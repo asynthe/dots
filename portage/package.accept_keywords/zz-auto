@@ -1,0 +1,17 @@
+#lto-overlay
+sys-config/ltoize ~amd64
+app-portage/portage-bash-rc-mv ~amd64
+app-shells/runtitle ~amd64
+sys-devel/gcc ~amd64
+#more lto
+media-libs/x264 -~amd64
+#app-editors/neovim **
+x11-misc/picom-jonaburg **
+games-emulation/rpcs3::guru **
+
+#ruby
+#dev-lang/ruby -~amd64
+# required by flycast (argument)
+=games-emulation/flycast-9999 **
+# required by xdg-desktop-portal-hyprland (argument)
+=gui-libs/xdg-desktop-portal-hyprland-9999 **

@@ -1,0 +1,24 @@
+sys-firmware/intel-microcode initramfs
+# required by dev-python/PyQtWebEngine-5.15.6::gentoo
+# required by www-client/qutebrowser-2.5.2-r1::gentoo[python_single_target_python3_10]
+# required by qutebrowser (argument)
+>=dev-python/PyQt5-5.15.7 sql declarative webchannel
+# required by dev-python/PyQtWebEngine-5.15.6::gentoo
+# required by www-client/qutebrowser-2.5.2-r1::gentoo[python_single_target_python3_10]
+# required by qutebrowser (argument)
+>=dev-qt/qtwebengine-5.15.8_p20230106 widgets
+# required by dev-qt/qtwebengine-5.15.8_p20230106::gentoo
+# required by dev-python/PyQtWebEngine-5.15.6::gentoo
+# required by www-client/qutebrowser-2.5.2-r1::gentoo[python_single_target_python3_10]
+# required by qutebrowser (argument)
+>=dev-qt/qtwebchannel-5.15.8 qml
+# required by dev-qt/qtwebengine-5.15.8_p20230106::gentoo
+# required by dev-python/PyQtWebEngine-5.15.6::gentoo
+# required by www-client/qutebrowser-2.5.2-r1::gentoo[python_single_target_python3_10]
+# required by qutebrowser (argument)
+>=sys-libs/zlib-1.2.13-r1 minizip
+# required by dev-python/PyQt5-5.15.7::gentoo[multimedia]
+# required by dev-python/PyQtWebEngine-5.15.6::gentoo
+# required by www-client/qutebrowser-2.5.2-r1::gentoo[python_single_target_python3_10]
+# required by qutebrowser (argument)
+>=dev-qt/qtmultimedia-5.15.8 widgets

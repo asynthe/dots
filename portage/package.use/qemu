@@ -1,0 +1,1 @@
+app-emulation/qemu					QEMU_SOFTMMU_TARGETS: arm x86_64 sparc QEMU_USER_TARGETS: x86_64

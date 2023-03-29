@@ -1,0 +1,62 @@
+# created by eselect-repo
+
+[guru]
+location = /var/db/repos/guru
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/guru.git
+
+[gentoo-zh]
+location = /var/db/repos/gentoo-zh
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/gentoo-zh.git
+
+[wayland-desktop]
+location = /var/db/repos/wayland-desktop
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/wayland-desktop.git
+
+[mv]
+location = /var/db/repos/mv
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/mv.git
+
+[lto-overlay]
+location = /var/db/repos/lto-overlay
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/lto-overlay.git
+
+[librewolf]
+location = /var/db/repos/librewolf
+sync-type = git
+sync-uri = https://gitlab.com/librewolf-community/browser/gentoo.git
+
+[4nykey]
+location = /var/db/repos/4nykey
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/4nykey.git
+
+[r7l]
+location = /var/db/repos/r7l
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/r7l.git
+
+[brave-overlay]
+location = /var/db/repos/brave-overlay
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/brave-overlay.git
+
+[src_prepare-overlay]
+location = /var/db/repos/src_prepare-overlay
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/src_prepare-overlay.git
+
+[pentoo]
+location = /var/db/repos/pentoo
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/pentoo.git
+
+
+[booboo]
+location = /var/db/repos/booboo
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/booboo.git
