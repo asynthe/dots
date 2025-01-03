@@ -1,6 +1,4 @@
-{
-    # Temporary import to test before making options.
-    imports = [ ../../modules ];
+{ config, pkgs, ... }: {
 
     networking.hostName = "raider";
     system.stateVersion = "24.11";
@@ -9,6 +7,15 @@
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = "America/Santiago";
 
+    # Testing
+    imports = [ ../../modules ];
+    programs.xwayland.enable = true;
+
+    # Latest
+    #nix.package = pkgs.nixVersions.latest;
+    #boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    #package = config.boot.kernelPackages.nvidiaPackages.beta;
+
     meta = {
         # -------------- System - Main --------------
         system.user = "meow";
@@ -16,7 +23,9 @@
         system.language = "both"; # english, japanese, both
         system.packages = "minimal"; # minimal, minimal_stable
         system.keyboard = true;
-        system.windows = true; # Option for dual-boot, fix System time
+
+        system.windows.enable = true; # Option for dual-boot, fix System time
+        system.windows.disk = "/dev/nvme0n1p2";
         
         # Next options are set up by `meta.system.type`, but can be edited.
         #system.nix.settings = "laptop";
@@ -66,7 +75,7 @@
         services.ssh.configuration = "laptop"; # laptop, server
         #services.sshfs.enable = true;
         #services.syncthing.enable = true;
-        #services.wine.enable = true;
+        services.wine.enable = true;
         #services.xmr.enable = true;
 
         # -------------- VM --------------

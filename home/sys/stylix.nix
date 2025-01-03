@@ -21,11 +21,12 @@
         image = ./img/grey.png;
 
         # -------------- Specific targets --------------
-        #targets = {
+        targets = {
             #nixvim.transparentBackground.main = true;
             #nixvim.transparent_bg.sign_column = true;
             #wezterm.enable = false;
-        #};
+            yazi.enable = false;
+        };
 
         # -------------- Colorscheme --------------
         # https://tinted-theming.github.io/base16-gallery/

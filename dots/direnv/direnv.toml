@@ -1,5 +1,5 @@
 [global]
 hide_env_diff = true
-skip_dotenv = true
+load_dotenv = true
 warn_timeout = 0
 #warn_timeout = 2h

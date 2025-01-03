@@ -6,9 +6,7 @@ in {
     options.meta.services.wine.enable = mkOption {
         type = bool;
         default = false;
-        description = ''
-          Enable and set up Wine.
-        '';
+        description = "Enable and set up Wine";
     };
 
     config = mkIf cfg.enable {
@@ -18,13 +16,13 @@ in {
 
         # Support for 32-bit apps.
         # Only supported for nvidia and also Mesa.
-        hardware.opengl.driSupport32Bit = true;
+        hardware.graphics.enable32Bit = true;
 
         environment.systemPackages = builtins.attrValues {
             inherit (pkgs)
 
                 # Frontends
-                bottles #bottles-unwrapped
+                #bottles #bottles-unwrapped
                 #q4wine
       
                 # Wine
@@ -34,7 +32,7 @@ in {
                 #wine64 # Support 64-bit only
       
                 # Extras
-                wineasio
+                #wineasio
                 winetricks
             ;
 

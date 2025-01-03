@@ -12,16 +12,18 @@
 	    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
         nixos-hardware.url = "github:NixOS/nixos-hardware/master";
         nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-        disko.url = "github:nix-community/disko";
         disko.inputs.nixpkgs.follows = "nixpkgs";
+        disko.url = "github:nix-community/disko";
+        ghostty.url = "github:ghostty-org/ghostty";
         impermanence.url = "github:nix-community/impermanence";
-        lanzaboote.url = "github:nix-community/lanzaboote";
         lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
+        lanzaboote.url = "github:nix-community/lanzaboote";
         musnix.url = "github:musnix/musnix";
         sops-nix.url = "github:Mic92/sops-nix";
         stylix.url = "github:danth/stylix";
-        yazi.url = "github:sxyazi/yazi";
+        superfile.url = "github:yorukot/superfile";
         wezterm.url = "github:wez/wezterm?dir=nix";
+        yazi.url = "github:sxyazi/yazi";
 
         # Apps
 	    nixvim = {
@@ -43,6 +45,7 @@
         # Other
 	    nix-darwin,
         nixos-hardware,
+        nixos-wsl,
         disko,
         impermanence,
         lanzaboote,
@@ -52,10 +55,12 @@
 
         # Apps
 	    nixvim,
+        ghostty,
         hyprland,
+        superfile,
         swww,
-        yazi,
         wezterm,
+        yazi,
         ...
     
     #}: let
@@ -151,7 +156,7 @@
 	                user = "meow";
                 };
                 modules = [ 
-	                ./home/meow 
+	                ./home/user/meow 
 	                nixvim.homeManagerModules.nixvim
 	                sops-nix.homeManagerModules.sops
                     hyprland.homeManagerModules.default

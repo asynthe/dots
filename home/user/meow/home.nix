@@ -1,4 +1,4 @@
-{ config, user, ... }: {
+{ config, pkgs, user, ... }: {
 
     programs.home-manager.enable = true;
 
@@ -11,4 +11,7 @@
 
     # Hide "last login" message on new terminal.
     home.file.".hushlogin".text = "";
+
+    # Testing 
+    home.packages = [ pkgs.monero-gui ];
 }

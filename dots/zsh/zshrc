@@ -3,7 +3,7 @@ export EDITOR='nvim'
 export BROWSER='librewolf'
 export FILE='yazi'
 export FLAKE='/home/meow/sync/flake'
-export READER='zathura'
+export READER='sioyek'
 export TERM='xterm-256color'
 export QT_STYLE_OVERRIDE=adwaita-dark
 
@@ -72,15 +72,15 @@ alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias -g info='mediainfo'
 alias -g nv='nvim' 
 alias -g nvv='doas nvim'
-alias -g pdf='zathura'
+alias -g pdf='sioyek'
 alias ani-on='hyprctl keyword animations:enabled 1'
 alias ani-off='hyprctl keyword animations:enabled 0'
 #alias ani-off='hyprgame'
 
 # Books
-alias book='fd . ~/sync/study/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias books='fd . ~/sync/archive/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias bookjp='fd . ~/sync/archive/jp/book -e "pdf" -e "epub" | sk | xargs zathura'
+alias book='fd . ~/sync/study/book --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+alias books='fd . ~/sync/archive/book --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+alias bookjp='fd . ~/sync/archive/jp/book -e "pdf" -e "epub" | sk | xargs sioyek'
 
 # TV
 

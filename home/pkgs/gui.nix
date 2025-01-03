@@ -4,7 +4,7 @@
         inherit (pkgs)
 
             # Non-free
-            #spotify
+            spotify
 
 	        # Terminal
 	        kitty
@@ -21,11 +21,11 @@
             #aegisub # Subtitle Editor
 	        emacs29-pgtk
 	        #etcher
-	        gimp-with-plugins #gimp # Remember to configure photogimp.
+	        #gimp-with-plugins #gimp # Remember to configure photogimp.
 	        gparted
 	        hypnotix
 	        keepassxc
-	        #libreoffice
+	        libreoffice
 	        #obsidian
 	        ungoogled-chromium #brave
 	        ventoy-full #ventoy
@@ -42,7 +42,7 @@
 	        #stellarium
 
             # File Manager - Thumbnailers for PCmanFM
-            pcmanfm
+            #pcmanfm
             nufraw-thumbnailer # .raw files (raw-thumbnailer)
             evince # Adobe .pdf files
             ffmpegthumbnailer # Video files

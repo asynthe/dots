@@ -1,0 +1,59 @@
+# ------------------------ Configuration ------------------------
+#title = "Ghostty 👻"
+custom-shader-animation = true
+background-opacity = 0.8
+background-blur-radius = 30
+unfocused-split-opacity = 0.95
+
+#window-decoration = true
+#window-theme = ghostty
+#gtk-adwaita = false
+# Simple titlebar
+
+# Titlebar
+gtk-titlebar = false
+gtk-wide-tabs = false
+window-theme = dark
+adw-toolbar-style = flat
+
+# Font
+#font-family = JetBrainsMono Nerd Font Mono
+#font-style = Regular
+font-size = 12
+#font-thicken = true
+
+# Colors
+background = #080808
+foreground = #dddddd
+selection-background = #1c2f39
+selection-foreground = #dddddd
+cursor-color = #e6eaea
+
+# Cursor
+#mouse-hide-while-typing = false
+
+# ------------------------ Keybinds ------------------------
+keybind = shift+ctrl+r=reload_config
+keybind = shift+ctrl+w=close_window
+confirm-close-surface = false
+
+keybind = ctrl+.=clear_screen
+keybind = ctrl+\=new_split:right
+keybind = shift+ctrl+\=new_split:down
+
+# Focus
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:down
+keybind = ctrl+k=goto_split:up
+keybind = ctrl+l=goto_split:right
+
+# Resize
+keybind = ctrl+shift+h=resize_split:left,40
+keybind = ctrl+shift+j=resize_split:down,40
+keybind = ctrl+shift+k=resize_split:up,40
+keybind = ctrl+shift+l=resize_split:right,40
+
+# Tabs
+keybind = ctrl+[=previous_tab
+keybind = ctrl+]=next_tab
+keybind = ctrl+t=new_tab

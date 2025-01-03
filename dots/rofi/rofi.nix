@@ -6,5 +6,5 @@
         ;
     };
 
-    xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink ./config.rasi;
+    #xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink ./config.rasi;
 }

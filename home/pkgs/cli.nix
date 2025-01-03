@@ -36,7 +36,7 @@
             ripgrep
             sox
             tectonic # LaTeX Engine
-            tesseract easyocr # OCR
+            tesseract #easyocr # OCR
 
             # System
             ethtool
@@ -74,7 +74,6 @@
             weechat
 
 	        # Fun
-	        #cava
 	        cli-visualizer
             cpu-x
 	        figlet

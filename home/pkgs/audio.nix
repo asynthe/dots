@@ -1,6 +1,7 @@
 { pkgs, ... }: {
     home.packages = builtins.attrValues {
         inherit (pkgs)
+
             # Tools
             #linthesia # Synthesia replacement
 
@@ -16,12 +17,15 @@
 
             # DAWs - Digital Audio Workstation
             #ardour
-            #renoise
-            #reaper
-            #bitwig-studio # paid
-    
-            # DJ mixer
-            #mixxx
+            bitwig-studio # paid
+            mixxx # DJ mixer
+            reaper
+            renoise
+            #zrythm
+
+            # Other
+            #fluidsynth
+            #qsynth
 
             # Audio editors
             #ocenaudio #audacity

@@ -6,16 +6,26 @@ in {
     options.meta.services.xmr.enable = mkOption {
         type = bool;
         default = false;
-        description = ''
-          Enable and set up the Monero daemon.
-        '';
+        description = "Enable and set up the Monero daemon.";
     };
 
     config = mkIf cfg.enable {
 
-        services.monero = {
-            enable = true;
-            dataDir = "/home/${config.meta.system.user}/sync/xmr/blockchain";
+        environment.systemPackages = builtins.attrValues {
+            inherit (pkgs)
+                monero-cli
+                monero-gui
+
+                # Mining
+                #xmrig #xmrig-proxy
+                #p2pool      
+                #xmr-stak
+            ;
+        };
+
+        #services.monero = {
+            #enable = true;
+            #dataDir = "/home/${config.meta.system.user}/sync/xmr/blockchain";
             #priorityNodes = [ "" ];
             #exclusiveNodes = [ "" ];
             #extraNodes = [ "" ];
@@ -34,7 +44,7 @@ in {
                 #password = "";
                 #restricted = false;
             #};
-        };
+        #};
 
         # Mining
         #services.monero.mining = {
@@ -42,17 +52,5 @@ in {
             #threads = ""; # Set to 0 to use all available.
             #mining.address = "";
         #};
-
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                monero-cli
-                #monero-gui
-
-                # Mining
-                #xmrig #xmrig-proxy
-                #p2pool      
-                #xmr-stak
-            ;
-        };
     };
 }

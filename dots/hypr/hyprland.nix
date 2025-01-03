@@ -1,7 +1,13 @@
 { config, pkgs, ... }: {
 
     # -------------- Hyprland --------------
-    xdg.configFile."hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink ./hyprland.conf;
+    #xdg.configFile."hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink ./hyprland.conf;
+
+    # Configuration 
+    wayland.windowManager.hyprland = {
+        xwayland.enable = true; # Steam
+        systemd.enable = false;
+    };
 
     # Packages
     home.packages = builtins.attrValues {
