@@ -7,7 +7,7 @@
   "efmls-configs-nvim": { "branch": "main", "commit": "ddc7c542aaad21da594edba233c15ae3fad01ea0" },
   "gen.nvim": { "branch": "main", "commit": "41ad952c8269fa7aa3a4b8a5abb44541cb628313" },
   "indent-blankline.nvim": { "branch": "master", "commit": "3c8a185da4b8ab7aef487219f5e001b11d4b6aaf" },
-  "lazy.nvim": { "branch": "main", "commit": "96584866b9c5e998cbae300594d0ccfd0c464627" },
+  "lazy.nvim": { "branch": "main", "commit": "077102c5bfc578693f12377846d427f49bc50076" },
   "lsp-zero.nvim": { "branch": "v3.x", "commit": "accbac5131df050ad9913115b5f618b232d6e8e4" },
   "lualine.nvim": { "branch": "master", "commit": "566b7036f717f3d676362742630518a47f132fff" },
   "neoconf.nvim": { "branch": "main", "commit": "64437787dba70fce50dad7bfbb97d184c5bc340f" },

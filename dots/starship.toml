@@ -149,6 +149,7 @@ symbol = " "
 symbol = "ﳒ "
 
 [ruby]
+disabled = true
 symbol = " "
 
 [rust]

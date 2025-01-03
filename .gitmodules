@@ -4,3 +4,12 @@
 [submodule "home/modules/sec/nix-security-box"]
 	path = home/modules/sec/nix-security-box
 	url = git@github.com:asynthe/nix-security-box.git
+[submodule "dots/zsh/plugin/zsh-autosuggestions"]
+	path = dots/zsh/plugin/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "dots/zsh/plugin/zsh-vi-mode"]
+	path = dots/zsh/plugin/zsh-vi-mode
+	url = https://github.com/jeffreytse/zsh-vi-mode
+[submodule "dots/zsh/plugin/zsh-syntax-highlighting"]
+	path = dots/zsh/plugin/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting

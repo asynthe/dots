@@ -12,7 +12,7 @@ fi
 
 
 echo "For"
-for file in sync/dots/dots/*; do
+for file in ~/sync/dots/dots/*; do
   target="$dest_path/$(basename "$file")"
   
   if [ -L "$target" ]; then

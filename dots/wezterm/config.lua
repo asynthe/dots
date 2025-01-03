@@ -3,7 +3,7 @@ local act = wezterm.action
 
 local keybinds = {
   -- Main
-  { key = 'v', mods = 'SUPER', action = act.SplitHorizontal { args =  { 'alsamixer' }, }, }, -- Open alsamixer
+  --{ key = 'v', mods = 'SUPER', action = act.SplitHorizontal { args =  { 'alsamixer' }, }, }, -- Open alsamixer
   { key = 'i', mods = 'CTRL', action = act.ShowDebugOverlay },
   { key = 'z', mods = 'CTRL|SHIFT', action = act.TogglePaneZoomState },
   -- { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab { confirm = true }, },

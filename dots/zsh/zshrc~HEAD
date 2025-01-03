@@ -1,16 +1,11 @@
-# macOS stuff
-source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-chruby ruby-3.1.3
-
 # -------------- Environment Variables --------------
 export EDITOR='nvim'
 export BROWSER='librewolf'
 export FILE='yazi'
 export FLAKE='/home/meow/sync/flake'
-export READER='zathura'
-#export TERM='xterm-256color'
-#export QT_STYLE_OVERRIDE=adwaita-dark
+export READER='sioyek'
+export TERM='xterm-256color'
+export QT_STYLE_OVERRIDE=adwaita-dark
 
 export GNUPGHOME=$HOME/sync/pass/gpg # default `$HOME/.gnupg`
 export PASSWORD_STORE_DIR=$HOME/sync/pass/pass # default `$HOME/.password-store`
@@ -37,9 +32,6 @@ alias dicker='docker'
 alias dokcer='docker'
 alias focker='docker'
 
-# Dev
-alias py='python'
-
 # Main
 alias ,='cd -'
 alias -g c='bat' # cat -> bat
@@ -52,6 +44,7 @@ alias ifconfig='echo "ipconfig is deprecated, use ip instead."; false'
 alias m='ncmpcpp'
 alias n='nvim'
 alias nm='doas nmtui'
+alias py='python'
 alias port='ss -naptu state listening'
 alias ports='ss -tulanp'
 alias v='pulsemixer'
@@ -79,15 +72,15 @@ alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias -g info='mediainfo'
 alias -g nv='nvim' 
 alias -g nvv='doas nvim'
-alias -g pdf='zathura'
+alias -g pdf='sioyek'
 alias ani-on='hyprctl keyword animations:enabled 1'
 alias ani-off='hyprctl keyword animations:enabled 0'
 #alias ani-off='hyprgame'
 
 # Books
-alias book='fd . ~/sync/study/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias books='fd . ~/sync/archive/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias bookjp='fd . ~/sync/archive/jp/book -e "pdf" -e "epub" | sk | xargs zathura'
+alias book='fd . ~/sync/study/book --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+alias books='fd . ~/sync/archive/book --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+alias bookjp='fd . ~/sync/archive/jp/book -e "pdf" -e "epub" | sk | xargs sioyek'
 
 # TV
 

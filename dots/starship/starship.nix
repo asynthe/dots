@@ -13,7 +13,7 @@
     };
 
     xdg.configFile = {
-        "starship.toml".source = config.lib.file.mkOutOfStoreSymlink ./starship.toml;
+        "starship.toml".source = config.lib.file.mkOutOfStoreSymlink ../starship.toml;
     };
 
     #programs.starship = {
