@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, lib, pkgs, ... }: {
 
     networking.hostName = "raider";
     system.stateVersion = "24.11";
@@ -9,14 +9,17 @@
 
     # Testing
     imports = [ ../../modules ];
-    programs.xwayland.enable = true;
-
-    # Latest
-    #nix.package = pkgs.nixVersions.latest;
-    #boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-    #package = config.boot.kernelPackages.nvidiaPackages.beta;
+    programs.xwayland.enable = true; # -> Hyprland
+    boot.supportedFilesystems = [ "bcachefs" ];
+    nix.package = pkgs.nixVersions.latest;
+    boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
 
     meta = {
+        # -------------- Cache --------------
+        cache.nvidia = true; # Cuda mantainers cachix, ENABLE FIRST
+                             # then enable the main option.
+
         # -------------- System - Main --------------
         system.user = "meow";
         system.type = "laptop"; # laptop, server
@@ -42,13 +45,11 @@
 
         # -------------- Driver --------------
         #driver.displaylink = true;
+        #driver.nvidia.specialisation = true; # gaming mode and portable mode.
         driver.nvidia.enable = true;
         driver.nvidia.mode = "offload"; # offload, sync
-        #driver.nvidia.cache = true;
-        #driver.nvidia.specialisation = true; # gaming mode and portable mode.
-
-        #driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
-        #driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
+        driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
+        driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
 
         # -------------- Audio --------------
         audio.bluetooth = true;
@@ -59,7 +60,7 @@
         # -------------- Gaming --------------
         gaming.steam = true;
         gaming.gamemode = true;
-        gaming.controller = true;
+        #gaming.controller = true;
 
         # -------------- Services --------------
         services.android.enable = true;

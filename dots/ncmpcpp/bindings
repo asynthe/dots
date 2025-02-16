@@ -75,3 +75,7 @@ def_key "4"
   show_help
 def_key "5"
   show_playlist_editor
+
+# This messes up ghostty focus right pane.
+def_key "ctrl-l"
+  dummy

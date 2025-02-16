@@ -2,6 +2,9 @@
     home.packages = builtins.attrValues {
         inherit (pkgs)
 
+            # Temporary
+            bcachefs-tools
+
             # DevOps
             #ollama
             #pulumi

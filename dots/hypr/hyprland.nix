@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, inputs, pkgs, ... }: {
 
     # -------------- Hyprland --------------
     #xdg.configFile."hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink ./hyprland.conf;
@@ -7,6 +7,11 @@
     wayland.windowManager.hyprland = {
         xwayland.enable = true; # Steam
         systemd.enable = false;
+
+        # Plugins
+        plugins = [
+            inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+        ];
     };
 
     # Packages

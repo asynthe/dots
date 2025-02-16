@@ -6,24 +6,23 @@ in {
     options.meta.driver.nvidia = {
         enable = mkEnableOption "Enable nvidia driver and configuration";
         specialisation = mkEnableOption "Enable specialisation modes";
-        cache = mkEnableOption "Enable cuda mantainers cachix repository.";
         mode = mkOption {
             type = nullOr str;
             default = null;
             description = "Mode for Nvidia PRIME.";
         };
-        #bus_id = {
-            #nvidia_gpu = mkOption {
-                #type = nullOr str;
-                #default = null;
-                #description = "Nvidia GPU Bus ID for PRIME.";
-            #};
-            #intel_cpu = mkOption {
-                #type = nullOr str;
-                #default = null;
-                #description = "Intel GPU (Integrated) Bus ID for PRIME.";
-            #};
-        #};
+        bus_id = {
+            nvidia_gpu = mkOption {
+                type = nullOr str;
+                default = null;
+                description = "Nvidia GPU Bus ID for PRIME.";
+            };
+            intel_cpu = mkOption {
+                type = nullOr str;
+                default = null;
+                description = "Intel GPU (Integrated) Bus ID for PRIME.";
+            };
+        };
     };
 
     config = mkIf cfg.enable {
@@ -53,13 +52,6 @@ in {
         # Screen Tearing Issues (Try Prime Sync Mode first, then this option)
         #hardware.nvidia.forceFullCompositionPipeline = true;
 
-        # -------------- Cuda Mantainers Cache --------------
-        # https://github.com/carlthome/dotfiles/blob/698ae7cdaf3e77819ed6e435372af80c339272d3/modules/nixos/cuda.nix
-        nix.settings = mkIf cfg.cache {
-            substituters = [ "https://cuda-maintainers.cachix.org" ];
-            trusted-public-keys = [ "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E=" ];
-        };
-
         # -------------- Nvidia --------------
         services.xserver.videoDrivers = [ "nvidia" ];
         hardware.graphics = {
@@ -88,7 +80,7 @@ in {
             modesetting.enable = true; # Required
             nvidiaSettings = true;
             open = true; # Open source kernel module
-            package = config.boot.kernelPackages.nvidiaPackages.beta; # stable, beta...
+            #package = pkgs.kernelPackages.nvidiaPackages.stable; # stable, beta...
 
             # Nvidia power management
             #powerManagement.enable = true;
@@ -98,11 +90,11 @@ in {
         # -------------- Prime --------------
         # Bus ID Values
         # You can find these values by running `lspci | grep ' VGA '`
+
+        # ADD: Make Required!
         hardware.nvidia.prime = {
-            intelBusId = "PCI:1:0:0";
-            nvidiaBusId = "PCI:0:2:0";
-            #intelBusId = "${config.meta.driver.nvidia.bus_id.intel_cpu}";
-            #nvidiaBusId = "${config.meta.driver.nvidia.bus_id.nvidia_gpu}";
+            intelBusId = cfg.bus_id.intel_cpu;
+            nvidiaBusId = cfg.bus_id.nvidia_gpu;
         };
 
         # -------------- Prime - Offload Mode --------------

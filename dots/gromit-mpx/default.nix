@@ -1,0 +1,3 @@
+{
+    imports = [ ./gromit-mpx.nix ];
+}

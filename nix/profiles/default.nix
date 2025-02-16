@@ -5,6 +5,9 @@
     */
 
     imports = [ 
+        # -------------- Cache --------------
+        ./cache.nix
+
         # -------------- Audio --------------
         ./audio/bluetooth.nix
         ./audio/musnix.nix

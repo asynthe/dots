@@ -1,5 +1,4 @@
-{ config, nixvim, ... }: {
-    
+{
     programs.nixvim = {
 	globals.mapleader = " "; # Space
 	keymaps = [
@@ -121,15 +120,15 @@
 		    #remap = false;
 		#};
 	    #}
-	    {
-		mode = "n";
-		key = "<C-l>";
-		action = "winnr('l') == winnr() ? ':vsp<CR>' : '<C-w>l'";
-		options = {
-		    expr = true;
-		    remap = false;
-		};
-	    }
+	    #{
+		#mode = "n";
+		#key = "<C-l>";
+		#action = "winnr('l') == winnr() ? ':vsp<CR>' : '<C-w>l'";
+		#options = {
+		#    expr = true;
+		#    remap = false;
+		#};
+	    #}
 	];
     };
 }

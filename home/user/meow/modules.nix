@@ -16,13 +16,17 @@
         ../../../dots/mpv
         ../../../dots/nushell
 
-        # mkOutOfStoreSymlink
+        # While `mkOutOfStoreSymlink` is just what i need
+        # I don't feel like rebuilding home all the time
+        # So I'll just install the programs with `home.packages`
+        # And dotfile -> symlink like always
 	    ../../../dots/ncmpcpp
         ../../../dots/cava
         ../../../dots/direnv
         ../../../dots/emacs
-        ../../../dots/hypr # Hyprland
-        ../../../dots/nvim # Using nixvim so I'll leave it like that.
+        ../../../dots/gromit-mpx
+        ../../../dots/hypr
+        ../../../dots/nvim
         ../../../dots/sioyek
         ../../../dots/starship
         ../../../dots/tmux
@@ -57,6 +61,8 @@
         ../../sys/xdg.nix
 
         # -------------- Remove from here down !!! --------------
+
+        ../../app/mapscii.nix
 
 	    # FIND PROBLEM with sql rust thing !!!
 	    # Apps

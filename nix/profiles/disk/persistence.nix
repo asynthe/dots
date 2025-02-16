@@ -38,6 +38,7 @@ in {
 	            "/var/lib/bluetooth"
 	            "/var/lib/nixos"
 	            "/var/lib/systemd/coredump"
+                "/tmp" # for Firefox cache
 
                 # MOVE THESE NEXT FILES
 	            #"/var/lib/tailscale" -> tailscale.nix if persistence is enabled.

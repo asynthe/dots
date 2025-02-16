@@ -23,8 +23,8 @@ in {
     };
 
     imports = [
-        ../banner/luks/cat.nix
-        ../banner/luks/dice.nix
+        ./luks_ascii/cat.nix
+        ./luks_ascii/dice.nix
     ];
 
     config = mkIf cfg.enable {

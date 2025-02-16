@@ -1,9 +1,9 @@
 # ------------------------ Configuration ------------------------
 #title = "Ghostty 👻"
 custom-shader-animation = true
-background-opacity = 0.8
+background-opacity = 0.85
 background-blur-radius = 30
-unfocused-split-opacity = 0.95
+unfocused-split-opacity = 0.5
 
 #window-decoration = true
 #window-theme = ghostty
@@ -34,7 +34,7 @@ cursor-color = #e6eaea
 
 # ------------------------ Keybinds ------------------------
 keybind = shift+ctrl+r=reload_config
-keybind = shift+ctrl+w=close_window
+keybind = ctrl+w=close_window
 confirm-close-surface = false
 
 keybind = ctrl+.=clear_screen
@@ -46,6 +46,7 @@ keybind = ctrl+h=goto_split:left
 keybind = ctrl+j=goto_split:down
 keybind = ctrl+k=goto_split:up
 keybind = ctrl+l=goto_split:right
+#keybind = super+;=goto_split:right
 
 # Resize
 keybind = ctrl+shift+h=resize_split:left,40
@@ -57,3 +58,7 @@ keybind = ctrl+shift+l=resize_split:right,40
 keybind = ctrl+[=previous_tab
 keybind = ctrl+]=next_tab
 keybind = ctrl+t=new_tab
+
+# Move tabs
+#keybind = super+h=move_tab:-1
+#keybind = super+l=move_tab:1

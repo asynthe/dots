@@ -30,7 +30,14 @@
             url = "github:nix-community/nixvim";
 	        #inputs.nixpkgs.follows = "nixpkgs";
         };
-        hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+        hyprland = {
+            url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
+        Hyprspace = {
+            url = "github:KZDKM/Hyprspace";
+            inputs.hyprland.follows = "hyprland";
+        };
         swww.url = "github:LGFae/swww";
     };
 
