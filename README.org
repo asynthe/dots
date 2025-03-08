@@ -3,6 +3,9 @@ Hewlo.
 #+ATTR_HTML: :align center :width 50px
 [[file:other/img/readme_cats.jpg]]
 
+Remember to clone this repository with the submodules.
+~$ git clone --recurse-submodules https://github.com/asynthe/dots.git~
+
 ** NixOS
 ** macOS
 ** Windows

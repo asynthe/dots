@@ -38,7 +38,7 @@
             #meshlab #f3d #fstl # 3D files
             ripgrep
             sox
-            tectonic # LaTeX Engine
+            #tectonic # LaTeX Engine
             tesseract #easyocr # OCR
 
             # System

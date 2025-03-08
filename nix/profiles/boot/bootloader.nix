@@ -21,10 +21,16 @@ in {
         (mkIf (cfg.bootloader == "systemd-boot") { 
             boot.loader = {
                 efi.canTouchEfiVariables = true;
-                timeout = 5;
+                timeout = 10;
                 systemd-boot.enable = true;
                 systemd-boot.configurationLimit = cfg.generations;
             };
+
+            # Testing / framebuffer
+            boot.kernelParams = [
+                #"video=1920x1080"
+                "video=2560x1600"
+            ];
         })
 
         # Grub
@@ -33,5 +39,10 @@ in {
                 #...
             #};
         #})
+
+        # TODO In Progress: rEFInd as main or second bootloader.
+        #(mkIf (cfg.bootloader == "refind") {
+            # ...
+         #})
     ];
 }

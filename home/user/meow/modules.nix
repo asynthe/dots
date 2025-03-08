@@ -61,8 +61,9 @@
         ../../sys/xdg.nix
 
         # -------------- Remove from here down !!! --------------
-
         ../../app/mapscii.nix
+        ../../app/microsoft-edge.nix
+        ../../app/obs.nix
 
 	    # FIND PROBLEM with sql rust thing !!!
 	    # Apps
@@ -89,6 +90,7 @@
         ../../pkgs/minimal.nix
         #../../pkgs/sec.nix
         ../../pkgs/pkgs.nix
+        ../../pkgs/stable.nix
 
         # Shell
         ../../shell/aliases.nix

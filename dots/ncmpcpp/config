@@ -6,7 +6,7 @@ mpd_crossfade_time = "6"
 mpd_host = "localhost"
 mpd_port = "6600"
 #lyrics_directory = "~/.local/share/lyrics"
-#mouse_support = "no";
+mouse_support = "yes"; # scrollbar use
 
 # -------------- Colors --------------
 colors_enabled="yes"

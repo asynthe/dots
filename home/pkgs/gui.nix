@@ -5,6 +5,7 @@
 
             # Non-free
             spotify
+            zoom-us
 
 	        # Terminal
 	        kitty

@@ -1,9 +1,21 @@
 # ------------------------ Configuration ------------------------
+
 #title = "Ghostty 👻"
-custom-shader-animation = true
-background-opacity = 0.85
+background-opacity = 0.6
 background-blur-radius = 30
-unfocused-split-opacity = 0.5
+unfocused-split-opacity = 0.9
+focus-follows-mouse = true
+
+# Shaders
+#custom-shader-animation = true
+#custom-shader = shaders/animated-gradient-shader.glsl
+#custom-shader = shaders/galaxy.glsl
+#custom-shader = shaders/just-snow.glsl
+#custom-shader = shaders/starfield-colors.glsl
+#custom-shader = shaders/starfield.glsl
+
+# Open split or tab in home directory
+window-inherit-working-directory = true
 
 #window-decoration = true
 #window-theme = ghostty
@@ -34,7 +46,7 @@ cursor-color = #e6eaea
 
 # ------------------------ Keybinds ------------------------
 keybind = shift+ctrl+r=reload_config
-keybind = ctrl+w=close_window
+keybind = ctrl+w=close_surface
 confirm-close-surface = false
 
 keybind = ctrl+.=clear_screen

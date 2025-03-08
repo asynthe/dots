@@ -10,7 +10,9 @@
         sessionVariables.READER = "zathura";
         shellAliases = {
 	        pdf = "zathura";
-	        book = "${pkgs.fd}/bin/fd . ~/sync/archive/book/reading --type f -e 'pdf' -e 'epub' | ${pkgs.skim}/bin/sk | xargs zathura";
+
+            # TODO Redirect output to /dev/null (?)
+	        book = "${pkgs.fd}/bin/fd . ~/sync/archive/book/reading --type f -e 'pdf' -e 'epub' | ${pkgs.skim}/bin/sk | xargs zathura & disown";
         };
     };
 }
