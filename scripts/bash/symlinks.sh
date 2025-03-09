@@ -35,8 +35,15 @@ fi
 echo "Detected OS: $OSTYPE"
 echo "Dotfiles will be symlinked to: $dest_path"
 
-ln -sf ../../dots/ncmpcpp/config "$HOME"/.config/ncmpcpp/config
-ln -sf ../../dots/ncmpcpp/bindings "$HOME"/.config/ncmpcpp/bindings
+ln -sf "$HOME"/dots/config/ncmpcpp/config "$HOME"/.config/ncmpcpp/config
+ln -sf "$HOME"/dots/config/ncmpcpp/bindings "$HOME"/.config/ncmpcpp/bindings
+
+# Working
+ln -sf "$HOME"/dots/config/nvim "$HOME"/.config/nvim
+ln -sf "$HOME"/dots/config/wezterm "$HOME"/.config/wezterm
+
+# Emacs (if ~/.emacs.d exist then delete or set a y/n for overwriting
+ln -sf "$HOME"/dots/config/emacs "$HOME"/.config/emacs
 
 #echo "For"
 # FIX: for folder instead (?)

@@ -13,6 +13,3 @@
 [submodule "dots/zsh/plugin/zsh-syntax-highlighting"]
 	path = dots/zsh/plugin/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting
-[submodule "dots/ghostty/shaders"]
-	path = dots/ghostty/shaders
-	url = https://github.com/hackr-sh/ghostty-shaders

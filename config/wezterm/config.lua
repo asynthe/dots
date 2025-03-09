@@ -1,5 +1,9 @@
 local wezterm = require "wezterm"
 local act = wezterm.action
+local config = wezterm.config_builder()
+
+-- NixOS
+-- config.default_domain = 'WSL:NixOS'
 
 local keybinds = {
   -- Main
@@ -27,10 +31,15 @@ local keybinds = {
   { key = 'l', mods = 'SUPER|SHIFT', action = act.RotatePanes 'Clockwise' },
 
   -- Pane focus w/ SUPER
-  { key = 'h', mods = 'SUPER', action = act.ActivatePaneDirection("Left") },
-  { key = 'j', mods = 'SUPER', action = act.ActivatePaneDirection("Down") },
-  { key = 'k', mods = 'SUPER', action = act.ActivatePaneDirection("Up") },
-  { key = 'l', mods = 'SUPER', action = act.ActivatePaneDirection("Right") },
+  { key = 'h', mods = 'CTRL', action = act.ActivatePaneDirection("Left") },
+  { key = 'j', mods = 'CTRL', action = act.ActivatePaneDirection("Down") },
+  { key = 'k', mods = 'CTRL', action = act.ActivatePaneDirection("Up") },
+  { key = 'l', mods = 'CTRL', action = act.ActivatePaneDirection("Right") },
+
+  -- { key = 'h', mods = 'SUPER', action = act.ActivatePaneDirection("Left") },
+  -- { key = 'j', mods = 'SUPER', action = act.ActivatePaneDirection("Down") },
+  -- { key = 'k', mods = 'SUPER', action = act.ActivatePaneDirection("Up") },
+  -- { key = 'l', mods = 'SUPER', action = act.ActivatePaneDirection("Right") },
 
   -- Pane resizing
   { key = 'h', mods = 'SUPER|CTRL', action = act.AdjustPaneSize { 'Left', 1 } },
@@ -59,6 +68,10 @@ local keybinds = {
 }
 
 return {
+
+  -- Transparency
+  window_background_opacity = 0.7,
+
   -- Keys
   -- disable_default_key_bindings = true,
   keys = keybinds,
@@ -69,10 +82,10 @@ return {
   -- hide_mouse_cursor_when_typing = true,
 
   -- Cursor
-  -- cursor_blink_rate = 800,
-  -- default_cursor_style = 'BlinklingBlock',
+  cursor_blink_rate = 800,
+  default_cursor_style = 'BlinklingBlock',
   -- default_cursor_style = 'BlinkingUnderline',
-
+  
   -- Other
   debug_key_events = true,
   alternate_buffer_wheel_scroll_speed = 1,

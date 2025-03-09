@@ -1,6 +1,7 @@
 {
     description = "asynthe's system flake";
     inputs = {
+
         # Main Inputs
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
         nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -151,6 +152,19 @@
                     #musnix.nixosModules.musnix
                 #];
             #};
+
+	    wsl = nixpkgs.lib.nixosSystem {
+	        specialArgs = { inherit inputs outputs pkgs-stable; };
+		modules = [
+		    ./nix/hosts/wsl
+	            sops-nix.nixosModules.sops
+                    disko.nixosModules.disko
+                    impermanence.nixosModules.impermanence
+                    lanzaboote.nixosModules.lanzaboote
+                    musnix.nixosModules.musnix
+		    nixos-wsl.nixosModules.default
+                ];
+	    };
         };
 
         # Home Manager configurations
