@@ -1,1 +1,0 @@
-/home/nixos/.config/emacs/straight/repos/bind-key/bind-key.el
