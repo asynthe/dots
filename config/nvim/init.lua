@@ -1,3 +1,11 @@
+-- init.lua
+
+-- Settings
+require("settings.main")
+
+-- Configuration modules
+require("plugins.transparency")
+
 -- Main configuration
 -- require("main.options")
 -- require("main.keymaps")
@@ -6,7 +14,7 @@
 -- Plugins
 -- require("plugins.init")
 -- require("plugins.colorscheme")
-require("plugins.transparency")
+-- require("plugins.transparency")
 
 -- LSP
 -- require("lsp.init")

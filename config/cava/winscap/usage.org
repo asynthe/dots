@@ -1,0 +1,12 @@
+#+title: Winscap
+
+-> TODO: Systemd user service for this?
+
+Cava working on Windows WSL
+https://github.com/quantum5/winscap
+
+Usage: ~winscap <channels> <sample rate> <bits per sample>~
+
+Example:
+$ mkfifo /tmp/cava.fifo & disown # Keep pid into account, can i catch it someway?
+$ /mnt/c/path/to/winscap.exe 2 48000 16 > /tmp/cava.fifo

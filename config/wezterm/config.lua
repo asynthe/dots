@@ -12,16 +12,25 @@ local keybinds = {
   { key = 'z', mods = 'CTRL|SHIFT', action = act.TogglePaneZoomState },
   -- { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab { confirm = true }, },
 
+  -- Move pane to a new tab
+  { key = 'n', mods = 'CTRL|SHIFT', 
+      action = wezterm.action_callback(function(win, pane)
+      local tab, window = pane:move_to_new_tab()
+    end),
+  },
+
   -- Clipboard -- FIX PLZ
   { key = 'c', mods = 'CTRL|SHIFT', action = act.CopyTo 'Clipboard' },
   { key = 'v', mods = 'CTRL|SHIFT', action = act.PasteFrom 'PrimarySelection' },
 
   -- Tabs
-  { key = '[', mods = 'CTRL', action = act.MoveTabRelative(-1) }, -- Move tab left
+  { key = 'Tab', mods = 'CTRL', action = act.ActivateTabRelative(1) }, -- Change to right tab
+  { key = 'Tab', mods = 'CTRL|SHIFT', action = act.ActivateTabRelative(-1) }, -- Change to left tab
   { key = ']', mods = 'CTRL', action = act.MoveTabRelative(1) }, -- Move tab right
-  { key = 't', mods = 'CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = '[', mods = 'CTRL', action = act.MoveTabRelative(-1) }, -- Move tab left
 
   -- Pane
+  { key = 't', mods = 'CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
   { key = '\\', mods = 'CTRL', action = act.SplitHorizontal },
   { key = '|', mods = 'CTRL|SHIFT', action = act.SplitVertical },
   { key = 'w', mods = 'CTRL', action = act.CloseCurrentPane { confirm = false } }, -- This also closes the window if only one pane left.
@@ -69,36 +78,45 @@ local keybinds = {
 
 return {
 
-  -- Transparency
-  window_background_opacity = 0.7,
+    -- Start in NixOS and in ~
+    default_prog = { "wsl.exe", "-d", "NixOS", "--cd", "~" },
+    enable_wayland = true,
+    set_environment_variables = {
+        WEZTERM_WSL_ENABLE_WAYLAND = "1",
+        WAYLAND_DISPLAY = os.getenv("WAYLAND_DISPLAY") or "wayland-0",
+        XDG_RUNTIEM_DIR = os.getenv("XDG_RUNTIME_DIR") or "/run/user/$(id -u)"
+    },
 
-  -- Keys
-  -- disable_default_key_bindings = true,
-  keys = keybinds,
+    -- Transparency
+    window_background_opacity = 0.8,
 
-  -- Tab Bar
-  show_new_tab_button_in_tab_bar = false,
-  hide_tab_bar_if_only_one_tab = true,
-  -- hide_mouse_cursor_when_typing = true,
+    -- Keys
+    disable_default_key_bindings = true,
+    keys = keybinds,
 
-  -- Cursor
-  cursor_blink_rate = 800,
-  default_cursor_style = 'BlinklingBlock',
-  -- default_cursor_style = 'BlinkingUnderline',
+    -- Tab Bar
+    show_new_tab_button_in_tab_bar = false,
+    hide_tab_bar_if_only_one_tab = true,
+    -- hide_mouse_cursor_when_typing = true,
+
+    -- Cursor
+    cursor_blink_rate = 1000,
+    --default_cursor_style = 'BlinkingBlock',
+    default_cursor_style = 'BlinkingUnderline',
   
-  -- Other
-  debug_key_events = true,
-  alternate_buffer_wheel_scroll_speed = 1,
-  window_close_confirmation = "NeverPrompt",
-  audible_bell = 'Disabled',
-  -- freetype_load_target = "Normal",
-  -- freetype_load_flags = 'NO_AUTOHINT',
+    -- Other
+    debug_key_events = true,
+    alternate_buffer_wheel_scroll_speed = 1,
+    window_close_confirmation = "NeverPrompt",
+    audible_bell = 'Disabled',
+    -- freetype_load_target = "Normal",
+    -- freetype_load_flags = 'NO_AUTOHINT',
 
-  -- Window Padding
-  -- window_padding = {
-  --  left = 0,
-  --  right = 0,
-  --  top = 0,
-  --  bottom = 0,
-  -- },
+    -- Window Padding
+    --window_padding = {
+    --  left = 0,
+    --  right = 0,
+    --  top = 0,
+    --  bottom = 0,
+    --},
 }
