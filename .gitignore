@@ -3,3 +3,8 @@ dots/vis/vis.log
 dots/qBittorrent/*
 !dots/qBittorrent/themes/
 !dots/qBittorrent/themes/*
+
+# Ignore Emacs backup files
+\#*.org\#
+.#*
+
