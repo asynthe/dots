@@ -44,6 +44,8 @@
 	     :config
 	     (evil-mode 1))
 
+(setq evil-undo-system 'undo-redo)          ; Undo like vim
+
 ;; Evil Collection (for Evil Mode)
 (use-package evil-collection
 	     :after evil
@@ -137,8 +139,12 @@
 
 ;; ------------------------- Settings -------------------------
 
+;; Open a file instead of Scratch buffer
+;; https://superuser.com/questions/400457/how-to-automatically-open-a-file-when-emacs-start
+(find-file "~/notes/main.org")
+
 ;; Main
-(global-display-line-numbers-mode t)        ; Line numbers
+;(global-display-line-numbers-mode t)        ; Line numbers
 (setq-default indent-tabs-mode nil)         ; Use spaces instead of tabs
 (setq-default tab-width 4)                  ; 4 spaces
 (show-paren-mode 1)                         ; Enable parentheses matching
@@ -158,6 +164,7 @@
 (tool-bar-mode -1)                        ; Disable tool bar
 (tooltip-mode -1)                         ; Disable tooltips
 (setq-default line-spacing 1)
+(setq truncate-lines nil)                 ; Enable word wrap
 
 ;; Disabling line numbering for certain modes
 (dolist (mode '(org-mode-hook
@@ -167,7 +174,7 @@
   (add-hook mode (lambda () (display-line-numbers-mode -1))))
 
 ;; Fringes
-(set-fringe-mode 10)
+(set-fringe-mode 7)
 ;(set-fringe-mode 0)                       ; No fringes
 
 ;; Margins / Padding
@@ -180,9 +187,9 @@
 (add-to-list 'default-frame-alist '(alpha-background .80)) ; For new frames
 
 ;; Auto-save
-(setq auto-save-default t)
-(setq auto-save-timeout 20)
-(setq auto-save-interval 200)
+;(setq auto-save-default t)
+;(setq auto-save-timeout 20)
+;(setq auto-save-interval 200)
 
 ;; Enable recent files mode
 (recentf-mode 1)
@@ -200,7 +207,6 @@
 
 ;; ------------------------- Theme -------------------------
 ;;
-;; ;; REDIRECT TO doom-meltbus theme ? -> jump to line with THEME
 (load-theme 'doom-meltbus t) ; THEME
 (setq doom-themes-enable-bold t)        ; If nil, bol is disabled
 (setq doom-themes-enable-italics t)     ; If nil, italics is disabled
@@ -208,19 +214,16 @@
 ;; ------------------------- Font -------------------------
 ;; Font -> JetBrainsMono
 (set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font 14"
-            :height 160
+		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
 
 (set-face-attribute 'variable-pitch nil
-		    :font "JetBrainsMono Nerd Font 14"
-            :height 160
+		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
 
 ;; Inherited face by org-table and org-block
 (set-face-attribute 'fixed-pitch nil
 		    :font "JetBrainsMono Nerd Font 12"
-            :height 160
 		    :weight 'regular)
 
 ;; Makes commented text and keywords italics.
@@ -234,7 +237,7 @@
 (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))
 
 ;; Font size
-(set-face-attribute 'default nil :height 240)
+(set-face-attribute 'default nil :height 120)
 
 ;; Ligatures
 (use-package ligature
@@ -253,13 +256,14 @@
 (add-hook 'org-mode-hook 'turn-on-flyspell) ; Flyspell (Spell Checking)
 
 ;; Settings
-(require 'org-mouse) ; Enable the mouse
+(require 'org-mouse)                  ; Enable the mouse
 (setq org-directory "~/notes"
       org-id-track-globally t
       org-return-follows-link t
       org-hide-block-startup nil      ; Don't fold code blocks
       org-hide-emphasis-markers t     ; Hide bold and italics symbols
       org-hide-leading-stars t        ; Hide org header leading stars
+      org-startup-folded 'overview    ; Show only top-level headings
       org-startup-indented t          ; Indent the text below headers
       org-startup-folded t            ; Open with headers folded
       org-log-done 'time
@@ -269,7 +273,7 @@
 
       ;; Display Images
       org-startup-with-inline-images t
-      org-image-actual-width nil      ; Enable attrs to edit width
+      ;org-image-actual-width nil      ; Enable attrs to edit width
 
       ;; Syntax Highlighting
       org-src-fontify-natively t
