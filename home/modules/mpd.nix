@@ -1,10 +1,5 @@
 { config, ... }: {
 
-    imports = [
-        #./mpd-discord-rpc.nix
-        #./mpdris2.nix
-    ];
-
     # Note, run `systemctl --user start mpd.service`
     services.mpd = {
         enable = true;

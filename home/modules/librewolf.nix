@@ -21,11 +21,4 @@
             "media.eme.enabled" = true; # DRM.
         };
     };
-
-    home.packages = builtins.attrValues {
-        inherit (pkgs)
-            # Decompress bookmarks backup files
-            dejsonlz4
-        ;
-    };
 }

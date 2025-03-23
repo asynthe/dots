@@ -2,6 +2,13 @@
 
     home.packages = builtins.attrValues {
         inherit (pkgs)
+
+            # Just for showing off.
+            neofetch
+            pfetch
+            freshfetch
+            fastfetch
+        
 	        imv # Image Viewer.
 	        wallust # pywal, but mantained.
 	        wl-clipboard # Clipboard.
