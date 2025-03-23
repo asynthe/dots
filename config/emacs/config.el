@@ -119,9 +119,9 @@
 
 ;; Beacon (cursor blink)
 ;; https://github.com/Malabarba/beacon
-(use-package beacon
-	     :config
-	     (beacon-mode 1))
+;(use-package beacon
+	     ;:config
+	     ;(beacon-mode 1))
 
 (use-package doom-themes)     ; Doom Themes
 (use-package doom-modeline)   ; Doom Modeline
@@ -136,6 +136,14 @@
 
 (use-package valign)          ; Vertical align
 ;(add-hook 'org-mode-hook #'valign-mode)
+
+;; ------------------------- Packages - Org -------------------------
+
+
+(use-package org-tidy           ; Hides :PROPERTY:
+             :ensure t
+             :hook
+             (org-mode . org-tidy-mode))
 
 ;; ------------------------- Settings -------------------------
 
@@ -174,13 +182,13 @@
   (add-hook mode (lambda () (display-line-numbers-mode -1))))
 
 ;; Fringes
-(set-fringe-mode 7)
-;(set-fringe-mode 0)                       ; No fringes
+;(set-fringe-mode 7)
+(set-fringe-mode 0)                       ; No fringes
 
 ;; Margins / Padding
-(setq-default left-margin-width 5)
-(setq-default right-margin-width 5)
-;(set-window-buffer nil (current-buffer))  ; ?
+(setq-default left-margin-width 3)
+(setq-default right-margin-width 3)
+(set-window-buffer nil (current-buffer))
 
 ;; Transparency
 (set-frame-parameter nil 'alpha-background 80) ; For current frame
@@ -214,16 +222,16 @@
 ;; ------------------------- Font -------------------------
 ;; Font -> JetBrainsMono
 (set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font 12"
+		    :font "JetBrainsMono Nerd Font 14"
 		    :weight 'regular)
 
 (set-face-attribute 'variable-pitch nil
-		    :font "JetBrainsMono Nerd Font 12"
+		    :font "JetBrainsMono Nerd Font 14"
 		    :weight 'regular)
 
 ;; Inherited face by org-table and org-block
 (set-face-attribute 'fixed-pitch nil
-		    :font "JetBrainsMono Nerd Font 12"
+		    :font "JetBrainsMono Nerd Font 14"
 		    :weight 'regular)
 
 ;; Makes commented text and keywords italics.
@@ -234,7 +242,7 @@
                     :slant 'italic)
 
 ;; Required by emacsclient, if not used fonts will appear smaller
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
 
 ;; Font size
 (set-face-attribute 'default nil :height 120)
@@ -254,9 +262,9 @@
 	
 ;; ------------------------- Org Mode -------------------------
 (add-hook 'org-mode-hook 'turn-on-flyspell) ; Flyspell (Spell Checking)
+(setq org-startup-with-inline-images t)
 
 ;; Settings
-(require 'org-mouse)                  ; Enable the mouse
 (setq org-directory "~/notes"
       org-id-track-globally t
       org-return-follows-link t
@@ -271,15 +279,12 @@
       org-ellipsis " … "
       org-adapt-identation nil
 
-      ;; Display Images
-      org-startup-with-inline-images t
-      ;org-image-actual-width nil      ; Enable attrs to edit width
-
       ;; Syntax Highlighting
       org-src-fontify-natively t
       org-src-tab-acts-natively t
       org-config-babel-evaluate nil
       org-edit-src-content-identation 0)
+(require 'org-mouse)                  ; Enable the mouse
 
 ;; Headings size
 (custom-set-faces
