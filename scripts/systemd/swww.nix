@@ -37,26 +37,3 @@ let
           done
         '';
     };
-in {
-
-    home.packages = [
-        inputs.swww.packages.${pkgs.system}.swww
-        #pkgs.swww
-        pkgs.waypaper # Kinda like Nitrogen.
-        #pkgs.fd
-        #pkgs.skim
-        #pkgs.xargs
-    ];
-
-    #wayland.windowManager.hyprland.settings.exec-once = [
-        #"sleep 1 && swww-daemon &"
-        #"sleep 1 && ${pkgs.swww}/bin/swww-daemon &"
-        #"sleep 1 && ${wallpaper_script}/bin/sww-random-wallpaper &"
-    #];
-
-    programs.zsh.shellAliases = mkIf config.programs.zsh.enable {
-        wall = "fd . ${config.home.homeDirectory}/sync/archive/wallpaper/img -e jpg -e png | sk | xargs swww img";
-	    #wall = "${pkgs.fd}/bin/fd . ${config.home.homeDirectory}/sync/archive/wallpaper/img -e jpg -e png | ${pkgs.skim}/bin/sk | xargs ${inputs.swww.packages.${pkgs.system}.swww}/bin/swww img";
-	    #wallp = "${pkgs.fd}/bin/fd . ${config.home.homeDirectory}/sync/archive/wallpaper/img -e jpg -e png | ${pkgs.skim}/bin/sk | tee >(xargs ${inputs.swww.packages.${pkgs.system}.swww}/bin/swww img) >(xargs ${pkgs.wallust}/bin/wallust run)"; 
-    };
-}

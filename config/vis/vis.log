@@ -1,0 +1,2 @@
+/build/source/src/Utils/ConfigurationUtils.cpp:427 ERROR Invalid spectrum mode monstercat # monstercat, sgs, none for visualizer.spectrum.smoothing.mode
+/build/source/src/Utils/ConfigurationUtils.cpp:390 ERROR Invalid falloff mode fill # default `fill`, options: fill, top, none for visualizer.spectrum.falloff.mode

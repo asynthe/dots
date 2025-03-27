@@ -84,6 +84,15 @@
             
             # Wi-Fi
             aircrack-ng
+
+            # -------------- General --------------
+            #seclists # Prefer git clone
+
+            # -------------- Active Directory --------------
+            responder
+
+            # -------------- Cracking --------------
+            hashcat
 	    ;
 	    inherit (pkgs.unixtools) xxd;
     };

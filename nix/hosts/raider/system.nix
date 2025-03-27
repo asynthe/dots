@@ -1,19 +1,22 @@
 { config, lib, pkgs, ... }: {
 
+    # Testing
+
+    # TODO Remember to make the modules options once working.
+    imports = [ ../../modules ];
+
+    programs.xwayland.enable = true; # -> Hyprland
+    boot.supportedFilesystems = [ "bcachefs" ];
+    nix.package = pkgs.nixVersions.latest;
+    boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+    hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
+
     networking.hostName = "raider";
     system.stateVersion = "24.11";
     nixpkgs.config.allowUnfree = true;
     networking.networkmanager.enable = true;
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = "America/Santiago";
-
-    # Testing
-    imports = [ ../../modules ];
-    programs.xwayland.enable = true; # -> Hyprland
-    boot.supportedFilesystems = [ "bcachefs" ];
-    nix.package = pkgs.nixVersions.latest;
-    boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-    hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
 
     meta = {
         # -------------- Cache --------------

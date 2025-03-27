@@ -139,20 +139,7 @@
                 #];
             #};
 
-            # Thinkpad
-            #thinkpad = nixpkgs.lib.nixosSystem {
-                #specialArgs = { inherit inputs outputs pkgs-stable; };
-                #modules = [
-                    #./nix/hosts/thinkpad
-                    #nixos-hardware.nixosModules.lenovo-thinkpad-t480
-	                #sops-nix.nixosModules.sops
-                    #disko.nixosModules.disko
-                    #impermanence.nixosModules.impermanence
-                    #lanzaboote.nixosModules.lanzaboote
-                    #musnix.nixosModules.musnix
-                #];
-            #};
-
+        # WSL
 	    wsl = nixpkgs.lib.nixosSystem {
 	        specialArgs = { inherit inputs outputs pkgs-stable; };
 		modules = [
@@ -177,7 +164,7 @@
 	                user = "meow";
                 };
                 modules = [ 
-	                ./home/user/meow 
+	                ./home/meow 
 	                nixvim.homeManagerModules.nixvim
 	                sops-nix.homeManagerModules.sops
                     hyprland.homeManagerModules.default

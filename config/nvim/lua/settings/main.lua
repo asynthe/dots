@@ -7,8 +7,21 @@ opt.relativenumber = true  -- Show relative numbers
 opt.cursorline = true      -- Highlight the current line
 opt.signcolumn = "yes"     -- Always show the sign column to prevent UI shifting
 opt.termguicolors = true   -- Enable 24-bit colors
-opt.scrolloff = 8          -- Keep at least 8 lines above/below the cursor
-opt.sidescrolloff = 8      -- Keep at least 8 columns left/right of the cursor
+
+-- Scroll
+opt.mousescroll = "ver:1"
+opt.scrolloff = 0
+opt.sidescrolloff = 0
+--opt.scrolloff = 8          -- Keep at least 8 lines above/below the cursor
+--opt.sidescrolloff = 8      -- Keep at least 8 columns left/right of the cursor
+
+-- 📜 Wrapping and Splitting
+opt.wrap = true                 -- Enable line wrapping
+opt.showbreak = "→ "            -- Wrapped line indicator
+opt.linebreak = true            -- Prevent words from breaking in the middle
+opt.breakindent = true          -- Keep indentation for wrapped lines
+opt.splitbelow = true           -- Split windows below
+opt.splitright = true           -- Split windows to the right
 
 -- 📄 Indentation and Formatting
 opt.expandtab = true       -- Convert tabs to spaces
@@ -34,10 +47,6 @@ opt.writebackup = false    -- Don't write a backup before overwriting
 opt.timeoutlen = 500       -- Timeout for mapped sequences (ms)
 opt.updatetime = 300       -- Faster update time for better responsiveness
 
--- 📜 Wrapping and Splitting
-opt.wrap = false           -- Disable line wrapping
-opt.splitbelow = true      -- Split windows below
-opt.splitright = true      -- Split windows to the right
 
 -- 🖊️ Clipboard
 opt.clipboard = "unnamedplus" -- Use system clipboard

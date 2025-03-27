@@ -83,7 +83,8 @@
 (use-package consult) ; Consult
 (setq consult-buffer-filter '("\\`\\*"))     ; Hide buffers starting with "*"
 (use-package embark) ; Embark
-(use-package embark-consult)
+(use-package embark-consult
+             :ensure t)
 
 ;; Marginalia
 (use-package marginalia 
@@ -222,16 +223,16 @@
 ;; ------------------------- Font -------------------------
 ;; Font -> JetBrainsMono
 (set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font 14"
+		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
 
 (set-face-attribute 'variable-pitch nil
-		    :font "JetBrainsMono Nerd Font 14"
+		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
 
 ;; Inherited face by org-table and org-block
 (set-face-attribute 'fixed-pitch nil
-		    :font "JetBrainsMono Nerd Font 14"
+		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
 
 ;; Makes commented text and keywords italics.
@@ -242,7 +243,7 @@
                     :slant 'italic)
 
 ;; Required by emacsclient, if not used fonts will appear smaller
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))
 
 ;; Font size
 (set-face-attribute 'default nil :height 120)
