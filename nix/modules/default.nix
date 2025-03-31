@@ -1,6 +1,3 @@
 {
-    imports = [
-        #./ollama.nix
-        ./ime.nix
-    ];
+    imports = [ ./modules.nix ];
 }

@@ -1,9 +1,8 @@
 { pkgs, pkgs-stable, ... }: {
 
-    home.packages = builtins.attrValues {
-        inherit (pkgs-stable)
-            wfuzz
-        ;
+    # ------------------------- Packages -------------------------
+    environment.systemPackages = with pkgs; [
+	    inherit (pkgs.unixtools) xxd;
         inherit (pkgs)
             # CLI
             vulnix
@@ -94,6 +93,5 @@
             # -------------- Cracking --------------
             hashcat
 	    ;
-	    inherit (pkgs.unixtools) xxd;
     };
 }

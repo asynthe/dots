@@ -3,6 +3,8 @@
     # ------------------------- Packages -------------------------
     environment.systemPackages = with pkgs; [
 
+        # ...
+
         # Packages from inputs
         #inputs.ghostty.packages.${system}.default
         #inputs.swww.packages.${pkgs.system}.swww

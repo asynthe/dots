@@ -1,8 +1,8 @@
 # ------------------------ Configuration ------------------------
 
 #title = "Ghostty 👻"
-background-opacity = 0.6
-background-blur-radius = 30
+background-opacity = 0.8
+background-blur-radius = 70
 unfocused-split-opacity = 0.9
 focus-follows-mouse = true
 

@@ -1,16 +1,17 @@
 { config, lib, pkgs, ... }: {
 
-    # Testing
-
     # TODO Remember to make the modules options once working.
     imports = [ ../../modules ];
+        
+    programs.xwayland.enable = true; # TODO MOVE -> Hyprland
 
-    programs.xwayland.enable = true; # -> Hyprland
-    boot.supportedFilesystems = [ "bcachefs" ];
+    # TODO Move to option
+    # ------------------- Bleeding Edge -------------------
     nix.package = pkgs.nixVersions.latest;
     boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
     hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
 
+    # -------------------- System Information --------------------
     networking.hostName = "raider";
     system.stateVersion = "24.11";
     nixpkgs.config.allowUnfree = true;

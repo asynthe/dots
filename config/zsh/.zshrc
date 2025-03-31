@@ -1,7 +1,8 @@
 # macOS stuff
-source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-chruby ruby-3.1.3
+# if uname == 'darwin' then
+# ->    source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+# ->    source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+# ->    chruby ruby-3.1.3
 
 # -------------- Environment Variables --------------
 export EDITOR='nvim'

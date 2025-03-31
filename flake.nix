@@ -164,29 +164,13 @@
 	                user = "meow";
                 };
                 modules = [ 
-	                ./home/meow 
+	                ./nix/pkgs/home/meow 
 	                nixvim.homeManagerModules.nixvim
 	                sops-nix.homeManagerModules.sops
                     hyprland.homeManagerModules.default
                     stylix.homeManagerModules.stylix
 	            ];
             };
-            
-            # missingno
-            #missingno = home-manager.lib.homeManagerConfiguration {
-                #pkgs = nixpkgs.legacyPackages.x86_64-linux;
-	            #extraSpecialArgs = {
-                    #inherit pkgs;
-                    #inherit pkgs-stable inputs;
-	                    #user = "missingno"
-                    #;
-	            #};
-	            #modules = [
-	                #./home/missingno
-	                #nixvim.homeManagerModules.nixvim
-                    #stylix.homeManagerModules.stylix
-	            #];
-            #};
         };
     };
 }

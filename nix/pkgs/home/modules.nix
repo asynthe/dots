@@ -87,54 +87,52 @@ function yy() {
     imports = [
 
         # TODO Fix Priority
-        ./modules/mpd.nix
+        ../nix/pkgs/home_modules/mpd.nix
 
         # TODO Modules to reduce and delete
         # MODIFY AND REMOVE FROM HOME
-	    #./modules/vscode
-	    #./modules/xmonad.nix
-	    ./modules/librewolf.nix
-        #./modules/spotifyd.nix
-        #./modules/swappy.nix
-        #./modules/swayidle.nix
-        ./modules/git.nix
-        ./modules/mpv.nix
+	    #../home_modules/vscode
+	    #../home_modules/xmonad.nix
+	     ../home_modules/librewolf.nix
+        #../home_modules/spotifyd.nix
+        #../home_modules/swappy.nix
+        #../home_modules/swayidle.nix
+         ../home_modules/git.nix
+         ../home_modules/mpv.nix
 
         # MOVE TO NIX
-        #./modules/games.nix
+        #./home_modules/games.nix
 
         # EMPTY
-        #./modules/uwsm.nix
+        #./home_modules/uwsm.nix
 
         # -------------------------------------------------
         # Remember to first rebuild home manager with 
         # the specified cache then enable the dotfile .
         ./substituters.nix
-        ./minimal.nix
-        #./sec.nix
 
         # Hyprland
-        ../config/hypr
+        ../../config/hypr
         # Wezterm
         # Yazi
 
         # -------------- Package modules and other --------------
 
 	    # System
-        ./modules/fonts.nix
-        ./modules/settings.nix
-        ./modules/stylix.nix
-        ./modules/xdg.nix
+        ./home_modules/fonts.nix
+        ./home_modules/settings.nix
+        ./home_modules/stylix.nix
+        ./home_modules/xdg.nix
 
         # Package Sets # REDUCE
-        ./modules/audio.nix
-        ./modules/cli.nix
-        ./modules/gui.nix
+        ./home_modules/audio.nix
+        ./home_modules/cli.nix
+        ./home_modules/gui.nix
 
         # Shell
-        ./modules/aliases.nix
-        ./modules/bash.nix
-        ./modules/plugins.nix
-        ./modules/zsh.nix
+        ./home_modules/aliases.nix
+        ./home_modules/bash.nix
+        ./home_modules/plugins.nix
+        ./home_modules/zsh.nix
     ];
 }
