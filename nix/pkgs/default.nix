@@ -1,8 +1,10 @@
 {
     imports = [
-
-        # -------------------- Packages --------------------
-        ./set/pkgs.nix
-        ./set/pkgs_sec.nix
+        ./set/cli.nix
+        #./set/games.nix
+        ./set/main.nix
+        ./set/minimal.nix
+        #./set/sec.nix
+        ./set/wm.nix
     ];
 }

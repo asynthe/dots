@@ -4,24 +4,32 @@
 # ->    source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 # ->    chruby ruby-3.1.3
 
-# -------------- Environment Variables --------------
+# --------------- Environment Variables ---------------
+# NixOS and Hyprland specific
+NIXOS_XDG_OPEN_USE_PORTAL=1
+NIXOS_OZONE_WL=1
+XDG_CURRENT_DESKTOP='Hyprland'
+
+# Personal
+BOOK_FOLDER = '/home/meow/sync/archive/book/reading'
+WALLPAPER_FOLDER = '/home/meow/sync/archive/wallpaper/img'
+WALLPAPER_VIDEO_FOLDER = '/home/meow/sync/archive/wallpaper/video'
+
 export EDITOR='nvim'
 export BROWSER='librewolf'
 export FILE='yazi'
-export FLAKE='/home/meow/sync/flake'
-export READER='zathura'
+export READER='sioyek'
 #export TERM='xterm-256color'
 #export QT_STYLE_OVERRIDE=adwaita-dark
 
+export FLAKE='/home/meow/sync/flake'
 export GNUPGHOME=$HOME/sync/pass/gpg # default `$HOME/.gnupg`
 export PASSWORD_STORE_DIR=$HOME/sync/pass/pass # default `$HOME/.password-store`
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml # default `$HOME/.config/starship.toml`, also $ZDOTDIR/starship/starship.toml to have inside zsh folder.
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini # Instead of $HOME/.config/wayfire.ini
 
-# NixOS and Hyprland specific
-NIXOS_XDG_OPEN_USE_PORTAL=1
-NIXOS_OZONE_WL=1
-XDG_CURRENT_DESKTOP='Hyprland'
+# direnv
+export DIRENV_LOG_FORMAT=""
 
 # -------------- Aliases --------------
 # Directories
@@ -38,8 +46,10 @@ alias dicker='docker'
 alias dokcer='docker'
 alias focker='docker'
 
-# Dev
-alias py='python'
+# Testing
+alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
+#alias img = 'wezterm imgcat'
+# TODO See how to have same but for ghostty.
 
 # Main
 alias ,='cd -'
@@ -64,6 +74,9 @@ alias wtype='xdg-mime query filetype'
 #alias scan='iwctl station wlan0 scan' # not using iwd now
 #alias -g cat='bat' # Problems with pywal
 
+# Dev
+alias py='python'
+
 # Grep
 alias grep='grep -i --color=auto'
 alias egrep='egrep --color=auto'
@@ -80,18 +93,17 @@ alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias -g info='mediainfo'
 alias -g nv='nvim' 
 alias -g nvv='doas nvim'
-alias -g pdf='zathura'
+alias -g pdf='sioyek'
 alias ani-on='hyprctl keyword animations:enabled 1'
 alias ani-off='hyprctl keyword animations:enabled 0'
 #alias ani-off='hyprgame'
 
 # Books
-alias book='fd . ~/sync/study/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias books='fd . ~/sync/archive/book --type f -e "pdf" -e "epub" | sk | xargs zathura'
-alias bookjp='fd . ~/sync/archive/jp/book -e "pdf" -e "epub" | sk | xargs zathura'
+alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+# TODO Redirect output to /dev/null (?)
 
 # TV
-
+# ...
 
 # Fun
 alias kernel-soul-8hz='aplay /dev/random'
@@ -104,18 +116,24 @@ alias upscayl='flatpak run org.upscayl.Upscayl'
 
 # Wallpaper
 alias swww-random='~/sync/archive/script/bash/swww/randomize.sh /home/asynthe/sync/system/wallpaper/favourite'
-alias wall='fd . ~/sync/archive/wallpaper/img -e jpg -e png | sk | xargs swww img'
-alias wallp='fd . ~/sync/archive/wallpaper/img -e jpg -e png | sk | tee >(xargs wal -i) >(xargs swww img)'
-alias wallpy='fd . ~/sync/archive/wallpaper -e jpg -e png | ~/script/bash/fzf_preview | tee >(xargs wal -i) >(xargs swww img)'
-alias video='fd . ~/sync/archive/wallpaper/video -e mp4 | sk | xargs mpvpaper -v -p -o "loop-file=inf" "*"'
-alias loop='fd . ~/sync/system/wallpaper/loop -e mp4 | sk | xargs mpvpaper -v -s -o "loop-file=inf" eDP-1'
+alias wall='fd . $WALLPAPER_FOLDER -e jpg -e png | sk | xargs swww img'
+alias video='fd . $WALLPAPER_VIDEO_FOLDER -e mp4 | sk | xargs mpvpaper -v -p -o "loop-file=inf --no-resume-playback" "*"'
+#alias wallp='fd . ~/sync/archive/wallpaper/img -e jpg -e png | sk | tee >(xargs wal -i) >(xargs swww img)'
 
-# TESTING #
-alias pl='mpvpaper -v -s -o "shuffle loop-playlist=inf" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
-alias pl-na='mpvpaper -v -s -o "no-audio shuffle loop-playlist=" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
-alias tv-jp='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/jp.m3u'
-alias tv-cl='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/cl.m3u'
-alias tv-au='mpvpaper -v -s "*" https://i.mjh.nz/au/Perth/raw-tv.m3u8'
+# --no-resume-playback
+# --panscan=1 # (2k zoom)
+# '*' -> All monitors
+
+# TODO Check how to run playlist on mpvpaper.
+# TODO example of tee >() >() for sending to two commands.
+# TODO Check for fzf image preview.
+
+# TESTING
+#alias pl='mpvpaper -v -s -o "shuffle loop-playlist=inf" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
+# alias pl-na='mpvpaper -v -s -o "no-audio shuffle loop-playlist=" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
+# alias tv-jp='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/jp.m3u'
+# alias tv-cl='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/cl.m3u'
+# alias tv-au='mpvpaper -v -s "*" https://i.mjh.nz/au/Perth/raw-tv.m3u8'
 
 # Other
 #alias wtr='curl wttr.in/Perth'
@@ -123,6 +141,7 @@ alias tv-au='mpvpaper -v -s "*" https://i.mjh.nz/au/Perth/raw-tv.m3u8'
 #alias t='peaclock --config-dir ~/.config/peaclock'
 #alias time='peaclock --config-dir ~/.config/peaclock'
 #alias irc='tmux attach-session -t weechat'
+#alias irc='weechat'
 
 # -------------- Keybinds --------------
 setopt extended_glob
@@ -146,6 +165,7 @@ bindkey -s '^X' 'nvim^M'
 bindkey -r '^Z' # Unbinded for tmux zoom pane instead of send into bg.
 
 # -------------- Configuration --------------
+eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
 #eval "$(starship init bash)" # if .bashrc
@@ -235,3 +255,5 @@ function yy() {
 }
 alias yazi='yy'
 alias lf='lfcd'
+alias lf = 'lf'
+

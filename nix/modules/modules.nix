@@ -6,11 +6,11 @@
         #./testing/avahi.nix # TODO FIX: Always tested but doesn't work.
         #./testing/greetd.nix # TODO FIX
         #./testing/printer.nix # TODO FIX: SANE and other stuff.
+        #./testing/httpd.nix
 
         # -------------------- Simple --------------------
         #./simple/clamav.nix
         ./simple/gpg.nix
-        #./simple/httpd.nix
         ./simple/ime.nix
         #./simple/kmscon.nix
         #./simple/mirakurun.nix

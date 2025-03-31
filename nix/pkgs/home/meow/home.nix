@@ -11,7 +11,4 @@
 
     # Hide "last login" message on new terminal.
     home.file.".hushlogin".text = "";
-
-    # Testing 
-    home.packages = [ pkgs.monero-gui ];
 }
