@@ -7,12 +7,10 @@
 	    lolcat
 	    nhentai # ( ͡° ͜ʖ ͡°) 
 	    peaclock tty-clock
-	    pulsemixer # from pulseaudio
 	    unimatrix
         asciiquarium-transparent
         bottom
         btop
-        cli-visualizer
         cpu-x
         pipes-rs
 

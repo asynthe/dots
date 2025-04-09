@@ -139,9 +139,7 @@
 ;(add-hook 'org-mode-hook #'valign-mode)
 
 ;; ------------------------- Packages - Org -------------------------
-
-
-(use-package org-tidy           ; Hides :PROPERTY:
+(use-package org-tidy         ; Hides :PROPERTY:
              :ensure t
              :hook
              (org-mode . org-tidy-mode))
@@ -162,9 +160,9 @@
 ;(use-package mozc)
 ;(require 'mozc)
 ;(setq default-input-method "japanese-mozc")
-(setenv "GTK_IM_MODULE" "fcitx")
-(setenv "QT_IM_MODULE" "fcitx")
-(setenv "XMODIFIERS" "@im=fcitx")
+;(setenv "GTK_IM_MODULE" "fcitx")
+;(setenv "QT_IM_MODULE" "fcitx")
+;(setenv "XMODIFIERS" "@im=fcitx")
 
 ;; Basic UI settings
 (setq inhibit-startup-message t)          ; No startup message
@@ -173,7 +171,20 @@
 (tool-bar-mode -1)                        ; Disable tool bar
 (tooltip-mode -1)                         ; Disable tooltips
 (setq-default line-spacing 1)
-(setq truncate-lines nil)                 ; Enable word wrap
+
+;; Truncate or word wrapping
+(add-hook 'org-mode-hook (lambda ()
+                           (setq truncate-lines nil)  ; Disable truncation
+                           (visual-line-mode 1)))     ; Enable word wrapping
+
+(setq-default fringe-indicator-alist
+              '((truncation . right-arrow)    ; Change to right-arrow (default)
+                (continuation . right-arrow))) ; Change wrapped lines to left-arrow
+
+;; Word wrapping doesn't work with Vertico
+(advice-add #'vertico--resize-window :after #'set-truncate)
+(defun set-truncate (&rest _)
+  (setq-local truncate-lines nil))
 
 ;; Disabling line numbering for certain modes
 (dolist (mode '(org-mode-hook
@@ -184,7 +195,7 @@
 
 ;; Fringes
 ;(set-fringe-mode 7)
-(set-fringe-mode 0)                       ; No fringes
+;(set-fringe-mode 0)                       ; No fringes
 
 ;; Margins / Padding
 (setq-default left-margin-width 3)

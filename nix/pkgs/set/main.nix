@@ -3,20 +3,7 @@
     # ------------------------- Packages -------------------------
     environment.systemPackages = with pkgs; [
 
-        # GUI
-        mpv # TODO Add plugins: mpris, thumbnail, thumbfast, visualizer
-
-        # NON HYPR
-        zathura
-        sioyek
-
-        # Tools
-        bat
-        eza
-        nh
-        starship
-        zoxide
-
+        # ------------------------- CLI -------------------------
         # Apps
         mpd ncmpcpp
         neovim
@@ -25,6 +12,13 @@
         weechat
         yazi
         zellij
+
+        # Audio visualizer and others
+	    pulsemixer # from pulseaudio
+        alsa-utils
+        cava
+        cli-visualizer
+        cmus # Music player
 
         # Tools
 	    fd
@@ -40,8 +34,6 @@
 	    ripgrep
 	    unar
         #meshlab #f3d #fstl # 3D files
-        alsa-utils
-        cmus # Music player
         exiftool
         ffmpeg
         git bfg-repo-cleaner
@@ -54,6 +46,14 @@
         speedtest-cli
         #tesseract #easyocr # OCR
 
+        # Tools
+        bat
+        eza
+        nh
+        starship
+        zoxide
+        pkgs-stable.tectonic #tectonic # LaTeX Engine
+
         # Tools - Nix
         #nixfmt
         #nixops_unstable #nixops
@@ -63,7 +63,11 @@
         direnv
         nix-direnv
 
-        # --------------- Hyprland ---------------
+        # ------------------------- GUI -------------------------
+        mpv # TODO Add plugins: mpris, thumbnail, thumbfast, visualizer
+        sioyek #zathura # TODO: Remove `zathura` once replaced
+
+        # ------------------------- GUI - Hyprland -------------------------
         brightnessctl
         gromit-mpx
         hyprshot
@@ -75,9 +79,5 @@
         waybar
         wofi
         #pkgs.libsForQt5 polkit-kde-agent
-
-        # ------------------------- Packages that don't work for now -------------------------
-        #tectonic
-        pkgs-stable.tectonic # LaTeX Engine
     ];
 }
