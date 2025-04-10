@@ -1,37 +1,54 @@
-# macOS stuff
-# if uname == 'darwin' then
-# ->    source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-# ->    source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-# ->    chruby ruby-3.1.3
+# TODO: Fix the `---`
+
+# 1. Environment Variables
+# 2. Aliases
 
 # --------------- Environment Variables ---------------
-# NixOS and Hyprland specific
+
+# IF MACOS !!!!!!!!!!!!!!!
+# if uname == 'darwin' then
+
+    # Brew stuff
+    #source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+    #source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+    #chruby ruby-3.1.3
+
+    # Specific variables
+    #export PASSWORD_STORE_DIR=$HOME/ben/pass/pass # default `$HOME/.password-store`
+    #export GNUPGHOME=$HOME/ben/pass/gpg # default `$HOME/.gnupg`
+
+# IF LINUX !!!!!!!!!!!!!!!
+
+# Main
+#export TERM='xterm-256color' # TODO Testing
+#export QT_STYLE_OVERRIDE=adwaita-dark # TODO Testing
+export GNUPGHOME=$HOME/pass/gpg # default `$HOME/.gnupg`
+export PASSWORD_STORE_DIR=$HOME/pass/pass # default `$HOME/.password-store`
+
+# IF NIXOS !!!!!!!!!!!!!!!
 NIXOS_XDG_OPEN_USE_PORTAL=1
 NIXOS_OZONE_WL=1
-XDG_CURRENT_DESKTOP='Hyprland'
+export FLAKE='/home/meow/sync/flake'
 
-# Personal
-BOOK_FOLDER = '/home/meow/sync/archive/book/reading'
-WALLPAPER_FOLDER = '/home/meow/sync/archive/wallpaper/img'
-WALLPAPER_VIDEO_FOLDER = '/home/meow/sync/archive/wallpaper/video'
+# User
+BOOK_FOLDER = '$HOME/sync/archive/book/reading'
+WALLPAPER_FOLDER = '$HOME/sync/archive/wallpaper/img'
+WALLPAPER_VIDEO_FOLDER = '$HOME/sync/archive/wallpaper/video'
+
+# Hyprland
+XDG_CURRENT_DESKTOP='Hyprland'
 
 export EDITOR='nvim'
 export BROWSER='librewolf'
 export FILE='yazi'
 export READER='sioyek'
-#export TERM='xterm-256color'
-#export QT_STYLE_OVERRIDE=adwaita-dark
 
-export FLAKE='/home/meow/sync/flake'
-export GNUPGHOME=$HOME/sync/pass/gpg # default `$HOME/.gnupg`
-export PASSWORD_STORE_DIR=$HOME/sync/pass/pass # default `$HOME/.password-store`
-export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml # default `$HOME/.config/starship.toml`, also $ZDOTDIR/starship/starship.toml to have inside zsh folder.
+export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml # default `$HOME/.config/starship.toml`, 
+#also $ZDOTDIR/starship/starship.toml to have inside zsh folder.
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini # Instead of $HOME/.config/wayfire.ini
-
-# direnv
 export DIRENV_LOG_FORMAT=""
 
-# -------------- Aliases --------------
+# --------------- Aliases ---------------
 # Directories
 alias ls='eza --icons --group-directories-first'
 alias la='eza --icons -a --group-directories-first'
@@ -40,6 +57,7 @@ alias lla='eza --long -a --group-directories-first'
 alias lg='eza --long --git --group-directories-first'
 
 # Mistakes
+alias H='Hyprland'
 alias sl='ls'
 alias fuck='sudo !!'
 alias dicker='docker'
@@ -48,8 +66,7 @@ alias focker='docker'
 
 # Testing
 alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
-#alias img = 'wezterm imgcat'
-# TODO See how to have same but for ghostty.
+#alias img = 'wezterm imgcat' # TODO See how to have same but for ghostty.
 
 # Main
 alias ,='cd -'
