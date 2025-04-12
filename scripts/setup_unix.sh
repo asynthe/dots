@@ -1,5 +1,9 @@
 #! /usr/bin/env bash
 
+# TODO Can I run the flake from inside a Windows folder?
+# TODO If WSL is detected, then add a symlink to `/mnt/c/Users/ben/Desktop` to `$HOME`.
+# -> Ask what the Windows username is?
+
 # ASCII
 display_ascii_art() {
     cat << "EOF" | pv -qL 470
