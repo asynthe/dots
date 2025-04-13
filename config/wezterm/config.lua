@@ -1,3 +1,6 @@
+-- Asynthe's Wezterm config
+-- 2025
+
 local wezterm = require "wezterm"
 local act = wezterm.action
 local config = wezterm.config_builder()
@@ -84,11 +87,14 @@ return {
     set_environment_variables = {
         WEZTERM_WSL_ENABLE_WAYLAND = "1",
         WAYLAND_DISPLAY = os.getenv("WAYLAND_DISPLAY") or "wayland-0",
-        XDG_RUNTIEM_DIR = os.getenv("XDG_RUNTIME_DIR") or "/run/user/$(id -u)"
+        XDG_RUNTIME_DIR = os.getenv("XDG_RUNTIME_DIR") or "/run/user/$(id -u)"
     },
 
     -- Transparency
-    window_background_opacity = 0.8,
+    --window_background_opacity = 0.8,
+    --text_background_opacity = 0.989,
+    window_background_opacity = 0,
+    win32_system_backdrop = "Mica", -- Auto, Disabled, Acrylic, Mica, Tabbed
 
     -- Keys
     disable_default_key_bindings = true,

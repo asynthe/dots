@@ -10,3 +10,6 @@ Set a temporary execution policy
 
 Exit Execution Policy
 ~Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser # Revert Execution Policy~
+
+Disable Windows Beep sound
+windows how to set up different images for the lock screen from cmd

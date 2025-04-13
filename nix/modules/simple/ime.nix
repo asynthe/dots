@@ -34,8 +34,10 @@ with lib;
         # Apps / Video Player
         #anki-bin
         memento
+    ];
 
-        # ------------------------- Fonts -------------------------
+    # ------------------------- Fonts -------------------------
+    fonts.packages = with pkgs; [
         ipafont
         kochi-substitute
         noto-fonts

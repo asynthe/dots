@@ -1,8 +1,14 @@
 {
     imports = [
         ./system.nix
-	    ./pkgs.nix
-	    ../modules/gpg.nix
-        ../modules/ime.nix
+
+        # Modules
+	    ../../modules/simple/gpg.nix
+        ../../modules/simple/ime.nix
+        #../../modules/simple/ollama.nix
+
+        # Pkgs
+        ../../pkgs/set/wsl.nix
+        ../../pkgs/set/fonts.nix
     ];
 }

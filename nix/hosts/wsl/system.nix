@@ -13,18 +13,14 @@
     warn-dirty = false;
   };
 
-  wsl = {
-    enable = true;
+    wsl.enable = true;
+  #wsl = {
+    #enable = true;
     #defaultUser = "meow";
     #startMenuLaunchers = true;
     #wslConf = {
       #automount.root = "/home/meow/win"; # TODO Where to mount windows drive
       #boot.command = "";
     #};
-  };
-
-  # Services
-  imports = [
-    ../../modules/ollama.nix
-  ];
+  #};
 }

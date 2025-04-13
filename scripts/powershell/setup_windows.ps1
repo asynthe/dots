@@ -4,7 +4,43 @@
 # - Ableton
 # - TranslucentTB
 
+# TODO Copy 'rarreg.key' to WinRAR folder.
+# TODO Copy GlazeWM configuration to %USERPROFILE%/.glzr/glazewm
+# TODO Set up a temporal elevation
+
+# Win11DisableRoundedCourners
+# TODO Setup
+# TODO Delete the .exe at the end? Or move to another folder?
+# https://github.com/valinet/Win11DisableRoundedCorners/releases/download/1.0.0.3/Win11DisableOrRestoreRoundedCorners.exe
+
+#Write-Output "Other: fetching and running 'Win11DisableOrRestoreRoundedCorners.exe'..."
+#Start-Sleep -Milliseconds 100
+#$Repo = "valinet/Win11DisableRoundedCorners"
+#$FileName = "Win11DisableOrRestoreRoundedCorners.exe"
+#$LatestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
+#$LatestVersion = $LatestRelease.tag_name
+#$Url = "https://github.com/$Repo/releases/download/$LatestVersion/$FileName"
+#$Desktop = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop")
+#$FilePath = [System.IO.Path]::Combine($Desktop, $FileName)
+#Invoke-WebRequest -Uri $Url -OutFile $FilePath # Download the latest version
+#Start-Process -FilePath $FilePath -NoNewWindow -Wait # Run the executable
+
+# Neovim
+# TODO Test if working in powershell.
+# https://dev.to/hoo12f/setting-up-neovim-with-windows-powershell-2208
+#Write-Output "Copying neovim configuration into Appdata\Local..."
+#Start-Sleep -Milliseconds 100											# Sleep for 100 milliseconds.
+#$NvimConfigPath = "$env:USERPROFILE\AppData\Local\nvim"
+#$SourcePath = "..\config\nvim"
+# Create the target directory if it doesn't exist
+#if (!(Test-Path $NvimConfigPath)) {
+#    New-Item -ItemType Directory -Path $NvimConfigPath -Force
+#}
+#Copy-Item -Path $SourcePath -Destination $NvimConfigPath -Recurse -Force # Copy the files
+
 # ------------------------- ASCII -------------------------
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 function Display-AsciiArt {
     $asciiArt = @"
   ⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -112,7 +148,10 @@ $programs = @(
     "Valve.Steam",
     "qBittorrent.qBittorrent",
     "wez.wezterm",
+    "lars-berger.GlazeWM",
+    "Flow-Launcher.Flow-Launcher",
     #"CrystalDewWorld.CrystalDiskInfo.ShizukuEdition",
+    #"LibreWolf.LibreWolf",
 )
 
 $answer = Read-Host "This will set up the next list of programs, do you wish to continue? (y/n)"
@@ -138,9 +177,7 @@ foreach ($program in $programs) {
     }
 }
 
+# ------------------------- Finish -------------------------
 Write-Output "------------------------- Finished! -------------------------"
 Start-Sleep -Milliseconds 200
 Write-Output "Setup completed! Please restart PowerShell to apply changes."
-
-# TODO TEST NEOVIM CONFIGURATION ON POWERSHELL ???
-# https://dev.to/hoo12f/setting-up-neovim-with-windows-powershell-2208
