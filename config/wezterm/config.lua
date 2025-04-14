@@ -82,7 +82,7 @@ local keybinds = {
 return {
 
     -- Start in NixOS and in ~
-    default_prog = { "wsl.exe", "-d", "NixOS", "--cd", "~" },
+    --default_prog = { "wsl.exe", "-d", "NixOS", "--cd", "~" },
     enable_wayland = true,
     set_environment_variables = {
         WEZTERM_WSL_ENABLE_WAYLAND = "1",
