@@ -82,7 +82,7 @@ $answer = Read-Host "This will set up the next configuration, do you wish to con
 switch ($answer.ToLower()) {
     "y" { Write-Host "Continuing..." }
     "n" { Write-Host "Exiting..."; exit }
-    default { Write-Host "Character not recognized. Exiting..."; exit }
+    default { Write-Host "Character not recognized. Exiting..."; exit }}
 Start-Sleep -Milliseconds 500
 
 Write-Output "Powershell: Creating a profile..."
@@ -94,7 +94,7 @@ if (!(Test-Path -Path $PROFILE)) {
 Write-Output "Powershell: Removing welcome message..."
 Start-Sleep -Milliseconds 100
 Add-Content -Path $PROFILE -Value '$Host.UI.RawUI.WindowTitle = "PowerShell"; Clear-Host'
-Write-Output "------------------------- Configuration finished! -------------------------"
+Write-Output "------------------------- Finished! -------------------------"
 
 # Programs
 Write-Output "------------------------- Programs -------------------------"
@@ -108,31 +108,32 @@ List of programs:
 [+] Git
 [+] KeePassXC
 [+] Librewolf
-[+] PowerToys
-[+] Visual Studio Code
 [+] Mullvad VPN
 [+] Notepad++
 [+] OBS Studio
 [+] Obsidian
+[+] PowerToys
 [+] PuTTY
-[+] WinRAR
 [+] Spotify
+[+] Steam
 [+] VLC
 [+] VMware Workstation Pro
-[+] Steam
-[+] qBittorrent
+[+] Visual Studio Code
 [+] Wezterm
+[+] WinRAR
+[+] Yazi
+[+] qBittorrent
 "@
 
+# NOTE: Remember that last one doesn't have a comma.
 $programs = @(
     "7zip.7zip",
     "CPUID.CPU-Z.MSI", # MSI Ver.
-    "CrystalDewWorld.CrystalDiskInfo.KureiKeiEdition",
+    "CrystalDewWorld.CrystalDiskInfo.ShizukuEdition",
     "Discord.Discord",
     "File-New-Project.EarTrumpet",
     "Git.Git",
     "KeePassXCTeam.KeePassXC",
-    "LibreWolf.LibreWolf",
     "Microsoft.PowerToys",
     "Microsoft.VisualStudioCode",
     "MullvadVPN.MullvadVPN",
@@ -141,17 +142,34 @@ $programs = @(
     "Obsidian.Obsidian",
     "PeterPawlowski.foobar2000",
     "PuTTY.PuTTY",
-    "RARLab.WinRAR",
     "Spotify.Spotify",
     "VLC.VLC",
-    "VMware.WorkstationPro", # TODO Is this working?
     "Valve.Steam",
     "qBittorrent.qBittorrent",
     "wez.wezterm",
     "lars-berger.GlazeWM",
     "Flow-Launcher.Flow-Launcher",
-    #"CrystalDewWorld.CrystalDiskInfo.ShizukuEdition",
+
+    #"CrystalDewWorld.CrystalDiskInfo.KureiKeiEdition",
+    #"RARLab.WinRAR", # Prefer beta for Dark Mode
+    #"VMware.WorkstationPro", # TODO Is this working?
+    "LibreWolf.LibreWolf",
     #"LibreWolf.LibreWolf",
+
+    # Yazi
+    # TODO: `yy` alias
+    # TODO: Allow yazi to use `file` which comes with Git,
+    #       find the binary for `file`.
+    #       more info: https://yazi-rs.github.io/docs/installation#windows
+    "sxyazi.yazi",
+    "Gyan.FFmpeg", 
+    "7zip.7zip",
+    "jqlang.jq",
+    "sharkdp.fd",
+    "BurntSushi.ripgrep.MSVC",
+    "junegunn.fzf",
+    "ajeetdsouza.zoxide",
+    "ImageMagick.ImageMagick"
 )
 
 $answer = Read-Host "This will set up the next list of programs, do you wish to continue? (y/n)"

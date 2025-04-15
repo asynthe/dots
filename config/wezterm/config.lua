@@ -83,12 +83,13 @@ return {
 
     -- Start in NixOS and in ~
     --default_prog = { "wsl.exe", "-d", "NixOS", "--cd", "~" },
+    default_prog = { "pwsh.exe" },
     enable_wayland = true,
-    set_environment_variables = {
-        WEZTERM_WSL_ENABLE_WAYLAND = "1",
-        WAYLAND_DISPLAY = os.getenv("WAYLAND_DISPLAY") or "wayland-0",
-        XDG_RUNTIME_DIR = os.getenv("XDG_RUNTIME_DIR") or "/run/user/$(id -u)"
-    },
+    --set_environment_variables = {
+    --    WEZTERM_WSL_ENABLE_WAYLAND = "1",
+    --    WAYLAND_DISPLAY = os.getenv("WAYLAND_DISPLAY") or "wayland-0",
+    --    XDG_RUNTIME_DIR = os.getenv("XDG_RUNTIME_DIR") or "/run/user/$(id -u)"
+    --},
 
     -- Transparency
     --window_background_opacity = 0.8,
