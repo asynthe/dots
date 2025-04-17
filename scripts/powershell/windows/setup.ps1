@@ -94,7 +94,6 @@ if (!(Test-Path -Path $PROFILE)) {
 Write-Output "Powershell: Removing welcome message..."
 Start-Sleep -Milliseconds 100
 Add-Content -Path $PROFILE -Value '$Host.UI.RawUI.WindowTitle = "PowerShell"; Clear-Host'
-Write-Output "------------------------- Finished! -------------------------"
 
 # Programs
 Write-Output "------------------------- Programs -------------------------"
@@ -132,11 +131,12 @@ $programs = @(
     "CrystalDewWorld.CrystalDiskInfo.ShizukuEdition",
     "Discord.Discord",
     "File-New-Project.EarTrumpet",
+    "Flow-Launcher.Flow-Launcher",
     "Git.Git",
     "KeePassXCTeam.KeePassXC",
+    "LibreWolf.LibreWolf",
     "Microsoft.PowerToys",
     "Microsoft.VisualStudioCode",
-    "MullvadVPN.MullvadVPN",
     "Notepad++.Notepad++",
     "OBSProject.OBSStudio",
     "Obsidian.Obsidian",
@@ -145,16 +145,14 @@ $programs = @(
     "Spotify.Spotify",
     "VLC.VLC",
     "Valve.Steam",
+    "lars-berger.GlazeWM",
     "qBittorrent.qBittorrent",
     "wez.wezterm",
-    "lars-berger.GlazeWM",
-    "Flow-Launcher.Flow-Launcher",
 
     #"CrystalDewWorld.CrystalDiskInfo.KureiKeiEdition",
+    #"MullvadVPN.MullvadVPN", # Weird bug that opens it when system starts but doesn't show.
     #"RARLab.WinRAR", # Prefer beta for Dark Mode
     #"VMware.WorkstationPro", # TODO Is this working?
-    "LibreWolf.LibreWolf",
-    #"LibreWolf.LibreWolf",
 
     # Yazi
     # TODO: `yy` alias
@@ -195,7 +193,6 @@ foreach ($program in $programs) {
     }
 }
 
-# ------------------------- Finish -------------------------
 Write-Output "------------------------- Finished! -------------------------"
 Start-Sleep -Milliseconds 200
 Write-Output "Setup completed! Please restart PowerShell to apply changes."
