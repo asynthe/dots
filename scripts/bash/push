@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -x
+os=$(uname -s)
+
+# Linux
+if [ "$os" = "Linux" ]; then
+    echo "This is a Linux system."
+
+    # Flakes
+    #git -C ~/sync/flakes add -A
+    #git -C ~/sync/flakes commit -m 'updating'
+    #git -C ~/sync/flakes push
+
+    # Notes
+    git -C ~/sync/notes add -A
+    git -C ~/sync/notes commit -m 'updating'
+    git -C ~/sync/notes push
+
+    # Pass
+    git -C ~/sync/pass add -A
+    git -C ~/sync/pass commit -m 'updating'
+    git -C ~/sync/pass push
+
+    # Study
+    git -C ~/sync/study add -A
+    git -C ~/sync/study commit -m 'updating'
+    #git -C ~/sync/study push --recurse-submodules
+    git -C ~/sync/study push
+
+    # Personal flake
+    git -C ~/sync/flake add -A
+    git -C ~/sync/flake commit -m 'updating'
+    git -C ~/sync/flake push
+
+# macOS
+elif [ "$os" = "Darwin" ]; then
+    echo "This is a macOS system."
+
+    # Flakes
+    git -C ~/sync/flakes add -A
+    git -C ~/sync/flakes commit -m 'updating'
+    git -C ~/sync/flakes push
+
+    # Notes
+    git -C ~/sync/notes add -A
+    git -C ~/sync/notes commit -m 'updating'
+    git -C ~/sync/notes push
+
+    # Keys
+    git -C ~/sync/pass add -A
+    git -C ~/sync/pass commit -m 'updating'
+    git -C ~/sync/pass push
+
+    # Study
+    git -C ~/sync/study add -A
+    git -C ~/sync/study commit -m 'updating'
+    #git -C ~/sync/study push --recurse-submodules
+    git -C ~/sync/study push
+
+    # Personal flake
+    git -C ~/sync/flake add -A
+    git -C ~/sync/flake commit -m 'updating'
+    git -C ~/sync/flake push
+
+else
+    echo "Unsupported operating system: $os"
+    exit 1
+fi
