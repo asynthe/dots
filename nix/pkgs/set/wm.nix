@@ -58,34 +58,6 @@
         #emacsPackages.doom-modeline
         #emacsPackages.doom-modeline-now-playing # Requires playerctl.
 
-        # -------------- Hyprland --------------
-        brightnessctl
-        grim slurp
-        imv
-        mako libnotify
-        mpvpaper
-        ripdrag
-        swayidle
-        swww
-        wl-clipboard
-        wofi
-        libsForQt5.polkit-kde-agent # Authentication agent
-        libsForQt5.qt5.qtwayland
-
-        # -------------- Xmonad --------------
-        #xmonad
-        #xmonad-with-packages
-        #xmobar
-        #dmenu
-        #nitrogen
-        #nsxiv
-        #xclip
-        #xorg.xinit
-        #xorg.xprop
-        #picom-jonaburg
-        #xargs
-        #xlsclients
-
         # -------------- Thumbnailers for PCmanFM --------------
         #pcmanfm
         #nufraw-thumbnailer # .raw files (raw-thumbnailer)

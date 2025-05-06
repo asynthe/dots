@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }: {
 
-    # TODO Remember to make the modules options once working.
-    imports = [ ../../modules ];
-        
-    programs.xwayland.enable = true; # TODO MOVE -> Hyprland
-
     # TODO Move to option
+    imports = [
+        ../../modules/hyprland.nix
+    ];
+
     # ------------------- Bleeding Edge -------------------
     nix.package = pkgs.nixVersions.latest;
     boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
@@ -17,7 +16,7 @@
     nixpkgs.config.allowUnfree = true;
     networking.networkmanager.enable = true;
     i18n.defaultLocale = "en_US.UTF-8";
-    time.timeZone = "America/Santiago";
+    time.timeZone = "Asia/Tokyo";
 
     meta = {
         # -------------- Cache --------------
@@ -28,7 +27,6 @@
         system.user = "meow";
         system.type = "laptop"; # laptop, server
         system.language = "both"; # english, japanese, both
-        system.packages = "minimal"; # minimal, minimal_stable
         system.keyboard = true;
 
         system.windows.enable = true; # Option for dual-boot, fix System time
@@ -38,6 +36,9 @@
         #system.nix.settings = "laptop";
         #system.networking.type = "laptop";
         #system.users = "laptop";
+
+        # Package set
+        system.packages = "minimal"; # minimal, minimal_stable
 
         # -------------- Boot --------------
         boot.bootloader = "systemd-boot";
@@ -104,7 +105,7 @@
         # -------------- VM --------------
         vm.libvirt.enable = true;
         #vm.virtualbox.enable = true;
-        vm.vmware.enable = true;
+        #vm.vmware.enable = true;
 
         # -------------- VPN --------------
         vpn.mullvad.enable = true;

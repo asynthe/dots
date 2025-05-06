@@ -15,7 +15,6 @@
             nerd-fonts.iosevka-term-slab
             nerd-fonts.jetbrains-mono
             nerd-fonts.mononoki
-            nerd-fonts.mplus
             nerd-fonts.overpass
             nerd-fonts.sauce-code-pro
             nerd-fonts.ubuntu-sans

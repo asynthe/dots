@@ -1,45 +1,45 @@
-# -------------- Configuration --------------
+# --------------- Configuration ---------------
 ncmpcpp_directory = "/home/meow/.config/ncmpcpp"
-mpd_music_dir = /home/meow/sync/archive/music
+mpd_music_dir = "/home/meow/sync/archive/music"
 allow_for_physical_item_deletion = no
 mpd_crossfade_time = "6"
 mpd_host = "localhost"
 mpd_port = "6600"
-#lyrics_directory = "~/.local/share/lyrics"
-mouse_support = "yes"; # scrollbar use
+lyrics_directory = "~/.local/share/lyrics"
+mouse_support = "yes"; # Scrollbar use
 
-# -------------- Colors --------------
+# --------------- Colors ---------------
 colors_enabled="yes"
 main_window_color="white"
 #header_window_color = "";
 #volume_color = "";
 #statusbar_color = "";
 
-# -------------- Cursor / Progress bar --------------
+# --------------- Cursor / Progress Bar ---------------
 now_playing_prefix="> "
 centered_cursor="yes"
 progressbar_look="─╼"
 progressbar_color="black"
 progressbar_elapsed_color="white"
 
-# -------------- Display modes --------------
+# --------------- Display modes ---------------
 playlist_editor_display_mode="columns"
 search_engine_display_mode="columns"
 browser_display_mode="columns"
 playlist_display_mode="classic"
 
-# -------------- Interface --------------
+# --------------- Interface ---------------
 user_interface="classic"
 header_visibility="no"
 titles_visibility="no"
 statusbar_visibility="yes"
 display_bitrate="no"
 
-# -------------- Song List --------------
+# --------------- Song List ---------------
 song_columns_list_format=“(20)[5]{a} (25)[5]{b} (5)[5]{y} (25)[6]{tr} (3f)[4]{n} (6f)[5]{lr}”
 #song_list_format ="$6%a - $6%t $R$5%l "
 
-# -------------- Visualizer --------------
+# --------------- Visualizer ---------------
 #visualizer_data_source = "/tmp/mpd.fifo"
 #visualizer_output_name = "my_fifo"
 #visualizer_in_stereo = "yes"

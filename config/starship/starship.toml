@@ -1,7 +1,7 @@
+# ------------------------- Configuration -------------------------
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# ------------------------ Configuration ------------------------
 add_newline = true # Insert a new line between shell prompts
 command_timeout = 20000
 continuation_prompt = "▶▶"

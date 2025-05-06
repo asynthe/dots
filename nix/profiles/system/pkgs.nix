@@ -10,7 +10,17 @@ in {
     };
 
     imports = [
-        ./pkgs/minimal.nix
-        ./pkgs/minimal_stable.nix
+        # Always on
+        ../../pkgs/set/minimal.nix
+
+        # wm-on / graphics on / no server
+        ../../pkgs/set/fonts.nix
+        ../../pkgs/set/main.nix
+        ../../pkgs/set/wm.nix
+
+        #../../pkgs/set/networking.nix
+        #../../pkgs/set/wsl.nix
+        #../../pkgs/set/games.nix
+        #../../pkgs/set/sec.nix
     ];
 }

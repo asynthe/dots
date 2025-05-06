@@ -1,7 +1,5 @@
 { pkgs, ... }: {
 
-    # TODO: Fix
-
     environment.systemPackages = with pkgs; [
         # ...
 	    mangohud

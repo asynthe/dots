@@ -1,14 +1,11 @@
 { inputs, pkgs, pkgs-stable, ... }: {
 
-    # ------------------------- Packages -------------------------
     environment.systemPackages = with pkgs; [
 
         # ------------------------- CLI -------------------------
         # Apps
         mpd ncmpcpp
-        neovim
         superfile
-        tmux tmuxp
         weechat
         yazi
         zellij
@@ -21,32 +18,20 @@
         cmus # Music player
 
         # Tools
-	    fd
 	    ffmpegthumbnailer
 	    file
-	    fzf
 	    hyperfine
 	    imagemagickBig
 	    img2pdf
-	    jq
-	    libqalculate
 	    poppler
-	    ripgrep
 	    unar
         #meshlab #f3d #fstl # 3D files
         exiftool
         ffmpeg
-        git bfg-repo-cleaner
-        libqalculate
         mediainfo
-        pv
-        ripgrep
-        skim
-        sox
         speedtest-cli
         #tesseract #easyocr # OCR
-
-        # Tools
+        sox
         bat
         eza
         nh
@@ -54,7 +39,7 @@
         zoxide
         pkgs-stable.tectonic #tectonic # LaTeX Engine
 
-        # Tools - Nix
+        # Tools - Nix and DevOps
         #nixfmt
         #nixops_unstable #nixops
         alejandra
@@ -62,22 +47,29 @@
         deploy-rs
         direnv
         nix-direnv
+        pulumi
+        opentofu #terraform
+        ansible
 
-        # ------------------------- GUI -------------------------
-        mpv # TODO Add plugins: mpris, thumbnail, thumbfast, visualizer
-        sioyek #zathura # TODO: Remove `zathura` once replaced
+        # Fun
+	    figlet
+	    lolcat
+	    nhentai # ( ͡° ͜ʖ ͡°) 
+	    peaclock tty-clock
+	    unimatrix
+        asciiquarium-transparent
+        bottom
+        btop
+        cpu-x
+        pipes-rs
 
-        # ------------------------- GUI - Hyprland -------------------------
-        brightnessctl
-        gromit-mpx
-        hyprshot
-        mako
-        mpvpaper
-        pavucontrol
-        rofi-wayland
-        swappy
-        waybar
-        wofi
-        #pkgs.libsForQt5 polkit-kde-agent
+        # Fetch
+        pfetch
+        fastfetch
+        neofetch
+        starfetch
+
+        # Other
+        pkgs-stable.mapscii #mapscii
     ];
 }

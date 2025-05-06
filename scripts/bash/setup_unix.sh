@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+# TODO Zsh setup
+# symlink to .zshenv in dots/config/zsh?
+
 # TODO Can I run the flake from inside a Windows folder?
 # TODO If WSL is detected, then add a symlink to `/mnt/c/Users/ben/Desktop` to `$HOME`.
 # -> Ask what the Windows username is?

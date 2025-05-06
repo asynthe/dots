@@ -1,10 +1,8 @@
-# dots
-dots/vis/vis.log
-dots/qBittorrent/*
-!dots/qBittorrent/themes/
-!dots/qBittorrent/themes/*
+# Dots
+config/mpd/log
+config/ncmpcpp/error.log
+config/vis/vis.log
 
 # Ignore Emacs backup files
-\#*.org\#
 .#*
-
+\#*.org\#

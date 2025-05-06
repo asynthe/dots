@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -x
+os=$(uname -s)
+
+# Linux
+if [ "$os" = "Linux" ]; then
+    echo "This is a Linux system."
+
+    #git -C ~/sync/flakes pull # Flakes
+    #git -C ~/sync/study submodule update --recursive
+
+    git -C ~/sync/notes pull # Notes
+    git -C ~/sync/pass pull # Keys
+    git -C ~/sync/study pull # Study + books
+    git -C ~/sync/flake pull # Personal flake
+
+# macOS
+elif [ "$os" = "Darwin" ]; then
+    echo "This is a macOS system."
+
+    #git -C ~/sync/flakes pull # Flakes
+    #git -C ~/sync/study submodule update --recursive
+
+    git -C ~/sync/notes pull # Notes
+    git -C ~/sync/pass pull # Keys
+    git -C ~/sync/study pull # Study + books
+    git -C ~/sync/flake pull # Personal flake
+
+else
+    echo "Unsupported operating system: $os"
+    exit 1
+fi

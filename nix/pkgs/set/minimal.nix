@@ -10,32 +10,33 @@
 	    #gns3-gui gns3-server
 
         # --------------- CLI ---------------
-        pass-wayland
-
-        # CLI
+	    ascii
 	    bc
 	    fd ripgrep
 	    fzf skim
-	    git
+	    git bfg-repo-cleaner
+	    libqalculate
 	    ncdu
-        curl
         htop btop
+        httpie
         jq
         killall
         lsof
-        #neovim # If enabled, disable the dots import version.
+        neovim # If enabled, disable the dots import version.
+        pass-wayland
         rsync
+        tmux tmuxp
         tree
-        wget
-
-	    ascii
-        httpie
         usbutils
+        wget curl
+        pv
 
 	    # Filesystem tools
 		fio
 		hdparm
 		nvme-cli
+        gptfdisk
+        usbutils
 
         # Archiving
 	    #mdf2iso
