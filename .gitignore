@@ -1,3 +1,6 @@
+# Useless merges bc this
+flake.lock
+
 # Dots
 config/mpd/log
 config/ncmpcpp/error.log

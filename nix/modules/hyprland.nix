@@ -15,10 +15,10 @@
         mako libnotify
         mpvpaper
         ripdrag
+        rofi-wayland
         swayidle
         swww
         wl-clipboard
-        wofi
         libsForQt5.polkit-kde-agent
         libsForQt5.qt5.qtwayland
     ];
