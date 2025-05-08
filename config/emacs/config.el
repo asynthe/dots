@@ -1,18 +1,26 @@
-;; TODO
-;; ASCII ART HERE PLZ
+;; ███████╗███╗   ███╗ █████╗  ██████╗███████╗
+;; ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
+;; █████╗  ██╔████╔██║███████║██║     ███████╗
+;; ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
+;; ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
+;; ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 
-;; 1. Package Manager (straight.el)
-;; 2. Settings
-;; 3. Theme
-;; 4. Font
-;; 5. Keybinds
-;; 6. Packages
-;; 7. Org mode
-;; 7. Extra
+;; TODO If i scroll down can i keep cursor where it is, so if i move the arrows then it goes back to that line.
+
+
+; Package Manager
+; Packages (1)
+; Packages (2)
+; Packages (Org Mode)
+; Settings
+; Keybinds
+; Settings - Theme
+; Settings - Font
+; Settings - Org Mode
+; Settings - Org Roam
 
 ;; ------------------------- Package Manager (straight.el) -------------------------
 ;; https://github.com/radian-software/straight.el
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -29,27 +37,94 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-use-package-by-default t) ;; Use as default
-(setq package-enable-at-startup nil) ;; Improves startup speed if not using package.el
-(straight-use-package 'use-package) ;; Integrate with use-package
+;; Configuration
+(straight-use-package 'use-package)
+(use-package el-patch
+  :straight t)
+(setq straight-use-pakage-by-default t)
 
 ;; ------------------------- Packages (1) -------------------------
+
+;; Vertico
+;; Marginalia
+;; Orderless
+;; Consult
+;; Embark
+;; embark-consult
+;; wgrep
+
+;; Vertico
+(use-package vertico
+  :straight t
+  :config
+  (setq vertico-cycle t)
+  (setq vertico-resize nil)
+  (vertico-mode 1))
+
+;; Marginalia
+(use-package marginalia
+  :straight t
+  :config
+  (marginalia-mode 1))
+
+;; Orderless
+(use-package orderless
+  :straight t
+  :config
+  (setq completion-styles '(orderless basic)))
+
+;; Consult
+(use-package consult
+  :straight t
+  :config
+  (setq consult-buffer-filter '("\\`\\*"))      ; Hide buffers starting with "*"
+  :bind (
+         ("M-s M-g" . consult-grep)             ; A recursive grep
+         ("M-s M-f" . consult-find)             ; Search for files names recursively
+         ("M-s M-o" . consult-outline)          ; Search through the outline (headings) of the file
+         ("M-s M-l" . consult-line)             ; Search the current buffer
+         ("M-s M-b" . consult-buffer)))         ; Switch to another buffer, or bookmarked file, or recently opened file.
+
+;; Embark
+(use-package embark
+  :straight t
+  :bind (("C-." . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export)))
+
+;; embark-consult
+(use-package embark-consult
+  :straight t)
+
+;; wgrep
+(use-package wgrep
+  :straight t
+  :bind ( :map grep-mode-map
+          ("e" . wgrep-change-to-wgrep-mode)
+          ("C-x C-q" . wgrep-change-to-wgrep-mode)
+          ("C-c C-c" . wgrep-finish-edit)))
+
+;; (built-in)
+(savehist-mode 1)
+
+;; ------------------------- Packages (2) -------------------------
 ;; Evil Mode
 (use-package evil
+      :straight t
 	     :init
-	     (setq evil-want-integration t)     ; Enable integration with other modes
-	     (setq evil-want-keybinding nil)    ; Avoid default keybindings (use evil-collection)
-	     (setq evil-want-C-u-scroll t)      ; Enable scrolling with Ctrl+U
-	     (setq evil-want-C-i-jump nil)      ; Prevent conflict with TAB
+	     (setq evil-want-integration t)      ; Enable integration with other modes
+	     (setq evil-want-keybinding nil)     ; Avoid default keybindings (use evil-collection)
+	     (setq evil-want-C-u-scroll t)       ; Enable scrolling with Ctrl+U
+	     (setq evil-want-C-i-jump nil)       ; Prevent conflict with TAB
+       (setq evil-undo-system 'undo-redo)    ; Undo like vim
 	     :config
 	     (evil-mode 1))
-
-(setq evil-undo-system 'undo-redo)          ; Undo like vim
 
 ;; Evil Collection (for Evil Mode)
 (use-package evil-collection
 	     :after evil
-         :ensure t
+         :straight t
 	     :config
 	     (evil-collection-init))
 
@@ -59,132 +134,25 @@
                       (define-key evil-motion-state-map (kbd "RET") nil)
                       (define-key evil-motion-state-map (kbd "TAB") nil))
 
-;; Dired (directory editor)
-;(use-package all-the-icons-dired)
-;(use-package dired-open)
-;(use-package peep-dired)
+;; ------------------------- Packages - Org Mode -------------------------
 
-;; Vertico
-(use-package vertico
-             :init
-             (vertico-mode))
-(vertico-mode 1)
-
-;; Savehist
-(use-package savehist ; Save minibuffer history
-             :init
-             (savehist-mode))
-
-;; Orderless
-(use-package orderless
-             :custom
-             (completion-styles '(orderless basic)))
-
-(use-package consult) ; Consult
-(setq consult-buffer-filter '("\\`\\*"))     ; Hide buffers starting with "*"
-(use-package embark) ; Embark
-(use-package embark-consult
-             :ensure t)
-
-;; Marginalia
-(use-package marginalia 
-             :init
-             (marginalia-mode))
-
-;; Which-key
-(use-package which-key
-             :init (which-key-mode)
-             :diminish which-key-mode
-             :config
-             (setq which-key-idle-delay 1
-                   which-key-side-window-location 'bottom
-                   which-key-sort-order #'which-key-key-order-alpha
-                   which-key-sort-uppercase-first nil
-                   which-key-add-column-padding 1
-                   which-key-max-display-columns nil
-                   which-key-min-display-lines 6
-                   which-key-side-window-slot -10
-                   which-key-side-window-max-height 0.25
-                   which-key-max-description-length 25
-                   which-key-allow-imprecise-window-fit t
-                   which-key-separator " → "))
-
-;; ------------------------- Packages (2) -------------------------
-
-;; All the Icons
-(use-package all-the-icons
-             :ensure t
-             :if (display-graphic-p))
-(use-package all-the-icons-dired
-             :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
-
-;; Beacon (cursor blink)
-;; https://github.com/Malabarba/beacon
-;(use-package beacon
-	     ;:config
-	     ;(beacon-mode 1))
-
-(use-package doom-themes)     ; Doom Themes
-(use-package doom-modeline)   ; Doom Modeline
-(doom-modeline-mode 1)
-(display-battery-mode 1)      ; Display battery on modeline
-(use-package emojify
-             :hook (after-init . global-emojify-mode))
-
-(use-package hide-mode-line)  ; Hide the modeline
-;(global-hide-mode-line mode 1)
-;(add-hook 'neotree-mode-hook #'hide-mode-line-mode) ; FIX
-
-(use-package valign)          ; Vertical align
-;(add-hook 'org-mode-hook #'valign-mode)
-
-;; ------------------------- Packages - Org -------------------------
-(use-package org-tidy         ; Hides :PROPERTY:
-             :ensure t
-             :hook
-             (org-mode . org-tidy-mode))
+(use-package valign                         ; Vertical align
+  :straight t)
+(add-hook 'org-mode-hook #'valign-mode)
 
 ;; ------------------------- Settings -------------------------
-
-;; Open a file instead of Scratch buffer
-;; https://superuser.com/questions/400457/how-to-automatically-open-a-file-when-emacs-start
-(find-file "~/notes/main.org")
-
-;; Main
-;(global-display-line-numbers-mode t)        ; Line numbers
+(global-display-line-numbers-mode t)        ; Line numbers
 (setq-default indent-tabs-mode nil)         ; Use spaces instead of tabs
 (setq-default tab-width 4)                  ; 4 spaces
 (show-paren-mode 1)                         ; Enable parentheses matching
 
-;; Fcitx5 - Japanese Input
-;(use-package mozc)
-;(require 'mozc)
-;(setq default-input-method "japanese-mozc")
-;(setenv "GTK_IM_MODULE" "fcitx")
-;(setenv "QT_IM_MODULE" "fcitx")
-;(setenv "XMODIFIERS" "@im=fcitx")
-
 ;; Basic UI settings
-(setq inhibit-startup-message t)          ; No startup message
-(menu-bar-mode -1)                        ; Disable menu bar
-(scroll-bar-mode -1)                      ; Disable scroll bar
-(tool-bar-mode -1)                        ; Disable tool bar
-(tooltip-mode -1)                         ; Disable tooltips
+(setq inhibit-startup-message t)            ; No startup message
+(menu-bar-mode -1)                          ; Disable menu bar
+(scroll-bar-mode -1)                        ; Disable scroll bar
+(tool-bar-mode -1)                          ; Disable tool bar
+(tooltip-mode -1)                           ; Disable tooltips
 (setq-default line-spacing 1)
-
-;; Truncate or word wrapping
-(add-hook 'org-mode-hook (lambda ()
-                           (setq truncate-lines nil)  ; Disable truncation
-                           (visual-line-mode 1)))     ; Enable word wrapping
-
-(setq-default fringe-indicator-alist
-              '((truncation . right-arrow)    ; Change to right-arrow (default)
-                (continuation . right-arrow))) ; Change wrapped lines to left-arrow
-
-;; Word wrapping doesn't work with Vertico
-(advice-add #'vertico--resize-window :after #'set-truncate)
-(defun set-truncate (&rest _)
-  (setq-local truncate-lines nil))
 
 ;; Disabling line numbering for certain modes
 (dolist (mode '(org-mode-hook
@@ -193,46 +161,120 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode -1))))
 
-;; Fringes
-;(set-fringe-mode 7)
-;(set-fringe-mode 0)                       ; No fringes
+;; Mouse Scrolling
+(setq mouse-wheel-follow-mouse 't)          ; Scroll window under mouse
+;(setq mouse-wheel-progressive-speed t)     ; Accelerate scrolling
+(setq scroll-conservatively 101)            ; Value greater than 100 gets rid of half page jumping
 
-;; Margins / Padding
-(setq-default left-margin-width 3)
-(setq-default right-margin-width 3)
-(set-window-buffer nil (current-buffer))
+;; Mouse - Precision pixel scroll
+;(pixel-scroll-precision-mode 1)
+;(setq pixel-scroll-precision-large-scroll-height 40.0) ; Scroll with mouse as smooth as touchpad
+;(setq pixel-scroll-use-momentum t)         ; Keep the momentum when scrolling
+
+; TODO
+(setq mac-mouse-whell-mode t)
 
 ;; Transparency
-(set-frame-parameter nil 'alpha-background 80) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background .80)) ; For new frames
+(cond
+ ;; Linux
+ ((and (eq system-type 'gnu/linux)
 
-;; Auto-save
-;(setq auto-save-default t)
-;(setq auto-save-timeout 20)
-;(setq auto-save-interval 200)
+  ;; This are the two lines that set up transparency, you can use them outside the cond if you want.
+  (set-frame-parameter nil 'alpha-background 80)                    ; For current frame
+  (add-to-list 'default-frame-alist '(alpha-background . 80))))     ; For new frames
 
-;; Enable recent files mode
-(recentf-mode 1)
-(setq recentf-max-saved-items 50)
+ ;; macOS
+ ((eq system-type 'darwin)
+  (set-frame-parameter nil 'alpha '(70 . 80))
+  (add-to-list 'default-frame-alist '(alpha . (80 . 80))))
 
-;; Scrolling
-(setq mouse-wheel-follow-mouse 't) ;; Scroll window under mouse
-(setq scroll-conservatively 101) ;; Value greater than 100 gets rid of half page jumping
-(setq mouse-wheel-progressive-speed t) ;; Accelerate scrolling
+ ;; Windows
+ ((eq system-type 'windows-nt)
+  (set-frame-parameter nil 'alpha '(80 . 80))
+  (add-to-list 'default-frame-alist '(alpha . (80 . 80)))))
 
-;; Precision pixel scroll
-(pixel-scroll-precision-mode 1)
-(setq pixel-scroll-use-momentum t) ;; Keep the momentum when scrolling
-(setq pixel-scroll-precision-large-scroll-height 40.0) ;; Scroll with mouse as smooth as touchpad
+;; ------------------------- Keybinds -------------------------
+;; Setting up Evil-style keybindings
+(use-package general
+  :straight t
+  :config
+  (general-create-definer my/keybinds
+    :keymaps '(normal visual)
+    :prefix "SPC"
+    :global-prefix "C-SPC") ; Optional: allows SPC outside evil too
+)
 
-;; ------------------------- Theme -------------------------
-;;
-(load-theme 'doom-meltbus t) ; THEME
-(setq doom-themes-enable-bold t)        ; If nil, bol is disabled
-(setq doom-themes-enable-italics t)     ; If nil, italics is disabled
-;;
-;; ------------------------- Font -------------------------
-;; Font -> JetBrainsMono
+;; Description on the minibuffer
+;(use-package which-key
+;             :straight t
+;             :init (which-key-mode)
+;             :diminish which-key-mode
+;             :config
+;             (setq which-key-idle-delay 1
+;                   which-key-side-window-location 'bottom
+;                   which-key-sort-order #'which-key-key-order-alpha
+;                   which-key-sort-uppercase-first nil
+;                   which-key-add-column-padding 1
+;                   which-key-max-display-columns nil
+;                   which-key-min-display-lines 6
+;                   which-key-side-window-slot -10
+;                   which-key-side-window-max-height 0.25
+;                   which-key-max-description-length 25
+;                   which-key-allow-imprecise-window-fit t
+;                   which-key-separator " → "))
+
+(use-package which-key
+  :straight t
+  :init
+  (setq which-key-idle-delay 0.3) ; Faster pop-up
+  :config
+  (which-key-mode)
+  (which-key-enable-god-mode-support)) ; optional
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+
+;; Buffers and Files
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
+
+;(evil-define-key '(normal visual) global-map
+;                 (kbd "SPC .") #'find-file
+;                 (kbd "SPC ,") #'consult-buffer)
+
+;; Keybinds
+(my/keybinds
+
+  ;; Files
+  "."   '(find-file :which-key "Find file")
+  ","   '(consult-buffer :which-key "Switch buffer")
+  "fs"  '(save-buffer :which-key "Save file")
+
+  ;; Configuration
+  "uc"  '(load-file "~/.config/emacs/config.el" :which-key "Reload configuration")
+
+  ;; Buffers
+  "b"   '(:ignore t :which-key "Buffers commands")
+  "bk"  '(kill-this-buffer :which-key "Kill buffer")
+
+  ;; Org Roam
+  "n"  '(:ignore t :which-key "Org roam commands")
+  "nf" '(org-roam-node-find :which-key "Find and open note")
+  "nu" '(org-roam-db-sync :which-key "Notes database update")
+  "ri" '(org-id-get-create :which-key "Insert org-id")
+)
+
+;; ------------------------- Settings - Theme -------------------------
+(use-package doom-themes
+  :straight t)
+(load-theme 'doom-meltbus t)                ; Load a theme
+(setq doom-themes-enable-bold t)            ; If nil, bol is disabled
+(setq doom-themes-enable-italics t)         ; If nil, italics is disabled
+
+;; ------------------------- Settings - Font (JetBrainsMono) -------------------------
+(set-face-attribute 'default nil :height 120)                             ; Font size
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12")) ; Required by emacsclient, if not used fonts will appear smaller
+
 (set-face-attribute 'default nil
 		    :font "JetBrainsMono Nerd Font 12"
 		    :weight 'regular)
@@ -253,14 +295,9 @@
 (set-face-attribute 'font-lock-keyword-face nil
                     :slant 'italic)
 
-;; Required by emacsclient, if not used fonts will appear smaller
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))
-
-;; Font size
-(set-face-attribute 'default nil :height 120)
-
 ;; Ligatures
 (use-package ligature
+  :straight t
 	     :config
 	     (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
                                        "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
@@ -271,18 +308,21 @@
                                        "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
                                        ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
 	     (global-ligature-mode t))
-	
-;; ------------------------- Org Mode -------------------------
-(add-hook 'org-mode-hook 'turn-on-flyspell) ; Flyspell (Spell Checking)
-(setq org-startup-with-inline-images t)
 
-;; Settings
-(setq org-directory "~/notes"
+;; ------------------------- Settings - Org Mode -------------------------
+(straight-use-package 'org)
+(require 'org-mouse)                  ; Enable the mouse
+;; Open file links in the same window
+(setq org-link-frame-setup '((file . find-file)))  
+
+(setq 
+      org-directory "~/notes"
       org-id-track-globally t
       org-return-follows-link t
       org-hide-block-startup nil      ; Don't fold code blocks
       org-hide-emphasis-markers t     ; Hide bold and italics symbols
       org-hide-leading-stars t        ; Hide org header leading stars
+      org-startup-with-inline-images t; Open files with inline images opened
       org-startup-folded 'overview    ; Show only top-level headings
       org-startup-indented t          ; Indent the text below headers
       org-startup-folded t            ; Open with headers folded
@@ -296,59 +336,19 @@
       org-src-tab-acts-natively t
       org-config-babel-evaluate nil
       org-edit-src-content-identation 0)
-(require 'org-mouse)                  ; Enable the mouse
 
-;; Headings size
-(custom-set-faces
- '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
- '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
- '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
- '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
- '(org-document-title ((t (:inherit outline-3 :height 0.8)))))
-
-;; Font size for org faces
-(defun my-org-faces ()
-  (set-face-attribute 'org-todo nil :height 0.8)
-  (set-face-attribute 'org-level-1 nil :height 1.0)
-  (set-face-attribute 'org-level-2 nil :height 1.0)
-  (set-face-attribute 'org-level-3 nil :height 1.0))
-
-;; Language-specific colors for code blocks
-(setq org-src-block-faces '(("bash" (:background "#121212" :extend t))
-                            ("c" (:background "#121212" :extend t))
-                            ("cpp" (:background "#121212" :extend t))
-                            ("dockerfile" (:background "#121212" :extend t))
-                            ("haskell" (:background "#121212" :extend t))
-                            ("emacs-lisp" (:background "#121212" :extend t))
-                            ("json" (:background "#121212" :extend t))
-                            ("latex" (:background "#121212" :extend t))
-                            ("lua" (:background "#121212" :extend t))
-                            ("nix" (:background "#121212" :extend t))
-                            ("org" (:background "#121212" :extend t))
-                            ("python" (:background "#121212" :extend t))
-                            ("pwsh" (:background "#012456" :extend t))
-                            ("text" (:background "#121212" :extend t))
-                            ("shell" (:background "#121212" :extend t))
-                            ("yaml" (:background "#121212" :extend t))
-                            ("xml" (:background "#6D86FF" :extend t))))
-
-;; Org Roam
-;; ...
-
-;; ------------------------- Keybinds -------------------------
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-
-;; Buffers and Files
-(global-set-key (kbd "M-[") 'previous-buffer)
-(global-set-key (kbd "M-]") 'next-buffer)
-
-(evil-define-key '(normal visual) global-map
-                 (kbd "SPC .") #'find-file
-                 (kbd "SPC ,") #'consult-buffer)
-
-;; ------------------------- Extra -------------------------
-
-;; EOF
-(provide 'config)
+;; ------------------------- Settings - Org Roam -------------------------
+(use-package org-roam
+  :straight t
+  :custom
+  (org-roam-directory (cond
+                       ((eq system-type 'gnu/linux) "~/notes")
+                       ((eq system-type 'darwin) "~/ben/notes")
+                       ((eq system-type 'windows-nt) "C:/Users/Notes")
+                       (t "~/notes")))
+  :config
+  (condition-case err
+      (progn
+        (make-directory org-roam-directory t)
+        (org-roam-db-autosync-mode))
+    (error (message "Error initializing org-roam: %s" err))))

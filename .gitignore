@@ -6,6 +6,21 @@ config/mpd/log
 config/ncmpcpp/error.log
 config/vis/vis.log
 
-# Ignore Emacs backup files
+# Emacs
+config/emacs/.org-id-locations
+config/emacs/auto-save-list
+config/emacs/eln-cache
+config/emacs/elpa
+config/emacs/emojis
+config/emacs/history
+config/emacs/ltximg
+config/emacs/org-persist
+config/emacs/org-roam.db
+config/emacs/persp-save
+config/emacs/projectile-bookmarks.eld
+config/emacs/recentf
+config/emacs/straight
+config/emacs/transient
+# Ignore emacs backup files
 .#*
 \#*.org\#

@@ -1,0 +1,1 @@
+(setq package-enable-at-startup nil) ;; Prevent loading packages prior to their init-file loading
