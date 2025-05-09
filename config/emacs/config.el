@@ -272,37 +272,58 @@
 (setq doom-themes-enable-italics t)         ; If nil, italics is disabled
 
 ;; ------------------------- Settings - Font (JetBrainsMono) -------------------------
-(set-face-attribute 'default nil :height 120)                             ; Font size
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12")) ; Required by emacsclient, if not used fonts will appear smaller
 
-(set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font 12"
-		    :weight 'regular)
+;; General Font Settings
+(set-face-attribute 'default nil :height 120)                                       ; Font size
+(set-face-attribute 'font-lock-comment-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
+(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
 
-(set-face-attribute 'variable-pitch nil
-		    :font "JetBrainsMono Nerd Font 12"
-		    :weight 'regular)
+;; System-os specific
+(cond
+ ((or (eq system-type 'gnu/linux) (eq system-type 'darwin)) 
+  (progn
 
-;; Inherited face by org-table and org-block
-(set-face-attribute 'fixed-pitch nil
-		    :font "JetBrainsMono Nerd Font 12"
-		    :weight 'regular)
+    ; Linux and macOS configuration
+    (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))       ; Required by emacsclient, if not used fonts will appear smaller
+    (set-face-attribute 'default nil
+                        :font "JetBrainsMono Nerd Font 12"
+                        :weight 'regular)
+    (set-face-attribute 'variable-pitch nil
+                        :font "JetBrainsMono Nerd Font 12"
+                        :weight 'regular)
+    (set-face-attribute 'fixed-pitch nil
+                        :font "JetBrainsMono Nerd Font 12"
+                        :weight 'regular)
 
-;; Makes commented text and keywords italics.
-;; Works in emacsclient
-(set-face-attribute 'font-lock-comment-face nil
-                    :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-                    :slant 'italic)
+  ))
+ ((eq system-type 'windows-nt) 
+  (progn
+  
+    ; Windows configuration
+    (add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 12"))              ; Required by emacsclient, if not used fonts will appear smaller
+    (set-face-attribute 'default nil
+                        :font "JetBrainsMono NF 12"
+                        :weight 'regular)
+    (set-face-attribute 'variable-pitch nil
+                        :font "JetBrainsMono NF 12"
+                        :weight 'regular)
+    (set-face-attribute 'fixed-pitch nil
+                        :font "JetBrainsMono NF 12"
+                        :weight 'regular)
+    )))
 
 ;; Ligatures
 (use-package ligature
   :straight t
 	     :config
+
+         ;; Prog-mode
 	     (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
                                        "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
                                        "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
                                        ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
+
+         ;; Org-mode
 	     (ligature-set-ligatures 'org-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
                                        "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
                                        "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
@@ -316,6 +337,8 @@
 (setq org-link-frame-setup '((file . find-file)))  
 
 (setq 
+
+        ; TODO Set condition for Linux, macOS, and Windows
       org-directory "~/notes"
       org-id-track-globally t
       org-return-follows-link t
@@ -344,7 +367,7 @@
   (org-roam-directory (cond
                        ((eq system-type 'gnu/linux) "~/notes")
                        ((eq system-type 'darwin) "~/ben/notes")
-                       ((eq system-type 'windows-nt) "C:/Users/Notes")
+                       ((eq system-type 'windows-nt) "C:/Users/Ben/Desktop/ben/notes")
                        (t "~/notes")))
   :config
   (condition-case err
