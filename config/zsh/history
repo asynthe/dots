@@ -74,3 +74,10 @@
 : 1746814768:0;git add -A
 : 1746814771:0;sudo nixos-rebuild switch --flake '.#raider'
 : 1746815802:0;git add -A
+: 1746815826:0;git commit -m 'fixed most of zsh, final progress of migration to non-nix zsh'
+: 1746815839:0;git push
+: 1746815853:0;git pull
+: 1746815858:0;git add -A
+: 1746815865:0;git status
+: 1746815872:0;nvim .gitignore
+: 1746815877:0;git add -A
