@@ -1,3 +1,3 @@
 -- Settings
 require("settings.main")
-require("settings.lazy")
+--require("settings.lazy")

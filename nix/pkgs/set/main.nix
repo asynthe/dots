@@ -2,6 +2,13 @@
 
     environment.systemPackages = with pkgs; [
 
+        # --------------- Testing ---------------
+        bcachefs-tools
+        fbterm # -> Set 'video' user group
+        fbcat
+	    #ciscoPacketTracer8
+	    #gns3-gui gns3-server
+
         # ------------------------- CLI -------------------------
         # Apps
         mpd ncmpcpp
@@ -9,6 +16,7 @@
         weechat
         yazi
         zellij
+        weechat
 
         # Audio visualizer and others
 	    pulsemixer # from pulseaudio
@@ -24,20 +32,20 @@
 	    imagemagickBig
 	    img2pdf
 	    poppler
-	    unar
-        #meshlab #f3d #fstl # 3D files
+        bat
         exiftool
+        eza
         ffmpeg
         mediainfo
-        speedtest-cli
-        #tesseract #easyocr # OCR
-        sox
-        bat
-        eza
         nh
+        pkgs-stable.tectonic #tectonic # LaTeX Engine
+        sioyek
+        sox
+        speedtest-cli
         starship
         zoxide
-        pkgs-stable.tectonic #tectonic # LaTeX Engine
+        #meshlab #f3d #fstl # 3D files
+        #tesseract #easyocr # OCR
 
         # Tools - Nix and DevOps
         #nixfmt

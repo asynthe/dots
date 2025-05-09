@@ -2,13 +2,6 @@
 
     environment.systemPackages = with pkgs; [
 
-        # --------------- Testing ---------------
-        bcachefs-tools
-        fbterm # -> Set 'video' user group
-        fbcat
-	    #ciscoPacketTracer8
-	    #gns3-gui gns3-server
-
         # --------------- CLI ---------------
 	    ascii
 	    bc
@@ -17,6 +10,7 @@
 	    git bfg-repo-cleaner
 	    libqalculate
 	    ncdu
+        acpi
         htop btop
         httpie
         jq
@@ -24,12 +18,13 @@
         lsof
         neovim # If enabled, disable the dots import version.
         pass-wayland
+        pv
         rsync
         tmux tmuxp
         tree
         usbutils
         wget curl
-        pv
+        yazi
 
 	    # Filesystem tools
 		fio

@@ -90,8 +90,8 @@ configs=(
   "xmonad"
   "yazi"
   "zathura"
-  "zsh" # TODO NixOS: Seems like Home Manager sets up a config
-)       # delete it and set zsh configuration again.
+  "zsh"
+)
 
 # Create directories and symlink files
 for config in "${configs[@]}"; do

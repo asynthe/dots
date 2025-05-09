@@ -5,6 +5,8 @@ flake.lock
 config/mpd/log
 config/ncmpcpp/error.log
 config/vis/vis.log
+config/zsh/.zcompdump
+config/zsh/history
 
 # Emacs
 config/emacs/.org-id-locations
