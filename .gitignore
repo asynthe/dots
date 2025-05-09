@@ -24,3 +24,6 @@ config/emacs/transient
 # Ignore emacs backup files
 .#*
 \#*.org\#
+
+# Neovim
+config/nvim/lazy.lock
