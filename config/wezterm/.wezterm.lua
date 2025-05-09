@@ -81,16 +81,13 @@ local keybinds = {
 
 return {
 
-    -- Start in NixOS and in ~
-    --default_prog = { "wsl.exe", "-d", "NixOS", "--cd", "~" },
-    --default_prog = { "pwsh.exe" },
-    --enable_wayland = true,
+    -- Start in Powershell
+    default_prog = { "powershell.exe", "-NoLogo" },
 
     -- Transparency
-    --window_background_opacity = 0.8,
-    --text_background_opacity = 0.989,
-    window_background_opacity = 0,
-    win32_system_backdrop = "Tabbed", -- Auto, Disabled, Acrylic, Mica, Tabbed
+    window_background_opacity = 0.8,
+    text_background_opacity = 1,
+    win32_system_backdrop = "Auto", -- Auto, Disabled, Acrylic, Mica, Tabbed
 
     -- Keys
     disable_default_key_bindings = true,
