@@ -18,10 +18,10 @@
         sops-nix.url = "github:Mic92/sops-nix";
 
         # Apps
-	    nixvim = {
-            url = "github:nix-community/nixvim";
+	    #nixvim = {
+            #url = "github:nix-community/nixvim";
 	        #inputs.nixpkgs.follows = "nixpkgs";
-        };
+        #};
     };
 
     outputs = {
@@ -30,7 +30,6 @@
         self,
         nixpkgs,
         nixpkgs-stable,
-        home-manager,
 
         # Other
         nixos-hardware,
@@ -42,7 +41,7 @@
         sops-nix,
 
         # Apps
-	    nixvim,
+	    #nixvim,
         ...
     
     #}: let
@@ -113,20 +112,20 @@
         };
 
         # Home Manager configurations
-        homeConfigurations = {
+        #homeConfigurations = {
 
             # meow
-            meow = home-manager.lib.homeManagerConfiguration {
-                pkgs = nixpkgs.legacyPackages.x86_64-linux; # Required by Home Manager.
-                extraSpecialArgs = { inherit inputs outputs pkgs-stable;
-	                user = "meow";
-                };
-                modules = [ 
-	                ./nix/pkgs/home/meow 
-	                nixvim.homeManagerModules.nixvim
-	                sops-nix.homeManagerModules.sops
-	            ];
-            };
-        };
+            #meow = home-manager.lib.homeManagerConfiguration {
+                #pkgs = nixpkgs.legacyPackages.x86_64-linux; # Required by Home Manager.
+                #extraSpecialArgs = { inherit inputs outputs pkgs-stable;
+	                #user = "meow";
+                #};
+                #modules = [ 
+	                #./nix/pkgs/home/meow 
+	                #nixvim.homeManagerModules.nixvim
+	                #sops-nix.homeManagerModules.sops
+	            #];
+            #};
+        #};
     };
 }

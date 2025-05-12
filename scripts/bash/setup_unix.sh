@@ -111,3 +111,17 @@ done
 
 sleep 1
 echo "--------------- Finished! ---------------"
+
+
+
+
+
+
+
+
+
+
+
+
+# mpd
+touch $HOME/.config/mpd/playlists

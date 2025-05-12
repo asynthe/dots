@@ -101,9 +101,6 @@ return {
         require('mason-lspconfig').setup({
             ensure_installed = {
                 "lua_ls",
-                "intelephense",
-                "ts_ls",
-                "eslint",
             },
             handlers = {
                 -- this first function is the "default handler"

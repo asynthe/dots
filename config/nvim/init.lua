@@ -1,3 +1,4 @@
 -- Settings
 require("settings.main")
---require("settings.lazy")
+require("settings.keybinds")
+require("settings.lazy")

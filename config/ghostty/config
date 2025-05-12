@@ -1,38 +1,34 @@
-# ------------------------ Configuration ------------------------
+# ───────────────────────── Ghostty ─────────────────────────
 
 #title = "Ghostty 👻"
 background-opacity = 0.8
 background-blur-radius = 70
 unfocused-split-opacity = 0.9
-focus-follows-mouse = true
 
-# Shaders
-#custom-shader-animation = true
-#custom-shader = shaders/animated-gradient-shader.glsl
-#custom-shader = shaders/galaxy.glsl
-#custom-shader = shaders/just-snow.glsl
-#custom-shader = shaders/starfield-colors.glsl
-#custom-shader = shaders/starfield.glsl
+# Sometimes yes, others no, can mess a little bit with resizing panes
+focus-follows-mouse = false
+#mouse-hide-while-typing = false
 
 # Open split or tab in home directory
 window-inherit-working-directory = true
-
-#window-decoration = true
-#window-theme = ghostty
-#gtk-adwaita = false
-# Simple titlebar
+window-inherit-font-size = true
 
 # Titlebar
 gtk-titlebar = false
 gtk-wide-tabs = false
 window-theme = dark
 adw-toolbar-style = flat
+#window-decoration = true
+#window-theme = ghostty
+#gtk-adwaita = false
+# Simple titlebar
 
 # Font
 #font-family = JetBrainsMono Nerd Font Mono
 #font-style = Regular
 font-size = 12
 #font-thicken = true
+
 
 # Colors
 background = #080808
@@ -41,15 +37,28 @@ selection-background = #1c2f39
 selection-foreground = #dddddd
 cursor-color = #e6eaea
 
-# Cursor
-#mouse-hide-while-typing = false
+# ───────────────────────── Shaders ─────────────────────────
+# NOTE This requires performance
 
-# ------------------------ Keybinds ------------------------
+#custom-shader-animation = true
+#custom-shader = shaders/animated-gradient-shader.glsl
+#custom-shader = shaders/galaxy.glsl
+#custom-shader = shaders/just-snow.glsl
+#custom-shader = shaders/starfield-colors.glsl
+#custom-shader = shaders/starfield.glsl
+
+# ───────────────────────── Keybinds ─────────────────────────
+
+# Ignore fullscreen keybind
+keybind = ctrl+enter=ignore 
+
+# Main
 keybind = shift+ctrl+r=reload_config
 keybind = ctrl+w=close_surface
 confirm-close-surface = false
 
-keybind = ctrl+.=clear_screen
+# Split screen
+keybind = ctrl+.=toggle_split_zoom
 keybind = ctrl+\=new_split:right
 keybind = shift+ctrl+\=new_split:down
 
@@ -72,5 +81,5 @@ keybind = ctrl+]=next_tab
 keybind = ctrl+t=new_tab
 
 # Move tabs
-#keybind = super+h=move_tab:-1
-#keybind = super+l=move_tab:1
+keybind = super+h=move_tab:-1
+keybind = super+l=move_tab:1

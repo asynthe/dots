@@ -12,9 +12,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export NIXOS_OZONE_WL=1
 
     # User
-    export FLAKE='$HOME/dots' # for `nh`
-    export PASSWORD_STORE_DIR='$HOME/ben/pass/ben'
-    #export GNUPGHOME='$HOME/ben/pass/gpg'
+    export NH_FLAKE=$HOME/dots # for `nh`
+    export PASSWORD_STORE_DIR=$HOME/ben/pass/ben
+    #export GNUPGHOME=$HOME/ben/pass/gpg
 
 # macOS
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -25,8 +25,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     #chruby ruby-3.1.3
 
     # User
-    export FLAKE = '$HOME/dots' # for `nh`
-    export PASSWORD_STORE_DIR = '$HOME/ben/pass/ben'
+    export NH_FLAKE=$HOME/dots
+    export PASSWORD_STORE_DIR=$HOME/ben/pass/ben
 
 # Windows (WSL)
 elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]]; then
@@ -49,15 +49,19 @@ export DIRENV_LOG_FORMAT=''
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini
 
+# This is in my `.zshrc`
 # User
-export BOOK_PATH=$HOME/study/book/cybersecurity_ops_with_bash/cybersecurityopswithbash.pdf
-export BOOK_FOLDER=$HOME/study/archive_book
+#export BOOK_PATH=$HOME/study/book/cybersecurity_ops_with_bash/cybersecurityopswithbash.pdf
+#export BOOK_FOLDER=$HOME/study/archive_book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
 export WALLPAPER_VIDEO_FOLDER=$HOME/wallpaper/video
+export WALLPAPER_THUMBNAILS=$HOME/.cache/wallpaper_thumbnails
 
 # Add to PATH
-export PATH="$HOME/dots/script/bin:$PATH"
-export PATH="$HOME/dots/script/bash/git:$PATH"
+export PATH="$HOME/dots/scripts/bash:$PATH"
+export PATH="$HOME/dots/scripts/bash/hyprland:$PATH"
+#export PATH="$HOME/dots/scripts/bash:$PATH"
+#export PATH="$HOME/dots/scripts/bash/git:$PATH"
 #export PATH="$HOME/.cargo/bin:$PATH"
 #export PATH="$HOME/.local/bin:$PATH"
 #export PATH="/usr/lib/ccache/bin:${PATH}"
@@ -117,7 +121,7 @@ HISTORY_IGNORE="(ls|ls *|cd|cd *|bat *|cat *|pwd|clear|history)"
 
 # Inactivity auto-command
 if [[ -o interactive ]]; then # Only interactive. Don't run on scripts, SSH, or tmux
-  TMOUT=120
+  TMOUT=180
   TRAPALRM() {
     case $((RANDOM % 3)) in
       0) unimatrix -s 93 2>/dev/null ;;
@@ -212,47 +216,27 @@ alias kernel-soul='aplay -c 2 -f S16_LE -r 44100 /dev/random'
 alias rickroll='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 
 # Flatpak
-alias fightcade='flatpak run com.fightcade.Fightcade'
-alias pinball='flatpak run com.github.k4zmu2a.spacecadetpinball'
-alias upscayl='flatpak run org.upscayl.Upscayl'
-
-# Wallpaper
-wall() {
-  # Start swww-daemon if not running
-  if ! pgrep -x swww-daemon >/dev/null; then
-    nohup swww-daemon &>/dev/null &
-    disown
-    sleep 1
+flatpak_check() {
+  if ! command -v flatpak &>/dev/null; then
+    echo "[!] Flatpak is not installed on this system. Please install it first." >&2
+    return 1
   fi
-
-  # Select and apply wallpaper with smooth transition
-  local img
-  img=$(fd . "$WALLPAPER_FOLDER" -e jpg -e png | sk)
-  [[ -n "$img" ]] && swww img "$img" \
-    --transition-type simple \
-    --transition-duration 3 \
-    --transition-fps 60 \
-    &>/dev/null
 }
 
-#alias swww-random='~/sync/archive/script/bash/swww/randomize.sh /home/asynthe/sync/system/wallpaper/favourite'
-#alias video='fd . $WALLPAPER_VIDEO_FOLDER -e mp4 | sk | xargs mpvpaper -v -p -o "loop-file=inf --no-resume-playback" "*"'
-#alias wallp='fd . ~/sync/archive/wallpaper/img -e jpg -e png | sk | tee >(xargs wal -i) >(xargs swww img)'
+fightcade() {
+  flatpak_check || return
+  flatpak run com.fightcade.Fightcade
+}
 
-# --no-resume-playback
-# --panscan=1 # (2k zoom)
-# '*' -> All monitors
+pinball() {
+  flatpak_check || return
+  flatpak run com.github.k4zmu2a.spacecadetpinball
+}
 
-# TODO Check how to run playlist on mpvpaper.
-# TODO example of tee >() >() for sending to two commands.
-# TODO Check for fzf image preview.
-
-# TESTING
-#alias pl='mpvpaper -v -s -o "shuffle loop-playlist=inf" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
-# alias pl-na='mpvpaper -v -s -o "no-audio shuffle loop-playlist=" "*" ~/sync/system/wallpaper/video/anime_playlist.m3u'
-# alias tv-jp='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/jp.m3u'
-# alias tv-cl='mpvpaper -v -s "*" https://iptv-org.github.io/iptv/countries/cl.m3u'
-# alias tv-au='mpvpaper -v -s "*" https://i.mjh.nz/au/Perth/raw-tv.m3u8'
+upscayl() {
+  flatpak_check || return
+  flatpak run org.upscayl.Upscayl
+}
 
 # ------------------------- Keybinds -------------------------
 # Configuration

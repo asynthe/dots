@@ -1,6 +1,6 @@
 { pkgs, ... }: {
 
-    # --------------- Hyprland ---------------
+    # ───────────────────────── Hyprland ─────────────────────────
     programs = {
         hyprland = {
             enable = true;
@@ -8,6 +8,8 @@
         };
         #xwayland.enable = true;
     };
+
+    # ───────────────────────── Packages ─────────────────────────
     environment.systemPackages = with pkgs; [
         brightnessctl
         grim slurp

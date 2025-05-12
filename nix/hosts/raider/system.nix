@@ -1,16 +1,17 @@
 { config, lib, pkgs, ... }: {
 
-    # TODO Move to option
-    imports = [
-        ../../modules/hyprland.nix
+    # Testing
+    imports = [ 
+        ../../modules 
+        ../../pkgs
     ];
 
-    # ------------------- Bleeding Edge -------------------
+    # ───────────────────────── Bleeding Edge ─────────────────────────
     nix.package = pkgs.nixVersions.latest;
     boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
     hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
 
-    # -------------------- System Information --------------------
+    # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
     nixpkgs.config.allowUnfree = true;
@@ -19,11 +20,11 @@
     time.timeZone = "Asia/Tokyo";
 
     meta = {
-        # -------------- Cache --------------
+        # ─────────────── Cache ───────────────
         cache.nvidia = true; # Cuda mantainers cachix, ENABLE FIRST
                              # then enable the main option.
 
-        # -------------- System - Main --------------
+        # ─────────────── System - Main ───────────────
         system.user = "meow";
         system.type = "laptop"; # laptop, server
         system.language = "both"; # english, japanese, both
@@ -40,7 +41,7 @@
         # Package set
         system.packages = "minimal"; # minimal, minimal_stable
 
-        # -------------- Boot --------------
+        # ─────────────── Boot ───────────────
         boot.bootloader = "systemd-boot";
         #boot.banner = "simple_cat"; # simple_cat, hentai
         boot.generations = 3;
@@ -48,7 +49,7 @@
         boot.silent = false;
         #boot.secure = true; # Secure Boot (lanzaboote)
 
-        # --------------- Disk ---------------
+        # ─────────────── Disk ───────────────
         disk.device = "/dev/nvme0n1";
         disk.filesystem = "btrfs"; # bcachefs, btrfs, ext4, xfs, zfs
         disk.ssd = true;
@@ -66,7 +67,7 @@
         disk.persistence.enable = true;
         #disk.persistence.type = "tmpfs"; # snapshots (btrfs) or tmpfs
 
-        # -------------- Driver --------------
+        # ─────────────── Driver ───────────────
         #driver.displaylink = true;
         #driver.nvidia.specialisation = true; # gaming mode and portable mode.
         driver.nvidia.enable = true;
@@ -74,18 +75,26 @@
         driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
         driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
 
-        # -------------- Audio --------------
+        # ─────────────── Audio ───────────────
         audio.bluetooth = true;
         #audio.musnix = false;
         audio.pipewire.enable = true;
         #audio.pipewire.lowlatency = false;
 
-        # -------------- Gaming --------------
+        # ─────────────── Gaming ───────────────
         gaming.steam = true;
         gaming.gamemode = true;
         #gaming.controller = true;
 
-        # -------------- Services --------------
+        # ─────────────── VM ───────────────
+        vm.libvirt.enable = true;
+        #vm.virtualbox.enable = true;
+        #vm.vmware.enable = true;
+
+        # ─────────────── VPN ───────────────
+        vpn.mullvad.enable = true;
+
+        # ─────────────── Services ───────────────
         services.android.enable = true;
         services.docker.enable = true;
         #services.endlessh.enable = true;
@@ -102,15 +111,7 @@
         services.wine.enable = true;
         #services.xmr.enable = true;
 
-        # -------------- VM --------------
-        vm.libvirt.enable = true;
-        #vm.virtualbox.enable = true;
-        #vm.vmware.enable = true;
-
-        # -------------- VPN --------------
-        vpn.mullvad.enable = true;
-
-        # -------------- Services - Ports --------------
+        # ─────────────── Services - Ports ───────────────
         #services.ssh.port = 2001;
         #services.grafana.port = 2002;
         #services.service1.port = 2002;

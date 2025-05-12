@@ -3,10 +3,14 @@ flake.lock
 
 # Dots
 config/mpd/log
+config/mpd/playlists
 config/ncmpcpp/error.log
 config/vis/vis.log
 config/zsh/.zcompdump
 config/zsh/history
+
+# Neovim
+config/nvim/lazy-lock.json
 
 # Emacs
 config/emacs/.org-id-locations
@@ -27,5 +31,3 @@ config/emacs/transient
 .#*
 \#*.org\#
 
-# Neovim
-config/nvim/lazy.lock

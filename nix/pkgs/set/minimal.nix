@@ -2,7 +2,7 @@
 
     environment.systemPackages = with pkgs; [
 
-        # --------------- CLI ---------------
+        # ───────────────────────── CLI ─────────────────────────
 	    ascii
 	    bc
 	    fd ripgrep
@@ -13,10 +13,12 @@
         acpi
         htop btop
         httpie
+        imagemagick
         jq
         killall
         lsof
-        neovim # If enabled, disable the dots import version.
+        #neovim # If enabled, disable the dots import version.
+        nh
         pass-wayland
         pv
         rsync

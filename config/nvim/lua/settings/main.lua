@@ -1,6 +1,8 @@
 local opt = vim.opt
 local g = vim.g
 
+opt.clipboard = "unnamedplus" -- Use system clipboard
+
 -- UI Settings
 opt.number = true         -- Show line numbers
 opt.relativenumber = true -- Show relative numbers
@@ -47,14 +49,6 @@ opt.writebackup = false -- Don't write a backup before overwriting
 opt.timeoutlen = 500 -- Timeout for mapped sequences (ms)
 opt.updatetime = 300 -- Faster update time for better responsiveness
 
--- Clipboard
-opt.clipboard = "unnamedplus" -- Use system clipboard
-
 -- Performance Optimizations
 opt.lazyredraw = true -- Optimize redrawing for macros and scripts
 opt.synmaxcol = 300   -- Stop syntax highlighting after X columns
-
--- Set global variables (for plugins or defaults)
-g.mapleader = " " -- Space as the leader key
---vim.g.mapleader = " "
---vim.g.maplocalleader = "\\"

@@ -1,11 +1,9 @@
 {
     imports = [
-
-        ./set/cli.nix
-        #./set/games.nix
+        ./set/fonts.nix
         ./set/main.nix
         ./set/minimal.nix
-        #./set/sec.nix
+        ./set/minimal_wsl.nix
         ./set/wm.nix
     ];
 }

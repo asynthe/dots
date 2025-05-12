@@ -36,15 +36,15 @@ in {
         };
 
         # nh if using laptop configuration
-        programs = {
-            nh = mkIf (cfg.settings == "laptop") {
-                enable = true;
-	            clean = {
-                    enable = true;
-	                extraArgs = "--keep-since 4d --keep 3";
-                };
-            };
-        };
+        #programs = {
+        #    nh = mkIf (cfg.settings == "laptop") {
+        #        enable = true;
+	    #        clean = {
+        #            enable = true;
+	    #            extraArgs = "--keep-since 4d --keep 3";
+        #        };
+        #    };
+        #};
 
         # Server configuration
         # Garbage collection
