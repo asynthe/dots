@@ -35,7 +35,7 @@ with lib;
         emacsPackages.mozc
 
         # Apps / Video Player
-        #anki-bin
+        anki-bin
         memento
     ];
 
