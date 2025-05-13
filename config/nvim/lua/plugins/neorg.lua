@@ -11,11 +11,11 @@ return {
                 ["core.concealer"] = {}, -- Enables pretty icons
                 ["core.clipboard.code-blocks"] = {},
                 ["core.integrations.image"] = {},
-                ["core.keybinds"] = {},
-                    --config = {
-                        --default_keybinds = false,
-                    --},
-                --},
+                ["core.keybinds"] = {
+                    config = {
+                        default_keybinds = false,
+                    },
+                },
                 ["core.dirman"] = {
                     config = {
                         --index = "index.norg",

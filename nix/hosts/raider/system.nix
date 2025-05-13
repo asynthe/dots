@@ -96,7 +96,7 @@
 
         # ─────────────── Services ───────────────
         services.android.enable = true;
-        services.docker.enable = true;
+        #services.docker.enable = true;
         #services.endlessh.enable = true;
         #services.flatpak.enable = true;
         #services.grafana.enable = true;

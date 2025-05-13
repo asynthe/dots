@@ -10,14 +10,20 @@
 	    git bfg-repo-cleaner
 	    libqalculate
 	    ncdu
+        #neovim # If enabled, disable the dots import version.
+        #ollama
         acpi
+        cava
+        emacs30-pgtk
+        ffmpeg-full
+        git
         htop btop
         httpie
         imagemagick
         jq
         killall
         lsof
-        #neovim # If enabled, disable the dots import version.
+        neovim
         nh
         pass-wayland
         pv
@@ -27,6 +33,10 @@
         usbutils
         wget curl
         yazi
+
+        # GUI
+        #ghostty
+        #...
 
 	    # Filesystem tools
 		fio

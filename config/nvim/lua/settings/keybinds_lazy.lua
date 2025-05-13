@@ -1,6 +1,6 @@
 local opts = { noremap = true, silent = true }
 
-------------------------- Neovim -------------------------
+-- ───────────────────────── Modules ─────────────────────────
 -- Window Management
 vim.keymap.set("n", "<leader>wc", ":q<CR>", opts)
 vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
@@ -9,13 +9,22 @@ vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
 -- Buffers
 vim.keymap.set("n", "<A-]>", ":bnext<CR>", opts)
 vim.keymap.set("n", "<A-[>", ":bprev<CR>", opts)
+vim.keymap.set("n", "<leader>fs", ":w<CR>", opts)
+
+-- Kill buffer and close nvim if only that buffer left
+vim.keymap.set("n", "<leader>bk", function()
+    if #vim.fn.getbufinfo({ buflisted = 1 }) == 1 then
+        vim.cmd("q")
+    else
+        vim.cmd("bd")
+    end
+end, { noremap = true, silent = true, desc = "Kill buffer or quit" })
 
 -- Comments
 vim.api.nvim_set_keymap("n", "<C-_>", "gcc", { noremap = false })
 vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
 
-------------------------- Plugin Keymaps -------------------------
-
+-- ───────────────────────── Plugin Keymaps ─────────────────────────
 -- Harpoon
 local harpoon_ok, harpoon = pcall(require, "harpoon")
 if harpoon_ok then
@@ -58,18 +67,20 @@ if telescope_ok then
     vim.keymap.set('n', '<leader>fh', telescope.help_tags, { desc = 'Telescope help tags' })
 end
 
-------------------------- Neorg files configuration -------------------------
+-- ───────────────────────── Neorg keybinds ─────────────────────────
 vim.api.nvim_create_autocmd("Filetype", {
     pattern = "norg",
     callback = function()
         local opts = { buffer = true, silent = true, noremap = true }
 
+        -- Main keybinds
+        vim.keymap.set("n", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
+        vim.keymap.set("n", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
+
+        -- Tab to fold headings in normal and insert
         vim.keymap.set("n", "<Tab>", function()
             pcall(function() vim.cmd("normal! za") end)
         end, opts)
-
-        vim.keymap.set("n", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
-        vim.keymap.set("n", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
 
         vim.keymap.set("i", "<Tab>", function()
             pcall(function()

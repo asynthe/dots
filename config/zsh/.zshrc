@@ -3,7 +3,7 @@
 # Don't do anything if not running interactively.
 [[ $- != *i* ]] && return
 
-# ------------------------- Environment Variables -------------------------
+# ───────────────────────── Environment Variables ─────────────────────────
 # Linux
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
@@ -52,7 +52,7 @@ export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini
 # This is in my `.zshrc`
 # User
 #export BOOK_PATH=$HOME/study/book/cybersecurity_ops_with_bash/cybersecurityopswithbash.pdf
-#export BOOK_FOLDER=$HOME/study/archive_book
+export BOOK_FOLDER=$HOME/study/archive_book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
 export WALLPAPER_VIDEO_FOLDER=$HOME/wallpaper/video
 export WALLPAPER_THUMBNAILS=$HOME/.cache/wallpaper_thumbnails
@@ -101,7 +101,7 @@ if [ -z "$XDG_CACHE_HOME" ] ; then
     export XDG_CACHE_HOME="$HOME/.cache"
 fi
 
-# ------------------------- Configuration -------------------------
+# ───────────────────────── Configuration ─────────────────────────
 # Eval
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(direnv hook zsh)"
@@ -131,7 +131,7 @@ if [[ -o interactive ]]; then # Only interactive. Don't run on scripts, SSH, or 
   }
 fi
 
-# ------------------------- Aliases -------------------------
+# ───────────────────────── Aliases ─────────────────────────
 # Directories
 alias ls='eza --icons --group-directories-first'
 alias la='eza --icons -a --group-directories-first'
@@ -160,6 +160,8 @@ alias -g cat='bat'
 alias -g info='mediainfo'
 alias -g n='nvim'
 alias -g nv='nvim' 
+alias -g nt='nvim +Neorg\ index'
+alias -g note='nvim +Neorg\ index'
 alias -g nvv='sudo nvim'
 alias -g pdf='sioyek'
 alias bt='bluetuith'
@@ -178,7 +180,7 @@ alias vv='alsamixer'
 alias w='watch -n 1'
 alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
 alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
-alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek' # TODO Test
+alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek' # TODO Less verbose
 
 # Other
 #alias wtr='curl wttr.in/Perth'
@@ -238,7 +240,7 @@ upscayl() {
   flatpak run org.upscayl.Upscayl
 }
 
-# ------------------------- Keybinds -------------------------
+# ───────────────────────── Keybinds ─────────────────────────
 # Configuration
 setopt extended_glob
 setopt no_flowcontrol
@@ -261,22 +263,19 @@ bindkey -s '^N' 'ncmpcpp^M'
 bindkey -s '^X' 'nvim^M'
 bindkey -r '^Z' # Unbinded for tmux zoom pane instead of send into bg.
 
-# ------------------------- Plugins -------------------------
-#source $ZDOTDIR/plugin/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-#source $ZDOTDIR/plugin/zsh-autosuggestions/zsh-autosuggestions.zsh
-#source $ZDOTDIR/plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-#
-#function zvm_config() {
-#  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-#
-#  ZVM_CURSOR_STYLE_ENABLED=true
-#  
-#  ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-#  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-#}
+# ───────────────────────── Plugins ─────────────────────────
+source $ZDOTDIR/plugin/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source $ZDOTDIR/plugin/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZDOTDIR/plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# ------------------------- Other -------------------------
+function zvm_config() {
+  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  ZVM_CURSOR_STYLE_ENABLED=true
+  ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+}
 
+# ───────────────────────── Other ─────────────────────────
 # Yazi + cd
 function yy() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"

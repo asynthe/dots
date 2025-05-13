@@ -27,12 +27,9 @@ with lib;
 
     # ───────────────────────── Packages ─────────────────────────
     environment.systemPackages = with pkgs; [
-        fcitx5
-        fcitx5-mozc
-        fcitx5-gtk
         fcitx5-configtool
-        libsForQt5.fcitx5-with-addons
-        emacsPackages.mozc
+        #libsForQt5.fcitx5-with-addons
+        #emacsPackages.mozc
 
         # Apps / Video Player
         anki-bin

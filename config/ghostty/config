@@ -83,3 +83,5 @@ keybind = ctrl+t=new_tab
 # Move tabs
 keybind = super+h=move_tab:-1
 keybind = super+l=move_tab:1
+keybind = ctrl+shift+[=move_tab:-1
+keybind = ctrl+shift+]=move_tab:1
