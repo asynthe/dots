@@ -1,11 +1,12 @@
+# TODO
+# REMEMBER TO ADD THE DEVICE_NAME VARIABLE
+# TO ASCII (MESSAGE) AND DISKO CONFIGURATION
+
 { config, lib, ... }:
 with lib; with types;
 let
     cfg = config.meta.disk.encryption;
 in {
-    # REMEMBER TO ADD THE DEVICE_NAME VARIABLE
-    # TO ASCII (MESSAGE) AND DISKO CONFIGURATION
-
     options.meta.disk.encryption = {
         enable = mkEnableOption "Enable LUKS encryption.";
 

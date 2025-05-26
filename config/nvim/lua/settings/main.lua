@@ -6,9 +6,10 @@ opt.clipboard = "unnamedplus" -- Use system clipboard
 -- UI Settings
 opt.number = true         -- Show line numbers
 opt.relativenumber = true -- Show relative numbers
-opt.cursorline = true     -- Highlight the current line
+--opt.cursorline = true     -- Highlight the current line
 opt.signcolumn = "yes"    -- Always show the sign column to prevent UI shifting
 opt.termguicolors = true  -- Enable 24-bit colors
+opt.fillchars:append { eob = " " }
 
 -- Scroll
 opt.mousescroll = "ver:1"

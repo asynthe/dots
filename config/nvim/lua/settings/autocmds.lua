@@ -6,15 +6,9 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
       if vim.bo.filetype == "norg" then
         vim.opt_local.foldmethod = "expr"
         vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-        vim.opt_local.foldenable = false
-        vim.cmd("normal! zx")
+        vim.opt_local.foldenable = false  -- optional: start with all folds closed
+        vim.cmd("normal! zx")             -- recompute folds immediately
       end
-    end, 50)
+    end, 50) -- delay slightly to let Neorg/treesitter initialize
   end,
 })
-
--- Settings
-require("settings.main")
-require("settings.autocmds")
-require("settings.keybinds")
-require("settings.lazy")

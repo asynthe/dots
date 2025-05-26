@@ -18,6 +18,7 @@
         sops-nix.url = "github:Mic92/sops-nix";
 
         # Apps
+        swww.url = "github:LGFae/swww";
 	    #nixvim = {
             #url = "github:nix-community/nixvim";
 	        #inputs.nixpkgs.follows = "nixpkgs";
@@ -42,6 +43,7 @@
 
         # Apps
 	    #nixvim,
+        swww,
         ...
     
     #}: let

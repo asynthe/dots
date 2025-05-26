@@ -18,7 +18,7 @@ in {
                 enable = true;
                 ethernet.macAddress = "random";
                 wifi.scanRandMacAddress = true;
-                wifi.macAddress = "random"; # permanent, preserve, random, stable.
+                wifi.macAddress = "random"; # permanent, preserve, random, stable
             };
         })
     ];

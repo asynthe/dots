@@ -6,14 +6,10 @@
         ../../pkgs
     ];
 
-    # ───────────────────────── Bleeding Edge ─────────────────────────
-    nix.package = pkgs.nixVersions.latest;
-    boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-    hardware.nvidia.package = lib.mkForce config.boot.kernelPackages.nvidiaPackages.stable;
-
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
+    system.nixos.label = "meowsito";
     nixpkgs.config.allowUnfree = true;
     networking.networkmanager.enable = true;
     i18n.defaultLocale = "en_US.UTF-8";
@@ -21,14 +17,16 @@
 
     meta = {
         # ─────────────── Cache ───────────────
-        cache.nvidia = true; # Cuda mantainers cachix, ENABLE FIRST
-                             # then enable the main option.
+        # TODO Test
+        #cache.nvidia = true; # Cuda mantainers cachix, ENABLE FIRST
+                              # then enable the main option.
 
         # ─────────────── System - Main ───────────────
         system.user = "meow";
         system.type = "laptop"; # laptop, server
         system.language = "both"; # english, japanese, both
         system.keyboard = true;
+        system.dark-mode = true;
 
         system.windows.enable = true; # Option for dual-boot, fix System time
         system.windows.disk = "/dev/nvme0n1p2";
@@ -39,15 +37,16 @@
         #system.users = "laptop";
 
         # Package set
-        system.packages = "minimal"; # minimal, minimal_stable
+        system.packages = "minimal"; # minimal, minimal_stable, hyprland
 
         # ─────────────── Boot ───────────────
-        boot.bootloader = "systemd-boot";
+        boot.kernel = "zen"; # latest, zen, hardened
         #boot.banner = "simple_cat"; # simple_cat, hentai
-        boot.generations = 3;
         #boot.cleantmp = true;
-        boot.silent = false;
-        #boot.secure = true; # Secure Boot (lanzaboote)
+        boot.bootloader.type = "systemd-boot";
+        boot.bootloader.generations = 3; # Secure Boot (Lanzaboote)
+        boot.bootloader.secure = false; # Secure Boot (Lanzaboote)
+        boot.bootloader.silent = true;
 
         # ─────────────── Disk ───────────────
         disk.device = "/dev/nvme0n1";
@@ -71,7 +70,8 @@
         #driver.displaylink = true;
         #driver.nvidia.specialisation = true; # gaming mode and portable mode.
         driver.nvidia.enable = true;
-        driver.nvidia.mode = "offload"; # offload, sync
+        driver.nvidia.package = "beta"; # stable, beta
+        driver.nvidia.mode = "offload"; # offload, sync, reverse-sync
         driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
         driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
 
@@ -85,6 +85,7 @@
         gaming.steam = true;
         gaming.gamemode = true;
         #gaming.controller = true;
+        #gaming.gaming_spec = true; # NOTE Enable gaming specialization based on Jovian NixOS.
 
         # ─────────────── VM ───────────────
         vm.libvirt.enable = true;

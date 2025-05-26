@@ -8,6 +8,13 @@
         fbcat
 	    #ciscoPacketTracer8
 	    #gns3-gui gns3-server
+        lm_sensors
+        pciutils
+        htop
+        powertop
+        nvtopPackages.full # Testing
+        #nvtopPackages.nvidia # Testing
+        #pkgs-stable.nvtopPackages.full
 
         # ------------------------- CLI -------------------------
         # Apps

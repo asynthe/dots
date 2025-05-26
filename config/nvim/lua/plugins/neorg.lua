@@ -2,6 +2,7 @@ return {
     "nvim-neorg/neorg",
     lazy = false,  -- Disable lazy loading
     version = "*", -- Pin Neorg to the latest stable release
+    ft = "norg",
     config = function()
         local os_name = vim.loop.os_uname().sysname
         require("neorg").setup({
@@ -18,8 +19,6 @@ return {
                 },
                 ["core.dirman"] = {
                     config = {
-                        --index = "index.norg",
-                        -- Add if os_name == "Linux" and others here, just for `default_workspace`
                         default_workspace = "notes",
                         workspaces = {
                             notes = "~/notes",

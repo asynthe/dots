@@ -67,15 +67,31 @@ if telescope_ok then
     vim.keymap.set('n', '<leader>fh', telescope.help_tags, { desc = 'Telescope help tags' })
 end
 
+-- Lualine
+local lualine_hidden = false
+vim.keymap.set("n", "<leader>lt", function()
+  lualine_hidden = not lualine_hidden
+  require("lualine").hide({ unhide = lualine_hidden })
+end, { desc = "Toggle lualine" })
+
 -- ───────────────────────── Neorg keybinds ─────────────────────────
 vim.api.nvim_create_autocmd("Filetype", {
     pattern = "norg",
     callback = function()
         local opts = { buffer = true, silent = true, noremap = true }
 
+        -- Start with lualine hidden
+        require("lualine").hide({ place = { "statusline", "tabline", "winbar" } })
+
         -- Main keybinds
         vim.keymap.set("n", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
         vim.keymap.set("n", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
+        vim.keymap.set("i", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
+        vim.keymap.set("i", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
+
+        -- Create headers and list items with Alt + Enter
+        vim.keymap.set("n", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
+        vim.keymap.set("i", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
 
         -- Tab to fold headings in normal and insert
         vim.keymap.set("n", "<Tab>", function()
@@ -90,7 +106,5 @@ vim.api.nvim_create_autocmd("Filetype", {
             end)
         end, opts)
 
-        vim.keymap.set("i", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
-        vim.keymap.set("i", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
     end,
 })

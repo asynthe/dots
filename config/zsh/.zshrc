@@ -124,7 +124,7 @@ if [[ -o interactive ]]; then # Only interactive. Don't run on scripts, SSH, or 
   TMOUT=180
   TRAPALRM() {
     case $((RANDOM % 3)) in
-      0) unimatrix -s 93 2>/dev/null ;;
+      0) unimatrix -s -n 94 2>/dev/null ;;
       1) pipes-rs ;;
       2) asciiquarium -t -s ;;
     esac
@@ -140,6 +140,7 @@ alias lla='eza --long -a --group-directories-first'
 alias lg='eza --long --git --group-directories-first'
 
 # Mistakes
+alias apci='acpi'
 alias H='Hyprland'
 alias sl='ls'
 alias fuck='sudo !!'
@@ -203,6 +204,8 @@ alias port='ss -naptu state listening'
 alias ports='ss -tulanp'
 
 # Other
+alias hyprconf='nvim $HOME/.config/hypr/hyprland.conf'
+alias zshconf='nvim $HOME/.config/zsh/zshrc'
 alias doc='libreoffice'
 alias docx='libreoffice'
 alias excel='libreoffice'
@@ -263,18 +266,6 @@ bindkey -s '^N' 'ncmpcpp^M'
 bindkey -s '^X' 'nvim^M'
 bindkey -r '^Z' # Unbinded for tmux zoom pane instead of send into bg.
 
-# ───────────────────────── Plugins ─────────────────────────
-source $ZDOTDIR/plugin/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-source $ZDOTDIR/plugin/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ZDOTDIR/plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-function zvm_config() {
-  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-  ZVM_CURSOR_STYLE_ENABLED=true
-  ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
-  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-}
-
 # ───────────────────────── Other ─────────────────────────
 # Yazi + cd
 function yy() {
@@ -288,3 +279,23 @@ function yy() {
 alias yazi='yy'
 alias l='yy'
 alias lf='yy'
+
+# ───────────────────────── Plugins ─────────────────────────
+source $ZDOTDIR/plugin/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source $ZDOTDIR/plugin/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZDOTDIR/plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+function zvm_config() {
+  ZVM_CURSOR_STYLE_ENABLED=true
+  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLOCK
+  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+}
+
+# Suppress zsh-vi-mode errors
+functions[zvm_bindkey]='
+  () {
+    [[ -z "$1" ]] && return 0
+    builtin bindkey "$@" 2>/dev/null || return 0
+  }
+'

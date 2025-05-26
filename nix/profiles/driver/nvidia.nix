@@ -11,6 +11,11 @@ in {
             default = null;
             description = "Mode for Nvidia PRIME.";
         };
+        package = mkOption {
+            type = enum [ "stable" "beta" ];
+            default = "stable";
+            description = "Specify the package used for the Nvidia driver.";
+        };
         bus_id = {
             nvidia_gpu = mkOption {
                 type = nullOr str;
@@ -26,24 +31,19 @@ in {
     };
 
     config = mkIf cfg.enable {
-
         assertions = [
-            #{
-            #    assertion = cfg.enable -> cfg.mode;
-            #    message = "Enabling nvidia drivers requires a mode to be enabled.";
-            #}
             {
                 assertion = cfg.mode != null;
-                message = "Please specify a mode (offload/sync) for PRIME.";
+                message = "Please specify a mode (offload/sync/reverse-sync) for PRIME.";
             }
-        #    {
-        #        assertion = cfg.bus_id.nvidia_gpu != null;
-        #        message = "Please specify the Bus ID of your Nvidia GPU.";
-        #    }
-        #    {
-        #        assertion = cfg.bus_id.intel_cpu != null;
-        #        message = "Please specify the Bus ID of your Intel CPU.";
-        #    }
+            #{
+            #    assertion = cfg.bus_id.nvidia_gpu != null;
+            #    message = "Please specify the Bus ID of your Nvidia GPU.";
+            #}
+            #{
+            #    assertion = cfg.bus_id.intel_cpu != null;
+            #    message = "Please specify the Bus ID of your Intel CPU.";
+            #}
         ];
 
         # Completely disable NVIDIA graphics and use integrated.
@@ -79,8 +79,16 @@ in {
         hardware.nvidia = {
             modesetting.enable = true; # Required
             nvidiaSettings = true;
-            open = true; # Open source kernel module
-            #package = pkgs.kernelPackages.nvidiaPackages.stable; # stable, beta...
+            open = true;
+
+            package = mkDefault (
+            if cfg.package == "stable" then
+                config.boot.kernelPackages.nvidiaPackages.production
+            else if cfg.package == "beta" then
+                config.boot.kernelPackages.nvidiaPackages.beta
+            else
+                throw "Invalid Nvidia package option: ${cfg.package}. Must be 'stable' or 'beta'."
+            );
 
             # Nvidia power management
             #powerManagement.enable = true;
@@ -90,8 +98,7 @@ in {
         # -------------- Prime --------------
         # Bus ID Values
         # You can find these values by running `lspci | grep ' VGA '`
-
-        # ADD: Make Required!
+        # TODO: Make Required!
         hardware.nvidia.prime = {
             intelBusId = cfg.bus_id.intel_cpu;
             nvidiaBusId = cfg.bus_id.nvidia_gpu;
@@ -103,11 +110,9 @@ in {
             enable = true;
             enableOffloadCmd = true;
         };
+        hardware.nvidia.prime.sync.enable = mkIf (cfg.mode == "sync") true; # Prime - Sync Mode
+        hardware.nvidia.prime.reverseSync.enable = mkIf (cfg.mode == "reverse-sync") true; # Prime - Reverse Sync Mode
 
-        # -------------- Prime - Sync Mode --------------
-        #hardware.nvidia.prime.sync.enable = true;
-        hardware.nvidia.prime.sync.enable = mkIf (cfg.mode == "sync") true;
-        
         # -------------- Specialisation --------------
         specialisation = mkIf cfg.specialisation {
         
@@ -122,33 +127,28 @@ in {
         };
 
         # -------------- Variables and Packages --------------
-        environment = {
-            #variables = {
-                #GBM_BACKEND = "nvidia-drm";
-                #LIBVA_DRIVER_NAME = "nvidia";
-                #VDPAU_DRIVER = "va_gl";
-                #WLR_NO_HARDWARE_CURSORS = "1";
-                #__GLX_VENDOR_LIBRARY_NAME = "nvidia";
-            #};
+        #environment.variables = {
+            #GBM_BACKEND = "nvidia-drm";
+            #LIBVA_DRIVER_NAME = "nvidia";
+            #VDPAU_DRIVER = "va_gl";
+            #WLR_NO_HARDWARE_CURSORS = "1";
+            #__GLX_VENDOR_LIBRARY_NAME = "nvidia";
+        #};
 
-            systemPackages = builtins.attrValues {
-                inherit (pkgs)
-                    intel-gpu-tools
-                    glxinfo # glxgears
-                    #glibc
-                    #glxinfo # Check if running on gpu.
-                    #zenith-nvidia
-                    #nvtop-nvidia
-                    #vulkan-tools
-                    #virtualgl
-                    #nvidia-offload
-                    #linuxKernel.packages.linux_6_2.bbswitch
-                    #libva
-                    #libva-utils
-                    #libdrm
-                    #mesa #mesa-demos
-                ;
-            };
-        };
+        environment.systemPackages = with pkgs; [
+            intel-gpu-tools
+            glxinfo # glxgears
+            #glibc
+            #glxinfo # Check if running on gpu.
+            #zenith-nvidia
+            #vulkan-tools
+            #virtualgl
+            #nvidia-offload
+            #linuxKernel.packages.linux_6_2.bbswitch
+            #libva
+            #libva-utils
+            #libdrm
+            #mesa #mesa-demos
+        ];
     };
 }

@@ -11,11 +11,7 @@ in {
 
         # QMK
         hardware.keyboard.qmk.enable = true;
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                qmk
-            ;
-        };
+        environment.systemPackages = with pkgs; [ qmk ];
 
         # OpenRGB
         services.hardware.openrgb = {

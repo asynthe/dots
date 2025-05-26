@@ -11,7 +11,7 @@
         #whatsapp-for-linux # Whatsapp 😂😍🫢 ❗
 
         # Propietary
-        microsoft-edge # TODO Just for the PDF viewer.
+        #microsoft-edge # TODO Just for the PDF viewer.
         spotify
         zoom-us
 
@@ -28,6 +28,7 @@
         #etcher
         #gimp-with-plugins #gimp # Remember to configure photogimp.
         #gparted
+        helix
         hypnotix
         #keepassxc
         #libreoffice

@@ -12,7 +12,7 @@
         ninja
         boost
         fmt
-
+        
         vimPlugins.mason-lspconfig-nvim
         vimPlugins.neorg
     ];

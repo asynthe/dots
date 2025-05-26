@@ -18,8 +18,7 @@
         ./boot/bootloader.nix
         ./boot/cleantmp.nix
         ./boot/console.nix
-        ./boot/secure.nix
-        ./boot/silent.nix
+        ./boot/kernel.nix
 
         # -------------- Drivers --------------
         ./driver/displaylink.nix
@@ -57,6 +56,7 @@
 
         # -------------- System --------------
         ./system/configuration.nix
+        ./system/dark_mode.nix
         ./system/keyboard.nix
         ./system/language.nix
         ./system/networking.nix

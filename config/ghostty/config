@@ -1,9 +1,13 @@
 # ───────────────────────── Ghostty ─────────────────────────
 
 #title = "Ghostty 👻"
-background-opacity = 0.8
+background-opacity = 0.3
 background-blur-radius = 70
 unfocused-split-opacity = 0.9
+
+# Original
+#background-opacity = 0.8
+#background-blur-radius = 70
 
 # Sometimes yes, others no, can mess a little bit with resizing panes
 focus-follows-mouse = false
@@ -14,21 +18,19 @@ window-inherit-working-directory = true
 window-inherit-font-size = true
 
 # Titlebar
-gtk-titlebar = false
-gtk-wide-tabs = false
-window-theme = dark
-adw-toolbar-style = flat
-#window-decoration = true
-#window-theme = ghostty
-#gtk-adwaita = false
-# Simple titlebar
+window-decoration = auto
+gtk-titlebar = true
+adw-toolbar-style = raised-border
+gtk-tabs-location = bottom
+gtk-wide-tabs = true
+#window-theme = dark
+window-theme = ghostty
 
 # Font
-#font-family = JetBrainsMono Nerd Font Mono
-#font-style = Regular
+font-family = JetBrainsMono Nerd Font Mono
+font-style = Regular
 font-size = 12
-#font-thicken = true
-
+font-thicken = true
 
 # Colors
 background = #080808
@@ -79,9 +81,7 @@ keybind = ctrl+shift+l=resize_split:right,40
 keybind = ctrl+[=previous_tab
 keybind = ctrl+]=next_tab
 keybind = ctrl+t=new_tab
-
-# Move tabs
-keybind = super+h=move_tab:-1
-keybind = super+l=move_tab:1
+keybind = super+[=previous_tab
+keybind = super+]=next_tab
 keybind = ctrl+shift+[=move_tab:-1
 keybind = ctrl+shift+]=move_tab:1
