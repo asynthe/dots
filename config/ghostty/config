@@ -1,7 +1,6 @@
 # ───────────────────────── Ghostty ─────────────────────────
-
 #title = "Ghostty 👻"
-background-opacity = 0.3
+background-opacity = 0.7
 background-blur-radius = 70
 unfocused-split-opacity = 0.9
 
@@ -50,8 +49,7 @@ cursor-color = #e6eaea
 #custom-shader = shaders/starfield.glsl
 
 # ───────────────────────── Keybinds ─────────────────────────
-
-# Ignore fullscreen keybind
+# Ignore default fullscreen keybind
 keybind = ctrl+enter=ignore 
 
 # Main
@@ -69,7 +67,11 @@ keybind = ctrl+h=goto_split:left
 keybind = ctrl+j=goto_split:down
 keybind = ctrl+k=goto_split:up
 keybind = ctrl+l=goto_split:right
-#keybind = super+;=goto_split:right
+#keybind = super+h=goto_split:left
+#keybind = super+j=goto_split:down
+#keybind = super+k=goto_split:up
+#keybind = super+l=goto_split:right
+keybind = super+;=goto_split:right
 
 # Resize
 keybind = ctrl+shift+h=resize_split:left,40

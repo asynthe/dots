@@ -1,30 +1,64 @@
 local opts = { noremap = true, silent = true }
-
--- ───────────────────────── Modules ─────────────────────────
--- Window Management
-vim.keymap.set("n", "<leader>wc", ":q<CR>", opts)
-vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
-vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
-
--- Buffers
-vim.keymap.set("n", "<A-]>", ":bnext<CR>", opts)
-vim.keymap.set("n", "<A-[>", ":bprev<CR>", opts)
-vim.keymap.set("n", "<leader>fs", ":w<CR>", opts)
-
--- Kill buffer and close nvim if only that buffer left
-vim.keymap.set("n", "<leader>bk", function()
+local function kill_buffer_or_quit()
     if #vim.fn.getbufinfo({ buflisted = 1 }) == 1 then
         vim.cmd("q")
     else
         vim.cmd("bd")
     end
-end, { noremap = true, silent = true, desc = "Kill buffer or quit" })
+end
 
--- Comments
-vim.api.nvim_set_keymap("n", "<C-_>", "gcc", { noremap = false })
-vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
+-- ───────────────────────── NORMAL MODE ─────────────────────────
+local telescope = require("telescope.builtin")
+vim.keymap.set("n", "<leader>.", ":Oil<CR>", opts)
+vim.keymap.set("n", "<Tab>", ":NvimTreeFocus<CR>", opts)
+vim.keymap.set("n", "<leader>ft", ":NvimTreeFocus<CR>", opts)
+vim.keymap.set("n", "<leader>fm", ":Alpha<CR>", opts)
+vim.keymap.set("n", "<leader>g", telescope.live_grep, { desc = "Telescope live grep" })
+
+-- Telescope (Find files)
+vim.keymap.set("n", "<leader>fs", ":w<CR>", opts) -- Save file
+vim.keymap.set("n", "<leader>fk", kill_buffer_or_quit, opts) -- Kill buffer or exit if one buffer left
+vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Telescope help tags" })
+
+vim.keymap.set("n", "<leader>nl", telescope.buffers, { desc = "Telescope buffers" })
+vim.keymap.set("n", "<leader>nf", telescope.find_files, { desc = "Telescope find files" })
+
+-- Buffers
+vim.keymap.set("n", "<A-]>", ":bnext<CR>", opts)
+vim.keymap.set("n", "<A-[>", ":bprev<CR>", opts)
+
+-- Windows
+vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
+vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
+vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
+vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
+vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
+vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
+vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
+vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
+
+-- Terminal
+vim.keymap.set("t", "<C-h>", "<cmd>wincmd h<CR>", opts)
+vim.keymap.set("t", "<C-j>", "<cmd>wincmd j<CR>", opts)
+vim.keymap.set("t", "<C-k>", "<cmd>wincmd k<CR>", opts)
+vim.keymap.set("t", "<C-l>", "<cmd>wincmd l<CR>", opts)
+
+-- ───────────────────────── VISUAL MODE ─────────────────────────
+vim.keymap.set("v", "<", "<gv", opts) -- Indent
+vim.keymap.set("v", ">", ">gv", opts)
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts) -- Move selected lines up or down
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 
 -- ───────────────────────── Plugin Keymaps ─────────────────────────
+-- Lualine
+local lualine_hidden = false
+vim.keymap.set("n", "<leader>st", function()
+  lualine_hidden = not lualine_hidden
+  require("lualine").hide({ unhide = lualine_hidden })
+end, { desc = "Toggle lualine" })
+
 -- Harpoon
 local harpoon_ok, harpoon = pcall(require, "harpoon")
 if harpoon_ok then
@@ -51,60 +85,10 @@ if harpoon_ok then
         }):find()
     end
 
-    vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
-    vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-    vim.keymap.set("n", "<leader>fl", function() toggle_telescope(harpoon:list()) end, { desc = "Open Harpoon Telescope" })
-    vim.keymap.set("n", "<C-p>", function() harpoon:list():prev() end)
-    vim.keymap.set("n", "<C-n>", function() harpoon:list():next() end)
+    -- Harpoon Keybindings
+    vim.keymap.set("n", "<leader>na", function() harpoon:list():add() end)
+    vim.keymap.set("n", "<leader>nl", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+    vim.keymap.set("n", "<leader>nt", function() toggle_telescope(harpoon:list()) end, { desc = "Open Harpoon Telescope" })
+    vim.keymap.set("n", "<leader>nn", function() harpoon:list():prev() end)
+    vim.keymap.set("n", "<leader>np", function() harpoon:list():next() end)
 end
-
--- Telescope
-local telescope_ok, telescope = pcall(require, "telescope.builtin")
-if telescope_ok then
-    vim.keymap.set('n', '<leader>ff', telescope.find_files, { desc = 'Telescope find files' })
-    vim.keymap.set('n', '<leader>fg', telescope.live_grep, { desc = 'Telescope live grep' })
-    vim.keymap.set('n', '<leader>fb', telescope.buffers, { desc = 'Telescope buffers' })
-    vim.keymap.set('n', '<leader>fh', telescope.help_tags, { desc = 'Telescope help tags' })
-end
-
--- Lualine
-local lualine_hidden = false
-vim.keymap.set("n", "<leader>lt", function()
-  lualine_hidden = not lualine_hidden
-  require("lualine").hide({ unhide = lualine_hidden })
-end, { desc = "Toggle lualine" })
-
--- ───────────────────────── Neorg keybinds ─────────────────────────
-vim.api.nvim_create_autocmd("Filetype", {
-    pattern = "norg",
-    callback = function()
-        local opts = { buffer = true, silent = true, noremap = true }
-
-        -- Start with lualine hidden
-        require("lualine").hide({ place = { "statusline", "tabline", "winbar" } })
-
-        -- Main keybinds
-        vim.keymap.set("n", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
-        vim.keymap.set("n", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
-        vim.keymap.set("i", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
-        vim.keymap.set("i", "<A-Right>", "<Plug>(neorg.promo.promote)", { buffer = true })
-
-        -- Create headers and list items with Alt + Enter
-        vim.keymap.set("n", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
-        vim.keymap.set("i", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
-
-        -- Tab to fold headings in normal and insert
-        vim.keymap.set("n", "<Tab>", function()
-            pcall(function() vim.cmd("normal! za") end)
-        end, opts)
-
-        vim.keymap.set("i", "<Tab>", function()
-            pcall(function()
-                vim.cmd("stopinsert")
-                vim.cmd("normal! za")
-                vim.cmd("startinsert")
-            end)
-        end, opts)
-
-    end,
-})

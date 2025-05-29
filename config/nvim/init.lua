@@ -1,20 +1,5 @@
--- Need to make Neorg update folding
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.norg",
-  callback = function()
-    vim.defer_fn(function()
-      if vim.bo.filetype == "norg" then
-        vim.opt_local.foldmethod = "expr"
-        vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-        vim.opt_local.foldenable = false
-        vim.cmd("normal! zx")
-      end
-    end, 50)
-  end,
-})
-
 -- Settings
 require("settings.main")
-require("settings.autocmds")
+--require("settings.autocmds")
 require("settings.keybinds")
 require("settings.lazy")

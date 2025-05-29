@@ -19,7 +19,7 @@
 ; Settings - Org Mode
 ; Settings - Org Roam
 
-;; ------------------------- Package Manager (straight.el) -------------------------
+;; ───────────────────────── Package Manager (straight.el) ─────────────────────────
 ;; https://github.com/radian-software/straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -43,8 +43,8 @@
   :straight t)
 (setq straight-use-pakage-by-default t)
 
-;; ------------------------- Packages (1) -------------------------
-
+;; ───────────────────────── Packages - 1 ─────────────────────────
+;; Package list:
 ;; Vertico
 ;; Marginalia
 ;; Orderless
@@ -108,7 +108,7 @@
 ;; (built-in)
 (savehist-mode 1)
 
-;; ------------------------- Packages (2) -------------------------
+;; ───────────────────────── Packages - 2 ─────────────────────────
 ;; Evil Mode
 (use-package evil
       :straight t
@@ -134,13 +134,12 @@
                       (define-key evil-motion-state-map (kbd "RET") nil)
                       (define-key evil-motion-state-map (kbd "TAB") nil))
 
-;; ------------------------- Packages - Org Mode -------------------------
-
+;; ───────────────────────── Packages - Org Mode ─────────────────────────
 (use-package valign                         ; Vertical align
   :straight t)
 (add-hook 'org-mode-hook #'valign-mode)
 
-;; ------------------------- Settings -------------------------
+;; ───────────────────────── Settings ─────────────────────────
 (global-display-line-numbers-mode t)        ; Line numbers
 (setq-default indent-tabs-mode nil)         ; Use spaces instead of tabs
 (setq-default tab-width 4)                  ; 4 spaces
@@ -193,7 +192,7 @@
   (set-frame-parameter nil 'alpha '(80 . 80))
   (add-to-list 'default-frame-alist '(alpha . (80 . 80)))))
 
-;; ------------------------- Keybinds -------------------------
+;; ───────────────────────── Keybinds ─────────────────────────
 ;; Setting up Evil-style keybindings
 (use-package general
   :straight t
@@ -201,8 +200,7 @@
   (general-create-definer my/keybinds
     :keymaps '(normal visual)
     :prefix "SPC"
-    :global-prefix "C-SPC") ; Optional: allows SPC outside evil too
-)
+    :global-prefix "C-SPC")) ; Optional: allows SPC outside evil too
 
 ;; Description on the minibuffer
 ;(use-package which-key
@@ -261,18 +259,16 @@
   "n"  '(:ignore t :which-key "Org roam commands")
   "nf" '(org-roam-node-find :which-key "Find and open note")
   "nu" '(org-roam-db-sync :which-key "Notes database update")
-  "ri" '(org-id-get-create :which-key "Insert org-id")
-)
+  "ri" '(org-id-get-create :which-key "Insert org-id"))
 
-;; ------------------------- Settings - Theme -------------------------
+;; ───────────────────────── Settings - Theme ─────────────────────────
 (use-package doom-themes
   :straight t)
 (load-theme 'doom-meltbus t)                ; Load a theme
 (setq doom-themes-enable-bold t)            ; If nil, bol is disabled
 (setq doom-themes-enable-italics t)         ; If nil, italics is disabled
 
-;; ------------------------- Settings - Font (JetBrainsMono) -------------------------
-
+;; ───────────────────────── Settings - Font (JetBrainsMono) ─────────────────────────
 ;; General Font Settings
 (set-face-attribute 'default nil :height 120)                                       ; Font size
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
@@ -330,16 +326,15 @@
                                        ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
 	     (global-ligature-mode t))
 
-;; ------------------------- Settings - Org Mode -------------------------
+;; ───────────────────────── Settings - Org Mode ─────────────────────────
 (straight-use-package 'org)
 (require 'org-mouse)                  ; Enable the mouse
 ;; Open file links in the same window
 (setq org-link-frame-setup '((file . find-file)))  
 
 (setq 
-
-        ; TODO Set condition for Linux, macOS, and Windows
-      org-directory "~/notes"
+      ; TODO Set condition for Linux, macOS, and Windows
+      org-directory "~/notes/org"
       org-id-track-globally t
       org-return-follows-link t
       org-hide-block-startup nil      ; Don't fold code blocks
@@ -360,14 +355,14 @@
       org-config-babel-evaluate nil
       org-edit-src-content-identation 0)
 
-;; ------------------------- Settings - Org Roam -------------------------
+;; ───────────────────────── Settings - Org Roam ─────────────────────────
 (use-package org-roam
   :straight t
   :custom
   (org-roam-directory (cond
-                       ((eq system-type 'gnu/linux) "~/notes")
-                       ((eq system-type 'darwin) "~/ben/notes")
-                       ((eq system-type 'windows-nt) "C:/Users/Ben/Desktop/ben/notes")
+                       ((eq system-type 'gnu/linux) "~/notes/org")
+                       ((eq system-type 'darwin) "~/ben/notes/org")
+                       ((eq system-type 'windows-nt) "C:/Users/Ben/Desktop/ben/notes/org")
                        (t "~/notes")))
   :config
   (condition-case err

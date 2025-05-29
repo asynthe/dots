@@ -1,8 +1,9 @@
 return {
     "nvim-neorg/neorg",
+    requires = "nvim-lua/plenary.nvim",
+    run = ":Neorg sync-parsers",
     lazy = false,  -- Disable lazy loading
     version = "*", -- Pin Neorg to the latest stable release
-    ft = "norg",
     config = function()
         local os_name = vim.loop.os_uname().sysname
         require("neorg").setup({
