@@ -19,6 +19,7 @@ with lib;
         fcitx5 = {
             waylandFrontend = true;
             addons = with pkgs; [
+                fcitx5-configtool
                 fcitx5-gtk # Support for GTK-based programs
                 fcitx5-mozc # Japanese input
             ];
@@ -27,24 +28,10 @@ with lib;
 
     # ───────────────────────── Packages ─────────────────────────
     environment.systemPackages = with pkgs; [
-        fcitx5-configtool
         #libsForQt5.fcitx5-with-addons
-        #emacsPackages.mozc
 
         # Apps / Video Player
         anki-bin
         memento
-    ];
-
-    # ───────────────────────── Fonts ─────────────────────────
-    fonts.packages = with pkgs; [
-        ipafont
-        kochi-substitute
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-        noto-fonts-emoji
-        noto-fonts-extra
-        sarasa-gothic
     ];
 }

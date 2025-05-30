@@ -4,11 +4,11 @@
 
         # Modules
 	    ../../modules/simple/gpg.nix
-        ../../modules/simple/ime.nix
-        #../../modules/simple/ollama.nix
+        ../../modules/simple/neovim.nix
 
         # Pkgs
-        ../../pkgs/set/wsl.nix
+        ../../pkgs/set/minimal_wsl.nix
         ../../pkgs/set/fonts.nix
+        ../../pkgs/set/fonts_jp.nix
     ];
 }

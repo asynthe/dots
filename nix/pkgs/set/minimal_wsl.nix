@@ -1,20 +1,15 @@
 { pkgs, ... }: {
 
   environment.systemPackages = with pkgs; [
-    cava
-    emacs30-pgtk
     ffmpeg-full
-    git
+    git bfg-repo-cleaner
     imagemagick
     neovim
     nh
-    #ollama
-    superfile
+    tree
     yazi
 
     # GUI
-    #ghostty
-    #...
-    
+    ghostty
   ];
 }

@@ -30,4 +30,3 @@ config/emacs/transient
 # Ignore emacs backup files
 .#*
 \#*.org\#
-
