@@ -2,10 +2,11 @@
 flake.lock
 
 # Dots
-config/mpd/playlists
 config/mpd/database
 config/mpd/log
+config/mpd/playlists
 config/ncmpcpp/error.log
+config/other/icons/hicolor
 config/vis/vis.log
 config/zsh/.zcompdump
 config/zsh/history
