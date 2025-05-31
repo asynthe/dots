@@ -1,11 +1,5 @@
 { config, lib, pkgs, ... }: {
 
-    # Testing
-    imports = [ 
-        ../../modules 
-        ../../pkgs
-    ];
-
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
@@ -16,11 +10,6 @@
     time.timeZone = "Asia/Tokyo";
 
     meta = {
-        # ─────────────── Cache ───────────────
-        # TODO Test
-        #cache.nvidia = true; # Cuda mantainers cachix, ENABLE FIRST
-                              # then enable the main option.
-
         # ─────────────── System - Main ───────────────
         system.user = "meow";
         system.type = "laptop"; # laptop, server

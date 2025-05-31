@@ -21,7 +21,7 @@ return {
         -- Sections
         dashboard.section.footer.val = "Neovimへようこそ！"
         dashboard.section.buttons.val = {
-            dashboard.button("n", "󱞁 Notes", ":cd ~/notes/neorg | e index.norg<CR>"),
+            dashboard.button("n", "󱞁 Notes", ":cd ~/notes | e index.norg<CR>"),
             dashboard.button("f", "󰍉 Find file", ":Telescope find_files<CR>"),
             dashboard.button("l", "󰒲 Lazy", ":Lazy<CR>"),
             dashboard.button("q", "󰩈 Exit", ":qa<CR>"),

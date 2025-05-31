@@ -23,8 +23,8 @@
         wezterm
 
         # Apps
+        mpv
         #aegisub # Subtitle Editor
-        #emacs29-pgtk
         #etcher
         #gimp-with-plugins #gimp # Remember to configure photogimp.
         #gparted

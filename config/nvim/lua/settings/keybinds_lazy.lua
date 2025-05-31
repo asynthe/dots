@@ -9,7 +9,8 @@ end
 
 -- ───────────────────────── NORMAL MODE ─────────────────────────
 local telescope = require("telescope.builtin")
-vim.keymap.set("n", "<leader>.", ":Oil<CR>", opts)
+vim.keymap.set("n", "<leader>.", "<cmd>Yazi<cr>", opts)
+--vim.keymap.set("n", "<leader>.", ":Oil<CR>", opts)
 vim.keymap.set("n", "<Tab>", ":NvimTreeFocus<CR>", opts)
 vim.keymap.set("n", "<leader>ft", ":NvimTreeFocus<CR>", opts)
 vim.keymap.set("n", "<leader>fm", ":Alpha<CR>", opts)
@@ -19,7 +20,6 @@ vim.keymap.set("n", "<leader>g", telescope.live_grep, { desc = "Telescope live g
 vim.keymap.set("n", "<leader>fs", ":w<CR>", opts) -- Save file
 vim.keymap.set("n", "<leader>fk", kill_buffer_or_quit, opts) -- Kill buffer or exit if one buffer left
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Telescope help tags" })
-
 vim.keymap.set("n", "<leader>nl", telescope.buffers, { desc = "Telescope buffers" })
 vim.keymap.set("n", "<leader>nf", telescope.find_files, { desc = "Telescope find files" })
 
