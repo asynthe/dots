@@ -122,6 +122,7 @@ List of programs:
 [+] WinRAR
 [+] Yazi
 [+] qBittorrent
+[+] scrcpy
 "@
 
 # NOTE: Remember that last one doesn't have a comma.
@@ -148,6 +149,7 @@ $programs = @(
     "lars-berger.GlazeWM",
     "qBittorrent.qBittorrent",
     "wez.wezterm",
+    "Genymobile.scrcpy",
 
     #"CrystalDewWorld.CrystalDiskInfo.KureiKeiEdition",
     #"MullvadVPN.MullvadVPN", # Weird bug that opens it when system starts but doesn't show.

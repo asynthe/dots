@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }: {
 
     networking.hostName = "wsl"; # check wsl.wslConf.network.hostname
-        system.stateVersion = "24.11"; # Did you read the comment?
-        nixpkgs = {
-            hostPlatform = "x86_64-linux";
-            config.allowUnfree = true;
-        };
+    system.stateVersion = "24.11";
+    nixpkgs = {
+        hostPlatform = "x86_64-linux";
+        config.allowUnfree = true;
+    };
 
     nix.settings = {
         experimental-features = [ "nix-command" "flakes" ];
@@ -23,4 +23,4 @@
             #boot.command = "";
         #};
     #};
-}                        }
+}

@@ -1,14 +1,25 @@
 local opts = { buffer = true, silent = true, noremap = true }
 
 -- ───────────────────────── Configuration ─────────────────────────
+-- No numbering
 vim.opt_local.number = false
 vim.opt_local.relativenumber = false
 vim.opt_local.cursorline = false
 vim.opt_local.colorcolumn = ""
-
 vim.opt_local.signcolumn = "yes:1"
-vim.opt_local.foldcolumn = "1"
 vim.opt_local.numberwidth = 6
+
+-- Fold column, shows headings
+vim.opt_local.foldcolumn = "0"
+
+-- Conceal level to hide markup and links
+vim.opt_local.conceallevel = 3
+
+-- Indentation
+vim.opt_local.expandtab = true
+vim.opt_local.tabstop = 2
+vim.opt_local.shiftwidth = 2
+vim.opt_local.softtabstop = 2
 
 -- ───────────────────────── Keybinds ─────────────────────────
 -- Main keybinds

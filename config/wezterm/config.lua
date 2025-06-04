@@ -1,1 +1,1 @@
-C:/Users/Ben/Desktop/ben/dots/config/wezterm/.wezterm.lua
+.wezterm.lua

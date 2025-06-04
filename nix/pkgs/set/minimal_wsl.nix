@@ -6,6 +6,7 @@
     imagemagick
     neovim
     nh
+    sioyek
     tree
     yazi
 

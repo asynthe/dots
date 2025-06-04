@@ -112,16 +112,19 @@ done
 sleep 1
 echo "--------------- Finished! ---------------"
 
-
-
-
-
-
-
-
-
-
-
-
 # mpd
 touch $HOME/.config/mpd/playlists
+
+#!/usr/bin/env bash
+
+
+
+# Setup for both common Linux systems and WSL.
+
+# ZSH
+# ...
+
+########################### WSL BLOCK ###########################
+for 
+
+

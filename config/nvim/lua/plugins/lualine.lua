@@ -17,7 +17,8 @@ return {
             options = {
                 icons_enabled = true,
                 --theme = auto_theme_custom,
-                disabled_filetypes = { "alpha", "NvimTree" }, --norg
+                --disabled_filetypes = { "alpha", "NvimTree" }, 
+                disabled_filetypes = { "alpha", "norg", "NvimTree" },
 
                 -- TESTING
                 --disabled_filetypes = {
