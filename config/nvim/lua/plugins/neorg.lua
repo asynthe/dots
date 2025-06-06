@@ -10,7 +10,12 @@ return {
             load = {
                 --["core.latex.renderer"] = {},
                 ["core.defaults"] = {},
-                ["core.concealer"] = {}, -- Enables pretty icons
+                ["core.concealer"] = {
+                    config = {
+                        init_open_folds = "never", -- Don't open folds
+                        icon_preset = "basic", -- basic, diamond, varied
+                    },
+                },
                 ["core.clipboard.code-blocks"] = {},
                 ["core.integrations.image"] = {},
                 ["core.keybinds"] = {

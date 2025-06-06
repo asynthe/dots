@@ -9,9 +9,6 @@ vim.opt_local.colorcolumn = ""
 vim.opt_local.signcolumn = "yes:1"
 vim.opt_local.numberwidth = 6
 
--- Fold column, shows headings
-vim.opt_local.foldcolumn = "0"
-
 -- Conceal level to hide markup and links
 vim.opt_local.conceallevel = 3
 
@@ -20,6 +17,11 @@ vim.opt_local.expandtab = true
 vim.opt_local.tabstop = 2
 vim.opt_local.shiftwidth = 2
 vim.opt_local.softtabstop = 2
+
+-- Folding
+vim.opt_local.foldenable = true
+vim.opt_local.foldcolumn = "0" -- Fold column, hides indicator
+vim.opt_local.foldlevel =  0 -- All folds closed
 
 -- ───────────────────────── Keybinds ─────────────────────────
 -- Main keybinds
@@ -36,14 +38,14 @@ vim.keymap.set("n", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer
 vim.keymap.set("i", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
 
 -- Tab to fold headings in normal and insert
-vim.keymap.set("n", "<Tab>", function()
-    pcall(function() vim.cmd("normal! za") end)
-end, opts)
+--vim.keymap.set("n", "<Tab>", function()
+--    pcall(function() vim.cmd("normal! za") end)
+--end, opts)
 
-vim.keymap.set("i", "<Tab>", function()
-    pcall(function()
-        vim.cmd("stopinsert")
-        vim.cmd("normal! za")
-        vim.cmd("startinsert")
-    end)
-end, opts)
+--vim.keymap.set("i", "<Tab>", function()
+--    pcall(function()
+--        vim.cmd("stopinsert")
+--        vim.cmd("normal! za")
+--        vim.cmd("startinsert")
+--    end)
+--end, opts)
