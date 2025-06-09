@@ -10,9 +10,10 @@ end
 -- ───────────────────────── NORMAL MODE ─────────────────────────
 local telescope = require("telescope.builtin")
 
-vim.keymap.set("n", "<leader>.", "<cmd>Yazi<cr>", opts)
 --vim.keymap.set("n", "<leader>.", ":Oil<CR>", opts)
-vim.keymap.set("n", "<Tab>", ":NvimTreeFocus<CR>", opts)
+--vim.keymap.set("n", "<Tab>", ":NvimTreeFocus<CR>", opts)
+--vim.keymap.set("n", "<leader>.", "<cmd>Yazi<cr>", opts)
+vim.keymap.set("n", "<leader>.", telescope.find_files, { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>ft", ":NvimTreeFocus<CR>", opts)
 vim.keymap.set("n", "<leader>fm", ":Alpha<CR>", opts)
 vim.keymap.set("n", "<leader>g", telescope.live_grep, { desc = "Telescope live grep" })
@@ -29,28 +30,28 @@ vim.keymap.set("n", "<A-]>", ":bprev<CR>", opts)
 vim.keymap.set("n", "<A-[>", ":bnext<CR>", opts)
 
 -- Window splits
-vim.keymap.set("n", "<leader>\\", ":vsplit<CR>", opts)
-vim.keymap.set("n", "<leader>|", ":split<CR>", opts)
-vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
-vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
+--vim.keymap.set("n", "<leader>\\", ":vsplit<CR>", opts)
+--vim.keymap.set("n", "<leader>|", ":split<CR>", opts)
+--vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
+--vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
 
 -- Window navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
-vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
-vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
-vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
+--vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
+--vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
+--vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+--vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
 
 -- Window resizing
-vim.keymap.set("n", "H", ":vertical resize -2<CR>", opts)
-vim.keymap.set("n", "J", ":resize +2<CR>", opts)
-vim.keymap.set("n", "K", ":resize -2<CR>", opts)
-vim.keymap.set("n", "L", ":vertical resize +2<CR>", opts)
+--vim.keymap.set("n", "H", ":vertical resize -2<CR>", opts)
+--vim.keymap.set("n", "J", ":resize +2<CR>", opts)
+--vim.keymap.set("n", "K", ":resize -2<CR>", opts)
+--vim.keymap.set("n", "L", ":vertical resize +2<CR>", opts)
 
 -- Terminal
-vim.keymap.set("t", "<C-h>", "<cmd>wincmd h<CR>", opts)
-vim.keymap.set("t", "<C-j>", "<cmd>wincmd j<CR>", opts)
-vim.keymap.set("t", "<C-k>", "<cmd>wincmd k<CR>", opts)
-vim.keymap.set("t", "<C-l>", "<cmd>wincmd l<CR>", opts)
+--vim.keymap.set("t", "<C-h>", "<cmd>wincmd h<CR>", opts)
+--vim.keymap.set("t", "<C-j>", "<cmd>wincmd j<CR>", opts)
+--vim.keymap.set("t", "<C-k>", "<cmd>wincmd k<CR>", opts)
+--vim.keymap.set("t", "<C-l>", "<cmd>wincmd l<CR>", opts)
 
 -- ───────────────────────── VISUAL MODE ─────────────────────────
 vim.keymap.set("v", "<", "<gv", opts) -- Indent

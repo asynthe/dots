@@ -1,55 +1,8 @@
-{ pkgs, ... }: {
+{ pkgs, pkgs-stable, ... }: {
 
     environment.systemPackages = with pkgs; [
 
-        # -------------- GUI --------------
-        # Social
-        signal-desktop
-        telegram-desktop
-        #hexchat # IRC
-        webcord #discord # fuck discord
-        #whatsapp-for-linux # Whatsapp 😂😍🫢 ❗
-
-        # Propietary
-        #microsoft-edge # TODO Just for the PDF viewer.
-        spotify
-        zoom-us
-
-        # Terms
-	    kitty
-        alacritty
-        cool-retro-term
-        ghostty
-        wezterm
-
-        # Apps
-        mpv
-        #aegisub # Subtitle Editor
-        #etcher
-        #gimp-with-plugins #gimp # Remember to configure photogimp.
-        #gparted
-        helix
-        hypnotix
-        #keepassxc
-        #libreoffice
-        #obsidian
-        #ungoogled-chromium #brave
-        #ventoy-full #ventoy
-        #aegisub
-        #davinci-resolve # Not working.
-        #kdenlive
-        #nicotine-plus
-        #qmmp
-        #wf-recorder
-        wayfire
-        librewolf dejsonlz4 # Decompress bookmarks backup files.
-
-        # Astronomy
-	    #celestia
-	    #libnova
-	    #stellarium
-
-        # -------------- Emacs --------------
+        # ───────────────────────── Emacs ─────────────────────────
         emacs-pgtk
         hunspell
         hunspellDicts.en_US # English (United States) from Wordlist
@@ -59,7 +12,7 @@
         #emacsPackages.doom-modeline
         #emacsPackages.doom-modeline-now-playing # Requires playerctl.
 
-        # -------------- Thumbnailers for PCmanFM --------------
+        # ───────────────────────── Thumbnails (PCmanFM) ─────────────────────────
         #pcmanfm
         #nufraw-thumbnailer # .raw files (raw-thumbnailer)
         #evince # Adobe .pdf files
@@ -69,5 +22,90 @@
 
         #with pkgs.libsForQt5; [ dolphin ];
         #with pkgs.xfce; [ thunar tumbler ];
+
+        # ───────────────────────── CLI ─────────────────────────
+        # Apps
+        mpd ncmpcpp
+        superfile
+        weechat
+        yazi
+        zellij
+        weechat
+
+        # Audio visualizer and others
+        alsa-utils pulsemixer # from pulseaudio
+        cava
+        cmus # Music player
+
+        # Tools
+	    img2pdf
+	    poppler
+        #meshlab #f3d #fstl # 3D files
+        #tesseract #easyocr # OCR
+
+        # Fun
+	    figlet
+	    lolcat
+	    nhentai # ( ͡° ͜ʖ ͡°) 
+	    peaclock tty-clock
+	    unimatrix
+        asciiquarium-transparent
+        bottom
+        btop
+        cpu-x
+        pipes-rs
+        pkgs-stable.mapscii #mapscii
+
+        # Fetch
+        pfetch
+        fastfetch
+        neofetch
+        starfetch
+
+        # ───────────────────────── GUI ─────────────────────────
+        # Social
+        signal-desktop
+        telegram-desktop
+        webcord #discord # fuck discord
+        #hexchat # IRC
+
+        # Propietary
+	    #ciscoPacketTracer8
+	    #gns3-gui gns3-server
+        #whatsapp-for-linux # Whatsapp 😂😍🫢 ❗
+        #microsoft-edge # Just for the PDF editor
+        spotify
+        zoom-us
+        #davinci-resolve # Not working
+
+        # Terms
+	    kitty
+        alacritty
+        cool-retro-term
+        ghostty
+        wezterm
+
+        # Apps
+        mpv hypnotix
+        gimp3-with-plugins # Remember to configure photogimp
+        qmmp
+        sioyek zathura
+        #aegisub
+        #etcher
+        #gparted
+        #keepassxc
+        #libreoffice
+        #obsidian
+        #ungoogled-chromium #brave
+        #ventoy-full #ventoy
+        #kdenlive
+        #nicotine-plus
+        wayfire
+        librewolf dejsonlz4 # Decompress bookmarks backup files.
+
+        # Astronomy
+	    #celestia
+	    #libnova
+	    #stellarium
     ];
 }

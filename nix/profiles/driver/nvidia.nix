@@ -68,6 +68,7 @@ in {
                 intel-vaapi-driver # VA-API for Intel i965 Broadwell (2014), better for Firefox?
                 vaapiVdpau # VDPAU driver for the VAAPI library
             ];
+
             # For 32-bit, lol. I don't think I'll ever need it.
             #extraPackages32 = with pkgs.pkgsi686Linux; [
                 #intel-vaapi-driver

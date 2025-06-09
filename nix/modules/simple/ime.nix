@@ -3,13 +3,13 @@ with lib;
 {
     # ───────────────────────── Environment Variables ─────────────────────────
     environment.sessionVariables = {
-        GTK_IM_MODULE = "fcitx";
+        #GTK_IM_MODULE = "fcitx";
         QT_IM_MODULE = "fcitx";
-        DefaultIMModule = "fcitx";
         INPUT_METHOD = "fcitx";
         XMODIFIERS = "@im=fcitx";
         SDL_IM_MODULE = "fcitx";
         GLFW_IM_MODULE = "ibus";
+        DefaultIMModule = "fcitx";
     };
 
     # ───────────────────────── Fcitx5 + mozc ─────────────────────────

@@ -13,6 +13,7 @@
         boost
         fmt
         
+        lua-language-server
         vimPlugins.mason-lspconfig-nvim
         vimPlugins.neorg
     ];

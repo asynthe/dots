@@ -105,48 +105,48 @@ fg = "#c1c3c4"
 [input.value]
 fg = "#c1c3c4"
 
-[manager]
+[mgr]
 syntect_theme = "/nix/store/7wv66dc3f1zxzlm1hmb17y8rvibl8bb1-untitled/base16-untitled.tmTheme"
-[manager.border_style]
+[mgr.border_style]
 fg = "#a3a5a6"
 
-[manager.cwd]
+[mgr.cwd]
 fg = "#42fff9"
 
-[manager.find_keyword]
+[mgr.find_keyword]
 bold = true
 fg = "#06ea61"
 
-[manager.find_position]
+[mgr.find_position]
 fg = "#c1c3c4"
 
-[manager.hovered]
+[mgr.hovered]
 bg = "#474849"
 bold = true
 fg = "#c1c3c4"
 
-[manager.marker_copied]
+[mgr.marker_copied]
 bg = "#c9d364"
 fg = "#c9d364"
 
-[manager.marker_cut]
+[mgr.marker_cut]
 bg = "#b53b50"
 fg = "#b53b50"
 
-[manager.marker_selected]
+[mgr.marker_selected]
 bg = "#06ea61"
 fg = "#06ea61"
 
-[manager.preview_hovered]
+[mgr.preview_hovered]
 bg = "#474849"
 bold = true
 fg = "#c1c3c4"
 
-[manager.tab_active]
+[mgr.tab_active]
 bg = "#03aeff"
 fg = "#000000"
 
-[manager.tab_inactive]
+[mgr.tab_inactive]
 bg = "#1a1b1c"
 fg = "#c1c3c4"
 

@@ -1,4 +1,4 @@
-[manager]
+[mgr]
 layout = [1, 3, 4]
 linemode = "none"
 show_hidden = false

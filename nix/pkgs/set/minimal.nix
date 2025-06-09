@@ -1,6 +1,37 @@
-{ pkgs, ... }: {
+{ pkgs, pkgs-stable, ... }: {
 
     environment.systemPackages = with pkgs; [
+
+        # ───────────────────────── Testing ─────────────────────────
+        # Testing
+        fbterm # -> Set 'video' user group
+        fbcat
+        lm_sensors
+        pciutils
+        htop
+        powertop
+        usbutils
+
+        # Tools
+        lsof
+        tree
+        pkgs-stable.tectonic #tectonic # LaTeX Engine
+
+        # Filesystem tools
+        bcachefs-tools
+        gptfdisk
+
+        # Networking
+        httpie
+
+        # NVMe / SSD Testing
+		fio
+		hdparm
+		nvme-cli
+
+        # Nvidia
+        nvtopPackages.full #pkgs-stable.nvtopPackages.full
+        #nvtopPackages.nvidia
 
         # ───────────────────────── CLI ─────────────────────────
 	    ascii
@@ -8,50 +39,51 @@
 	    fd ripgrep
 	    fzf skim
 	    git bfg-repo-cleaner
+	    imagemagickBig
 	    libqalculate
 	    ncdu
-        #neovim # If enabled, disable the dots import version.
-        #ollama
         acpi
-        cava
-        emacs30-pgtk
-        ffmpeg-full
-        git
+        bat
+        exiftool
+        eza
+        ffmpeg-full ffmpegthumbnailer
+        file
         htop btop
-        httpie
-        imagemagick
+        hyperfine
         jq
         killall
-        lsof
-        neovim
+        mediainfo
         nh
         pass-wayland
         pv
         rsync
+        sox
+        speedtest-cli
+        starship
         tmux tmuxp
-        tree
-        usbutils
         wget curl
         yazi
+        zoxide
 
-        # GUI
-        #ghostty
-        #...
+        # Nix / DevOps
+        #nixfmt
+        #nixops_unstable #nixops
+        alejandra
+        colmena
+        deploy-rs
+        direnv
+        nix-direnv
+        pulumi
+        opentofu #terraform
+        ansible
 
-	    # Filesystem tools
-		fio
-		hdparm
-		nvme-cli
-        gptfdisk
-        usbutils
-
-        # Archiving
-	    #mdf2iso
+        # ───────────────────────── Archiving ─────────────────────────
         p7zip
         rar #unrar #rar2fs
-        #torrent7z
         unar # Allows for unzipping with Unicode characters.
-        #xz
         zip unzip 
+	    #mdf2iso
+        #torrent7z
+        #xz
     ];
 }

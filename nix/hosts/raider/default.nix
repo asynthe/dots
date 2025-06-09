@@ -12,7 +12,6 @@
 
         # Packages
         ../../pkgs/set/fonts.nix
-        ../../pkgs/set/main.nix
         ../../pkgs/set/minimal.nix
         ../../pkgs/set/wm.nix
     ];

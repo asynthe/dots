@@ -1,5 +1,3 @@
-# TODO ASCII Art Here
-
 # Don't do anything if not running interactively.
 [[ $- != *i* ]] && return
 
@@ -40,8 +38,6 @@ export EDITOR='nvim'
 export BROWSER='librewolf'
 export FILE='yazi'
 export READER='sioyek'
-#export TERM='xterm-256color' # TODO Testing
-#export QT_STYLE_OVERRIDE='adwaita-dark' # TODO Testing
 export XDG_CURRENT_DESKTOP='Hyprland'
 
 # Apps
@@ -50,14 +46,13 @@ export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini
 
 # This is in my `.zshrc`
-# User
 #export BOOK_PATH=$HOME/study/book/cybersecurity_ops_with_bash/cybersecurityopswithbash.pdf
 export BOOK_FOLDER=$HOME/study/archive_book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
 export WALLPAPER_VIDEO_FOLDER=$HOME/wallpaper/video
 export WALLPAPER_THUMBNAILS=$HOME/.cache/wallpaper_thumbnails
 
-# Add to PATH
+# PATH
 export PATH="$HOME/dots/scripts/bash:$PATH"
 export PATH="$HOME/dots/scripts/bash/hyprland:$PATH"
 #export PATH="$HOME/dots/scripts/bash:$PATH"
@@ -132,6 +127,29 @@ if [[ -o interactive ]]; then # Only interactive. Don't run on scripts, SSH, or 
 fi
 
 # ───────────────────────── Aliases ─────────────────────────
+# Testing
+alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
+#alias wtr='curl wttr.in/Perth'
+#alias h='history | grep --color=auto'
+#alias t='peaclock --config-dir ~/.config/peaclock'
+#alias t='tty-clock -ScB'
+#alias time='peaclock --config-dir ~/.config/peaclock'
+#alias irc='tmux attach-session -t weechat'
+#alias irc='weechat'
+
+# Per Terminal
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+    alias img='kitty +kitten icat'
+elif [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
+    alias img='wezterm imgat'
+fi
+
+# Configurations
+alias ghosttyconf='nvim $HOME/.config/ghostty/config'
+alias hyprconf='nvim $HOME/.config/hypr/hyprland.conf'
+alias mpvconf='nvim $HOME/.config/mpv/mpv.conf'
+alias zshconf='nvim $HOME/.config/zsh/zshrc'
+
 # Directories
 alias ls='eza --icons --group-directories-first'
 alias la='eza --icons -a --group-directories-first'
@@ -139,20 +157,20 @@ alias ll='eza --long --group-directories-first'
 alias lla='eza --long -a --group-directories-first'
 alias lg='eza --long --git --group-directories-first'
 
+# Git
+alias ga='git add -A'
+alias gc='git commit -m "updating"'
+alias gp='git push'
+
 # Mistakes
 alias apci='acpi'
-alias H='Hyprland'
 alias sl='ls'
 alias fuck='sudo !!'
 alias dicker='docker'
 alias dokcer='docker'
 alias focker='docker'
 
-# Testing
-alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
-
 # Main
-# NOTE Wezterm uses 'wezterm imgcat' so see if it's possible to configure
 alias ,='cd -'
 alias ..='cd ..'
 alias @='neomutt'
@@ -160,9 +178,6 @@ alias -g c='bat' # cat -> bat
 alias -g cat='bat'
 alias -g info='mediainfo'
 alias -g n='nvim'
-alias -g nv='nvim' 
-alias -g nt='nvim +Neorg\ index'
-alias -g note='nvim +Neorg\ index'
 alias -g nvv='sudo nvim'
 alias -g pdf='sioyek'
 alias bt='bluetuith'
@@ -182,14 +197,8 @@ alias w='watch -n 1'
 alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
 alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek' # TODO Less verbose
-
-# Other
-#alias wtr='curl wttr.in/Perth'
-#alias h='history | grep --color=auto'
-#alias t='peaclock --config-dir ~/.config/peaclock'
-#alias time='peaclock --config-dir ~/.config/peaclock'
-#alias irc='tmux attach-session -t weechat'
-#alias irc='weechat'
+alias off='poweroff'
+alias rm='rm -i'
 
 # Grep
 alias grep='grep -i --color=auto'
@@ -204,8 +213,6 @@ alias port='ss -naptu state listening'
 alias ports='ss -tulanp'
 
 # Other
-alias hyprconf='nvim $HOME/.config/hypr/hyprland.conf'
-alias zshconf='nvim $HOME/.config/zsh/zshrc'
 alias doc='libreoffice'
 alias docx='libreoffice'
 alias excel='libreoffice'
@@ -245,13 +252,29 @@ upscayl() {
 
 # ───────────────────────── Keybinds ─────────────────────────
 # Configuration
+bindkey -v # vi mode
 setopt extended_glob
 setopt no_flowcontrol
-# shopt autocd for bashrc # cd with ..
+
+# Home / End
+bindkey -M viins '^[OH' beginning-of-line
+bindkey -M viins '^[OF' end-of-line
+bindkey -M viins '^[[H' beginning-of-line
+bindkey -M viins '^[[F' end-of-line
+bindkey -M viins '^[[1~' beginning-of-line
+bindkey -M viins '^[[4~' end-of-line
+bindkey -M vicmd '^[OH' beginning-of-line
+bindkey -M vicmd '^[OF' end-of-line
+bindkey -M vicmd '^[[H' beginning-of-line
+bindkey -M vicmd '^[[F' end-of-line
+bindkey -M vicmd '^[[1~' beginning-of-line
+bindkey -M vicmd '^[[4~' end-of-line
+
+# Tab / Tab + Shift -> menu-complete / reverse-menu-complete
+bindkey -M vicmd '^[[Z' reverse-menu-complete
+bindkey -M viins '^[[Z' reverse-menu-complete
 
 # Keybinds
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
 #bindkey -s '^I' 'pactl set-sink-volume 0 -5%; clear^M'
 #bindkey -s '^O' 'pactl set-sink-volume 0 +5%; clear^M'
 bindkey -s '^Q' 'qalc^M'

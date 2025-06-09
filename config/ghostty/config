@@ -1,20 +1,19 @@
 # ───────────────────────── Ghostty ─────────────────────────
+# Settings
 #title = "Ghostty 👻"
-background-opacity = 0.7
+focus-follows-mouse = false
+window-inherit-working-directory = true 
+window-inherit-font-size = true
+
+# Opacity
+background-opacity = 0.5
 background-blur-radius = 70
 unfocused-split-opacity = 0.9
 
-# Original
-#background-opacity = 0.8
-#background-blur-radius = 70
-
-# Sometimes yes, others no, can mess a little bit with resizing panes
-focus-follows-mouse = false
-#mouse-hide-while-typing = false
-
-# Open split or tab in home directory
-window-inherit-working-directory = true
-window-inherit-font-size = true
+# Padding
+window-padding-balance = true
+#window-padding-x = 5, 0
+#window-padding-y = 10, 0
 
 # Titlebar
 window-decoration = auto
@@ -28,7 +27,7 @@ window-theme = ghostty
 # Font
 font-family = JetBrainsMono Nerd Font Mono
 font-style = Regular
-font-size = 12
+font-size = 14
 font-thicken = true
 
 # Colors

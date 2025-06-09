@@ -15,7 +15,7 @@ in {
 
         # wm-on / graphics on / no server
         ../../pkgs/set/fonts.nix
-        ../../pkgs/set/main.nix
+        ../../pkgs/set/minimal.nix
         ../../pkgs/set/wm.nix
 
         #../../pkgs/set/networking.nix

@@ -94,6 +94,7 @@ configs=(
 )
 
 # Create directories and symlink files
+# TODO librewolf symlink ../config/librewolf/librewolf.overrides.cfg -> ~/.librewolf/librewolf.overrides.cfg
 for config in "${configs[@]}"; do
   src="$source_base/$config"
   target="$dest_path/$config"
@@ -125,6 +126,3 @@ touch $HOME/.config/mpd/playlists
 # ...
 
 ########################### WSL BLOCK ###########################
-for 
-
-
