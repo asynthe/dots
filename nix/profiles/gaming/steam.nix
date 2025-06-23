@@ -1,27 +1,24 @@
+# TODO
+# ADD STUFF FROM VIMJOYERS VIDEO
+# ADD MORE CONFIGURATION AND OPTIONS (XBOX CONTROLLER?)
+
 { config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.gaming;
 in {
-    options.meta.gaming.steam = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Enable Steam and gaming-related packages like Proton.
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.gaming.steam = mkEnableOption "Enable Steam and gaming-related packages like Proton.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.steam {
 
-        # ADD STUFF FROM VIMJOYERS VIDEO
-        # ADD MORE CONFIGURATION AND OPTIONS (XBOX CONTROLLER?)
-
-        # -------------- Steam --------------
         programs.steam = {
             enable = true;
             gamescopeSession.enable = true;
-            #remotePlay.openFirewall = true; # Open ports for Steam Remote Play.
-            #dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server.
+            remotePlay.openFirewall = true; # Open ports for Steam Remote Play.
+            localNetworkGameTransfers.openFirewall = true;
+            dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server.
         };
 
         programs.steam.protontricks.enable = true;
@@ -29,20 +26,16 @@ in {
             STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/${config.meta.system.user}/.steam/root/compatibilitytools.d";
         };
 
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
+        environment.systemPackages = with pkgs; [
+            mangohud
+            protonup-ng # ProtonGE
+            #steam-tui
+            #gamescope
+            steamtinkerlaunch
 
-                mangohud
-	            protonup-ng # ProtonGE
-	            #steam-tui
-	            #gamescope
-	            #steamtinkerlaunch
-	        ;
-            inherit (pkgs.steamPackages)
-	            #steamcmd
-	            #steam-runtime
-	            #steam-runtime-wrapped
-	        ;
-        };
+	        #steamPackages.steamcmd
+	        #steamPackages.steam-runtime
+	        #steamPackages.steam-runtime-wrapped
+        ];
     };
 }

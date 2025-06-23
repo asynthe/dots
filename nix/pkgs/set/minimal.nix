@@ -4,11 +4,12 @@
 
         # ───────────────────────── Testing ─────────────────────────
         # Testing
-        fbterm # -> Set 'video' user group
         fbcat
+        fbterm # -> Set 'video' user group
+        htop
+        iotop
         lm_sensors
         pciutils
-        htop
         powertop
         usbutils
 

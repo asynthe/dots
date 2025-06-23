@@ -3,13 +3,17 @@ with lib; with types;
 let
     cfg = config.meta.services.docker;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.services.docker.enable = mkEnableOption "Enable and set up Docker.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
+        # ─────────────────────────────────────────────────────────────────
         # Beware that docker group membership is equivalent to being root!
         # See more at https://github.com/moby/moby/issues/9976
         # See also Rootless mode (below).
+        # ─────────────────────────────────────────────────────────────────
 
         users.users.${config.meta.system.user}.extraGroups = [ "docker" ];
         virtualisation.docker = {

@@ -3,16 +3,13 @@ with lib; with types;
 let
     cfg = config.meta.services.sshfs;
 in {
-    options.meta.services.sshfs.enable = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Set up an automatic connection to the server through a SSHFS folder.
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.sshfs.enable = mkEnableOption "Set up an automatic connection to the server through a SSHFS folder.";
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable { 
 
-        environment.systemPackages = builtins.attrValues { inherit (pkgs) sshfs; };
+        environment.systemPackages = with pkgs; [ sshfs ];
         services.openssh.allowSFTP = true; # Allow SFTP, which is used by SSHFS.
         users.users.${config.meta.system.user}.extraGroups = [ "fuse" ]; # Add to FUSE group and enable allow_other.
         programs.fuse.userAllowOther = true; # ?

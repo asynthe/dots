@@ -1,15 +1,13 @@
 { config, pkgs, lib, ... }: 
 with lib; with types;
 let
-    cfg = config.meta.audio;
+    cfg = config.meta.audio.bluetooth;
 in {
-    options.meta.audio.bluetooth = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable Bluetooth service.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.audio.bluetooth.enable = mkEnableOption "Enable Bluetooth service.";
 
-    config = mkIf cfg.bluetooth {
+    # ───────────────────────── Configuration ─────────────────────────
+    config = mkIf cfg.enable {
 
         services.blueman.enable = true;
         hardware.bluetooth = {
@@ -25,12 +23,10 @@ in {
             settings.Policy.AutoEnable = true;
         };
 
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-	            bluez-tools
-	            bluetuith # Bluetooth ncurses frontend.
-	        ;
-        };
+        environment.systemPackages = with pkgs; [
+            bluez-tools
+            bluetuith # Bluetooth ncurses frontend.
+        ];
 
         #services.pipewire.wireplumber.extraConfig.bluetoothEnhancements = mkIf config.services.pipewire.enable {
             #"monitor.bluez.properties" = {

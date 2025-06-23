@@ -1,26 +1,3 @@
-{ config, lib, pkgs, ... }: 
-with lib; with types;
-let
-cfg = config.meta.system.windows;
-in {
-    options.meta.system.windows = {
-        enable = mkEnableOption "Enable setup for Windows dual-boot or access.";
-        disk = mkOption {
-            type = nullOr str;
-            default = null;
-            description = "Specify the device for windows auto-mount";
-        };
-    };
-
-    config = mkIf cfg.enable {
-
-        time.hardwareClockInLocalTime = true;
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                ntfs3g
-                ;
-        };
-
 # TODO Create a folder in `$HOME/windows` that points to C:\Users\Ben
 # option -> meta.system.windows.mount_windows_folder = true;
 # option -> meta.system.windows.mount_windows_user = "Ben";
@@ -34,5 +11,26 @@ in {
 #fsType = "ntfs";
 #options = [ "rw" ];
 #};
+
+{ config, lib, pkgs, ... }: 
+with lib; with types;
+let
+    cfg = config.meta.system.windows;
+in {
+# ───────────────────────── Options ─────────────────────────
+    options.meta.system.windows = {
+        enable = mkEnableOption "Enable setup for Windows dual-boot or access.";
+        disk = mkOption {
+            type = nullOr str;
+            default = null;
+            description = "Specify the device for windows auto-mount";
+        };
+    };
+
+# ───────────────────────── Configuration ─────────────────────────
+    config = mkIf cfg.enable {
+
+        time.hardwareClockInLocalTime = true;
+        environment.systemPackages = with pkgs; [ ntfs3g ];
     };
 }

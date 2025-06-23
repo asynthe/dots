@@ -1,294 +1,48 @@
-[{
-  "output": "eDP-1",
-  "layer": "top", // Waybar at top layer
-  "position": "bottom", // Waybar position (top|bottom|left|right)
-  "height": 36, // Waybar height (to be removed for auto height)
-  // "width": 1280, // Waybar width
-  "spacing": 3, // Gaps between modules (4px)
-  // Choose the order of the modules
-  "modules-left": ["hyprland/workspaces", "custom/media"],
-  // "modules-center": ["mpd", "hyprland/window"],
-  "modules-center": [ "hyprland/window"],
-  "modules-right": ["cpu", "memory", "network", "battery", "clock", "keyboard-state"],
+[
+    // eDP-1 -> MSI Raider GE68HX
+    // DP-2 -> CRUA Ultrawide
+    {
+        "output": [ "eDP-1", "DP-2" ],
+        "layer": "top",
+        "position": "bottom", // top, bottom, left, right
+        "height": 36, // TODO to be removed for auto height (?)
+        //"width": 1280,
+        "spacing": 2, // Gaps between modules (4px)
 
-  // More modules: "mpd", "idle_inhibitor", "temperature", "backlight", "sway/language"
-  // "tray", "battery#bat2", "cpu", "memory", "pulseaudio", "sway/window", "hyprland/mode"
-  // "hyprland/scratchpad", "keyboard-state"
+        // Module setup
+        "modules-left": [ "hyprland/workspaces", "hyprland/submap", "custom/media" ],
+        "modules-right": [ "mpd", "cava", "tray", "battery", "clock" ],
+        //"modules-center": [ "hyprland/window" ],
+        //"modules-center": [ "tray" ],
+        //"modules-right": [ "mpd", "cava", "tray", "network", "battery", "clock" ],
 
-  // Hyprland Modules
-  "hyprland/workspaces": {
-    // "all-outputs": true,
-    // "warp-on-scroll": true,
-    // "persistent_workspaces": {
-    //    "*": 10
-    // },
-    "disable-scroll": true,
-    "on-scroll-up": "hyprctl dispatch workspace -1",
-    "on-scroll-down": "hyprctl dispatch workspace +1",
-    "format": "{icon}",
-    "format-icons": {
-      "1": "一",
-      "2": "二",
-      "3": "三",
-      "4": "四",
-      "5": "五", 
-      "6": "六",
-      "7": "七",
-      "8": "八",
-      "9": "九",
-      "10": "",
-      "urgent": "",
-      "focused": ""
-      // "default": ""
+        // Modules
+        "include": [
+            "~/.config/waybar/modules/default.jsonc",
+            "~/.config/waybar/modules/hyprland.jsonc",
+            "~/.config/waybar/modules/cava.jsonc",
+            "~/.config/waybar/modules/mpd.jsonc"
+        ]
+    },
+
+    // DP-1 -> Arzopa F1ZC
+    // DP-3 -> Arzopa F1ZC
+    {
+        "output": [ "!eDP-1", "!DP-2" ],
+        "layer": "top",
+        "position": "bottom", // top, bottom, left, right
+
+        // Modules
+        //"modules-left": [ "" ],
+        //"modules-center": [ "" ],
+        "modules-right": [ "clock" ],
+
+        // Imports
+        "include": [
+            "~/.config/waybar/modules/default.jsonc",
+            "~/.config/waybar/modules/hyprland.jsonc",
+            "~/.config/waybar/modules/cava.jsonc",
+            "~/.config/waybar/modules/mpd.jsonc"
+        ]
     }
-  },
-
-  "hyprland/window": {
-      "separate-outputs": true,
-      "max-length": 50,
-      "rewrite": {
-        "(.*) - GNU Emacs at server": "$1",
-        "(.*) - GNU Emacs at thinknya": "$1",
-        "(.*) - Mozilla Firefox": "$1",
-        "(.*) - QGIS": "$1",
-        "(.*) - Tor Browser": "$1",
-        "(.*) - YouTube — Librewolf": "$1",
-        "(.*) - mpv": "$1",
-        "(.*) - zsh": "> [$1]",
-        "(.*) on QEMU/KVM": "$1",
-        "(.*) — Librewolf": "$1",
-        "Yazi: (.*)": "$1"
-      	/* "/home/asynthe/jp/N3JP.pdf -> N3JP */
-      }
-  },
-
-  "hyprland/mode": {
-    "format": "<span style=\"italic\">{}</span>"
-  },
-
-  "hyprland/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": ["", ""],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
-
-  // Other Modules
-
-  "keyboard-state": {
-        /* "numlock": true, */
-        "capslock": true,
-        "format": "{icon}",
-        "format-icons": {
-            "locked": " ",
-            "unlocked": ""
-            /* "unlocked": "" */
-        }
-    },
-
-    "mpd": {
-      "format": "{artist} - {title}  ",
-      "format-alt": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}  ",
-      /* "format": "{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S})", */
-      /* "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ", */
-      "format-disconnected": "Disconnected",
-      "format-paused": "",
-      "format-stopped": "",
-      /* "format-stopped": "", */
-      /* "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ", */
-      "unknown-tag": "N/A",
-      "interval": 2,
-      "consume-icons": {
-        "on": " "
-      },
-      "random-icons": {
-        "off": "<span color=\"#f53c3c\"></span> ",
-        "on": " "
-      },
-      "repeat-icons": {
-        "on": " "
-      },
-      "single-icons": {
-        "on": "1 "
-      },
-      "state-icons": {
-        "paused": "",
-        "playing": ""
-      },
-      "tooltip-format": "MPD (connected)",
-      "tooltip-format-disconnected": "MPD (disconnected)"
-    },
-    "idle_inhibitor": {
-      "format": "{icon}",
-      "format-icons": {
-        "activated": "",
-        "deactivated": ""
-      }
-    },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10
-    },
-    "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-    "cpu": {
-        "format": "{usage}% CPU",
-        "tooltip": false
-    },
-    "memory": {
-        "format": "{}% "
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
-    },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
-    },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        // "format-wifi": "{essid} ({signalStrength}%) ",
-        "format": "{essid}  ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        /* "format-alt": "{ifname}: {ipaddr}/{cidr} " */
-        "format-alt": "{ipaddr}/{cidr}  [{ifname}]",
-        "format-ethernet": "{ipaddr}/{cidr} "
-    }
-}
-, {
-    "output": ["HDMI-A-2"],
-    "layer": "top",
-    "position": "top",
-    "height": 30,
-    "spacing": 2,
-
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["mpd", "keyboard-state", "network", "battery", "clock"],
-
-    // Hyprland
-    "hyprland/window": {
-      "separate-outputs": true,
-      "max-length": 50,
-      "rewrite": {
-        "(.*) - Mozilla Firefox": "$1",
-        "(.*) - zsh": "> [$1]"
-      }
-    },
-
-    // Modules
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        // "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-wifi": "",
-        "format-disconnected": "⚠",
-        "format-alt": "{ipaddr}/{cidr}  [{ifname}]",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} "
-    },
-
-    "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-
-    "mpd": {
-      "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}",
-      "format-paused": "",
-      "format-stopped": "",
-      /* "format-stopped": "", */
-      "format-disconnected": "",
-      "interval": 2,
-      "consume-icons": {
-        "on": " "
-      },
-      "random-icons": {
-        "off": "<span color=\"#f53c3c\"></span> ",
-        "on": " "
-      },
-      "repeat-icons": {
-        "on": " "
-      },
-      "single-icons": {
-        "on": "1 "
-      },
-      "state-icons": {
-        "paused": "",
-        "playing": ""
-      }
-    },
-
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}",
-        "format-full": [""],
-        "format-charging": "",
-        "format-plugged": "",
-        "format-icons": ["", "", "", "", ""]
-    }
-}]
-
-// "custom/media": {
-//"format": "{icon} {}",
-//"return-type": "json",
-//"max-length": 40,
-//"format-icons": {
-//    "spotify": "",
-//    "default": "🎜"
-//},
-// "escape": true,
-// "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name }
-
-
-// "pulseaudio": {
-// "scroll-step": 1, // %, can be a float
-// "format": "{volume}% {icon} {format_source}",
-// "format-bluetooth": "{volume}% {icon} {format_source}",
-// "format-bluetooth-muted": " {icon} {format_source}",
-// "format-muted": " {format_source}",
-// "format-source": "{volume}% ",
-// "format-source-muted": "",
-// "on-click": "pavucontrol",
-// "format-icons": {
-//"headphone": "",
-//"hands-free": "",
-//"headset": "",
-//"phone": "",
-//"portable": "",
-//"car": "",
-//"default": ["", "", ""],
-// },
+]

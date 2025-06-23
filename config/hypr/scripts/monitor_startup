@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+startup() {
+    connected_monitors=$(hyprctl -j monitors | jq 'length')
+    widescreen_screen_connected=$(hyprctl -j monitors | jq 'any(.[]; .model == "CR340HDU")')
+
+    # Laptop monitor
+    if [ "$connected_monitors" -eq 0 ]; then
+        echo "Only eDP-1 detected, enabling configuration..."
+        hyprctl keyword monitor "eDP-1, 2560x1600@120, 0x0, 1"
+        #windowrulev2 = size 1694 921, class:^(com.mitchellh.ghostty)$ 
+        #windowrulev2 = move 1728 676, title:(Mullvad VPN) # (1.25x scaling applied)
+
+    # Widescren connected
+    elif [ "$connected_monitors" -gt 1 ] && [ "$widescreen_screen_connected" = "true" ]; then
+        echo "DP-2 (CR340HDU) detected, disabling eDP-1..."
+        hyprctl keyword monitor "eDP-1, disable"
+        hyprctl keyword monitor "DP-2, 3440x1440@144, 0x0, 1" # CRUA Ultrawide 34" UWQHD 144Hz
+        #windowrulev2 = size 2280 1122, class:^(com.mitchellh.ghostty)$
+        #windowrulev2 = move 3133 836, title:(Mullvad VPN)
+    fi
+}
+
+startup

@@ -26,6 +26,7 @@ vim.opt_local.foldlevel =  0 -- All folds closed
 -- ───────────────────────── Keybinds ─────────────────────────
 -- Main keybinds
 vim.keymap.set("n", "<Return>", "<Plug>(neorg.esupports.hop.hop-link)", { buffer = true })
+vim.keymap.set("n", "<A-a>", "<Plug>(neorg.qol.todo-items.todo.task-cycle)", { buffer = true })
 
 -- Promote / Demote
 vim.keymap.set("n", "<A-Left>", "<Plug>(neorg.promo.demote)", { buffer = true })
@@ -37,15 +38,15 @@ vim.keymap.set("i", "<A-Right>",  "<Plug>(neorg.promo.promote)", { buffer = true
 vim.keymap.set("n", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
 vim.keymap.set("i", "<A-Return>", "<Plug>(neorg.itero.next-iteration)", { buffer = true })
 
--- Tab to fold headings in normal and insert
+-- Tab to fold headings in normal mode
 vim.keymap.set("n", "<Tab>", function()
     pcall(function() vim.cmd("normal! za") end)
 end, opts)
 
-vim.keymap.set("i", "<Tab>", function()
-    pcall(function()
-        vim.cmd("stopinsert")
-        vim.cmd("normal! za")
-        vim.cmd("startinsert")
-    end)
-end, opts)
+--vim.keymap.set("i", "<Tab>", function()
+--        pcall(function()
+--        vim.cmd("stopinsert")
+--        vim.cmd("normal! za")
+--        vim.cmd("startinsert")
+--    end)
+--end, opts)

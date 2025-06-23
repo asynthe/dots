@@ -3,12 +3,14 @@ with lib; with types;
 let
     cfg = config.meta.system;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system.users = mkOption {
         type = str;
         default = config.meta.system.type;
         description = "Set up the system users.";
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkMerge [
 
         # KEEP HERE FOR SOPS-FICATION

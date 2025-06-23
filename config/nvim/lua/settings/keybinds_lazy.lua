@@ -7,39 +7,53 @@ local function kill_buffer_or_quit()
     end
 end
 
+-- ───────────────────────── which-key ─────────────────────────
+local wk = require("which-key")
+wk.add({
+    { "<leader>f", group = "File operations" },
+    { "<leader>j", group = "Journal" },
+    { "<leader>l", group = "List files (Harpoon)" },
+    { "<leader>t", group = "Toggle / Disable" },
+    { "<leader>w", group = "Window operations" },
+})
+
 -- ───────────────────────── NORMAL MODE ─────────────────────────
 local telescope = require("telescope.builtin")
 
---vim.keymap.set("n", "<leader>.", ":Oil<CR>", opts)
---vim.keymap.set("n", "<Tab>", ":NvimTreeFocus<CR>", opts)
---vim.keymap.set("n", "<leader>.", "<cmd>Yazi<cr>", opts)
-vim.keymap.set("n", "<leader>.", telescope.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>ft", ":NvimTreeFocus<CR>", opts)
-vim.keymap.set("n", "<leader>fm", ":Alpha<CR>", opts)
-vim.keymap.set("n", "<leader>g", telescope.live_grep, { desc = "Telescope live grep" })
+-- Main
+vim.keymap.set("n", "<leader>.", "<cmd>Yazi<cr>", { noremap = true, silent = true, desc = "Yazi file manager" })
+vim.keymap.set("n", "<leader>,", ":Oil<CR>", { noremap = true, silent = true, desc = "Oil file manager" })
 
--- Telescope (Find files)
-vim.keymap.set("n", "<leader>fs", ":w<CR>", opts) -- Save file
-vim.keymap.set("n", "<leader>fk", kill_buffer_or_quit, opts) -- Kill buffer or exit if one buffer left
-vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Telescope help tags" })
-vim.keymap.set("n", "<leader>nl", telescope.buffers, { desc = "Telescope buffers" })
-vim.keymap.set("n", "<leader>nf", telescope.find_files, { desc = "Telescope find files" })
+-- File operations
+vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "List buffers (Telescope)" })
+vim.keymap.set("n", "<leader>fg", telescope.live_grep, { desc = "File live grep (Telescope)" })
+vim.keymap.set("n", "<leader>fk", kill_buffer_or_quit, { noremap = true, silent = true, desc = "Close file" })
+vim.keymap.set("n", "<leader>fl", telescope.find_files, { desc = "Find files (Telescope)" })
+vim.keymap.set("n", "<leader>fs", ":w<CR>", { noremap = true, silent = true, desc = "Save file" })
+
+-- Journal (neorg)
+vim.keymap.set("n", "<leader>jn", ":Neorg journal today<CR>", { buffer = true, desc = "Note (today)" })
+vim.keymap.set("n", "<leader>jq", ":Neorg journal yesterday<CR>", { buffer = true, desc = "Note (yesterday)" })
+vim.keymap.set("n", "<leader>jw", ":Neorg journal tomorrow<CR>", { buffer = true, desc = "Note (tomorrow)" })
+
+-- Toggle / Disable
+vim.keymap.set("n", "<leader>tm", ":Alpha<CR>", { noremap = true, silent = true, desc = "Open Alpha dashboard" })
+vim.keymap.set("n", "<leader>tt", ":NvimTreeFocus<CR>", { noremap = true, silent = true, desc = "Open nvim-tree" })
+
+-- Window operations
+vim.keymap.set("n", "<leader>wc", ":q<CR>", { noremap = true, silent = true, desc = "Close window" })
+vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", { noremap = true, silent = true, desc = "Split window (vertical)" })
+vim.keymap.set("n", "<leader>ws", ":split<CR>", { noremap = true, silent = true, desc = "Split window (horizontal)" })
+vim.keymap.set("n", "<leader>wh", "<C-w>h", { noremap = true, silent = true, desc = "Change to buffer in left" })
+vim.keymap.set("n", "<leader>wj", "<C-w>j", { noremap = true, silent = true, desc = "Change to buffer in down" })
+vim.keymap.set("n", "<leader>wk", "<C-w>k", { noremap = true, silent = true, desc = "Change to buffer in up" })
+vim.keymap.set("n", "<leader>wl", "<C-w>l", { noremap = true, silent = true, desc = "Change to buffer in right" })
+--vim.keymap.set("n", "<leader>\\", ":vsplit<CR>", opts)
+--vim.keymap.set("n", "<leader>|", ":split<CR>", opts)
 
 -- Buffers
 vim.keymap.set("n", "<A-]>", ":bprev<CR>", opts)
 vim.keymap.set("n", "<A-[>", ":bnext<CR>", opts)
-
--- Window splits
---vim.keymap.set("n", "<leader>\\", ":vsplit<CR>", opts)
---vim.keymap.set("n", "<leader>|", ":split<CR>", opts)
---vim.keymap.set("n", "<leader>wv", ":vsplit<CR>", opts)
---vim.keymap.set("n", "<leader>ws", ":split<CR>", opts)
-
--- Window navigation
---vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
---vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
---vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
---vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
 
 -- Window resizing
 --vim.keymap.set("n", "H", ":vertical resize -2<CR>", opts)
@@ -62,7 +76,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 -- ───────────────────────── Plugin Keymaps ─────────────────────────
 -- Lualine
 local lualine_hidden = false
-vim.keymap.set("n", "<leader>st", function()
+vim.keymap.set("n", "<leader>tl", function()
   lualine_hidden = not lualine_hidden
   require("lualine").hide({ unhide = lualine_hidden })
 end, { desc = "Toggle lualine" })
@@ -93,10 +107,10 @@ if harpoon_ok then
         }):find()
     end
 
-    -- Harpoon Keybindings
-    vim.keymap.set("n", "<leader>na", function() harpoon:list():add() end)
-    vim.keymap.set("n", "<leader>nl", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-    vim.keymap.set("n", "<leader>nt", function() toggle_telescope(harpoon:list()) end, { desc = "Open Harpoon Telescope" })
-    vim.keymap.set("n", "<leader>nn", function() harpoon:list():prev() end)
-    vim.keymap.set("n", "<leader>np", function() harpoon:list():next() end)
+    -- List (Harpoon Keybindings)
+    vim.keymap.set("n", "<leader>la", function() harpoon:list():add() end, { desc = "Add to list" })
+    vim.keymap.set("n", "<leader>lm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "List menu" })
+    vim.keymap.set("n", "<leader>lt", function() toggle_telescope(harpoon:list()) end, { desc = "Open list on Telescope" })
+    vim.keymap.set("n", "<leader>ln", function() harpoon:list():prev() end, { desc = "List next" })
+    vim.keymap.set("n", "<leader>lp", function() harpoon:list():next() end, { desc = "List previous" })
 end

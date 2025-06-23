@@ -21,19 +21,23 @@
     environment.systemPackages = with pkgs; [
         brightnessctl
         grim slurp
+        gromit-mpx
+        hyprshot
         imv
+        libsForQt5.polkit-kde-agent
+        libsForQt5.qt5.qtwayland
         mako libnotify
         pavucontrol
         ripdrag
         rofi-wayland
+        socat # IPC
+        swappy
         swayidle
         wl-clipboard
-        libsForQt5.polkit-kde-agent
-        libsForQt5.qt5.qtwayland
 
         # Wallpaper
         mpvpaper
-        inputs.swww.packages.${pkgs.system}.swww
+        swww #inputs.swww.packages.${pkgs.system}.swww
         waypaper
     ];
 }

@@ -1,14 +1,11 @@
-{ config, lib, ... }: 
+{ config, lib, pkgs, ... }: 
 with lib; with types;
 let
     cfg = config.meta.audio.pipewire;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.audio.pipewire = {
-        enable = mkOption {
-            type = bool;
-            default = false;
-            description = "Enable Pipewire audio setup and configuration.";
-        };
+        enable = mkEnableOption "Enable Pipewire audio setup and configuration.";
         lowlatency = mkOption {
             type = types.bool;
             default = false;
@@ -16,6 +13,7 @@ in {
         };
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
         # Pipewire audio configuration.
@@ -50,5 +48,10 @@ in {
                 #default.clock.max-quantum = 32;
             #};
         #};
+
+        # Packages
+        environment.systemPackages = with pkgs; [
+            easyeffects
+        ];
     };
 }

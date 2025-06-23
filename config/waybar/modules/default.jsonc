@@ -1,0 +1,101 @@
+{
+  // ───────────────────────── Modules ─────────────────────────
+  // Change the order of the modules
+  // More modules: "mpd", "idle_inhibitor", "temperature", "backlight", "sway/language"
+  // "tray", "battery#bat2", "cpu", "memory", "pulseaudio", "sway/window", "hyprland/mode"
+  // "hyprland/scratchpad", "keyboard-state"
+  // Modules list:
+  // - mpd
+  // - mpd
+  // - mpd
+  // - mpd
+  // - mpd
+
+  "idle_inhibitor": {
+      "format": "{icon}",
+      "format-icons": {
+          "activated": "",
+          "deactivated": ""
+      }
+  },
+
+  "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+  },
+
+  "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+  },
+
+  "cpu": {
+      "format": "{usage}% CPU",
+      "tooltip": false
+  },
+
+  "memory": {
+      "format": "{}% "
+  },
+
+  "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+  },
+
+  "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+  },
+
+  // Battery
+  "battery": {
+      "format": "{icon}",
+      "format-icons": ["", "", "", "", ""],
+      "format-alt": "{capacity}% {icon}",
+      "format-charging": "",
+      "format-full": "",
+      "format-plugged": "",
+      // "format-good": "", // An empty format will hide the module
+      "tooltip-format": "{capacity}%",
+      "states": {
+            "critical": 15,
+            "warning": 30
+            // "good": 95
+      }
+  },
+
+  // Network
+  "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        //"format-alt": "{ifname}: {ipaddr}/{cidr} ",
+        //"format": "{essid} ",
+        //"format-wifi": "{essid} ",
+        // "tooltip-format": "{ifname} via {gwaddr} ",
+        // "format-alt": "{ipaddr}/{cidr}  [{ifname}]"
+
+        "format-wifi": "",
+        "tooltip-format": "{essid}",
+        "format-alt": "{gwaddr} [{ifname}] ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-linked": "{ifname} (NO IP) ", // ?
+        "format-disconnected": "DISCONNECTED ⚠"
+  },
+
+  // Keyboard state
+  "keyboard-state": {
+        //"numlock": true,
+        "capslock": true,
+        "format": "{icon}",
+        "format-icons": {
+            "locked": " ",
+            "unlocked": ""
+            /* "unlocked": "" */
+        }
+  }
+}

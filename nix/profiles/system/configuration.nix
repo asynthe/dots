@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.system;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system = {
         user = mkOption { type = str; };
 
@@ -14,6 +15,8 @@ in {
             default = "server";
         };
     };
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = lib.mkMerge [
         # Shared config
         {

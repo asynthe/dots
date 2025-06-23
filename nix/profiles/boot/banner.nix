@@ -3,12 +3,14 @@ with lib; with types;
 let
     cfg = config.meta.boot;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.boot.banner = mkOption {
         type = nullOr str;
         default = null;
         description = "Enable and specify a banner on device login.";
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf (cfg.banner != null) {
         #users.motd = "Today is leg day.";
         environment.etc."issue".source = lib.mkForce (

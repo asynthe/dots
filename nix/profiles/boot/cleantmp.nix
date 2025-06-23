@@ -3,14 +3,10 @@ with lib; with types;
 let
     cfg = config.meta.boot;
 in {
-    options.meta.boot.cleantmp = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Clean /tmp on reboot.
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.boot.cleantmp = mkEnableOption "Clean /tmp on reboot.";
     
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.cleantmp {
         boot.tmp = {
             cleanOnBoot = true;

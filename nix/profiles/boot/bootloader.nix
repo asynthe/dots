@@ -8,6 +8,7 @@ with lib; with types;
 let
     cfg = config.meta.boot.bootloader;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.boot.bootloader = {
         secure = mkEnableOption "Enable Secure Boot for current system."; 
         silent = mkEnableOption "Enable configuration for a Silent Boot (almost possible, because of nix stages output at boot).";
@@ -23,6 +24,8 @@ in {
             description = "Number of generations to output.";
         };
     };
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkMerge [
 
         # Shared configuration

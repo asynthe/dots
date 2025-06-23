@@ -1,19 +1,15 @@
+# TODO Make `output` path an custom option.
+
 { config, lib, pkgs, ... }: 
 with lib; with types;
 let
     cfg = config.meta.services.locate;
 in {
-    options.meta.services.locate.enable = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Enable and set up Locate daemon. (plocate)
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.locate.enable = mkEnableOption "Enable and set up Locate daemon. (plocate)";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
-
-        # Make `output` path an custom option.
 
         services.locate = {
             enable = true;

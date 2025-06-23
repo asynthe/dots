@@ -35,11 +35,11 @@ return {
                 "TelescopeResultsTitle",
 
                 -- barbar
-                "BufferCurrent",
-                "BufferVisible",
-                "BufferAlternate",
-                "BufferInactive",
-                "BufferInactiveSign",
+                --"BufferCurrent",
+                --"BufferVisible",
+                --"BufferAlternate",
+                --"BufferInactive",
+                --"BufferInactiveSign",
 
                 -- Floating windows / Plugin panels
                 "NormalFloat",

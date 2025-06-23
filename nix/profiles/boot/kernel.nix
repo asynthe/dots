@@ -5,12 +5,14 @@ with lib; with types;
 let
 cfg = config.meta.boot;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.boot.kernel = mkOption {
         type = enum [ "latest" "zen" "hardened" ];
         default = "latest";
         description = "Linux kernel to use.";
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkMerge [
         # Latest
         (mkIf (cfg.kernel == "latest") { 

@@ -1,5 +1,21 @@
 { config, lib, pkgs, ... }: {
 
+    # ───────────────────────── Imports ─────────────────────────
+    imports = [
+        # Simple Modules
+        ../../modules/simple/gpg.nix
+        ../../modules/simple/hyprland.nix
+        ../../modules/simple/ime.nix
+        ../../modules/simple/neovim.nix
+        ../../modules/simple/obs-studio.nix
+
+        # Packages
+        ../../pkgs/set/fonts.nix
+        ../../pkgs/set/fonts_jp.nix
+        ../../pkgs/set/minimal.nix
+        ../../pkgs/set/wm.nix
+    ];
+
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
@@ -27,6 +43,12 @@
 
         # Package set
         system.packages = "minimal"; # minimal, minimal_stable, hyprland
+
+        # ─────────────── Audio ───────────────
+        audio.bluetooth.enable = true;
+        audio.musnix.enable = false;
+        audio.pipewire.enable = true;
+        #audio.pipewire.lowlatency = false;
 
         # ─────────────── Boot ───────────────
         boot.kernel = "zen"; # latest, zen, hardened
@@ -64,12 +86,6 @@
         driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
         driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
 
-        # ─────────────── Audio ───────────────
-        audio.bluetooth = true;
-        #audio.musnix = false;
-        audio.pipewire.enable = true;
-        #audio.pipewire.lowlatency = false;
-
         # ─────────────── Gaming ───────────────
         gaming.steam = true;
         gaming.gamemode = true;
@@ -78,33 +94,44 @@
 
         # ─────────────── VM ───────────────
         vm.libvirt.enable = true;
-        #vm.virtualbox.enable = true;
-        #vm.vmware.enable = true;
+        vm.virtualbox.enable = false;
+        vm.vmware.enable = false;
 
         # ─────────────── VPN ───────────────
         vpn.mullvad.enable = true;
 
         # ─────────────── Services ───────────────
         services.android.enable = true;
-        #services.docker.enable = true;
-        #services.endlessh.enable = true;
-        #services.flatpak.enable = true;
-        #services.grafana.enable = true;
-        #services.i2pd.enable = true;
-        #services.locate.enable = true;
-        services.qbittorrent-nox.enable = true;
-        #services.sql.enable = true;
+        services.endlessh.enable = false;
+        services.flatpak.enable = false;
+        services.grafana.enable = false;
+        services.i2pd.enable = false;
+        services.locate.enable = false;
+        services.monica.enable = false;
+        services.ollama.enable = false;
+        services.qbittorrent-nox.enable = false;
+        services.sql.enable = false;
+        #services.sql.backend = [ "mysql" "postgresql" ];
         services.ssh.enable = true;
         services.ssh.configuration = "laptop"; # laptop, server
-        #services.sshfs.enable = true;
-        #services.syncthing.enable = true;
-        services.wine.enable = true;
-        #services.xmr.enable = true;
+        services.sshfs.enable = false;
+        services.syncthing.enable = false;
+        services.wine.enable = false;
+        services.xmr.enable = false;
 
         # ─────────────── Services - Ports ───────────────
+        # TODO
+        # Check which services have port option.
         #services.ssh.port = 2001;
         #services.grafana.port = 2002;
-        #services.service1.port = 2002;
-        #services.service2.port = 2002;
+        #services.syncthing.port = 2003;
+
+        # ─────────────── Docker + Containers ───────────────
+        services.docker.enable = true;
+        services.docker.containers.monica.enable = true;
+        services.docker.containers.monica.dir = "/tmp/monica";
+        services.docker.containers.prowlarr.enable = false;
+        services.docker.containers.radarr.enable = false;
+        services.docker.containers.sonarr.enable = false;
     };
 }

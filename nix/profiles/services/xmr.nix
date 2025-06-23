@@ -3,25 +3,21 @@ with lib; with types;
 let
     cfg = config.meta.services.xmr;
 in {
-    options.meta.services.xmr.enable = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable and set up the Monero daemon.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.xmr.enable = mkEnableOption "Enable and set up the Monero daemon.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                monero-cli
-                monero-gui
+        environment.systemPackages = with pkgs; [
+            monero-cli
+            monero-gui
 
-                # Mining
-                #xmrig #xmrig-proxy
-                #p2pool      
-                #xmr-stak
-            ;
-        };
+            # Mining
+            #xmrig #xmrig-proxy
+            #p2pool      
+            #xmr-stak
+        ];
 
         #services.monero = {
             #enable = true;

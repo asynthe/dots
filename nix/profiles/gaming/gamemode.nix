@@ -3,12 +3,10 @@ with lib; with types;
 let
     cfg = config.meta.gaming;
 in {
-    options.meta.gaming.gamemode = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable Gamemode to get more performance in games.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.gaming.gamemode = mkEnableOption "Enable Gamemode to get more performance in games.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.gamemode {
 
         # Better performance on games. Use with `gamemoderun`.
@@ -16,7 +14,6 @@ in {
         programs.gamemode = {
             enable = true;
 	        enableRenice = true;
-	        #settings = ;
         };
     };
 }

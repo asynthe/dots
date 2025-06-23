@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.disk;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.disk.filesystem = mkOption {
         type = nullOr str;
         default = null;
@@ -17,6 +18,7 @@ in {
         #./disko/zfs.nix
     ];
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = {
         # I want to set up assertions that only those specified filesystems can be used
         # If null or a filesystem that doesn't exists is put, then stop the process.

@@ -1,16 +1,14 @@
+# TODO
+# Configure `config.meta.services.ssh.port`.
+
 { config, lib, ... }:
 with lib; with types;
 let
     cfg = config.meta.services.ssh;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.services.ssh = {
-        enable = mkOption {
-            type = bool;
-            default = false;
-            description = ''
-              Enable SSH daemon.
-            '';
-        };
+        enable = mkEnableOption "Enable SSH daemon.";
         configuration = mkOption {
             type = nullOr str;
             default = null;
@@ -27,7 +25,9 @@ in {
         };
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
+
         programs.mosh.enable = mkIf cfg.mosh true;
         services.openssh = mkMerge [
             {

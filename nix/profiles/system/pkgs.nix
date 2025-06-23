@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.system;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system.packages = mkOption {
         type = str;
         default = "minimal";
@@ -23,4 +24,7 @@ in {
         #../../pkgs/set/games.nix
         #../../pkgs/set/sec.nix
     ];
+
+    # ───────────────────────── Configuration ─────────────────────────
+    # ...
 }

@@ -1,5 +1,0 @@
-{
-    services.monica = {
-        enable = true;
-    };
-}

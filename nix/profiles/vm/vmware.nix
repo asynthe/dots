@@ -1,15 +1,14 @@
 { config, lib, pkgs, ... }:
-
 with lib; with types;
 let
     cfg = config.meta.vm.vmware;
 in {
-    options.meta.vm.vmware = {
-        enable = mkEnableOption "Enable vmware.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.vm.vmware.enable = mkEnableOption "Enable vmware.";
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
-        # -------------- vmware --------------
         services.xserver.videoDrivers = [ "vmware" ];
         virtualisation.vmware = {
             host = {

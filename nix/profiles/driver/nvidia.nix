@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.driver.nvidia;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.driver.nvidia = {
         enable = mkEnableOption "Enable nvidia driver and configuration";
         specialisation = mkEnableOption "Enable specialisation modes";
@@ -30,6 +31,7 @@ in {
         };
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
         assertions = [
             {

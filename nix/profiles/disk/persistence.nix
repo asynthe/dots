@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.disk.persistence;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.disk.persistence = {
         enable = mkEnableOption "Enable system persistence.";
         #type = mkOption {
@@ -12,6 +13,7 @@ in {
         #};
     };
 
+    # ───────────────────────── Options ─────────────────────────
     config = mkIf cfg.enable {
         #assertions = [
             #{

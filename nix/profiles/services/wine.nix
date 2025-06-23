@@ -3,12 +3,10 @@ with lib; with types;
 let
     cfg = config.meta.services.wine;
 in {
-    options.meta.services.wine.enable = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable and set up Wine";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.wine.enable = mkEnableOption "Enable and set up Wine";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
         # Wine configuration and packages

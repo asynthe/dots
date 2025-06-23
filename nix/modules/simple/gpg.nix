@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
 
     # I got it running with the next commands.
     # `pkill gpg-agent` (If gpg-agent is running)

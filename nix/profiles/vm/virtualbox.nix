@@ -3,12 +3,12 @@ with lib; with types;
 let
     cfg = config.meta.vm.virtualbox;
 in {
-    options.meta.vm.virtualbox = {
-        enable = mkEnableOption "Enable VirtualBox.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.vm.virtualbox.enable = mkEnableOption "Enable VirtualBox.";
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
         
-        # -------------- VirtualBox --------------
         users.extraGroups.vboxusers.members = [ "${config.meta.system.user}" ];
         virtualisation.virtualbox = {
             host = {

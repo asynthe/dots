@@ -3,10 +3,13 @@ with lib; with types;
 let
     cfg = config.meta.system;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system.language = mkOption {
         type = str;
         default = "english";
     };
+
+    # ───────────────────────── Configuration ─────────────────────────
     config = let
         choices = {
             # Both (English and Japanese)
@@ -39,6 +42,7 @@ in {
                 #};
             };
         };
+
     in mkIf (cfg.language != null) {
         i18n = choices.${cfg.language};
 

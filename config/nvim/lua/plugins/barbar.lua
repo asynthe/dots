@@ -15,6 +15,7 @@ return {
     config = function()
         require("barbar").setup {
             auto_hide = true, -- Hide tab bar if only one window
+            animation = false,
         }
     end,
 }

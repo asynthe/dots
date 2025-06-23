@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.disk;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.disk = {
         ssd = mkEnableOption "Enable drivers and optimizations for SSD-type drives.";
         device = mkOption {
@@ -12,6 +13,7 @@ in {
         };
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = {
         assertions = [
             {

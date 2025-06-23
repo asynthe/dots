@@ -1,15 +1,13 @@
 { config, lib, ... }: 
 with lib; with types;
 let
-    cfg = config.meta.audio;
+    cfg = config.meta.audio.musnix;
 in {
-    options.meta.audio.musnix = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable audio configuration. (Musnix)";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.audio.musnix.enable = mkEnableOption "Enable audio configuration. (Musnix)";
 
-    config = mkIf cfg.musnix {
+    # ───────────────────────── Configuration ─────────────────────────
+    config = mkIf cfg.enable {
         musnix = {
             enable = true;
             #alsaSeq.enable = true;

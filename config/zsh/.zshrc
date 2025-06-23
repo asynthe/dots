@@ -149,6 +149,7 @@ alias ghosttyconf='nvim $HOME/.config/ghostty/config'
 alias hyprconf='nvim $HOME/.config/hypr/hyprland.conf'
 alias mpvconf='nvim $HOME/.config/mpv/mpv.conf'
 alias zshconf='nvim $HOME/.config/zsh/zshrc'
+alias waybarconf='nvim $HOME/.config/waybar/config.jsonc'
 
 # Directories
 alias ls='eza --icons --group-directories-first'
@@ -179,7 +180,7 @@ alias -g cat='bat'
 alias -g info='mediainfo'
 alias -g n='nvim'
 alias -g nvv='sudo nvim'
-alias -g pdf='sioyek'
+alias -g pdf='zathura'
 alias bt='bluetuith'
 alias cp='rsync -ah --info=progress2'
 alias dsize='ncdu ${pwd}'
@@ -191,8 +192,8 @@ alias nani='xdg-mime query filetype'
 alias mimetype='xdg-mime query filetype'
 alias py='python'
 alias shell='which $SHELL'
-alias v='pulsemixer'
-alias vv='alsamixer'
+alias v='alsamixer'
+alias vv='pulsemixer'
 alias w='watch -n 1'
 alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
 alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
@@ -291,6 +292,7 @@ bindkey -r '^Z' # Unbinded for tmux zoom pane instead of send into bg.
 
 # ───────────────────────── Other ─────────────────────────
 # Yazi + cd
+# NOTE: In case of FUNCNEST error, then do `unset yy` then `\yazi` or `command yazi`
 function yy() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXX")"
 	yazi "$@" --cwd-file="$tmp"

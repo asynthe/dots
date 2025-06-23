@@ -1,37 +1,42 @@
+/* ───────────────────────── Main ───────────────────────── */
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Fira Code Nerd Font, Roboto, Helvetica, Arial, sans-serif;
     font-size: 18px;
+    border: none;
+    border-radius: 0;
 }
 
 window#waybar {
     color: white;
-    background-color: rgba(0, 0, 0, 0.6);
-    transition-property: background-color;
-    transition-duration: .3s;
-}
-/* border-bottom: 3px solid rgba(100, 114, 125, 0.5); # THIS GOES INSIDE */
-
-/* window#waybar.hidden {
-	opacity: 0.2;
-} */
-
-/* Only one window open */
-window#waybar.solo {
-    background-color: rgba(0, 0, 0, 0.8);
-    transition-duration: .3s;
-    transition-property: background-color;
-}
-
-window#waybar.tiling {
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 1);
 }
 
 /* No windows open */
 window#waybar.empty {
-    background-color: transparent;
+    /* background-color: transparent; */
+    background-color: rgba(0, 0, 0, 1);
+    transition-duration: .3s;
+    transition-property: background-color;
 }
 
+/* Tiling windows */
+window#waybar.tiling {
+    /* background-color: transparent; */
+    background-color: rgba(0, 0, 0, 1);
+    transition-duration: .3s;
+    transition-property: background-color;
+}
+
+/* Floating windows */
+window#waybar.floating {
+    /* background-color: transparent; */
+    background-color: rgba(0, 0, 0, 1);
+    transition-duration: .3s;
+    transition-property: background-color;
+}
+
+/* ───────────────────────── Apps ───────────────────────── */
 window#waybar.firefox {
     background-color: rgba(0, 0, 0, 1);
     border: none;
@@ -41,6 +46,38 @@ window#waybar.virt-manager {
     background-color: rgba(0, 0, 0, 1);
     border: none;
 }
+
+/* ───────────────────────── Module - Workspace ───────────────────────── */
+#workspaces button {
+    color: #ffffff;
+    margin: 0 1px;
+}
+#workspaces button.active {
+    background-color: #1d2021;
+}
+
+#workspaces button.urgent {
+    background-color: #e78a4e;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+/* ───────────────────────── Modules ───────────────────────── */
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
 #clock,
 #battery,
 #cpu,
@@ -56,27 +93,26 @@ window#waybar.virt-manager {
 #mode,
 #idle_inhibitor,
 #scratchpad,
+#window,
 #mpd {
     padding: 0 10px;
 }
 
-#window,
-#workspaces {
-    color: white;
-    margin: 0 4px;
-
+#tray {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* #clock {
-    background-color: transparent;
-    color: #ffffff;
-} */
-
-
+/* Battery */
 #battery.charging, #battery.plugged {
     color: #ffffff;
 }
-
 #battery.critical:not(.charging) {
     background-color: #f53c3c;
     color: #ffffff;
@@ -87,28 +123,7 @@ window#waybar.virt-manager {
     animation-direction: alternate;
 }
 
+/* Network */
 #network.disconnected {
     background-color: #f53c3c;
-}
-
-
-#tray {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: rgba(0, 0, 0, 0.8);
-
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: #000000;
-    }
 }

@@ -1,25 +1,22 @@
+# TODO
+# configure `config.meta.services.syncthing.port`
+
 { config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.services.syncthing;
 in {
-    options.meta.services.syncthing.enable = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-          Enable and set up Syncthing.
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.syncthing.enable = mkEnableOption "Enable and set up Syncthing.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                syncthing
-                syncthingtray
-                stc-cli
-            ;
-        };
+        environment.systemPackages = with pkgs; [
+            syncthing
+            syncthingtray
+            stc-cli
+        ];
 
         # Enable and configure.
         #services.syncthing = {

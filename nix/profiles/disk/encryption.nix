@@ -7,6 +7,7 @@ with lib; with types;
 let
     cfg = config.meta.disk.encryption;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.disk.encryption = {
         enable = mkEnableOption "Enable LUKS encryption.";
 
@@ -28,6 +29,7 @@ in {
         ./luks_ascii/dice.nix
     ];
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
         # ADD assertion once everything is configured.

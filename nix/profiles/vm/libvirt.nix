@@ -1,15 +1,14 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.vm.libvirt;
 in {
-    options.meta.vm.libvirt = {
-        enable = mkEnableOption "Enable QEMU and libvirt.";    
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.vm.libvirt.enable = mkEnableOption "Enable QEMU and libvirt.";    
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
-        # -------------- QEMU and libvirt --------------
         users.users.${config.meta.system.user}.extraGroups = [ "libvirtd" ];
         programs.dconf.enable = true; # Enable dconf (System Management Tool)
         virtualisation.spiceUSBRedirection.enable = true;
@@ -23,22 +22,20 @@ in {
             qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
         };
 
-        environment.systemPackages = builtins.attrValues {
-            inherit (pkgs)
-                adwaita-icon-theme # Needed if not running gnome.
-	            bridge-utils
-	            iproute2
-	            virtiofsd
-                libguestfs
-                spice
-                spice-gtk
-                spice-protocol
-                virt-manager
-                virt-viewer
-                win-spice
-                win-virtio
-                xorriso
-            ;
-        };
+        environment.systemPackages = with pkgs; [
+            adwaita-icon-theme # Needed if not running gnome.
+            bridge-utils
+            iproute2
+            virtiofsd
+            libguestfs
+            spice
+            spice-gtk
+            spice-protocol
+            virt-manager
+            virt-viewer
+            win-spice
+            win-virtio
+            xorriso
+        ];
     };
 }

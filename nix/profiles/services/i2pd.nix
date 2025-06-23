@@ -1,22 +1,18 @@
+# TODO
+# DISABLE ALL THOSE THAT ARE ENABLED BY DEFAULT with `services.i2pd.enable`
+# i2pd configuration, using defaults from here
+# https://i2phides.me/i2pd-docs/user-guide/configuration/index.html
+
 { config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.services.i2pd;
 in {
-    options.meta.services.i2pd.enable = mkOption {
-        type = bool;
-        default = false;
-        description = ''
-         Enable and set I2PD.
-        '';
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.services.i2pd.enable = mkEnableOption "Enable and set I2PD.";
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
-
-        # DISABLE ALL THOSE THAT ARE ENABLED BY DEFAULT with `services.i2pd.enable`
-
-        # i2pd configuration, using defaults from here
-        # https://i2phides.me/i2pd-docs/user-guide/configuration/index.html
 
         services.i2pd = {
             enable = true;
@@ -99,6 +95,5 @@ in {
             #extraCommands = "iptables -I FORWARD ...";
             #extraStopCommands = "iptables -D FORWARD ... || true";
         #};
-
     };
 }

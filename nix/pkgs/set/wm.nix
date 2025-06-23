@@ -40,13 +40,14 @@
         # Tools
 	    img2pdf
 	    poppler
+        keepassxc
+        networkmanagerapplet
         #meshlab #f3d #fstl # 3D files
         #tesseract #easyocr # OCR
 
         # Fun
-	    figlet
-	    lolcat
-	    nhentai # ( ͡° ͜ʖ ͡°) 
+	    figlet lolcat dotacat
+        #nhentai # ( ͡° ͜ʖ ͡°) 
 	    peaclock tty-clock
 	    unimatrix
         asciiquarium-transparent
@@ -54,7 +55,7 @@
         btop
         cpu-x
         pipes-rs
-        pkgs-stable.mapscii #mapscii
+        #pkgs-stable.mapscii #mapscii
 
         # Fetch
         pfetch
@@ -86,10 +87,14 @@
         wezterm
 
         # Apps
-        mpv hypnotix
         gimp3-with-plugins # Remember to configure photogimp
+        librewolf dejsonlz4 # Decompress bookmarks backup files.
+        mpv hypnotix
+        qbittorrent
         qmmp
         sioyek zathura
+        wayfire
+        wf-recorder
         #aegisub
         #etcher
         #gparted
@@ -100,8 +105,11 @@
         #ventoy-full #ventoy
         #kdenlive
         #nicotine-plus
-        wayfire
-        librewolf dejsonlz4 # Decompress bookmarks backup files.
+
+        # Japanese
+        anki-bin
+        memento
+        pkgs-stable.mokuro
 
         # Astronomy
 	    #celestia

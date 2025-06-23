@@ -3,6 +3,7 @@ with lib; with types;
 let
     cfg = config.meta.system.nix;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system.nix = {
         settings = mkOption {
             type = nullOr (enum [ "laptop" "server" ]);
@@ -15,6 +16,7 @@ in {
         #};
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = {
         # Hanging at rebuild and wait-online service failing.
         # See nixpkgs#180175

@@ -1,6 +1,5 @@
-{ config, lib, pkgs, ... }:
-with lib;
-{
+{ pkgs, ... }: {
+
     # ───────────────────────── Environment Variables ─────────────────────────
     environment.sessionVariables = {
         #GTK_IM_MODULE = "fcitx";
@@ -25,13 +24,4 @@ with lib;
             ];
         };
     };
-
-    # ───────────────────────── Packages ─────────────────────────
-    environment.systemPackages = with pkgs; [
-        #libsForQt5.fcitx5-with-addons
-
-        # Apps / Video Player
-        anki-bin
-        memento
-    ];
 }

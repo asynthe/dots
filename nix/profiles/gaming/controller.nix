@@ -3,12 +3,10 @@ with lib; with types;
 let
     cfg = config.meta.gaming;
 in {
-    options.meta.gaming.controller = mkOption {
-        type = bool;
-        default = false;
-        description = "Enable Xbox controller.";
-    };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.gaming.controller = mkEnableOption "Enable Xbox controller.";
     
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.controller {
         hardware = {
             xone.enable = true; # Driver.

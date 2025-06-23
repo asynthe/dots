@@ -1,12 +1,12 @@
-{ config, pkgs, lib, ... }:
+# TODO
+# FORCE WIREGUARD ON MULLVAD / MULLSCALE ?
 
+{ config, lib, pkgs, ... }:
 with lib;
 let
     cfg = config.system.vpn;
 in {
-    
-    # FORCE WIREGUARD ON MULLVAD / MULLSCALE ?
-
+    # ───────────────────────── Options ─────────────────────────
     options.system.vpn.mullscale = {
         enable = mkOption {
             type = types.bool;
@@ -91,8 +91,7 @@ in {
         #};
     };
 
-    # ---------------------------------------------------------------------
-
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkMerge [
         (mkIf (cfg.mullscale.enable) {
             services.tailscale.enable = true;

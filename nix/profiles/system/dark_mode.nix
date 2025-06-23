@@ -3,10 +3,12 @@ with lib; with types;
 let
   cfg = config.meta.system;
 in {
+    # ───────────────────────── Options ─────────────────────────
     options.meta.system = {
         dark-mode = mkEnableOption "Enable dark mode for both GTK and QT apps.";
     };
 
+    # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.dark-mode {
 
         environment.sessionVariables = {
