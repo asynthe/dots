@@ -35,6 +35,8 @@ vim.opt.wrap = true -- Enable line wrapping
 vim.opt.showbreak = "→ " -- Wrapped line indicator
 vim.opt.linebreak = true -- Prevent words from breaking in the middle
 vim.opt.breakindent = true -- Keep indentation for wrapped lines
+
+-- Splitting
 vim.opt.splitbelow = true -- Split windows below
 vim.opt.splitright = true -- Split windows to the right
 

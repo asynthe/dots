@@ -13,6 +13,7 @@ wk.add({
     { "<leader>f", group = "File operations" },
     { "<leader>j", group = "Journal" },
     { "<leader>l", group = "List files (Harpoon)" },
+    { "<leader>n", group = "Notes" },
     { "<leader>t", group = "Toggle / Disable" },
     { "<leader>w", group = "Window operations" },
 })
@@ -36,6 +37,13 @@ vim.keymap.set("n", "<leader>jn", ":Neorg journal today<CR>", { buffer = true, d
 vim.keymap.set("n", "<leader>jq", ":Neorg journal yesterday<CR>", { buffer = true, desc = "Note (yesterday)" })
 vim.keymap.set("n", "<leader>jw", ":Neorg journal tomorrow<CR>", { buffer = true, desc = "Note (tomorrow)" })
 
+-- Notes
+vim.keymap.set("n", "<leader>nf", function()
+    require("telescope.builtin").find_files({
+        cwd = vim.fn.expand("~/notes"),
+    })
+end, { desc = "Search on notes directory" })
+
 -- Toggle / Disable
 vim.keymap.set("n", "<leader>tm", ":Alpha<CR>", { noremap = true, silent = true, desc = "Open Alpha dashboard" })
 vim.keymap.set("n", "<leader>tt", ":NvimTreeFocus<CR>", { noremap = true, silent = true, desc = "Open nvim-tree" })
@@ -52,8 +60,8 @@ vim.keymap.set("n", "<leader>wl", "<C-w>l", { noremap = true, silent = true, des
 --vim.keymap.set("n", "<leader>|", ":split<CR>", opts)
 
 -- Buffers
-vim.keymap.set("n", "<A-]>", ":bprev<CR>", opts)
-vim.keymap.set("n", "<A-[>", ":bnext<CR>", opts)
+vim.keymap.set("n", "<C-]>", ":bprev<CR>", opts)
+vim.keymap.set("n", "<C-[>", ":bnext<CR>", opts)
 
 -- Window resizing
 --vim.keymap.set("n", "H", ":vertical resize -2<CR>", opts)

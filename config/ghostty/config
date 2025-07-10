@@ -6,7 +6,8 @@ window-inherit-working-directory = true
 window-inherit-font-size = true
 
 # Opacity
-background-opacity = 0.5
+background-opacity = 0.7
+#background-opacity = 0.5
 background-blur-radius = 70
 unfocused-split-opacity = 0.9
 
@@ -70,7 +71,7 @@ keybind = ctrl+l=goto_split:right
 #keybind = super+j=goto_split:down
 #keybind = super+k=goto_split:up
 #keybind = super+l=goto_split:right
-keybind = super+;=goto_split:right
+#keybind = super+;=goto_split:right
 
 # Resize
 keybind = ctrl+shift+h=resize_split:left,40
@@ -79,10 +80,10 @@ keybind = ctrl+shift+k=resize_split:up,40
 keybind = ctrl+shift+l=resize_split:right,40
 
 # Tabs
-keybind = ctrl+[=previous_tab
-keybind = ctrl+]=next_tab
 keybind = ctrl+t=new_tab
+keybind = alt+[=previous_tab
+keybind = alt+]=next_tab
+keybind = alt+shift+[=move_tab:-1
+keybind = alt+shift+]=move_tab:1
 keybind = super+[=previous_tab
 keybind = super+]=next_tab
-keybind = ctrl+shift+[=move_tab:-1
-keybind = ctrl+shift+]=move_tab:1

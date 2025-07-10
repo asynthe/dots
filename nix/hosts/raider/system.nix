@@ -46,6 +46,7 @@
 
         # ─────────────── Audio ───────────────
         audio.bluetooth.enable = true;
+        audio.bluetooth.no_handsfree_mode = true;
         audio.musnix.enable = false;
         audio.pipewire.enable = true;
         #audio.pipewire.lowlatency = false;

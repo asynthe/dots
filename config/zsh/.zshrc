@@ -13,6 +13,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export NH_FLAKE=$HOME/dots # for `nh`
     export PASSWORD_STORE_DIR=$HOME/ben/pass/ben
     #export GNUPGHOME=$HOME/ben/pass/gpg
+    
+    export ANKI_BASE=$HOME/study/jp/anki
+    export ANKI_WAYLAND=1
 
 # macOS
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -46,10 +49,12 @@ export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini
 
 # This is in my `.zshrc`
-#export BOOK_PATH=$HOME/study/book/cybersecurity_ops_with_bash/cybersecurityopswithbash.pdf
+export BOOK_CURRENT=$HOME/study/book/security+/gibson_comptia_security_plus_get_certified.pdf
+export BOOK_CURRENT_2=$HOME/study/book/security+/professor_messer_comptia_security_plus_practice_exams.pdf
 export BOOK_FOLDER=$HOME/study/archive_book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
 export WALLPAPER_VIDEO_FOLDER=$HOME/wallpaper/video
+export WALLPAPER_VIDEO_PLAYLISTS=$HOME/wallpaper/video/playlists
 export WALLPAPER_THUMBNAILS=$HOME/.cache/wallpaper_thumbnails
 
 # PATH
@@ -175,13 +180,14 @@ alias focker='docker'
 alias ,='cd -'
 alias ..='cd ..'
 alias @='neomutt'
-alias -g c='bat' # cat -> bat
 alias -g cat='bat'
 alias -g info='mediainfo'
 alias -g n='nvim'
 alias -g nvv='sudo nvim'
 alias -g pdf='zathura'
 alias bt='bluetuith'
+alias c='clear'
+alias cls='clear' # Look ma i'm Powershell
 alias cp='rsync -ah --info=progress2'
 alias dsize='ncdu ${pwd}'
 alias h='history | sk'
@@ -197,7 +203,9 @@ alias vv='pulsemixer'
 alias w='watch -n 1'
 alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
 alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
-alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek' # TODO Less verbose
+alias book='zathura $BOOK_CURRENT'
+alias book_2='zathura $BOOK_CURRENT_2'
+#alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek'
 alias off='poweroff'
 alias rm='rm -i'
 
@@ -227,6 +235,11 @@ alias kernel-soul-8hz='aplay /dev/random'
 alias kernel-soul-pa='pacat /dev/urandom'
 alias kernel-soul='aplay -c 2 -f S16_LE -r 44100 /dev/random'
 alias rickroll='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+
+# Wallpaper
+alias wall='fd . $WALLPAPER_FOLDER -e jpg -e png | sk | xargs swww img'
+alias video='fd . $WALLPAPER_VIDEO_FOLDER -e mp4 | sk | xargs mpvpaper -vp -o "loop-file=inf --hwdec=nvdec --panscan=1 --no-resume-playback" "*"'
+alias playlist='fd . $WALLPAPER_VIDEO_PLAYLISTS -e m3u | sk | xargs mpvpaper -vp -o "loop-playlist=inf --hwdec=nvdec --panscan=1 --shuffle --no-resume-playback" "*"'
 
 # Flatpak
 flatpak_check() {

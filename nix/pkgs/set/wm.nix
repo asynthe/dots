@@ -60,7 +60,6 @@
         # Fetch
         pfetch
         fastfetch
-        neofetch
         starfetch
 
         # ───────────────────────── GUI ─────────────────────────
@@ -89,6 +88,7 @@
         # Apps
         gimp3-with-plugins # Remember to configure photogimp
         librewolf dejsonlz4 # Decompress bookmarks backup files.
+        tor-browser
         mpv hypnotix
         qbittorrent
         qmmp
