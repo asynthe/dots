@@ -11,7 +11,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
     # User
     export NH_FLAKE=$HOME/dots # for `nh`
-    export PASSWORD_STORE_DIR=$HOME/ben/pass/ben
+    export PASSWORD_STORE_DIR=$HOME/ben/pass/password_store/ben
     export WEZTERM_CONFIG_FILE=$HOME/.config/wezterm/.wezterm.lua
     #export GNUPGHOME=$HOME/ben/pass/gpg
     
