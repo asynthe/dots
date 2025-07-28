@@ -6,11 +6,7 @@ in {
     # ───────────────────────── Options ─────────────────────────
     options.meta.audio.pipewire = {
         enable = mkEnableOption "Enable Pipewire audio setup and configuration.";
-        lowlatency = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Enable low latency configuration.";
-        };
+        low-latency = mkEnableOption "Enable low latency configuration.";
     };
 
     # ───────────────────────── Configuration ─────────────────────────
@@ -22,13 +18,6 @@ in {
 
         users.users.${config.meta.system.user}.extraGroups = [ "audio" ];
         security.rtkit.enable = true;
-
-        # Needed by Pipewire.
-        #environment.systemPackages = builtins.attrValues { inherit (pkgs) pulseaudio; }; # pulsemixer?
-        #hardware.pulseaudio.enable = false;
-        #hardware.pulseaudio.support32Bit = true; # Gaming fix.
-
-        # Pipewirez
         services.pipewire = {
             enable = true;
             audio.enable = true; # Use as primary sound server.
@@ -39,19 +28,26 @@ in {
             wireplumber.enable = true;
         };
 
-        # Low-latency setup
-        #services.pipewire.extraConfig.pipewire."92-low-latency" = mkIf cfg.lowlatency {
-            #context.properties = {
-                #default.clock.rate = 48000;
-                #default.clock.quantum = 32;
-                #default.clock.min-quantum = 32;
-                #default.clock.max-quantum = 32;
-            #};
-        #};
+        services.pipewire = {
+            # Low-latency setup
+            extraConfig.pipewire = {
+                "92-low-latency" = mkIf cfg.low-latency {
+                    context.properties = {
+                        default.clock.rate = 48000;
+                        default.clock.quantum = 32;
+                        default.clock.min-quantum = 32;
+                        default.clock.max-quantum = 32;
+                    };
+                };
+            };
 
-        # Packages
-        environment.systemPackages = with pkgs; [
-            easyeffects
-        ];
+            # TODO If laptop
+            wireplumber.extraConfig = {
+                "10-disable-hdmi-outputs"."monitor.alsa.rules" = [{
+                    matches = [{ "node.name" = "~.*HDMI[123]__sink"; }];
+                    actions.update-props = { "node.disabled" = true; };
+                }];
+            };
+        };
     };
 }

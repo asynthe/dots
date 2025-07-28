@@ -548,10 +548,10 @@ Format: 44100:16:2
 mtime: 1738627000
 added: 1745751324
 song_end
-playlist_begin: Snoop Lion - Reincarnated.m3u
+playlist_begin: Reincarnated.cue
 mtime: 1738626999
 playlist_end
-playlist_begin: Reincarnated.cue
+playlist_begin: Snoop Lion - Reincarnated.m3u
 mtime: 1738626999
 playlist_end
 end: ALBUM/(2013) Reincarnated
@@ -1347,10 +1347,10 @@ Format: 44100:16:2
 mtime: 1724686291
 added: 1745751315
 song_end
-playlist_begin: Tabula Rasa.cue
+playlist_begin: Arvo Pärt - Tabula Rasa.m3u
 mtime: 1724686292
 playlist_end
-playlist_begin: Arvo Pärt - Tabula Rasa.m3u
+playlist_begin: Tabula Rasa.cue
 mtime: 1724686292
 playlist_end
 end: ALBUM/Arvo Pärt - Tabula Rasa (1984) [FLAC] {ECM NEW SERIES 1275 476 3878}
@@ -1783,11 +1783,11 @@ Format: 44100:16:2
 mtime: 1737085598
 added: 1745751323
 song_end
-playlist_begin: Lifestylez Ov Da Poor & Dangerous 20th Anniversary Edition.cue
-mtime: 1737085595
-playlist_end
 playlist_begin: Big L - Lifestylez Ov Da Poor & Dangerous 20th Anniversary Edition.m3u
 mtime: 1737085596
+playlist_end
+playlist_begin: Lifestylez Ov Da Poor & Dangerous 20th Anniversary Edition.cue
+mtime: 1737085595
 playlist_end
 end: ALBUM/Big L - Lifestylez Ov Da Poor & Dangerous (20th Anniv. Edition) (FLAC 16bit 44.1khz)
 directory: Bob Marley & the Wailers - 1973 - Catch a Fire [1990 Remaster] [422-846 201-2] [FLAC]
@@ -2114,10 +2114,10 @@ Format: 44100:16:2
 mtime: 1724686323
 added: 1745751318
 song_end
-playlist_begin: Boris - Boris at Last -Feedbacker-.m3u
+playlist_begin: Boris - Boris at Last -Feedbacker- (2003).cue
 mtime: 1724686323
 playlist_end
-playlist_begin: Boris - Boris at Last -Feedbacker- (2003).cue
+playlist_begin: Boris - Boris at Last -Feedbacker-.m3u
 mtime: 1724686323
 playlist_end
 end: ALBUM/Boris - Boris at Last -Feedbacker- (2003) [2005 core024 CD] {FLAC}
@@ -2298,14 +2298,14 @@ Format: 44100:16:2
 mtime: 1724686316
 added: 1745751317
 song_end
-playlist_begin: The Devil and God Are Raging Inside Me [UK Edition].[Noncompliant].cue
-mtime: 1724686316
-playlist_end
 playlist_begin: Brand New - The Devil and God Are Raging Inside Me [UK Edition].[Exact Copy].m3u
 mtime: 1724686316
 playlist_end
 playlist_begin: The Devil and God Are Raging Inside Me [UK Edition].[Noncompliant].[Exact Copy].cue
 mtime: 1724686315
+playlist_end
+playlist_begin: The Devil and God Are Raging Inside Me [UK Edition].[Noncompliant].cue
+mtime: 1724686316
 playlist_end
 end: ALBUM/Brand New - 2006 - The Devil and God Are Raging Inside Me [UK Edition] {1717451} [FLAC]
 directory: Buena Vista Social Club - 1997 - Buena Vista Social Club
@@ -5698,10 +5698,10 @@ Format: 44100:16:2
 mtime: 1726205745
 added: 1745751319
 song_end
-playlist_begin: 00 - Electric Wizard - Dopethrone.m3u
+playlist_begin: 00 - Electric Wizard - Dopethrone.cue
 mtime: 1726205706
 playlist_end
-playlist_begin: 00 - Electric Wizard - Dopethrone.cue
+playlist_begin: 00 - Electric Wizard - Dopethrone.m3u
 mtime: 1726205706
 playlist_end
 end: ALBUM/Electric.Wizard-Dopethrone-2000-FLAC
@@ -7108,11 +7108,11 @@ Format: 44100:16:2
 mtime: 1726205961
 added: 1745751319
 song_end
-playlist_begin: The Score.cue
-mtime: 1726205956
-playlist_end
 playlist_begin: Fugees - The Score.m3u
 mtime: 1726205952
+playlist_end
+playlist_begin: The Score.cue
+mtime: 1726205956
 playlist_end
 end: ALBUM/Fugees - The Score (1996) [FLAC]
 directory: Gongjoong Doduk (공중도덕) - (2015) 공중도덕 {WEB} [FLAC]
@@ -8956,10 +8956,10 @@ Format: 44100:16:2
 mtime: 1724686296
 added: 1745751316
 song_end
-playlist_begin: John Mayer - Continuum.m3u
+playlist_begin: John Mayer - Continuum.cue
 mtime: 1724686296
 playlist_end
-playlist_begin: John Mayer - Continuum.cue
+playlist_begin: John Mayer - Continuum.m3u
 mtime: 1724686296
 playlist_end
 end: ALBUM/John Mayer - Continuum (2006) [CD FLAC] [Say Re-Release]
@@ -9764,10 +9764,10 @@ Format: 44100:16:2
 mtime: 1724686300
 added: 1745751316
 song_end
-playlist_begin: Kendrick Lamar - To Pimp a Butterfly.m3u
+playlist_begin: Kendrick Lamar - To Pimp A Butterfly.cue
 mtime: 1724686300
 playlist_end
-playlist_begin: Kendrick Lamar - To Pimp A Butterfly.cue
+playlist_begin: Kendrick Lamar - To Pimp a Butterfly.m3u
 mtime: 1724686300
 playlist_end
 end: ALBUM/Kendrick Lamar - To Pimp a Butterfly (2015) - FLAC
@@ -11217,10 +11217,10 @@ Format: 44100:16:2
 mtime: 1724686305
 added: 1745751316
 song_end
-playlist_begin: Maximum the Hormone - Buiikikaeasu.m3u
+playlist_begin: Buiikikaeasu.cue
 mtime: 1724686306
 playlist_end
-playlist_begin: Buiikikaeasu.cue
+playlist_begin: Maximum the Hormone - Buiikikaeasu.m3u
 mtime: 1724686306
 playlist_end
 end: ALBUM/Maximum the Hormone - Buiikikaesu (2007) [FLAC]2
@@ -12145,10 +12145,10 @@ Format: 44100:16:2
 mtime: 1737085288
 added: 1745751322
 song_end
-playlist_begin: Mr. Oizo - Analog Worms Attack.m3u
+playlist_begin: Mr. Oizo - Analog Worms Attack.cue
 mtime: 1737085271
 playlist_end
-playlist_begin: Mr. Oizo - Analog Worms Attack.cue
+playlist_begin: Mr. Oizo - Analog Worms Attack.m3u
 mtime: 1737085271
 playlist_end
 end: ALBUM/Mr. Oizo - Analog Worms Attack (MUTE 9118-2) - CD FLAC
@@ -13067,10 +13067,10 @@ Format: 44100:16:2
 mtime: 1724686290
 added: 1745751315
 song_end
-playlist_begin: OutKast - Aquemini.m3u
+playlist_begin: Aquemini.cue
 mtime: 1724686290
 playlist_end
-playlist_begin: Aquemini.cue
+playlist_begin: OutKast - Aquemini.m3u
 mtime: 1724686290
 playlist_end
 end: ALBUM/OutKast - Aquemini (1998) CD [FLAC]
@@ -14788,10 +14788,10 @@ Format: 44100:16:2
 mtime: 1724686309
 added: 1745751317
 song_end
-playlist_begin: Two Nuns and a Pack Mule.cue
+playlist_begin: Rapeman - Two Nuns and a Pack Mule.m3u
 mtime: 1724686310
 playlist_end
-playlist_begin: Rapeman - Two Nuns and a Pack Mule.m3u
+playlist_begin: Two Nuns and a Pack Mule.cue
 mtime: 1724686310
 playlist_end
 end: ALBUM/Rapeman - Two Nuns and a Pack Mule (1988)
@@ -15112,10 +15112,10 @@ Format: 44100:16:2
 mtime: 1724686279
 added: 1745751314
 song_end
-playlist_begin: United by Fate.cue
+playlist_begin: Rival Schools - United by Fate.m3u
 mtime: 1724686280
 playlist_end
-playlist_begin: Rival Schools - United by Fate.m3u
+playlist_begin: United by Fate.cue
 mtime: 1724686280
 playlist_end
 end: ALBUM/Rival Schools - United by Fate {586 837-2} [FLAC]
@@ -15582,10 +15582,10 @@ Format: 44100:16:2
 mtime: 1726204868
 added: 1745751319
 song_end
-playlist_begin: Soda Stereo - MTV Unplugged - Comfort Y Musica Para Volar.m3u
+playlist_begin: MTV Unplugged - Comfort Y Musica Para Volar.cue
 mtime: 1726204859
 playlist_end
-playlist_begin: MTV Unplugged - Comfort Y Musica Para Volar.cue
+playlist_begin: Soda Stereo - MTV Unplugged - Comfort Y Musica Para Volar.m3u
 mtime: 1726204859
 playlist_end
 end: ALBUM/Soda Stereo - MTV Unplugged - Comfort Y Musica Para Volar [FLAC] {8869 717730-2} (2007)
@@ -15774,10 +15774,10 @@ Format: 44100:16:2
 mtime: 1724686282
 added: 1745751315
 song_end
-playlist_begin: The Blue Moods of Spain.cue
+playlist_begin: Spain - The Blue Moods of Spain.m3u
 mtime: 1724686282
 playlist_end
-playlist_begin: Spain - The Blue Moods of Spain.m3u
+playlist_begin: The Blue Moods of Spain.cue
 mtime: 1724686282
 playlist_end
 end: ALBUM/Spain – The Blue Moods Of Spain (1995) [CD FLAC] {7 72910-2}
@@ -19284,10 +19284,10 @@ Format: 44100:16:2
 mtime: 1725742011
 added: 1745751318
 song_end
-playlist_begin: Weezer - Pinkerton [Geffen Records].m3u
+playlist_begin: Pinkerton [Geffen Records].cue
 mtime: 1725742012
 playlist_end
-playlist_begin: Pinkerton [Geffen Records].cue
+playlist_begin: Weezer - Pinkerton [Geffen Records].m3u
 mtime: 1725742012
 playlist_end
 end: ALBUM/Weezer - Pinkerton [Geffen Records]
@@ -20067,7 +20067,7 @@ song_end
 end: ALBUM/青葉市子 - 2020-12-02 - アダンの風 [FLAC]
 end: ALBUM
 directory: ARTIST
-mtime: 1740609602
+mtime: 1752574558
 begin: ARTIST
 directory: Aphex Twin
 mtime: 1737082424
@@ -20316,6 +20316,9 @@ Format: 44100:16:2
 mtime: 1737081909
 added: 1745751354
 song_end
+playlist_begin: Richard D. James Album.cue
+mtime: 1737081903
+playlist_end
 end: ARTIST/Aphex Twin/Aphex Twin - 1996 - Richard D. James Album - FLAC
 directory: Aphex Twin - 2014 - Syro (FLAC - 100% Log - Cue - CD)
 mtime: 1737082066
@@ -20464,6 +20467,9 @@ Format: 44100:16:2
 mtime: 1737082071
 added: 1745751354
 song_end
+playlist_begin: Syro.cue
+mtime: 1737082065
+playlist_end
 end: ARTIST/Aphex Twin/Aphex Twin - 2014 - Syro (FLAC - 100% Log - Cue - CD)
 directory: Aphex Twin - Come To Daddy [2017 Reissue] {WEB-FLAC} (1997)
 mtime: 1737081969
@@ -20834,6 +20840,12 @@ Format: 44100:16:2
 mtime: 1724686297
 added: 1745751354
 song_end
+playlist_begin: Aphex Twin - Selected Ambient Works 85-92.m3u
+mtime: 1724686298
+playlist_end
+playlist_begin: Selected Ambient Works 85-92.cue
+mtime: 1724686298
+playlist_end
 end: ARTIST/Aphex Twin/Aphex Twin - Selected Ambient Works 85-92 (AMB 3922 CD) flac
 directory: Aphex_Twin-___I_Care_Because_You_Do_(Reissue)-(WARPCDD30)-(WEB)-FLAC-2017
 mtime: 1737082441
@@ -21098,6 +21110,9 @@ Format: 48000:16:2
 mtime: 1737082447
 added: 1745751354
 song_end
+playlist_begin: 00-aphex_twin-___i_care_because_you_do_(reissue)-(warpcdd30)-(web)-flac-2017.m3u
+mtime: 1737082427
+playlist_end
 end: ARTIST/Aphex Twin/Aphex_Twin-___I_Care_Because_You_Do_(Reissue)-(WARPCDD30)-(WEB)-FLAC-2017
 directory: Aphex_Twin-Drukqs_(Reissue)-(WARPCDD92)-(WEB)-FLAC-2018
 mtime: 1737082065
@@ -21544,6 +21559,9 @@ Format: 44100:24:2
 mtime: 1737082074
 added: 1745751354
 song_end
+playlist_begin: 00-aphex_twin-drukqs_(reissue)-(warpcdd92)-(web)-flac-2018.m3u
+mtime: 1737082025
+playlist_end
 end: ARTIST/Aphex Twin/Aphex_Twin-Drukqs_(Reissue)-(WARPCDD92)-(WEB)-FLAC-2018
 directory: Aphex_Twin-Selected_Ambient_Works_Volume_II_(Reissue)-(WARPCDD21)-(WEB)-FLAC-2017
 mtime: 1737081947
@@ -21886,6 +21904,9 @@ Format: 48000:16:2
 mtime: 1737081955
 added: 1745751354
 song_end
+playlist_begin: 00-aphex_twin-selected_ambient_works_volume_ii_(reissue)-(warpcdd21)-(web)-flac-2017.m3u
+mtime: 1737081924
+playlist_end
 end: ARTIST/Aphex Twin/Aphex_Twin-Selected_Ambient_Works_Volume_II_(Reissue)-(WARPCDD21)-(WEB)-FLAC-2017
 end: ARTIST/Aphex Twin
 directory: Arctic Monkeys
@@ -22062,6 +22083,12 @@ Format: 44100:16:2
 mtime: 1737081418
 added: 1745751354
 song_end
+playlist_begin: AM.cue
+mtime: 1737081398
+playlist_end
+playlist_begin: Arctic Monkeys - AM.m3u
+mtime: 1737081398
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - AM
 directory: Arctic Monkeys - Brianstorm (CDM) (FLAC)
 mtime: 1737081674
@@ -22114,6 +22141,12 @@ Format: 44100:16:2
 mtime: 1737081679
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Brianstorm.m3u
+mtime: 1737081674
+playlist_end
+playlist_begin: Brianstorm.cue
+mtime: 1737081674
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Brianstorm (CDM) (FLAC)
 directory: Arctic Monkeys - Favourite Worst Nightmare [Domino Recording Co.]
 mtime: 1737081343
@@ -22262,6 +22295,12 @@ Format: 44100:16:2
 mtime: 1737081351
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Favourite Worst Nightmare [Domino Recording Co.].m3u
+mtime: 1737081340
+playlist_end
+playlist_begin: Favourite Worst Nightmare [Domino Recording Co.].cue
+mtime: 1737081340
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Favourite Worst Nightmare [Domino Recording Co.]
 directory: Arctic Monkeys - Fluorescent Adolescent (2007) [FLAC]
 mtime: 1737081607
@@ -22318,6 +22357,12 @@ Format: 44100:16:2
 mtime: 1737081610
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Fluorescent Adolescent.cue
+mtime: 1737081606
+playlist_end
+playlist_begin: Arctic Monkeys - Fluorescent Adolescent.m3u
+mtime: 1737081606
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Fluorescent Adolescent (2007) [FLAC]
 directory: Arctic Monkeys - Humbug [Domino Recording Co.]
 mtime: 1737081306
@@ -22442,6 +22487,12 @@ Format: 44100:16:2
 mtime: 1737081311
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Humbug [Domino Recording Co.].m3u
+mtime: 1737081306
+playlist_end
+playlist_begin: Humbug [Domino Recording Co.].cue
+mtime: 1737081306
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Humbug [Domino Recording Co.]
 directory: Arctic Monkeys - Suck It And See [2011]
 mtime: 1737081282
@@ -22614,6 +22665,9 @@ Format: 44100:16:2
 mtime: 1737081286
 added: 1745751354
 song_end
+playlist_begin: Suck It And See.cue
+mtime: 1737081282
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Suck It And See [2011]
 directory: Arctic Monkeys - Whatever People Say I Am, That's What I'm Not [Domino Recording Co.]
 mtime: 1737081395
@@ -22774,6 +22828,12 @@ Format: 44100:16:2
 mtime: 1737081399
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Whatever People Say I Am, That's What I'm Not [Domino Recording Co.].m3u
+mtime: 1737081395
+playlist_end
+playlist_begin: Whatever People Say I Am, That's What I'm Not [Domino Recording Co.].cue
+mtime: 1737081395
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Whatever People Say I Am, That's What I'm Not [Domino Recording Co.]
 directory: Arctic Monkeys - Who the Fuck Are Arctic Monkeys (2006) [FLAC]
 mtime: 1737081441
@@ -22843,6 +22903,12 @@ Format: 44100:16:2
 mtime: 1737081443
 added: 1745751354
 song_end
+playlist_begin: Arctic Monkeys - Who The Fuck Are Arctic Monkeys.m3u
+mtime: 1737081440
+playlist_end
+playlist_begin: Who The Fuck Are Arctic Monkeys.cue
+mtime: 1737081441
+playlist_end
 end: ARTIST/Arctic Monkeys/Arctic Monkeys - Who the Fuck Are Arctic Monkeys (2006) [FLAC]
 end: ARTIST/Arctic Monkeys
 directory: BADBADNOTGOOD
@@ -23043,6 +23109,18 @@ Format: 44100:16:2
 mtime: 1726203655
 added: 1745751350
 song_end
+playlist_begin: BadBadNotGood - IV (Noncompliant WAV).cue
+mtime: 1726203655
+playlist_end
+playlist_begin: BadBadNotGood - IV (Single WAV).cue
+mtime: 1726203655
+playlist_end
+playlist_begin: BadBadNotGood - IV.m3u
+mtime: 1726203655
+playlist_end
+playlist_begin: BadBadNotGood - IV.m3u8
+mtime: 1726203655
+playlist_end
 end: ARTIST/BADBADNOTGOOD/[BRIL-2034] BadBadNotGood - IV (2016) [FLAC]
 directory: 2012 - BBNG2 (Web)
 mtime: 1727589780
@@ -23457,6 +23535,12 @@ Format: 44100:16:2
 mtime: 1726203631
 added: 1745751350
 song_end
+playlist_begin: BADBADNOTGOOD - III.m3u
+mtime: 1726203616
+playlist_end
+playlist_begin: III.cue
+mtime: 1726203616
+playlist_end
 end: ARTIST/BADBADNOTGOOD/BADBADNOTGOOD - III [2014-CD-FLAC]
 end: ARTIST/BADBADNOTGOOD
 directory: Blank Banshee
@@ -25020,6 +25104,9 @@ Format: 44100:16:2
 mtime: 1724686388
 added: 1745751348
 song_end
+playlist_begin: Aoi.cue
+mtime: 1724686387
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-38] Aoi
 directory: [M3-38] Vapor Reflection
 mtime: 1727589702
@@ -25108,6 +25195,9 @@ Format: 44100:16:2
 mtime: 1724686380
 added: 1745751348
 song_end
+playlist_begin: Vapor Reflection.cue
+mtime: 1724686379
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-38] Vapor Reflection
 directory: [M3-39] EN
 mtime: 1727589700
@@ -25242,6 +25332,12 @@ Format: 44100:16:2
 mtime: 1724686381
 added: 1745751348
 song_end
+playlist_begin: EN..cue
+mtime: 1724686380
+playlist_end
+playlist_begin: callasoiled - EN..m3u
+mtime: 1724686380
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-39] EN
 directory: [M3-40] 思考標本
 mtime: 1727589698
@@ -25363,6 +25459,9 @@ Format: 44100:16:2
 mtime: 1724686383
 added: 1745751348
 song_end
+playlist_begin: 思考標本(Thought Specimen).cue
+mtime: 1724686382
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-40] 思考標本
 directory: [M3-41] NA [CLSD-001]
 mtime: 1727589691
@@ -25510,6 +25609,12 @@ Format: 44100:16:2
 mtime: 1724686389
 added: 1745751348
 song_end
+playlist_begin: NA.cue
+mtime: 1724686388
+playlist_end
+playlist_begin: NA.m3u
+mtime: 1724686388
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-41] NA [CLSD-001]
 directory: [M3-42] 幻想質 [CLSD-004]
 mtime: 1727589696
@@ -25634,6 +25739,12 @@ Format: 44100:16:2
 mtime: 1724686384
 added: 1745751348
 song_end
+playlist_begin: callasoiled - 幻想質.m3u
+mtime: 1724686383
+playlist_end
+playlist_begin: 幻想質.cue
+mtime: 1724686383
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-42] 幻想質 [CLSD-004]
 directory: [M3-43] Ly [CLSD-005]
 mtime: 1727589694
@@ -26309,6 +26420,12 @@ Format: 44100:16:2
 mtime: 1724686385
 added: 1745751348
 song_end
+playlist_begin: Epul.cue
+mtime: 1724686385
+playlist_end
+playlist_begin: callasoiled - Epul.m3u
+mtime: 1724686385
+playlist_end
 end: ARTIST/callasoiled/DOUJIN/[M3-51] Epul [callasoiled1]
 end: ARTIST/callasoiled/DOUJIN
 directory: NON-DOUJIN
@@ -26541,6 +26658,9 @@ Format: 44100:16:2
 mtime: 1724686392
 added: 1745751348
 song_end
+playlist_begin: Reflected In Cloud.cue
+mtime: 1724686392
+playlist_end
 end: ARTIST/callasoiled/NON-DOUJIN/[2016] Reflected in Cloud
 directory: [2017] elements
 mtime: 1727589685
@@ -28906,6 +29026,12 @@ Format: 44100:16:2
 mtime: 1724686359
 added: 1745751346
 song_end
+playlist_begin: Irreversible + Lucoq HD(作りかけ).cue
+mtime: 1724686359
+playlist_end
+playlist_begin: callasoiled - Irreversible + Lucoq HD(作りかけ) .m3u8
+mtime: 1724686359
+playlist_end
 end: ARTIST/callasoiled/SINGLES/[2016] Irreversible + Lucoq HD (作りかけ)
 directory: [2016] Lucoq HD
 mtime: 1727589711
@@ -29042,6 +29168,9 @@ Format: 44100:16:2
 mtime: 1724686372
 added: 1745751347
 song_end
+playlist_begin: Lucoq HD.cue
+mtime: 1724686371
+playlist_end
 end: ARTIST/callasoiled/SINGLES/[2016] Lucoq HD
 directory: [2017] THE 昔
 mtime: 1727589709
@@ -30469,6 +30598,12 @@ Format: 44100:16:2
 mtime: 1724686457
 added: 1745751352
 song_end
+playlist_begin: Casiopea - Mint Jams.cue
+mtime: 1724686457
+playlist_end
+playlist_begin: Casiopea - Mint Jams.m3u
+mtime: 1724686457
+playlist_end
 end: ARTIST/Casiopea/Casiopea - Mint Jams (1982) [FLAC] {SNCD 924}
 end: ARTIST/Casiopea
 directory: COALTAR OF THE DEEPERS
@@ -30631,6 +30766,12 @@ Format: 44100:16:2
 mtime: 1724686336
 added: 1745751344
 song_end
+playlist_begin: Coaltar of the Deepers - Submerge.m3u
+mtime: 1724686337
+playlist_end
+playlist_begin: Submerge.cue
+mtime: 1724686337
+playlist_end
 end: ARTIST/COALTAR OF THE DEEPERS/[1998.03.25] Submerge
 directory: COALTAR OF THE DEEPERS - COME OVER TO THE DEEPEND
 mtime: 1727589871
@@ -30917,6 +31058,9 @@ InPlaylist: yes
 mtime: 1724686340
 added: 1745751344
 song_end
+playlist_begin: DEAR FUTURE.flac.cue
+mtime: 1724686340
+playlist_end
 end: ARTIST/COALTAR OF THE DEEPERS/coaltar of the deepers - Dear Future (2011) - FLAC
 directory: COALTAR OF THE DEEPERS - NO THANK YOU
 mtime: 1727589868
@@ -31077,6 +31221,12 @@ Format: 44100:16:2
 mtime: 1724686336
 added: 1745751344
 song_end
+playlist_begin: Coaltar Of The Deepers - Rabbit EP.m3u
+mtime: 1724686336
+playlist_end
+playlist_begin: Rabbit EP.cue
+mtime: 1724686336
+playlist_end
 end: ARTIST/COALTAR OF THE DEEPERS/Coaltar Of The Deepers - Rabbit EP (U-desper Records, 2018) flac
 directory: Yukari Telepath
 mtime: 1727589871
@@ -31427,6 +31577,12 @@ Format: 44100:16:2
 mtime: 1725741580
 added: 1745751349
 song_end
+playlist_begin: Deftones - Diamond Eyes.cue
+mtime: 1725741575
+playlist_end
+playlist_begin: Deftones - Diamond Eyes.m3u
+mtime: 1725741575
+playlist_end
 end: ARTIST/Deftones/Deftones - (2010) Diamond Eyes [FLAC]
 directory: Deftones - 1995 - Adrenaline [FLAC]
 mtime: 1727589832
@@ -31585,6 +31741,12 @@ Format: 44100:16:2
 mtime: 1724686409
 added: 1745751349
 song_end
+playlist_begin: Adrenaline.cue
+mtime: 1724686409
+playlist_end
+playlist_begin: Deftones - Adrenaline.m3u
+mtime: 1724686410
+playlist_end
 end: ARTIST/Deftones/Deftones - 1995 - Adrenaline [FLAC]
 directory: Deftones - Around The Fur (1997) - FLAC (9362-46810-2)
 mtime: 1727589828
@@ -31729,6 +31891,12 @@ Format: 44100:16:2
 mtime: 1725741869
 added: 1745751349
 song_end
+playlist_begin: Around the Fur.cue
+mtime: 1725741846
+playlist_end
+playlist_begin: Deftones - Around the Fur.m3u
+mtime: 1725741846
+playlist_end
 end: ARTIST/Deftones/Deftones - Around The Fur (1997) - FLAC (9362-46810-2)
 directory: Deftones - Deftones [US 48350-2] {CD-FLAC} (2003)
 mtime: 1727589829
@@ -31887,6 +32055,9 @@ Format: 44100:16:2
 mtime: 1725741665
 added: 1745751349
 song_end
+playlist_begin: Deftones.cue
+mtime: 1725741642
+playlist_end
 end: ARTIST/Deftones/Deftones - Deftones [US 48350-2] {CD-FLAC} (2003)
 directory: Deftones - White Pony (2000) {WPCR-10689} [Japan]
 mtime: 1727589828
@@ -32045,6 +32216,12 @@ Format: 44100:16:2
 mtime: 1725741689
 added: 1745751349
 song_end
+playlist_begin: Deftones - White Pony.m3u
+mtime: 1725741675
+playlist_end
+playlist_begin: White Pony.cue
+mtime: 1725741675
+playlist_end
 end: ARTIST/Deftones/Deftones - White Pony (2000) {WPCR-10689} [Japan]
 end: ARTIST/Deftones
 directory: Fishmans
@@ -32123,6 +32300,12 @@ Format: 44100:16:2
 mtime: 1726202399
 added: 1745751354
 song_end
+playlist_begin: Fishmans - Long Season.cue
+mtime: 1726202383
+playlist_end
+playlist_begin: Fishmans - Long Season.m3u
+mtime: 1726202383
+playlist_end
 end: ARTIST/Fishmans/Fishmans - Long Season (2009) CD FLAC
 directory: Fishmans - 宇宙 日本 世田谷 (Uchu Nippon Setagaya) (1997) [CD FLAC] {POCH-1640}
 mtime: 1727589730
@@ -32239,6 +32422,12 @@ Format: 44100:16:2
 mtime: 1726202374
 added: 1745751354
 song_end
+playlist_begin: Fishmans - 宇宙 日本 世田谷 (Uchu Nippon Setagaya) - Noncompliant.cue
+mtime: 1726202370
+playlist_end
+playlist_begin: Fishmans - 宇宙 日本 世田谷 (Uchu Nippon Setagaya).m3u
+mtime: 1726202370
+playlist_end
 end: ARTIST/Fishmans/Fishmans - 宇宙 日本 世田谷 (Uchu Nippon Setagaya) (1997) [CD FLAC] {POCH-1640}
 directory: Fishmans (1999) 98.12.28 男達の別れ [FLAC] {POCH-1855_6}
 mtime: 1727589667
@@ -32400,6 +32589,12 @@ Format: 44100:16:2
 mtime: 1726202342
 added: 1745751354
 song_end
+playlist_begin: 98.12.28 男達の別れ.cue
+mtime: 1726202337
+playlist_end
+playlist_begin: Fishmans - 98.12.28 男達の別れ.m3u
+mtime: 1726202337
+playlist_end
 end: ARTIST/Fishmans/Fishmans (1999) 98.12.28 男達の別れ [FLAC] {POCH-1855_6}/Disc 1
 directory: Disc 2
 mtime: 1727589670
@@ -32446,6 +32641,12 @@ Format: 44100:16:2
 mtime: 1726202357
 added: 1745751354
 song_end
+playlist_begin: 98.12.28 男達の別れ.cue
+mtime: 1726202353
+playlist_end
+playlist_begin: Fishmans - 98.12.28 男達の別れ.m3u
+mtime: 1726202353
+playlist_end
 end: ARTIST/Fishmans/Fishmans (1999) 98.12.28 男達の別れ [FLAC] {POCH-1855_6}/Disc 2
 end: ARTIST/Fishmans/Fishmans (1999) 98.12.28 男達の別れ [FLAC] {POCH-1855_6}
 directory: フィッシュマンズ - 空中キャンプ (1996) [FLAC] {POCH 1550}
@@ -32563,6 +32764,12 @@ Format: 44100:16:2
 mtime: 1726202422
 added: 1745751354
 song_end
+playlist_begin: noncom.cue
+mtime: 1726202400
+playlist_end
+playlist_begin: フィッシュマンズ - 空中キャンプ.m3u
+mtime: 1726202401
+playlist_end
 end: ARTIST/Fishmans/フィッシュマンズ - 空中キャンプ (1996) [FLAC] {POCH 1550}
 end: ARTIST/Fishmans
 directory: Frenesi
@@ -33732,6 +33939,12 @@ Format: 44100:16:2
 mtime: 1726203871
 added: 1745751353
 song_end
+playlist_begin: Gorillaz - Gorillaz.m3u
+mtime: 1726203842
+playlist_end
+playlist_begin: Gorillaz.cue
+mtime: 1726203842
+playlist_end
 end: ARTIST/Gorillaz/Gorillaz - 2001 - Gorillaz
 directory: Gorillaz - Demon Days (2005) FLAC
 mtime: 1727589743
@@ -33946,6 +34159,12 @@ Format: 44100:16:2
 mtime: 1726203887
 added: 1745751353
 song_end
+playlist_begin: Demon Days.cue
+mtime: 1726203885
+playlist_end
+playlist_begin: Gorillaz - Demon Days.m3u
+mtime: 1726203885
+playlist_end
 end: ARTIST/Gorillaz/Gorillaz - Demon Days (2005) FLAC
 directory: Gorillaz - Plastic Beach (2010) {509996-27547-29} [FLAC]
 mtime: 1727589740
@@ -34302,6 +34521,9 @@ Format: 44100:16:2
 mtime: 1726203928
 added: 1745751353
 song_end
+playlist_begin: Gorillaz - Plastic Beach.cue
+mtime: 1726203910
+playlist_end
 end: ARTIST/Gorillaz/Gorillaz - Plastic Beach (2010) {509996-27547-29} [FLAC]
 directory: Gorillaz - The Fall (2011) [FLAC]
 mtime: 1727589740
@@ -34501,6 +34723,12 @@ Format: 44100:16:2
 mtime: 1726203936
 added: 1745751353
 song_end
+playlist_begin: Gorillaz - The Fall.m3u
+mtime: 1726203936
+playlist_end
+playlist_begin: The Fall.cue
+mtime: 1726203936
+playlist_end
 end: ARTIST/Gorillaz/Gorillaz - The Fall (2011) [FLAC]
 end: ARTIST/Gorillaz
 directory: Jamiroquai
@@ -34783,6 +35011,9 @@ InPlaylist: yes
 mtime: 1724686404
 added: 1745751349
 song_end
+playlist_begin: Dynamite.cue
+mtime: 1724686406
+playlist_end
 end: ARTIST/Jamiroquai/Jamiroquai - Dynamite (2005) [CD FLAC] {EK 97716}
 directory: Jamiroquai - Emergency On Planet Earth (1993) [FLAC]
 mtime: 1727589837
@@ -34998,6 +35229,9 @@ InPlaylist: yes
 mtime: 1724686406
 added: 1745751349
 song_end
+playlist_begin: Emergency On Planet Earth.cue
+mtime: 1724686406
+playlist_end
 end: ARTIST/Jamiroquai/Jamiroquai - Emergency On Planet Earth (1993) [FLAC]
 directory: Jamiroquai - Synkronized (1999) [FLAC]
 mtime: 1727589834
@@ -35273,6 +35507,9 @@ Format: 44100:16:2
 mtime: 1724686409
 added: 1745751349
 song_end
+playlist_begin: Synkronized.cue
+mtime: 1724686409
+playlist_end
 end: ARTIST/Jamiroquai/Jamiroquai - Synkronized (1999) [FLAC]
 directory: Jamiroquai - The Return Of The Space Cowboy (1994) [FLAC]
 mtime: 1727589837
@@ -35578,6 +35815,9 @@ Format: 44100:16:2
 mtime: 1724686407
 added: 1745751349
 song_end
+playlist_begin: The Return Of The Space Cowboy.cue
+mtime: 1724686408
+playlist_end
 end: ARTIST/Jamiroquai/Jamiroquai - The Return Of The Space Cowboy (1994) [FLAC]
 directory: Jamiroquai - Travelling Without Moving (1996) [FLAC]
 mtime: 1727589841
@@ -35911,6 +36151,9 @@ Format: 44100:16:2
 mtime: 1724686404
 added: 1745751349
 song_end
+playlist_begin: Travelling Without Moving.cue
+mtime: 1724686404
+playlist_end
 end: ARTIST/Jamiroquai/Jamiroquai - Travelling Without Moving (1996) [FLAC]
 end: ARTIST/Jamiroquai
 directory: Machine Girl
@@ -37191,6 +37434,12 @@ Format: 44100:16:2
 mtime: 1724686333
 added: 1745751344
 song_end
+playlist_begin: Massive Attack - 100th Window.cue
+mtime: 1724686333
+playlist_end
+playlist_begin: Massive Attack - 100th Window.m3u
+mtime: 1724686333
+playlist_end
 end: ARTIST/Massive Attack/Massive Attack - 100th Window (2003) [FLAC] {Virgin, CDV2967}
 directory: Massive Attack - 1998 - Mezzanine {7243  8 45599 2 2} [FLAC]
 mtime: 1727589883
@@ -37338,6 +37587,9 @@ Format: 44100:16:2
 mtime: 1724686328
 added: 1745751344
 song_end
+playlist_begin: Mezzanine.cue
+mtime: 1724686328
+playlist_end
 end: ARTIST/Massive Attack/Massive Attack - 1998 - Mezzanine {7243  8 45599 2 2} [FLAC]
 directory: Massive Attack - Blue Lines (1991) [FLAC]
 mtime: 1727589883
@@ -37619,6 +37871,9 @@ Format: 44100:16:2
 mtime: 1724686329
 added: 1745751344
 song_end
+playlist_begin: Blue Lines.cue
+mtime: 1724686329
+playlist_end
 end: ARTIST/Massive Attack/Massive Attack - Blue Lines (1991) [FLAC]
 directory: Massive Attack - Protection (1994) [FLAC]
 mtime: 1727589883
@@ -37763,6 +38018,12 @@ Format: 44100:16:2
 mtime: 1724686330
 added: 1745751344
 song_end
+playlist_begin: Massive Attack - Protection.m3u
+mtime: 1724686330
+playlist_end
+playlist_begin: Protection.cue
+mtime: 1724686330
+playlist_end
 end: ARTIST/Massive Attack/Massive Attack - Protection (1994) [FLAC]
 end: ARTIST/Massive Attack
 directory: Michael Jackson
@@ -37967,6 +38228,12 @@ Format: 44100:16:2
 mtime: 1737084552
 added: 1745751353
 song_end
+playlist_begin: Dangerous.cue
+mtime: 1737084549
+playlist_end
+playlist_begin: Michael Jackson - Dangerous.m3u
+mtime: 1737084534
+playlist_end
 end: ARTIST/Michael Jackson/[1991] Dangerous
 directory: Michael Jackson - Bad (1987) {Epic EK 40600 CD} [FLAC]
 mtime: 1737084418
@@ -38136,6 +38403,12 @@ Format: 44100:16:2
 mtime: 1737084423
 added: 1745751353
 song_end
+playlist_begin: Bad.cue
+mtime: 1737084418
+playlist_end
+playlist_begin: Michael Jackson - Bad.m3u
+mtime: 1737084418
+playlist_end
 end: ARTIST/Michael Jackson/Michael Jackson - Bad (1987) {Epic EK 40600 CD} [FLAC]
 directory: Michael Jackson - Off the Wall (2001) [FLAC]
 mtime: 1737084485
@@ -38406,6 +38679,12 @@ Format: 44100:16:2
 mtime: 1737084487
 added: 1745751353
 song_end
+playlist_begin: Michael Jackson - Off the Wall.m3u
+mtime: 1737084485
+playlist_end
+playlist_begin: Off the Wall.cue
+mtime: 1737084485
+playlist_end
 end: ARTIST/Michael Jackson/Michael Jackson - Off the Wall (2001) [FLAC]
 directory: Michael Jackson - Thriller (1982) {Epic EK 38112 CD} [FLAC]
 mtime: 1737084452
@@ -38545,6 +38824,12 @@ Format: 44100:16:2
 mtime: 1737084451
 added: 1745751353
 song_end
+playlist_begin: Michael Jackson - Thriller.m3u
+mtime: 1737084452
+playlist_end
+playlist_begin: Thriller.cue
+mtime: 1737084452
+playlist_end
 end: ARTIST/Michael Jackson/Michael Jackson - Thriller (1982) {Epic EK 38112 CD} [FLAC]
 end: ARTIST/Michael Jackson
 directory: Midori
@@ -38693,6 +38978,12 @@ Format: 44100:16:2
 mtime: 1724686326
 added: 1745751344
 song_end
+playlist_begin: Aratamemashite, Hajimemashite, Midori Desu..cue
+mtime: 1724686326
+playlist_end
+playlist_begin: Midori - Aratamemashite, Hajimemashite, Midori Desu..m3u
+mtime: 1724686326
+playlist_end
 end: ARTIST/Midori/Midori - 2008 - Aratamemashite, Hajimemashite, Midori Desu
 directory: Midori - album 2010.05.19 - Shinsekai [FLAC]
 mtime: 1727589884
@@ -38900,6 +39191,12 @@ Format: 44100:16:2
 mtime: 1724686468
 added: 1745751353
 song_end
+playlist_begin: Animals (2018 Remix).cue
+mtime: 1724686468
+playlist_end
+playlist_begin: Pink Floyd - Animals (2018 Remix).m3u8
+mtime: 1724686468
+playlist_end
 end: ARTIST/Pink Floyd/Pink Floyd - Animals (2018 Remix) (2022) [EAC-FLAC] {PFR28}
 directory: Pink Floyd - The Dark Side Of The Moon (1973) [FLAC] {PFR8}
 mtime: 1727589745
@@ -39034,6 +39331,12 @@ Format: 44100:16:2
 mtime: 1724686468
 added: 1745751353
 song_end
+playlist_begin: Pink Floyd - The Dark Side Of The Moon.m3u
+mtime: 1724686468
+playlist_end
+playlist_begin: The Dark Side Of The Moon.cue
+mtime: 1724686468
+playlist_end
 end: ARTIST/Pink Floyd/Pink Floyd - The Dark Side Of The Moon (1973) [FLAC] {PFR8}
 directory: Pink Floyd - Wish You Were Here (1975) [FLAC] {PFR9}
 mtime: 1727589746
@@ -39103,6 +39406,12 @@ Format: 44100:16:2
 mtime: 1724686467
 added: 1745751353
 song_end
+playlist_begin: Pink Floyd - Wish You Were Here.m3u
+mtime: 1724686467
+playlist_end
+playlist_begin: Wish You Were Here.cue
+mtime: 1724686467
+playlist_end
 end: ARTIST/Pink Floyd/Pink Floyd - Wish You Were Here (1975) [FLAC] {PFR9}
 end: ARTIST/Pink Floyd
 directory: Pixies
@@ -39552,6 +39861,9 @@ InPlaylist: yes
 mtime: 1737080702
 added: 1745751354
 song_end
+playlist_begin: Doolittle.cue
+mtime: 1737080699
+playlist_end
 end: ARTIST/Pixies/Pixies - Doolittle (1989) [FLAC] (CAD 905 CD 4AD 1989)
 directory: Pixies - Surfer Rosa [1992 4AD-Elektra Records]
 mtime: 1737080930
@@ -39724,6 +40036,12 @@ Format: 44100:16:2
 mtime: 1737080933
 added: 1745751354
 song_end
+playlist_begin: Pixies - Surfer Rosa [1992 4AD-Elektra Records].m3u
+mtime: 1737080930
+playlist_end
+playlist_begin: Surfer Rosa [1992 4AD-Elektra Records].cue
+mtime: 1737080930
+playlist_end
 end: ARTIST/Pixies/Pixies - Surfer Rosa [1992 4AD-Elektra Records]
 end: ARTIST/Pixies
 directory: Portishead
@@ -39872,6 +40190,9 @@ Format: 44100:16:2
 mtime: 1724686444
 added: 1745751350
 song_end
+playlist_begin: Dummy.cue
+mtime: 1724686444
+playlist_end
 end: ARTIST/Portishead/Portishead - Dummy [1994]
 directory: Portishead - Portishead - 1997 flac
 mtime: 1727589771
@@ -40185,6 +40506,9 @@ Format: 44100:16:2
 mtime: 1724686446
 added: 1745751350
 song_end
+playlist_begin: Portishead.cue
+mtime: 1724686445
+playlist_end
 end: ARTIST/Portishead/Portishead - Portishead - 1997 flac
 directory: Portishead - Roseland NYC Live (1998) [FLAC]
 mtime: 1727589770
@@ -40321,6 +40645,9 @@ Format: 44100:16:2
 mtime: 1724686446
 added: 1745751350
 song_end
+playlist_begin: Roseland NYC Live [noncompliant].cue
+mtime: 1724686446
+playlist_end
 end: ARTIST/Portishead/Portishead - Roseland NYC Live (1998) [FLAC]
 directory: Portishead (2008) Third [Mercury; B0011141-02]
 mtime: 1727589772
@@ -40479,6 +40806,12 @@ Format: 44100:16:2
 mtime: 1724686445
 added: 1745751350
 song_end
+playlist_begin: Portishead - Third.m3u
+mtime: 1724686445
+playlist_end
+playlist_begin: Third.cue
+mtime: 1724686445
+playlist_end
 end: ARTIST/Portishead/Portishead (2008) Third [Mercury; B0011141-02]
 end: ARTIST/Portishead
 directory: Sade
@@ -40641,6 +40974,12 @@ Format: 44100:16:2
 mtime: 1724686442
 added: 1745751350
 song_end
+playlist_begin: Promise.cue
+mtime: 1724686443
+playlist_end
+playlist_begin: Sade - Promise.m3u
+mtime: 1724686443
+playlist_end
 end: ARTIST/Sade/Sade - 1985 - Promise
 directory: Sade - Diamond Life (1984) [CD-FLAC] {EPIC - CD 26044}
 mtime: 1727589775
@@ -40771,6 +41110,12 @@ Format: 44100:16:2
 mtime: 1724686443
 added: 1745751350
 song_end
+playlist_begin: 00 - Diamond Life.cue
+mtime: 1724686444
+playlist_end
+playlist_begin: 00 - Diamond Life.m3u
+mtime: 1724686444
+playlist_end
 end: ARTIST/Sade/Sade - Diamond Life (1984) [CD-FLAC] {EPIC - CD 26044}
 directory: Sade - Love Deluxe (1992) [CD FLAC] {Epic EK 53178}
 mtime: 1727589777
@@ -40892,6 +41237,9 @@ Format: 44100:16:2
 mtime: 1724686441
 added: 1745751350
 song_end
+playlist_begin: Love Deluxe.cue
+mtime: 1724686442
+playlist_end
 end: ARTIST/Sade/Sade - Love Deluxe (1992) [CD FLAC] {Epic EK 53178}
 end: ARTIST/Sade
 directory: Serani Poji
@@ -41020,6 +41368,12 @@ Format: 44100:16:2
 mtime: 1724686461
 added: 1745751352
 song_end
+playlist_begin: Manamoon.cue
+mtime: 1724686461
+playlist_end
+playlist_begin: Serani Poji - Manamoon.m3u
+mtime: 1724686462
+playlist_end
 end: ARTIST/Serani Poji/Serani Poji - 1999 - Manamoon [FLAC]
 directory: Serani Poji - Special Remix
 mtime: 1727589754
@@ -41069,6 +41423,9 @@ Format: 44100:16:2
 mtime: 1724686461
 added: 1745751352
 song_end
+playlist_begin: Unknown Title.cue
+mtime: 1724686461
+playlist_end
 end: ARTIST/Serani Poji/Serani Poji - Special Remix
 directory: Serani Poji ~ Ochamekan
 mtime: 1727589752
@@ -41299,7 +41656,7 @@ song_end
 end: ARTIST/Serani Poji/Serani Poji ~ One Room Survival
 end: ARTIST/Serani Poji
 directory: sewerslvt
-mtime: 1727589665
+mtime: 1752557467
 begin: ARTIST/sewerslvt
 directory: [2019] SEWAGEBIPOLAR (mrk90v2when megamix)
 mtime: 1727589798
@@ -42138,6 +42495,150 @@ mtime: 1724686432
 added: 1745751350
 song_end
 end: ARTIST/sewerslvt/[2021] We Had Good Times Together, Don't Forget That
+directory: Cynthoni - Draining Love Story (In The Eyes Of Cynthoni) (2025) [WEB FLAC 24-48]
+mtime: 1752557835
+begin: ARTIST/sewerslvt/Cynthoni - Draining Love Story (In The Eyes Of Cynthoni) (2025) [WEB FLAC 24-48]
+song_begin: 01 It Is Happening Again.flac
+Time: 159.428
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: It Is Happening Again...
+Disc: 1
+Track: 1
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557553
+added: 1752557475
+song_end
+song_begin: 02 Lvstlove.flac
+Time: 366.028
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Lvstlove
+Disc: 1
+Track: 2
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557555
+added: 1752557475
+song_end
+song_begin: 03 Yandere Era.flac
+Time: 227.096
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Yandere Era
+Disc: 1
+Track: 3
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557498
+added: 1752557475
+song_end
+song_begin: 04 Swan Dive Into Eternity.flac
+Time: 362.72700000000003
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Swan Dive Into Eternity
+Disc: 1
+Track: 4
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557494
+added: 1752557475
+song_end
+song_begin: 05 Lexapro Doesn't Work.flac
+Time: 443.076
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Lexapro Doesn't Work
+Disc: 1
+Track: 5
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557505
+added: 1752557475
+song_end
+song_begin: 06 The Feeling Is Gone.flac
+Time: 274.285
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: The Feeling Is Gone
+Disc: 1
+Track: 6
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557519
+added: 1752557475
+song_end
+song_begin: 07 Femcels.flac
+Time: 296.228
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Femcels
+Disc: 1
+Track: 7
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557538
+added: 1752557475
+song_end
+song_begin: 08 Cynthoni Of Flames.flac
+Time: 557.647
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Cynthoni Of Flames
+Disc: 1
+Track: 8
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557537
+added: 1752557475
+song_end
+song_begin: 09 Even Further Down The Drain.flac
+Time: 482.711
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Even Further Down The Drain
+Disc: 1
+Track: 9
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557626
+added: 1752557475
+song_end
+song_begin: 10 Slowburn.flac
+Time: 427.587
+AlbumArtist: Cynthoni
+Artist: Cynthoni
+Album: Draining Love Story (In The Eyes Of Cynthoni)
+Title: Slowburn
+Disc: 1
+Track: 10
+Date: 2025-01-25
+Label: Cynthoni
+Format: 48000:24:2
+mtime: 1752557850
+added: 1752557475
+song_end
+end: ARTIST/sewerslvt/Cynthoni - Draining Love Story (In The Eyes Of Cynthoni) (2025) [WEB FLAC 24-48]
 directory: Drowning In The Sewer
 mtime: 1727589789
 begin: ARTIST/sewerslvt/Drowning In The Sewer
@@ -42875,6 +43376,9 @@ Format: 44100:16:2
 mtime: 1724686402
 added: 1745751349
 song_end
+playlist_begin: Pygmalion.cue
+mtime: 1724686402
+playlist_end
 end: ARTIST/Slowdive/Slowdive - Pygmalion [1995]
 directory: Slowdive - Souvlaki (1994, 0777 7 88263 2 3) - [FLAC]
 mtime: 1727589843
@@ -43061,6 +43565,12 @@ Format: 44100:16:2
 mtime: 1724686402
 added: 1745751349
 song_end
+playlist_begin: Slowdive - Souvlaki.m3u
+mtime: 1724686403
+playlist_end
+playlist_begin: Souvlaki.cue
+mtime: 1724686403
+playlist_end
 end: ARTIST/Slowdive/Slowdive - Souvlaki (1994, 0777 7 88263 2 3) - [FLAC]
 directory: Slowdive -2017-Slowdive (FLAC)
 mtime: 1727589845
@@ -43292,6 +43802,9 @@ Format: 44100:16:2
 mtime: 1724686401
 added: 1745751349
 song_end
+playlist_begin: Slowdive.cue
+mtime: 1724686401
+playlist_end
 end: ARTIST/Slowdive/Slowdive -2017-Slowdive (FLAC)
 end: ARTIST/Slowdive
 directory: Soichi Terada
@@ -43413,6 +43926,12 @@ InPlaylist: yes
 mtime: 1724686312
 added: 1745751353
 song_end
+playlist_begin: ACID FACE.cue
+mtime: 1724686313
+playlist_end
+playlist_begin: Soichi Terada - ACID FACE.m3u
+mtime: 1724686313
+playlist_end
 end: ARTIST/Soichi Terada/Soichi Terada - ACID FACE [FLAC]
 directory: Soichi Terada - Far East Recording 2
 mtime: 1727589735
@@ -43571,6 +44090,12 @@ Format: 44100:16:2
 mtime: 1724686298
 added: 1745751353
 song_end
+playlist_begin: far east recording 2.cue
+mtime: 1724686299
+playlist_end
+playlist_begin: soichi terada - far east recording 2.m3u
+mtime: 1724686299
+playlist_end
 end: ARTIST/Soichi Terada/Soichi Terada - Far East Recording 2
 directory: Soichi Terada - Sumo Jungle Grandeur
 mtime: 1727589737
@@ -43881,6 +44406,12 @@ Format: 44100:16:2
 mtime: 1725742367
 added: 1745751354
 song_end
+playlist_begin: Daydream Nation [Blast First Records].cue
+mtime: 1725742360
+playlist_end
+playlist_begin: Sonic Youth - Daydream Nation [Blast First Records].m3u
+mtime: 1725742360
+playlist_end
 end: ARTIST/Sonic Youth/Sonic Youth - Daydream Nation [Blast First Records]
 directory: Sonic Youth - Murray Street (2002) [FLAC] {493 319-2}
 mtime: 1727589732
@@ -43983,6 +44514,12 @@ Format: 44100:16:2
 mtime: 1725742404
 added: 1745751354
 song_end
+playlist_begin: Murray Street.cue
+mtime: 1725742368
+playlist_end
+playlist_begin: Sonic Youth - Murray Street.m3u
+mtime: 1725742368
+playlist_end
 end: ARTIST/Sonic Youth/Sonic Youth - Murray Street (2002) [FLAC] {493 319-2}
 directory: Sonic Youth - Sister (1987) [BFFP 20 CD] [FLAC]
 mtime: 1727589732
@@ -44141,6 +44678,12 @@ Format: 44100:16:2
 mtime: 1725742413
 added: 1745751354
 song_end
+playlist_begin: Sister.cue
+mtime: 1725742401
+playlist_end
+playlist_begin: Sonic Youth - Sister.m3u
+mtime: 1725742401
+playlist_end
 end: ARTIST/Sonic Youth/Sonic Youth - Sister (1987) [BFFP 20 CD] [FLAC]
 end: ARTIST/Sonic Youth
 directory: Swans
@@ -44440,6 +44983,9 @@ Format: 44100:16:2
 mtime: 1724686469
 added: 1745751353
 song_end
+playlist_begin: Swans - Soundtracks for the Blind,Die Tür Ist Zu CD1.cue
+mtime: 1724686470
+playlist_end
 end: ARTIST/Swans/Swans - Soundtracks for the Blind (3CD) [FLAC]/CD1 - Silver
 directory: CD2 - Copper
 mtime: 1727589672
@@ -44780,6 +45326,9 @@ Format: 44100:16:2
 mtime: 1724686472
 added: 1745751353
 song_end
+playlist_begin: Swans - Soundtracks for the Blind,Die Tür Ist Zu CD2.cue
+mtime: 1724686472
+playlist_end
 end: ARTIST/Swans/Swans - Soundtracks for the Blind (3CD) [FLAC]/CD2 - Copper
 directory: CD3 - Gold
 mtime: 1727589674
@@ -44952,6 +45501,9 @@ Format: 44100:16:2
 mtime: 1724686470
 added: 1745751353
 song_end
+playlist_begin: Swans - Soundtracks for the Blind,Die Tür Ist Zu CD3.cue
+mtime: 1724686470
+playlist_end
 end: ARTIST/Swans/Swans - Soundtracks for the Blind (3CD) [FLAC]/CD3 - Gold
 end: ARTIST/Swans/Swans - Soundtracks for the Blind (3CD) [FLAC]
 end: ARTIST/Swans
@@ -45129,6 +45681,12 @@ Format: 44100:16:2
 mtime: 1724686319
 added: 1745751353
 song_end
+playlist_begin: Elephant.cue
+mtime: 1724686319
+playlist_end
+playlist_begin: The White Stripes - Elephant.m3u8
+mtime: 1724686319
+playlist_end
 end: ARTIST/The White Stripes/The White Stripes (2003) Elephant
 end: ARTIST/The White Stripes
 directory: tricot
@@ -45319,6 +45877,12 @@ Format: 44100:16:2
 mtime: 1724686458
 added: 1745751352
 song_end
+playlist_begin: T H E.cue
+mtime: 1724686458
+playlist_end
+playlist_begin: tricot - T H E.m3u
+mtime: 1724686458
+playlist_end
 end: ARTIST/tricot/tricot - THE (2013) [FLAC]
 directory: tricot - 真っ黒 (2020) [WEB-FLAC]
 mtime: 1727589755
@@ -45555,6 +46119,12 @@ Format: 44100:16:2
 mtime: 1737082338
 added: 1745751354
 song_end
+playlist_begin: Close to the Edge.cue
+mtime: 1737082335
+playlist_end
+playlist_begin: Yes - Close to the Edge.m3u
+mtime: 1737082335
+playlist_end
 end: ARTIST/Yes/Yes - [1972] Close to the Edge (1988 Atlantic SD 19133-2) [FLAC]
 directory: Yes - Fragile (1971) [FLAC] {2015 Definitive Edition}
 mtime: 1737082668
@@ -45909,6 +46479,9 @@ InPlaylist: yes
 mtime: 1737082671
 added: 1745751354
 song_end
+playlist_begin: Yes - Fragile (2015 Definitive Edition).cue
+mtime: 1737082668
+playlist_end
 end: ARTIST/Yes/Yes - Fragile (1971) [FLAC] {2015 Definitive Edition}
 directory: Yes - The Yes Album (1971) [FLAC] {UDCD 779}
 mtime: 1737082635
@@ -46063,6 +46636,15 @@ InPlaylist: yes
 mtime: 1737082640
 added: 1745751354
 song_end
+playlist_begin: Yes - The Yes Album [FLAC].cue
+mtime: 1737082635
+playlist_end
+playlist_begin: Yes - The Yes Album [WAV].cue
+mtime: 1737082635
+playlist_end
+playlist_begin: Yes - The Yes Album.m3u
+mtime: 1737082635
+playlist_end
 end: ARTIST/Yes/Yes - The Yes Album (1971) [FLAC] {UDCD 779}
 directory: Yes - Yes [1989 Atlantic Records]
 mtime: 1737082689
@@ -46163,6 +46745,12 @@ Format: 44100:16:2
 mtime: 1737082697
 added: 1745751354
 song_end
+playlist_begin: Yes - Yes [1989 Atlantic Records].m3u
+mtime: 1737082689
+playlist_end
+playlist_begin: Yes [1989 Atlantic Records].cue
+mtime: 1737082689
+playlist_end
 end: ARTIST/Yes/Yes - Yes [1989 Atlantic Records]
 end: ARTIST/Yes
 directory: Zazen Boys
@@ -46741,6 +47329,12 @@ Format: 44100:16:2
 mtime: 1724686358
 added: 1745751346
 song_end
+playlist_begin: Zazen Boys - Zazen Boys 4.m3u8
+mtime: 1724686358
+playlist_end
+playlist_begin: Zazen Boys 4.cue
+mtime: 1724686358
+playlist_end
 end: ARTIST/Zazen Boys/Zazen Boys - Zazen Boys 4 [2008] [FLAC]
 directory: ZAZEN BOYS - ZAZEN BOYS II [2004] [FLAC]
 mtime: 1727589847
@@ -46955,6 +47549,12 @@ Format: 44100:16:2
 mtime: 1724686356
 added: 1745751346
 song_end
+playlist_begin: ZAZEN BOYS - ZAZEN BOYS II.m3u
+mtime: 1724686356
+playlist_end
+playlist_begin: ZAZEN BOYS II.cue
+mtime: 1724686356
+playlist_end
 end: ARTIST/Zazen Boys/ZAZEN BOYS - ZAZEN BOYS II [2004] [FLAC]
 directory: ZAZEN BOYS - ZAZEN BOYS III [2006] [FLAC]
 mtime: 1727589662
@@ -47127,6 +47727,12 @@ Format: 44100:16:2
 mtime: 1724686357
 added: 1745751346
 song_end
+playlist_begin: ZAZEN BOYS - ZAZEN BOYS III.m3u
+mtime: 1724686357
+playlist_end
+playlist_begin: ZAZEN BOYS III.cue
+mtime: 1724686357
+playlist_end
 end: ARTIST/Zazen Boys/ZAZEN BOYS - ZAZEN BOYS III [2006] [FLAC]
 directory: Zazen Boys - すとーりーず (Stories) - (2012) [FLAC]
 mtime: 1727589848
@@ -47285,6 +47891,12 @@ Format: 44100:16:2
 mtime: 1724686355
 added: 1745751346
 song_end
+playlist_begin: Zazen Boys - すとーりーず.m3u
+mtime: 1724686355
+playlist_end
+playlist_begin: cue.cue
+mtime: 1724686355
+playlist_end
 end: ARTIST/Zazen Boys/Zazen Boys - すとーりーず (Stories) - (2012) [FLAC]
 end: ARTIST/Zazen Boys
 end: ARTIST
@@ -56948,31 +57560,6 @@ added: 1745751333
 song_end
 end: GENRE/IDM/Mr. Oizo - Analog Worms Attack (MUTE 9118-2) - CD FLAC
 end: GENRE/IDM
-directory: JUNGLE
-mtime: 1738627498
-begin: GENRE/JUNGLE
-song_begin: Helvetican - Wipeout.mp3
-Time: 175.008
-Artist: Helvetican
-Title: Wipeout
-Album: Album
-Track: 1
-Format: 48000:16:2
-mtime: 1734019793
-added: 1745751332
-song_end
-song_begin: Posij - Windforce.mp3
-Time: 210.047
-Artist: Posij
-Title: Windforce
-Album: Faya Lobi
-Track: 1
-Date: 1
-Format: 44100:16:2
-mtime: 1734019928
-added: 1745751332
-song_end
-end: GENRE/JUNGLE
 directory: REGGAE
 mtime: 1750734952
 begin: GENRE/REGGAE
@@ -57599,8 +58186,79 @@ playlist_end
 end: GENRE/REGGAE/Yellowman - Mister Yellowman (1990) {Shanachie 48007} [FLAC-CD]
 end: GENRE/REGGAE
 directory: SINGLES
-mtime: 1738634482
+mtime: 1752575060
 begin: GENRE/SINGLES
+directory: ben
+mtime: 1752576338
+begin: GENRE/SINGLES/ben
+song_begin: No Mana - Phase 4 [sF5-6SpFIo4].mp3
+Time: 216.05
+Format: 48000:16:2
+mtime: 1745752572
+added: 1752576185
+song_end
+song_begin: No Mana, Julian Gray, 28mm, C.H.A.Y. - stuck (drunk at julian's) [qW_tN_PmJBU].mp3
+Time: 191.727
+Format: 48000:16:2
+mtime: 1752367644
+added: 1752574957
+song_end
+song_begin: Helvetican - Wipeout.mp3
+Time: 175.008
+Artist: Helvetican
+Title: Wipeout
+Album: Album
+Track: 1
+Format: 48000:16:2
+mtime: 1734019793
+added: 1752576344
+song_end
+song_begin: Cavestar - Not Built For Speed.mp3
+Time: 304.23900000000003
+Artist: Cavestar
+Title: Not Built For Speed
+Album: Cavestar
+Track: 2
+Date: 1997
+Format: 48000:16:2
+mtime: 1724686566
+added: 1752575157
+song_end
+song_begin: Posij - Windforce.mp3
+Time: 210.047
+Artist: Posij
+Title: Windforce
+Album: Faya Lobi
+Track: 1
+Date: 1
+Format: 44100:16:2
+mtime: 1734019928
+added: 1752576344
+song_end
+song_begin: Vorso - Palindromes.flac
+Time: 227.584
+Album: Holonomy
+AlbumArtist: Vorso
+Artist: Vorso
+Date: 2023
+Disc: 1
+Title: Palindromes
+Track: 11
+Format: 44100:16:2
+mtime: 1738627505
+added: 1752576285
+song_end
+song_begin: Mr Williamz - Pass The Kutchi (Benny Page Remix).mp3
+Time: 251.16
+Artist: Mr Williamz
+Title: Pass the Kutchi (Benny Page Remix)
+Album: Pass the Kutchi
+Track: 1
+Format: 48000:16:2
+mtime: 1734019908
+added: 1752575066
+song_end
+end: GENRE/SINGLES/ben
 song_begin: Tsukuni & ADTurnUp - Stoner.mp3
 Time: 153.62800000000001
 Format: 48000:16:2
@@ -57733,15 +58391,37 @@ Format: 48000:16:2
 mtime: 1734019965
 added: 1745751333
 song_end
-song_begin: Mr Williamz - Pass The Kutchi (Benny Page Remix).mp3
-Time: 251.16
-Artist: Mr Williamz
-Title: Pass the Kutchi (Benny Page Remix)
-Album: Pass the Kutchi
+song_begin: The Cyrkle - The Visit (She Was Here).mp3
+Time: 135.893
+Artist: The Cyrkle
+Title: The Visit (She Was Here)
+Album: Neon
+Track: 1
+Date: 1999
+Format: 48000:16:2
+mtime: 1724686566
+added: 1752574931
+song_end
+song_begin: Galimatias - Ocean Floor Kisses.mp3
+Time: 215.04
+Artist: Galimatias
+Title: Ocean Floor Kisses
+Album: Ocean Floor Kisses
+Track: 1
+Genre: Chillhop
+Format: 44100:16:2
+mtime: 1751722375
+added: 1752574931
+song_end
+song_begin: Tekken 4 OST - Authentic Sky (Definitive Drum Mix).mp3
+Time: 276.526
+Artist: Tekken 4 OST
+Title: Authentic Sky (Definitive Drum Mix)
+Album: Tekken 4 OST
 Track: 1
 Format: 48000:16:2
-mtime: 1734019908
-added: 1745751333
+mtime: 1724686566
+added: 1752574931
 song_end
 end: GENRE/SINGLES
 directory: TECHNO
@@ -71550,10 +72230,10 @@ Format: 44100:16:2
 mtime: 1737233752
 added: 1747029890
 song_end
-playlist_begin: Stéphane Pompougnac - Hôtel Costes - Vol.11.m3u
+playlist_begin: Hôtel Costes - Vol.11.cue
 mtime: 1737233764
 playlist_end
-playlist_begin: Hôtel Costes - Vol.11.cue
+playlist_begin: Stéphane Pompougnac - Hôtel Costes - Vol.11.m3u
 mtime: 1737233764
 playlist_end
 end: LABEL/Hôtel Costes/VA - 2008 - Hotel Costes 11 {3133172 }[FLAC]
@@ -110771,7 +111451,7 @@ end: SAMPLE_PACK/YumeNikki sample pack/Tones
 end: SAMPLE_PACK/YumeNikki sample pack
 end: SAMPLE_PACK
 directory: SINGLE
-mtime: 1733975210
+mtime: 1752575151
 begin: SINGLE
 directory: dnb
 mtime: 1737823273
@@ -110787,17 +111467,6 @@ mtime: 1734019884
 added: 1747029894
 song_end
 end: SINGLE/dnb
-song_begin: Cavestar - Not Built For Speed.mp3
-Time: 304.23900000000003
-Artist: Cavestar
-Title: Not Built For Speed
-Album: Cavestar
-Track: 2
-Date: 1997
-Format: 48000:16:2
-mtime: 1724686566
-added: 1747029893
-song_end
 song_begin: Demon's Souls - Souls of Mist.mp3
 Time: 1857.05
 Artist: Demon's Souls OST
@@ -110890,28 +111559,6 @@ Format: 48000:16:2
 mtime: 1724686566
 added: 1747029894
 song_end
-song_begin: The Cyrkle - The Visit (She Was Here).mp3
-Time: 135.893
-Artist: The Cyrkle
-Title: The Visit (She Was Here)
-Album: Neon
-Track: 1
-Date: 1999
-Format: 48000:16:2
-mtime: 1724686566
-added: 1747029894
-song_end
-song_begin: Galimatias - Ocean Floor Kisses.mp3
-Time: 215.04
-Artist: Galimatias
-Title: Ocean Floor Kisses
-Album: Ocean Floor Kisses
-Track: 1
-Genre: Chillhop
-Format: 44100:16:2
-mtime: 1751722375
-added: 1747029894
-song_end
 song_begin: EXTEND CUT pyramidhead.mp3
 Time: 148.108
 Artist: Pyramidhead
@@ -110969,16 +111616,6 @@ Time: 350.342
 Artist: Spore Soundtrack
 Title: Rich Relaxation
 Album: Spore Soundtrack
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1747029894
-song_end
-song_begin: Tekken 4 OST - Authentic Sky (Definitive Drum Mix).mp3
-Time: 276.526
-Artist: Tekken 4 OST
-Title: Authentic Sky (Definitive Drum Mix)
-Album: Tekken 4 OST
 Track: 1
 Format: 48000:16:2
 mtime: 1724686566

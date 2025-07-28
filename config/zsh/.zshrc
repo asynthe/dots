@@ -12,9 +12,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # User
     export NH_FLAKE=$HOME/dots # for `nh`
     export PASSWORD_STORE_DIR=$HOME/ben/pass/ben
+    export WEZTERM_CONFIG_FILE=$HOME/.config/wezterm/.wezterm.lua
     #export GNUPGHOME=$HOME/ben/pass/gpg
     
-    export ANKI_BASE=$HOME/study/jp/anki
+    export ANKI_BASE=$HOME/disk/jp/anki
     export ANKI_WAYLAND=1
 
 # macOS
@@ -49,9 +50,9 @@ export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
 export WAYFIRE_CONFIG_FILE=$HOME/.config/wayfire/wayfire.ini
 
 # This is in my `.zshrc`
-export BOOK_CURRENT=$HOME/study/book/security+/gibson_comptia_security_plus_get_certified.pdf
-export BOOK_CURRENT_2=$HOME/study/book/security+/professor_messer_comptia_security_plus_practice_exams.pdf
-export BOOK_FOLDER=$HOME/study/archive_book
+export BOOK_CURRENT=$HOME/disk/book/exam/security_plus/gibson_comptia_security_plus_get_certified.pdf
+export BOOK_CURRENT_2=$HOME/disk/book/reading/learningviandvimeditors8e.pdf
+export BOOK_FOLDER=$HOME/disk/book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
 export WALLPAPER_VIDEO_FOLDER=$HOME/wallpaper/video
 export WALLPAPER_VIDEO_PLAYLISTS=$HOME/wallpaper/video/playlists
@@ -155,6 +156,7 @@ alias hyprconf='nvim $HOME/.config/hypr/hyprland.conf'
 alias mpvconf='nvim $HOME/.config/mpv/mpv.conf'
 alias zshconf='nvim $HOME/.config/zsh/zshrc'
 alias waybarconf='nvim $HOME/.config/waybar/config.jsonc'
+alias wezconf='nvim $HOME/.config/wezterm/.wezterm.lua'
 
 # Directories
 alias ls='eza --icons --group-directories-first'

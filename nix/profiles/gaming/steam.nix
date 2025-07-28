@@ -15,10 +15,14 @@ in {
 
         programs.steam = {
             enable = true;
+            extest.enable = true;
             gamescopeSession.enable = true;
             remotePlay.openFirewall = true; # Open ports for Steam Remote Play.
             localNetworkGameTransfers.openFirewall = true;
             dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server.
+            extraCompatPackages = with pkgs; [
+                proton-ge-bin
+            ];
         };
 
         programs.steam.protontricks.enable = true;
@@ -27,6 +31,8 @@ in {
         };
 
         environment.systemPackages = with pkgs; [
+            pkgsi686Linux.gperftools # temp fix
+
             mangohud
             protonup-ng # ProtonGE
             #steam-tui

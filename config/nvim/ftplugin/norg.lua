@@ -50,3 +50,8 @@ end, opts)
 --        vim.cmd("startinsert")
 --    end)
 --end, opts)
+
+-- Journal (neorg)
+vim.keymap.set("n", "<leader>jn", ":Neorg journal today<CR>", { buffer = true, desc = "Note (today)" })
+vim.keymap.set("n", "<leader>jq", ":Neorg journal yesterday<CR>", { buffer = true, desc = "Note (yesterday)" })
+vim.keymap.set("n", "<leader>jw", ":Neorg journal tomorrow<CR>", { buffer = true, desc = "Note (tomorrow)" })

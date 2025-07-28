@@ -69,6 +69,7 @@ local keybinds = {
 }
 
 return {
+
     -- Windows
     --win32_system_backdrop = "Auto", -- Auto, Disabled, Acrylic, Mica, Tabbed
 

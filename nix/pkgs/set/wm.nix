@@ -36,6 +36,8 @@
         alsa-utils pulsemixer # from pulseaudio
         cava
         cmus # Music player
+        easyeffects
+        pulseaudioFull
 
         # Tools
 	    img2pdf

@@ -19,16 +19,15 @@
         pkgs-stable.tectonic #tectonic # LaTeX Engine
 
         # Filesystem tools
-        bcachefs-tools
-        gptfdisk
-
-        # Networking
-        httpie
-
-        # NVMe / SSD Testing
 		fio
 		hdparm
 		nvme-cli
+        bcachefs-tools
+        gptfdisk
+        parted
+
+        # Networking
+        httpie
 
         # Nvidia
         nvtopPackages.full #pkgs-stable.nvtopPackages.full
@@ -64,6 +63,7 @@
         tmux tmuxp
         wget curl
         yazi
+        yt-dlp
         zoxide
 
         # Nix / DevOps

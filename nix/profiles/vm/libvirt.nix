@@ -20,7 +20,11 @@ in {
             qemu.swtpm.enable = true;
             qemu.ovmf.enable = true;
             qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
+            qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
         };
+
+        # Virt-manager
+        programs.virt-manager.enable = true;
 
         environment.systemPackages = with pkgs; [
             adwaita-icon-theme # Needed if not running gnome.
@@ -31,7 +35,6 @@ in {
             spice
             spice-gtk
             spice-protocol
-            virt-manager
             virt-viewer
             win-spice
             win-virtio

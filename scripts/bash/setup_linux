@@ -42,7 +42,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
   source_base="$HOME/ben/dots/config"
   dest_path="$HOME/.config"
 else
-  echo "Unsupported OS: $OSTYPE"
+  echo "[X] Unsupported OS: $OSTYPE"
   exit 1
 fi
 
@@ -116,13 +116,5 @@ echo "--------------- Finished! ---------------"
 # mpd
 touch $HOME/.config/mpd/playlists
 
-#!/usr/bin/env bash
-
-
-
-# Setup for both common Linux systems and WSL.
-
-# ZSH
-# ...
-
-########################### WSL BLOCK ###########################
+ln -sf $HOME/.config/zsh/.zshenv $HOME/.zshenv
+ln -sf $XDG_DATA_HOME/Trash $HOME/trash

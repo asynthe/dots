@@ -107,7 +107,7 @@ in {
             nvidiaBusId = cfg.bus_id.nvidia_gpu;
         };
 
-        # -------------- Prime - Offload Mode --------------
+        # ─────────────── Prime - Offload Mode ───────────────
         #hardware.nvidia.prime.offload = {
         hardware.nvidia.prime.offload = mkIf (cfg.mode == "offload") {
             enable = true;
@@ -116,7 +116,7 @@ in {
         hardware.nvidia.prime.sync.enable = mkIf (cfg.mode == "sync") true; # Prime - Sync Mode
         hardware.nvidia.prime.reverseSync.enable = mkIf (cfg.mode == "reverse-sync") true; # Prime - Reverse Sync Mode
 
-        # -------------- Specialisation --------------
+        # ─────────────── Specialisation ───────────────
         specialisation = mkIf cfg.specialisation {
         
             # Gaming - Sync
@@ -124,7 +124,7 @@ in {
                 hardware.nvidia.prime = {
                     sync.enable = mkForce true;
                     offload.enable = mkForce false;
-                    enableOffloadCmd = mkForce false;
+                    #enableOffloadCmd = mkForce false;
                 };
             };
         };

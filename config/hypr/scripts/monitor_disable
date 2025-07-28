@@ -4,13 +4,13 @@ displays() {
     if [ "$1" = "monitoradded>>DP-2" ]; then
         hyprctl keyword monitor "eDP-1, disable"
         hyprctl keyword monitor "DP-2, 3440x1440@144, 0x0, 1" # CRUA Ultrawide 34" UWQHD 144Hz
-        windowrulev2 = size 2280 1122, class:^(com.mitchellh.ghostty)$
-        windowrulev2 = move 3133 836, title:(Mullvad VPN)
+        #windowrulev2 = size 2280 1122, class:^(com.mitchellh.ghostty)$
+        #windowrulev2 = move 3133 836, title:(Mullvad VPN)
 
     elif [ "$1" = "monitorremoved>>DP-2" ]; then
         hyprctl keyword monitor "eDP-1, 2560x1600@120, 0x0, 1.25" # MSI Laptop 4K UHD 120Hz
-        windowrulev2 = size 1694 921, class:^(com.mitchellh.ghostty)$ 
-        windowrulev2 = move 1728 676, title:(Mullvad VPN) # (1.25x scaling applied)
+        #windowrulev2 = size 1694 921, class:^(com.mitchellh.ghostty)$ 
+        #windowrulev2 = move 1728 676, title:(Mullvad VPN) # (1.25x scaling applied)
     fi
 }
 

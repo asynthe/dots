@@ -7,9 +7,9 @@ startup() {
     # Laptop monitor
     if [ "$connected_monitors" -eq 0 ]; then
         echo "Only eDP-1 detected, enabling configuration..."
-        hyprctl keyword monitor "eDP-1, 2560x1600@120, 0x0, 1"
-        windowrulev2 = size 1694 921, class:^(com.mitchellh.ghostty)$ 
-        windowrulev2 = size 1694 921, class:^(org.pwmt.zathura)$
+        hyprctl keyword monitor "eDP-1, 2560x1600@120, 0x0, 1.25"
+        #windowrulev2 = size 1694 921, class:^(com.mitchellh.ghostty)$ 
+        #windowrulev2 = size 1694 921, class:^(org.pwmt.zathura)$
         #windowrulev2 = move 1728 676, title:(Mullvad VPN) # (1.25x scaling applied)
 
     # Widescreen connected

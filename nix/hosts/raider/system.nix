@@ -33,9 +33,6 @@
         system.keyboard = true;
         system.dark-mode = true;
 
-        system.windows.enable = true; # Option for dual-boot, fix System time
-        system.windows.disk = "/dev/nvme0n1p2";
-        
         # Next options are set up by `meta.system.type`, but can be edited.
         #system.nix.settings = "laptop";
         #system.networking.type = "laptop";
@@ -49,7 +46,7 @@
         audio.bluetooth.no_handsfree_mode = true;
         audio.musnix.enable = false;
         audio.pipewire.enable = true;
-        #audio.pipewire.lowlatency = false;
+        audio.pipewire.low-latency = false;
 
         # ─────────────── Boot ───────────────
         boot.kernel = "zen"; # latest, zen, hardened
@@ -80,10 +77,10 @@
 
         # ─────────────── Driver ───────────────
         #driver.displaylink = true;
-        #driver.nvidia.specialisation = true; # gaming mode and portable mode.
         driver.nvidia.enable = true;
         driver.nvidia.package = "beta"; # stable, beta
         driver.nvidia.mode = "offload"; # offload, sync, reverse-sync
+        #driver.nvidia.specialisation = true; # sync, offload
         driver.nvidia.bus_id.intel_cpu = "PCI:1:0:0";
         driver.nvidia.bus_id.nvidia_gpu = "PCI:0:2:0";
 
@@ -99,7 +96,7 @@
         vm.vmware.enable = false;
 
         # ─────────────── VPN ───────────────
-        vpn.mullvad.enable = true;
+        vpn.mullvad.enable = false;
 
         # ─────────────── Services ───────────────
         services.android.enable = true;

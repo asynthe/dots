@@ -32,11 +32,6 @@ vim.keymap.set("n", "<leader>fk", kill_buffer_or_quit, { noremap = true, silent 
 vim.keymap.set("n", "<leader>fl", telescope.find_files, { desc = "Find files (Telescope)" })
 vim.keymap.set("n", "<leader>fs", ":w<CR>", { noremap = true, silent = true, desc = "Save file" })
 
--- Journal (neorg)
-vim.keymap.set("n", "<leader>jn", ":Neorg journal today<CR>", { buffer = true, desc = "Note (today)" })
-vim.keymap.set("n", "<leader>jq", ":Neorg journal yesterday<CR>", { buffer = true, desc = "Note (yesterday)" })
-vim.keymap.set("n", "<leader>jw", ":Neorg journal tomorrow<CR>", { buffer = true, desc = "Note (tomorrow)" })
-
 -- Notes
 vim.keymap.set("n", "<leader>nf", function()
     require("telescope.builtin").find_files({

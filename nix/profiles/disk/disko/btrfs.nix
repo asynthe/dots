@@ -5,6 +5,25 @@ let
 in {
     config = mkIf (cfg.filesystem == "btrfs") {
 
+        # External disk
+        fileSystems."/home/${config.meta.system.user}/disk" = {
+            device = "/dev/disk/by-uuid/2be0c2b1-8f04-4036-bec6-f23a7bbcbcfa";
+            fsType = "btrfs";
+            options = [ 
+                "rw"
+                "nosuid"
+                "nodev"
+                "noexec"
+                "noatime" 
+                "compress=zstd:3" 
+                "ssd"
+                "discard=async"
+                "space_cache=v2"
+                "subvol=/"
+                "nofail" 
+            ]; 
+        };
+
         boot = {
             supportedFilesystems = [ "btrfs" "vfat" ];
             #resumeDevice = "/dev/disk/by-label/nixos";
@@ -14,7 +33,7 @@ in {
 
         disko.devices = {
 
-            # -------------- Impermanence - tmpfs --------------
+            # ─────────────── Impermanence - tmpfs ───────────────
             nodev."/" = mkIf cfg.persistence.enable {
 	            fsType = "tmpfs";
 	            mountOptions = [ "size=4G" "defaults" "mode=0755" ];
@@ -22,8 +41,8 @@ in {
 
             # Main disk
             disk.main = {
-                device = cfg.device;
                 type = "disk";
+                device = cfg.device;
                 content.type = "gpt";
                 content.partitions = {
             
@@ -39,7 +58,7 @@ in {
 			            content.mountOptions = [ "defaults" ];
 		            };
 
-                    # -------------- Non-encrypted Impermanence --------------
+                    # ─────────────── Non-encrypted Impermanence ───────────────
 		            data = mkIf (cfg.persistence.enable && !cfg.encryption.enable) {
 		                size = "100%";
 			            content.type = "btrfs";
@@ -63,7 +82,7 @@ in {
 			            };
 		            };
 
-                    # -------------- LUKS encrypted + Impermanence --------------
+                    # ─────────────── LUKS encrypted + Impermanence ───────────────
                     main = mkIf (cfg.persistence.enable && cfg.encryption.enable) {
                         size = "100%";
                         label = "luks";
@@ -130,7 +149,26 @@ in {
                         };  
                     };
                 };
-	        };
+            };
+
+            # ─────────────── Second disk (to use as /home) ───────────────
+            #disk.second = {
+            #    type = "disk";
+            #    device = cfg.device_second;
+            #    content.type = "gpt";
+            #    content.partitions = {
+
+            #       # /home
+            #        home = {
+            #            size = "100%";
+            #            type = "filesystem";
+            #            format = "btrfs";
+            #            label = "home";
+            #            mountpoint = "/home";
+            #            mountOptions = [ "compress=zstd" "noatime" ];
+            #        };
+            #    };
+            #};
         };
     };
 }
