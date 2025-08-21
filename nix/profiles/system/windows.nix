@@ -15,20 +15,20 @@
 { config, lib, pkgs, ... }: 
 with lib; with types;
 let
-    cfg = config.meta.system.windows;
+    cfg = config.meta.system;
 in {
-# ───────────────────────── Options ─────────────────────────
-    options.meta.system.windows = {
-        enable = mkEnableOption "Enable setup for Windows dual-boot or access.";
-        disk = mkOption {
-            type = nullOr str;
-            default = null;
-            description = "Specify the device for windows auto-mount";
-        };
+    # ───────────────────────── Options ─────────────────────────
+    options.meta.system = {
+        windows = mkEnableOption "Enable setup for Windows dual-boot or access.";
+        # disk = mkOption {
+        #     type = nullOr str;
+        #     default = null;
+        #     description = "Specify the device for windows auto-mount";
+        # };
     };
 
-# ───────────────────────── Configuration ─────────────────────────
-    config = mkIf cfg.enable {
+    # ───────────────────────── Configuration ─────────────────────────
+    config = mkIf cfg.windows {
 
         time.hardwareClockInLocalTime = true;
         environment.systemPackages = with pkgs; [ ntfs3g ];

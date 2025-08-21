@@ -19,6 +19,7 @@
 
         # Apps
         swww.url = "github:LGFae/swww";
+        norgolith.url = "github:NTBBloodbath/norgolith";
 	    #nixvim = {
             #url = "github:nix-community/nixvim";
 	        #inputs.nixpkgs.follows = "nixpkgs";
@@ -42,7 +43,8 @@
         sops-nix,
 
         # Apps
-	    #nixvim,
+        #nixvim,
+        norgolith,
         swww,
         ...
     

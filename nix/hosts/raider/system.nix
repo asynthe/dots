@@ -32,6 +32,7 @@
         system.language = "both"; # english, japanese, both
         system.keyboard = true;
         system.dark-mode = true;
+        system.windows = true;
 
         # Next options are set up by `meta.system.type`, but can be edited.
         #system.nix.settings = "laptop";
@@ -42,8 +43,8 @@
         system.packages = "minimal"; # minimal, minimal_stable, hyprland
 
         # ─────────────── Audio ───────────────
-        audio.bluetooth.enable = true;
-        audio.bluetooth.no_handsfree_mode = true;
+        audio.bluetooth.enable = false;
+        audio.bluetooth.no_handsfree_mode = false;
         audio.musnix.enable = false;
         audio.pipewire.enable = true;
         audio.pipewire.low-latency = false;

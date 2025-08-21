@@ -13,6 +13,7 @@ return {
             load = {
                 --["core.latex.renderer"] = {},
                 ["core.defaults"] = {},
+                ["core.export"] = {},
                 ["core.concealer"] = {
                     config = {
                         init_open_folds = "never", -- Don't open folds

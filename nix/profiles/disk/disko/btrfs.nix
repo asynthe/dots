@@ -5,25 +5,6 @@ let
 in {
     config = mkIf (cfg.filesystem == "btrfs") {
 
-        # External disk
-        fileSystems."/home/${config.meta.system.user}/disk" = {
-            device = "/dev/disk/by-uuid/2be0c2b1-8f04-4036-bec6-f23a7bbcbcfa";
-            fsType = "btrfs";
-            options = [ 
-                "rw"
-                "nosuid"
-                "nodev"
-                "noexec"
-                "noatime" 
-                "compress=zstd:3" 
-                "ssd"
-                "discard=async"
-                "space_cache=v2"
-                "subvol=/"
-                "nofail" 
-            ]; 
-        };
-
         boot = {
             supportedFilesystems = [ "btrfs" "vfat" ];
             #resumeDevice = "/dev/disk/by-label/nixos";

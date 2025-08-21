@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
+
     programs.neovim.enable = true;
     environment.systemPackages = with pkgs; [
         git
@@ -15,6 +16,9 @@
         
         lua-language-server
         vimPlugins.mason-lspconfig-nvim
+
+        # Neorg
         vimPlugins.neorg
+        inputs.norgolith.packages.${pkgs.system}.default
     ];
 }

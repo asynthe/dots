@@ -92,7 +92,7 @@ return {
     --treat_east_asian_ambiguous_width_as_wide = true,
 
     -- Transparency
-    window_background_opacity = 0.8,
+    window_background_opacity = 0.6,
     text_background_opacity = 1,
 
     -- Keys
