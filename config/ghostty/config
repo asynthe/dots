@@ -81,9 +81,13 @@ keybind = ctrl+shift+l=resize_split:right,40
 
 # Tabs
 keybind = ctrl+t=new_tab
+#keybind = ctrl+[=previous_tab # For nvim
+#keybind = ctrl+]=next_tab # For nvim
 keybind = alt+[=previous_tab
 keybind = alt+]=next_tab
-keybind = alt+shift+[=move_tab:-1
-keybind = alt+shift+]=move_tab:1
-keybind = super+[=previous_tab
-keybind = super+]=next_tab
+keybind = ctrl+shift+[=move_tab:-1
+keybind = ctrl+shift+]=move_tab:1
+keybind = ctrl+shift+left=move_tab:-1
+keybind = ctrl+shift+right=move_tab:1
+#keybind = super+[=previous_tab
+#keybind = super+]=next_tab

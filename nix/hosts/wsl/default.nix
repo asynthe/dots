@@ -7,7 +7,7 @@
         ../../modules/simple/neovim.nix
 
         # Pkgs
-        ../../pkgs/set/minimal_wsl.nix
+        ../../pkgs/set/minimal.nix
         ../../pkgs/set/fonts.nix
         ../../pkgs/set/fonts_jp.nix
     ];

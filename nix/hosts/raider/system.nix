@@ -13,6 +13,7 @@
         ../../pkgs/set/fonts.nix
         ../../pkgs/set/fonts_jp.nix
         ../../pkgs/set/minimal.nix
+        ../../pkgs/set/minimal_extra.nix
         ../../pkgs/set/wm.nix
     ];
 
@@ -43,8 +44,8 @@
         system.packages = "minimal"; # minimal, minimal_stable, hyprland
 
         # ─────────────── Audio ───────────────
-        audio.bluetooth.enable = false;
-        audio.bluetooth.no_handsfree_mode = false;
+        audio.bluetooth.enable = true;
+        audio.bluetooth.no_handsfree_mode = true;
         audio.musnix.enable = false;
         audio.pipewire.enable = true;
         audio.pipewire.low-latency = false;
@@ -97,7 +98,7 @@
         vm.vmware.enable = false;
 
         # ─────────────── VPN ───────────────
-        vpn.mullvad.enable = false;
+        vpn.mullvad.enable = true;
 
         # ─────────────── Services ───────────────
         services.android.enable = true;

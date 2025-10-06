@@ -6,7 +6,6 @@
         withUWSM = true;
     };
 
-    programs.waybar.enable = true;
     xdg.portal = {
         enable = true;
         xdgOpenUsePortal = true;
@@ -18,22 +17,25 @@
     };
 
     # ───────────────────────── Packages ─────────────────────────
+    programs.waybar.enable = true;
     environment.systemPackages = with pkgs; [
         brightnessctl
         grim slurp
         gromit-mpx
         hyprshot
         imv
-        libsForQt5.polkit-kde-agent
-        libsForQt5.qt5.qtwayland
         mako libnotify
         pavucontrol
         ripdrag
-        rofi-wayland
+        rofi
         socat # IPC
         swappy
         swayidle
         wl-clipboard
+
+        # Libs
+        hyprpolkitagent
+        libsForQt5.qt5.qtwayland
 
         # Wallpaper
         mpvpaper

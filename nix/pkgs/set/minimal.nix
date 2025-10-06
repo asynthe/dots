@@ -1,44 +1,10 @@
-{ pkgs, pkgs-stable, ... }: {
+{ pkgs, ... }: {
 
     environment.systemPackages = with pkgs; [
 
-        # ───────────────────────── Testing ─────────────────────────
-        # Testing
-        fbcat
-        fbterm # -> Set 'video' user group
-        htop
-        iotop
-        lm_sensors
-        pciutils
-        powertop
-        usbutils
-
-        # Tools
-        lsof
-        tree
-        pkgs-stable.tectonic #tectonic # LaTeX Engine
-
-        # Filesystem tools
-		fio
-		hdparm
-		nvme-cli
-        bcachefs-tools
-        gptfdisk
-        parted
-
-        # Networking
-        httpie
-
-        # Nvidia
-        nvtopPackages.full #pkgs-stable.nvtopPackages.full
-        #nvtopPackages.nvidia
-
-        # ───────────────────────── CLI ─────────────────────────
-	    ascii
+        # ───────────────────────── Minimal ─────────────────────────
 	    bc
 	    fd ripgrep
-	    fzf skim
-	    git bfg-repo-cleaner
 	    imagemagickBig
 	    libqalculate
 	    ncdu
@@ -48,43 +14,31 @@
         eza
         ffmpeg-full ffmpegthumbnailer
         file
+        fzf skim
+        git bfg-repo-cleaner jujutsu
         htop btop
         hyperfine
         jq
         killall
+        lsof
         mediainfo
+        neovim
         nh
         pass-wayland
         pv
         rsync
+        sioyek
         sox
         speedtest-cli
         starship
         tmux tmuxp
+        tree
         wget curl
         yazi
         yt-dlp
         zoxide
 
-        # Nix / DevOps
-        #nixfmt
-        #nixops_unstable #nixops
-        alejandra
-        colmena
-        deploy-rs
-        direnv
-        nix-direnv
-        pulumi
-        opentofu #terraform
-        ansible
-
-        # ───────────────────────── Archiving ─────────────────────────
-        p7zip
-        rar #unrar #rar2fs
-        unar # Allows for unzipping with Unicode characters.
-        zip unzip 
-	    #mdf2iso
-        #torrent7z
-        #xz
-    ];
+        # GUI
+        ghostty
+      ];
 }
