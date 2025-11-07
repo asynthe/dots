@@ -1,0 +1,18 @@
+# ───────────────────────── Keybinds ─────────────────────────
+# Specific laptop keybinds for XF86 keys and shi
+$mainMod = ALT
+
+# Volume
+binde = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+binde = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+binde = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+binde = , XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+binde = , XF86MonBrightnessUp, exec, brightnessctl set 10%+
+binde = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
+
+# Disable touchpad
+# from https://www.reddit.com/r/hyprland/comments/1bo6rp8/comment/kwo1qw1/
+# TODO Looking for the `hyprctl getoption enabled` for the touchpad, then put in just one keybind
+#bind = $mainMod SHIFT, RETURN, exec, hyprctl getoption "device:synps/2-synaptics-touchpad:enabled" | grep 'int: 1' && (hyprctl keyword "device:synps/2-synaptics-touchpad:enabled" false && notify-send "Trackpad disabled") || (hyprctl keyword "device:synps/2-synaptics-touchpad:enabled" true)
+bind = $mainMod SHIFT, b, exec, hyprctl keyword -r -- "device[elan0305:00-04f3:31fd-touchpad]:enabled" "true" && notify-send "[!] Trackpad enabled"
+bind = $mainMod SHIFT, n, exec, hyprctl keyword -r -- "device[elan0305:00-04f3:31fd-touchpad]:enabled" "false" && notify-send "[!] Trackpad disabled"

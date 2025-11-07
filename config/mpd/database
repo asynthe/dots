@@ -111514,6 +111514,197 @@ playlist_end
 end: ARTIST/Zazen Boys/Zazen Boys - すとーりーず (Stories) - (2012) [FLAC]
 end: ARTIST/Zazen Boys
 end: ARTIST
+directory: ben
+begin: ben
+directory: SINGLE
+mtime: 1762360986
+begin: ben/SINGLE
+directory: dnb
+mtime: 1737823273
+begin: ben/SINGLE/dnb
+song_begin: Lunar Rage.mp3
+Time: 409.51
+Artist: Techno
+Title: Lunar Rage
+Album: Techno
+Track: 1
+Format: 48000:16:2
+mtime: 1734019884
+added: 1762360995
+song_end
+end: ben/SINGLE/dnb
+song_begin: K8K8K8K8 - Ryoji IKEA Riddim [HA_-4iuQomg].mp3
+Time: 50.048
+Format: 48000:16:2
+mtime: 1756374371
+added: 1762360995
+song_end
+song_begin: Demon's Souls - Souls of Mist.mp3
+Time: 1857.05
+Artist: Demon's Souls OST
+Title: Souls of Mist
+Album: Demon's Souls OST
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Ecco 2 - Sea of Darkness.mp3
+Time: 280.589
+Artist: Ecco
+Title: Sea of Darkness
+Album: Ecco 2: Tides of Time Soundtrack
+Track: 1
+Format: 44100:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Fluss - Under Your Sheets.mp3
+Time: 279.73
+Artist: Fluss
+AlbumArtist: Fluss
+Title: Under Your Sheets
+Album: Fluss
+Track: 1
+Date: 2010
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Hotel Dusk Room 215 - Hitting The Pavement.mp3
+Time: 174.254
+Artist: Hotel Dusk Room 215
+Title: Hitting The Pavement
+Album: Hotel Dusk Room 215
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: dorian concept - hide but it's midwest emo.mp3
+Time: 242.922
+Artist: Jackal
+Title: dorian concept - hide but it's midwest emo
+Album: Jackal
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Jackal - home resonance but it’s midwest emo.mp3
+Time: 219.24200000000002
+Artist: Jackal
+Title: home resonance but it's midwest emo
+Album: Jackal
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Jackal - øneheart x reidenshi - snowfall (guitar cover).mp3
+Time: 130.333
+Artist: Jackal
+Title: oneheart x reidenshi - snowfall (guitar cover)
+Album: Jackal
+Track: 2
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: King's Field IV - City Ruins.mp3
+Time: 222.69
+Artist: King's Field IV OST
+Title: City Ruins
+Album: King's Field IV OST
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: King's Field IV - The Ancient City Level 3, Tower.mp3
+Time: 155.341
+Artist: King's Field IV OST
+Title: The Ancient City Level 3, Tower
+Album: King's Field IV OST
+Track: 2
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: EXTEND CUT pyramidhead.mp3
+Time: 148.108
+Artist: Pyramidhead
+Title: Pyramidhead
+Album: Pyramidhead
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Akira Yamaoka - Resting Comfortably on Pulsating Ambience.mp3
+Time: 605.9010000000001
+Artist: Akira Yamaoka
+Title: Resting Comfortably on Pulsating Ambience
+Album: Silent Hill 4 OST
+Track: 1
+Format: 44100:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Starflyer 59 - Monterey.mp3
+Time: 179.906
+Artist: Starflyer 59
+Title: Monterey
+Album: Silver
+Track: 1
+Date: 2011
+Genre: Alternative
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: The Solitaire – Bronx.mp3
+Time: 303.67
+Artist: Simple 1500 Series Vol 8: The Solitaire
+Title: Bronx
+Album: Simple 1500 Series Vol 8: The Solitaire
+Track: 1
+Format: 44100:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: EXTEND Akiaura - Sleepwalker.mp3
+Time: 85.67
+Artist: Akiaura
+Title: Sleepwalker (Guitar Remix)
+Album: Sleepwalker
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Spore Sountrack - Rich Relaxation.mp3
+Time: 350.342
+Artist: Spore Soundtrack
+Title: Rich Relaxation
+Album: Spore Soundtrack
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+song_begin: Undertale OST - Chill.mp3
+Time: 56.378
+Artist: Toby Fox
+Title: Chill
+Album: Undertale OST
+Track: 1
+Format: 48000:16:2
+mtime: 1724686566
+added: 1762360995
+song_end
+end: ben/SINGLE
+end: ben
 directory: GENRE
 mtime: 1750477868
 begin: GENRE
@@ -175574,191 +175765,3 @@ song_end
 end: SAMPLE_PACK/YumeNikki sample pack/Tones
 end: SAMPLE_PACK/YumeNikki sample pack
 end: SAMPLE_PACK
-directory: SINGLE
-mtime: 1756374647
-begin: SINGLE
-directory: dnb
-mtime: 1737823273
-begin: SINGLE/dnb
-song_begin: Lunar Rage.mp3
-Time: 409.51
-Artist: Techno
-Title: Lunar Rage
-Album: Techno
-Track: 1
-Format: 48000:16:2
-mtime: 1734019884
-added: 1757035845
-song_end
-end: SINGLE/dnb
-song_begin: K8K8K8K8 - Ryoji IKEA Riddim [HA_-4iuQomg].mp3
-Time: 50.048
-Format: 48000:16:2
-mtime: 1756374371
-added: 1757035845
-song_end
-song_begin: Demon's Souls - Souls of Mist.mp3
-Time: 1857.05
-Artist: Demon's Souls OST
-Title: Souls of Mist
-Album: Demon's Souls OST
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Ecco 2 - Sea of Darkness.mp3
-Time: 280.589
-Artist: Ecco
-Title: Sea of Darkness
-Album: Ecco 2: Tides of Time Soundtrack
-Track: 1
-Format: 44100:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Fluss - Under Your Sheets.mp3
-Time: 279.73
-Artist: Fluss
-AlbumArtist: Fluss
-Title: Under Your Sheets
-Album: Fluss
-Track: 1
-Date: 2010
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Hotel Dusk Room 215 - Hitting The Pavement.mp3
-Time: 174.254
-Artist: Hotel Dusk Room 215
-Title: Hitting The Pavement
-Album: Hotel Dusk Room 215
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: dorian concept - hide but it's midwest emo.mp3
-Time: 242.922
-Artist: Jackal
-Title: dorian concept - hide but it's midwest emo
-Album: Jackal
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Jackal - home resonance but it’s midwest emo.mp3
-Time: 219.24200000000002
-Artist: Jackal
-Title: home resonance but it's midwest emo
-Album: Jackal
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Jackal - øneheart x reidenshi - snowfall (guitar cover).mp3
-Time: 130.333
-Artist: Jackal
-Title: oneheart x reidenshi - snowfall (guitar cover)
-Album: Jackal
-Track: 2
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: King's Field IV - City Ruins.mp3
-Time: 222.69
-Artist: King's Field IV OST
-Title: City Ruins
-Album: King's Field IV OST
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: King's Field IV - The Ancient City Level 3, Tower.mp3
-Time: 155.341
-Artist: King's Field IV OST
-Title: The Ancient City Level 3, Tower
-Album: King's Field IV OST
-Track: 2
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: EXTEND CUT pyramidhead.mp3
-Time: 148.108
-Artist: Pyramidhead
-Title: Pyramidhead
-Album: Pyramidhead
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Akira Yamaoka - Resting Comfortably on Pulsating Ambience.mp3
-Time: 605.9010000000001
-Artist: Akira Yamaoka
-Title: Resting Comfortably on Pulsating Ambience
-Album: Silent Hill 4 OST
-Track: 1
-Format: 44100:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Starflyer 59 - Monterey.mp3
-Time: 179.906
-Artist: Starflyer 59
-Title: Monterey
-Album: Silver
-Track: 1
-Date: 2011
-Genre: Alternative
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: The Solitaire – Bronx.mp3
-Time: 303.67
-Artist: Simple 1500 Series Vol 8: The Solitaire
-Title: Bronx
-Album: Simple 1500 Series Vol 8: The Solitaire
-Track: 1
-Format: 44100:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: EXTEND Akiaura - Sleepwalker.mp3
-Time: 85.67
-Artist: Akiaura
-Title: Sleepwalker (Guitar Remix)
-Album: Sleepwalker
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Spore Sountrack - Rich Relaxation.mp3
-Time: 350.342
-Artist: Spore Soundtrack
-Title: Rich Relaxation
-Album: Spore Soundtrack
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-song_begin: Undertale OST - Chill.mp3
-Time: 56.378
-Artist: Toby Fox
-Title: Chill
-Album: Undertale OST
-Track: 1
-Format: 48000:16:2
-mtime: 1724686566
-added: 1757035845
-song_end
-end: SINGLE

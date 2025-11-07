@@ -54,8 +54,8 @@ export BOOK_CURRENT=$HOME/disk/book/exam/security_plus/gibson_comptia_security_p
 export BOOK_CURRENT_2=$HOME/disk/book/reading/learningviandvimeditors8e.pdf
 export BOOK_FOLDER=$HOME/disk/book
 export WALLPAPER_FOLDER=$HOME/dots/wallpaper
-export WALLPAPER_VIDEO_FOLDER=$HOME/back_to_win/wallpaper/video
-export WALLPAPER_VIDEO_PLAYLISTS=$HOME/wallpaper/video/playlists
+export WALLPAPER_VIDEO_FOLDER=$HOME/media/wallpaper_old/video
+export WALLPAPER_VIDEO_PLAYLISTS=$HOME/media/wallpaper_old/video/playlists
 export WALLPAPER_THUMBNAILS=$HOME/.cache/wallpaper_thumbnails
 
 # PATH

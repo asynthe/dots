@@ -31,6 +31,7 @@
         socat # IPC
         swappy
         swayidle
+        wev
         wl-clipboard
 
         # Libs

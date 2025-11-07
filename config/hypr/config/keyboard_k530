@@ -1,0 +1,96 @@
+# ───────────────────────── Keybinds ─────────────────────────
+$mainMod = ALT
+
+# Zoom in/out with mouse wheel and arrow keys
+bind = $mainMod, mouse_down, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"
+bind = $mainMod, mouse_up, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 2.0}')" 
+bind = $mainMod, up, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor * 2.0}')"
+bind = $mainMod, down, exec, hyprctl keyword cursor:zoom_factor "$(hyprctl getoption cursor:zoom_factor | awk 'NR==1 {factor = $2; if (factor < 1) {factor = 1}; print factor / 2.0}')" 
+
+# Apps
+bind = $mainMod SHIFT, return, exec, [float] ghostty
+#bind = $mainMod SHIFT, return, exec, [float] wezterm
+bind = $mainMod, p, exec, pkill rofi || rofi -show drun
+bind = $mainMod, v, exec, [float] pkill pavucontrol || pavucontrol
+
+# Screenshots (with hyprshot and swappy)
+bind = $mainMod, t, exec, hyprshot --raw --mode region | swappy --file -
+bind = SUPER, s, exec, hyprshot --raw --mode region | swappy --file -
+bind = SUPER SHIFT, s, exec, hyprshot --raw --mode window | swappy --file -
+bind = SUPER CTRL, s, exec, hyprshot --raw --mode output | swappy --file -
+
+# Drawing (with gromix-mpx)
+# NOTE done with tray in waybar for now, but would be interesting to set up something like this.
+#bind = $mainMod, w, exec, gromix-mpx -a
+#bind = $mainMod, d, submap, Draw mode (gromit-mpx)
+#submap = Draw mode (gromit-mpx)
+#    bind = $mainMod, t, exec, gromit-mpx --toggle
+#    bind = $mainMod, c, exec, gromit-mpx --clear
+#    bind = $mainMod, v, exec, gromit-mpx --visibility
+#    bind = $mainMod, ., exec, gromit-mpx --undo
+#    #bind = SUPER, ,, exec, gromit-mpx --redo
+#    bind = , escape, exec, gromix-mpx --quit
+#    bind = , escape, submap, reset
+#submap = reset
+
+# Other
+bind = $mainMod SHIFT, o, exec, uwsm stop # exit
+bind = $mainMod, tab, exec, hyprctl --batch "dispatch cyclenext; dispatch bringactivetotop"
+
+# Windows
+bind = $mainMod SHIFT, c, killactive,
+bind = $mainMod SHIFT, t, pin,
+bind = $mainMod SHIFT, f, togglefloating,
+bind = $mainMod SHIFT, m, togglefloating,
+bind = $mainMod, d, togglesplit,
+bind = $mainMod, f, fullscreen,
+bind = $mainMod, m, fullscreen,
+bind = $mainMod, o, pseudo,
+
+# Focus
+bind = $mainMod SHIFT, comma, focusmonitor, -1
+bind = $mainMod SHIFT, period, focusmonitor, +1
+bind = $mainMod, h, movefocus, l
+bind = $mainMod, j, movefocus, d
+bind = $mainMod, k, movefocus, u
+bind = $mainMod, l, movefocus, r
+
+# Moving and Resizing
+# NOTE Another way is to create a submap
+# https://www.reddit.com/r/hyprland/comments/14jehzj/comment/jpl5c8f/
+bindm = $mainMod, mouse:272, movewindow
+bindm = $mainMod, mouse:273, resizewindow
+bind = $mainMod SHIFT, h, movewindow, l
+bind = $mainMod SHIFT, j, movewindow, d
+bind = $mainMod SHIFT, k, movewindow, u
+bind = $mainMod SHIFT, l, movewindow, r
+binde = $mainMod CTRL, h, resizeactive, -5% 0
+binde = $mainMod CTRL, j, resizeactive, 0 5%
+binde = $mainMod CTRL, k, resizeactive, 0 -5%
+binde = $mainMod CTRL, l, resizeactive, 5% 0
+
+# Workspaces
+bind = $mainMod, comma, workspace, e-1 # Cycles on each monitors open workspace
+bind = $mainMod, period, workspace, e+1
+bind = $mainMod, s, togglespecialworkspace
+bind = $mainMod, 1, workspace, 1
+bind = $mainMod, 2, workspace, 2
+bind = $mainMod, 3, workspace, 3
+bind = $mainMod, 4, workspace, 4
+bind = $mainMod, 5, workspace, 5
+bind = $mainMod, 6, workspace, 6
+bind = $mainMod, 7, workspace, 7
+bind = $mainMod, 8, workspace, 8
+bind = $mainMod, 9, workspace, 9
+bind = $mainMod, 0, workspace, 10
+bind = $mainMod SHIFT, 1, movetoworkspacesilent, 1
+bind = $mainMod SHIFT, 2, movetoworkspacesilent, 2
+bind = $mainMod SHIFT, 3, movetoworkspacesilent, 3
+bind = $mainMod SHIFT, 4, movetoworkspacesilent, 4
+bind = $mainMod SHIFT, 5, movetoworkspacesilent, 5
+bind = $mainMod SHIFT, 6, movetoworkspacesilent, 6
+bind = $mainMod SHIFT, 7, movetoworkspacesilent, 7
+bind = $mainMod SHIFT, 8, movetoworkspacesilent, 8
+bind = $mainMod SHIFT, 9, movetoworkspacesilent, 9
+bind = $mainMod SHIFT, 0, movetoworkspacesilent, 10
+bind = $mainMod SHIFT, s, movetoworkspacesilent, special

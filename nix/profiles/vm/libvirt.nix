@@ -18,8 +18,6 @@ in {
         virtualisation.libvirtd = {
             enable = true;
             qemu.swtpm.enable = true;
-            qemu.ovmf.enable = true;
-            qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
             qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
         };
 
