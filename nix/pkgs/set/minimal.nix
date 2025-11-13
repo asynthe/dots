@@ -40,5 +40,11 @@
 
         # GUI
         ghostty
+
+        # Tagging
+        puddletag
+
+        # Email
+        neomutt
       ];
 }
