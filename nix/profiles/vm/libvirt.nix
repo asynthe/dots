@@ -35,7 +35,7 @@ in {
             spice-protocol
             virt-viewer
             win-spice
-            win-virtio
+            virtio-win
             xorriso
         ];
     };

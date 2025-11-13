@@ -21,7 +21,7 @@
             source-sans-pro
             noto-fonts
             noto-fonts-cjk-sans
-            noto-fonts-emoji
+            noto-fonts-color-emoji
             nerd-fonts.fira-code
             nerd-fonts.iosevka-term
             nerd-fonts.iosevka-term-slab

@@ -68,7 +68,7 @@ in {
 
                 intel-media-driver # VA-API for Intel iHD Broadwell (2014) or newer
                 intel-vaapi-driver # VA-API for Intel i965 Broadwell (2014), better for Firefox?
-                vaapiVdpau # VDPAU driver for the VAAPI library
+                libva-vdpau-driver # VDPAU driver for the VAAPI library
             ];
 
             # For 32-bit, lol. I don't think I'll ever need it.
@@ -140,9 +140,8 @@ in {
 
         environment.systemPackages = with pkgs; [
             intel-gpu-tools
-            glxinfo # glxgears
+            mesa-demos # glxgears
             #glibc
-            #glxinfo # Check if running on gpu.
             #zenith-nvidia
             #vulkan-tools
             #virtualgl

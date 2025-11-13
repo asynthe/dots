@@ -18,9 +18,9 @@
         fcitx5 = {
             waylandFrontend = true;
             addons = with pkgs; [
-                fcitx5-configtool
                 fcitx5-gtk # Support for GTK-based programs
                 fcitx5-mozc # Japanese input
+                qt6Packages.fcitx5-configtool
             ];
         };
     };

@@ -17,6 +17,10 @@
         ../../pkgs/set/wm.nix
     ];
 
+    nixpkgs.config.permittedInsecurePackages = [
+        "electron-36.9.5"
+    ];
+
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
