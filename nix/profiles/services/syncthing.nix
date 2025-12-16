@@ -19,8 +19,8 @@ in {
         ];
 
         # Enable and configure.
-        #services.syncthing = {
-            #enable = true;
+        services.syncthing = {
+            enable = true;
             #systemService = true; # Run as system service.
             #user = "${user}";
             #package = ;
@@ -31,7 +31,7 @@ in {
 
             # Shared folders.
             #folders = ;
-        #};
+        };
 
         #services.syncthing.relay = {
             #enable = true;

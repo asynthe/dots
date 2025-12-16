@@ -37,16 +37,19 @@
 
         # Services
         ./services/android.nix
+        ./services/clamav.nix
         ./services/docker.nix
         ./services/docker-containers.nix
         ./services/endlessh.nix
         ./services/flatpak.nix
         ./services/grafana.nix
         ./services/i2pd.nix
+        ./services/kiwix.nix
         ./services/locate.nix
         ./services/monica.nix
         ./services/ollama.nix
         ./services/qbittorrent-nox.nix
+        ./services/radicale.nix
         ./services/sql.nix
         ./services/ssh.nix
         ./services/sshfs.nix

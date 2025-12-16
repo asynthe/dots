@@ -4,12 +4,6 @@ let
     cfg = config.meta.services.docker.containers;
     dockerEnabled = config.meta.services.docker.enable;    
 in {
-    # ───────────────────────── List ─────────────────────────
-    # - Monica
-    # - Radarr
-    # - Sonarr
-    # - Prowlarr
-
     # ───────────────────────── Options ─────────────────────────
     options.meta.services.docker.containers.monica = {
         enable = mkEnableOption "Enable and set up Monica (container).";

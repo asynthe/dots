@@ -1,25 +1,8 @@
 { config, lib, pkgs, ... }: {
 
-    # ───────────────────────── Imports ─────────────────────────
-    imports = [
-        # Simple Modules
-        ../../modules/simple/gpg.nix
-        ../../modules/simple/hyprland.nix
-        ../../modules/simple/ime.nix
-        ../../modules/simple/neovim.nix
-        ../../modules/simple/obs-studio.nix
-
-        # Packages
-        ../../pkgs/set/fonts.nix
-        ../../pkgs/set/fonts_jp.nix
-        ../../pkgs/set/minimal.nix
-        ../../pkgs/set/minimal_extra.nix
-        ../../pkgs/set/wm.nix
-    ];
-
-    nixpkgs.config.permittedInsecurePackages = [
-        "electron-36.9.5"
-    ];
+    #nixpkgs.config.permittedInsecurePackages = [
+    #    "electron-36.9.5"
+    #];
 
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
@@ -106,22 +89,25 @@
 
         # ─────────────── Services ───────────────
         services.android.enable = true;
+        services.clamav.enable = true;
         services.endlessh.enable = false;
         services.flatpak.enable = false;
         services.grafana.enable = false;
         services.i2pd.enable = false;
+        services.kiwix.enable = true;
         services.locate.enable = false;
         services.monica.enable = false;
         services.ollama.enable = false;
         services.qbittorrent-nox.enable = false;
+        services.radicale.enable = true;
         services.sql.enable = false;
+        services.ssh.configuration = "laptop"; # laptop, server
         #services.sql.backend = [ "mysql" "postgresql" ];
         services.ssh.enable = true;
-        services.ssh.configuration = "laptop"; # laptop, server
         services.sshfs.enable = false;
-        services.syncthing.enable = false;
+        services.syncthing.enable = true;
         services.wine.enable = false;
-        services.xmr.enable = false;
+        services.xmr.enable = true;
 
         # ─────────────── Services - Ports ───────────────
         # TODO
@@ -129,6 +115,7 @@
         #services.ssh.port = 2001;
         #services.grafana.port = 2002;
         #services.syncthing.port = 2003;
+        #services.kiwix.port = 2003;
 
         # ─────────────── Docker + Containers ───────────────
         services.docker.enable = true;

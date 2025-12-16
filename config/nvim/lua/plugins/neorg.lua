@@ -45,7 +45,7 @@ return {
                     config = {
                         default_workspace = "notes",
                         workspaces = {
-                            notes = "~/notes",
+                            notes = "/home/meow/media/ben/notes",
                         },
                     },
                 },

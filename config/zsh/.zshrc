@@ -15,7 +15,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     export WEZTERM_CONFIG_FILE=$HOME/.config/wezterm/.wezterm.lua
     #export GNUPGHOME=$HOME/ben/pass/gpg
     
-    export ANKI_BASE=$HOME/disk/jp/anki
+    # Anki
+    #export ANKI_BASE=$HOME/disk/jp/anki
     export ANKI_WAYLAND=1
 
 # macOS
@@ -339,3 +340,5 @@ functions[zvm_bindkey]='
     builtin bindkey "$@" 2>/dev/null || return 0
   }
 '
+
+starfetch

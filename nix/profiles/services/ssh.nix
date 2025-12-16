@@ -1,7 +1,7 @@
 # TODO
 # Configure `config.meta.services.ssh.port`.
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.services.ssh;
@@ -28,6 +28,7 @@ in {
     # ───────────────────────── Configuration ─────────────────────────
     config = mkIf cfg.enable {
 
+        environment.systemPackages = with pkgs; [ lazyssh ];
         programs.mosh.enable = mkIf cfg.mosh true;
         services.openssh = mkMerge [
             {

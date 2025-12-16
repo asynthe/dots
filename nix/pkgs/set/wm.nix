@@ -3,10 +3,10 @@
     environment.systemPackages = with pkgs; [
 
         # ───────────────────────── Emacs ─────────────────────────
-        emacs-pgtk
-        hunspell
-        hunspellDicts.en_US # English (United States) from Wordlist
-        hunspellDicts.es_CL # Spanish (Chile) from rla ?
+        #emacs-pgtk
+        #hunspell
+        #hunspellDicts.en_US # English (United States) from Wordlist
+        #hunspellDicts.es_CL # Spanish (Chile) from rla ?
 
         # Emacs - Packages
         #emacsPackages.doom-modeline
@@ -68,7 +68,7 @@
         # Social
         signal-desktop
         telegram-desktop
-        webcord #discord # fuck discord
+        discord #webcord # fuck discord
         #hexchat # IRC
 
         # Propietary
@@ -90,6 +90,7 @@
         # Apps
         gimp3-with-plugins # Remember to configure photogimp
         librewolf dejsonlz4 # Decompress bookmarks backup files.
+        ungoogled-chromium #brave
         tor-browser
         mpv hypnotix
         qbittorrent
@@ -103,7 +104,6 @@
         #keepassxc
         #libreoffice
         #obsidian
-        #ungoogled-chromium #brave
         #ventoy-full #ventoy
         #kdenlive
         #nicotine-plus

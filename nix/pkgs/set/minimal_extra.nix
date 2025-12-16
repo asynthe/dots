@@ -28,7 +28,7 @@
         httpie
 
         # Nvidia
-        nvtopPackages.full #pkgs-stable.nvtopPackages.full
+        #nvtopPackages.full #pkgs-stable.nvtopPackages.full
         #nvtopPackages.nvidia
 
         # ───────────────────────── CLI ─────────────────────────
