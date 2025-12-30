@@ -26,6 +26,7 @@
         nh
         pass-wayland
         pv
+        python3
         rsync
         sioyek
         sox

@@ -54,6 +54,7 @@
         ./services/ssh.nix
         ./services/sshfs.nix
         ./services/syncthing.nix
+        ./services/vdirsyncer.nix
         ./services/wine.nix
         ./services/xmr.nix
 

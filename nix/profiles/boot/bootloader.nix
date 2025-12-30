@@ -3,7 +3,7 @@
 # TODO Secure
 # See what files to persist?
 
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib; with types;
 let
     cfg = config.meta.boot.bootloader;
@@ -106,7 +106,7 @@ in {
             environment.systemPackages = with pkgs; [ sbctl ];
 
             # -------------- Persistence --------------
-            environment.persistence."/persist".directories = mkIf cfg.disk.persistence.enable [
+            environment.persistence."/persist".directories = mkIf config.meta.disk.persistence.enable [
                 config.boot.lanzaboote.pkiBundle  
             ];
         })

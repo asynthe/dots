@@ -1,9 +1,5 @@
 { config, lib, pkgs, ... }: {
 
-    #nixpkgs.config.permittedInsecurePackages = [
-    #    "electron-36.9.5"
-    #];
-
     # ───────────────────────── System Information ─────────────────────────
     networking.hostName = "raider";
     system.stateVersion = "24.11";
@@ -42,7 +38,7 @@
         #boot.banner = "simple_cat"; # simple_cat, hentai
         #boot.cleantmp = true;
         boot.bootloader.type = "systemd-boot";
-        boot.bootloader.generations = 3; # Secure Boot (Lanzaboote)
+        boot.bootloader.generations = 3;
         boot.bootloader.secure = false; # Secure Boot (Lanzaboote)
         boot.bootloader.silent = true;
 
@@ -106,6 +102,7 @@
         services.ssh.enable = true;
         services.sshfs.enable = false;
         services.syncthing.enable = true;
+        services.vdirsyncer.enable = true;
         services.wine.enable = false;
         services.xmr.enable = true;
 
