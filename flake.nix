@@ -1,135 +1,156 @@
+/*
+   ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  ⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣤⣶⣶⣿⣿⡗
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀
+  ⣿⣿⡇⠜⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ ⠀
+  ⣿⣿⣿⣶⣿⣿⣿⣿⣿⠋⡹⠙⣿⣿⣿⡇⠀⠀
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣾⣿⣿⠛⠀⠀⠀⠀⠀
+  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠁⠀⠀⠀⠀⠀⠀
+  ⣿⣿⡿⠻⠿⠿⠿⠿⠛⠹⠑
+  ⠟
+
+  asynthe's system flake, 2026
+  refer to readme.md for more information on how to use this flake.
+*/
+
 {
     description = "asynthe's system flake";
     inputs = {
 
-        # nixpkgs
+        # Main
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
         nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+        home-manager.url = "github:nix-community/home-manager";
+        home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-	    # Other
+        # Other
         nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+        nixgl.url = "github:nix-community/nixGL";
+        nixgl.inputs.nixpkgs.follows = "nixpkgs";
+
+        # Other 2
         nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-        disko.inputs.nixpkgs.follows = "nixpkgs";
         disko.url = "github:nix-community/disko";
+        disko.inputs.nixpkgs.follows = "nixpkgs";
         impermanence.url = "github:nix-community/impermanence";
-        lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
         lanzaboote.url = "github:nix-community/lanzaboote";
+        lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
         musnix.url = "github:musnix/musnix";
         sops-nix.url = "github:Mic92/sops-nix";
 
         # Apps
         swww.url = "github:LGFae/swww";
         norgolith.url = "github:NTBBloodbath/norgolith";
-	    #nixvim = {
-            #url = "github:nix-community/nixvim";
-	        #inputs.nixpkgs.follows = "nixpkgs";
-        #};
+
     };
 
     outputs = {
-
-        # Main
         self,
         nixpkgs,
         nixpkgs-stable,
-
-        # Other
-        nixos-hardware,
-        nixos-wsl,
-        disko,
-        impermanence,
-        lanzaboote,
-        musnix,
-        sops-nix,
-
-        # Apps
-        #nixvim,
-        norgolith,
-        swww,
+        home-manager,
+        nixgl,
         ...
-    
-    #}: let
-	    #system = "x86_64-linux";
-        #pkgs = nixpkgs.legacyPackages.${system};
-        #pkgs-stable = nixpkgs-stable.legacyPackages.${system};
-    
-    } @ inputs: let inherit (self) outputs;
+    } @ inputs:
 
-        # Supported systems
-        systems = [
-            "x86_64-linux"
-            "i686-linux"
-            "aarch64-linux"
-            "x86_64-darwin"
-            "aarch64-darwin"
-        ];
+    let
+        inherit (nixpkgs) lib;
+        inherit (self) outputs;
 
-        # Attribute -> calling a function you call to it passing each system as an argument.
-        forAllSystems = nixpkgs.lib.genAttrs systems;
-        
-        #pkgs = nixpkgs.legacyPackages.${system};
-	    system = "x86_64-linux";
-        pkgs-stable = nixpkgs-stable.legacyPackages.${system};
+        hostDirs = builtins.attrNames (
+            lib.filterAttrs
+                (name: type: type == "directory")
+                (builtins.readDir ./nix/hosts)
+        );
 
-    in {
-        # NixOS configurations
-        nixosConfigurations = {
+        homeDirs = builtins.attrNames (
+            lib.filterAttrs
+                (name: type: type == "directory")
+                (builtins.readDir ./nix/home)
+        );
 
-            # Raider
-            raider = nixpkgs.lib.nixosSystem {
-                specialArgs = { inherit inputs outputs pkgs-stable; };
-                modules = [
-                    ./nix/hosts/raider
-	                sops-nix.nixosModules.sops
-                    disko.nixosModules.disko
-                    impermanence.nixosModules.impermanence
-                    lanzaboote.nixosModules.lanzaboote
-                    musnix.nixosModules.musnix
-                ];
+        mkPkgs = nixpkgsInput: arch:
+            import nixpkgsInput {
+                system = arch;
+                config.allowUnfree = true;
             };
 
-	        # Server
-            #server = nixpkgs-stable.lib.nixosSystem {
-                #specialArgs = { inherit inputs outputs pkgs-stable; };
-                #modules = [
-                    #./hosts/server
-	                #sops-nix.nixosModules.sops
-                    #disko.nixosModules.disko
-                    #impermanence.nixosModules.impermanence
-                    #lanzaboote.nixosModules.lanzaboote
-                #];
-            #};
+        mkArchConfig = path:
+            let
+                archConfig = import path;
+                arch = archConfig.arch;
+                channel = archConfig.channel;
+                nixglPkgs = nixgl.packages.${arch};
 
-            # WSL
-            wsl = nixpkgs.lib.nixosSystem {
-	            specialArgs = { inherit inputs outputs pkgs-stable; };
-		        modules = [
-		            ./nix/hosts/wsl
-	                sops-nix.nixosModules.sops
-                    disko.nixosModules.disko
-                    impermanence.nixosModules.impermanence
-                    lanzaboote.nixosModules.lanzaboote
-                    musnix.nixosModules.musnix
-		            nixos-wsl.nixosModules.default
-                ];
-	        };
-        };
+                pkgs =
+                    if channel == "unstable" then
+                        mkPkgs nixpkgs arch
+                    else if channel == "stable" then
+                        mkPkgs nixpkgs-stable arch
+                    else
+                        throw "Invalid channel '${channel}' in ${toString path}";
+            in {
+                inherit arch channel pkgs nixglPkgs;
+                pkgs-stable = mkPkgs nixpkgs-stable arch;
+            };
 
-        # Home Manager configurations
-        #homeConfigurations = {
+        mkHost = host:
+            let
+                cfg = mkArchConfig ./nix/hosts/${host}/arch.nix;
+            in {
+                name = host;
 
-            # meow
-            #meow = home-manager.lib.homeManagerConfiguration {
-                #pkgs = nixpkgs.legacyPackages.x86_64-linux; # Required by Home Manager.
-                #extraSpecialArgs = { inherit inputs outputs pkgs-stable;
-	                #user = "meow";
-                #};
-                #modules = [ 
-	                #./nix/pkgs/home/meow 
-	                #nixvim.homeManagerModules.nixvim
-	                #sops-nix.homeManagerModules.sops
-	            #];
-            #};
-        #};
+                value = lib.nixosSystem {
+                    system = cfg.arch;
+                    pkgs = cfg.pkgs;
+
+                    specialArgs = {
+                        inherit inputs outputs;
+                        channel = cfg.channel;
+                        pkgs-stable = cfg.pkgs-stable;
+                        nixglPkgs = cfg.nixglPkgs;
+                    };
+
+                    modules = [
+                        ./nix/hosts/${host}
+                        inputs.sops-nix.nixosModules.sops
+                        inputs.disko.nixosModules.disko
+                        inputs.impermanence.nixosModules.impermanence
+                        inputs.lanzaboote.nixosModules.lanzaboote
+                        inputs.musnix.nixosModules.musnix
+                    ];
+                };
+            };
+
+        mkHome = user:
+            let
+                cfg = mkArchConfig ./nix/home/${user}/arch.nix;
+            in {
+                name = user;
+                value = home-manager.lib.homeManagerConfiguration {
+                    pkgs = cfg.pkgs;
+
+                    extraSpecialArgs = {
+                        inherit inputs outputs;
+                        channel = cfg.channel;
+                        pkgs-stable = cfg.pkgs-stable;
+                        nixglPkgs = cfg.nixglPkgs;
+                    };
+
+                    modules = [
+                        ./nix/home/${user}
+                    ];
+                };
+            };
+
+    in {
+        nixosConfigurations =
+            builtins.listToAttrs (map mkHost hostDirs);
+
+        homeConfigurations =
+            builtins.listToAttrs (map mkHome homeDirs);
     };
 }
