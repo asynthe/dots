@@ -30,7 +30,6 @@
         weechat
         yazi
         zellij
-        weechat
 
         # Audio visualizer and others
         alsa-utils pulsemixer # from pulseaudio
