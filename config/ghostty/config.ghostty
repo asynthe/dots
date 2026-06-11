@@ -1,0 +1,93 @@
+# ───────────────────────── Ghostty ─────────────────────────
+# Settings
+focus-follows-mouse = false
+window-inherit-font-size = true
+window-inherit-working-directory = true 
+working-directory = home
+
+# Opacity
+#background-opacity = 0
+#background-opacity = 0.2
+background-opacity = 0.5
+#background-opacity = 1
+#unfocused-split-opacity = 0.9
+
+# Padding
+#window-padding-balance = true
+#window-padding-x = 5, 0
+#window-padding-y = 10, 0
+
+# Titlebar
+window-decoration = auto
+gtk-titlebar = true
+#adw-toolbar-style = raised-border # TODO Remove bc old
+gtk-tabs-location = bottom
+gtk-wide-tabs = true
+#window-theme = dark
+window-theme = ghostty
+
+# Font
+font-family = JetBrainsMono Nerd Font
+font-style = Regular
+font-size = 14
+font-thicken = true
+
+# Colors
+background = #080808
+foreground = #dddddd
+selection-background = #1c2f39
+selection-foreground = #dddddd
+cursor-color = #e6eaea
+
+# ───────────────────────── Shaders ─────────────────────────
+# NOTE This requires performance
+#custom-shader-animation = true
+#custom-shader = shaders/animated-gradient-shader.glsl
+#custom-shader = shaders/galaxy.glsl
+#custom-shader = shaders/just-snow.glsl
+#custom-shader = shaders/starfield-colors.glsl
+#custom-shader = shaders/starfield.glsl
+
+# ───────────────────────── Keybinds ─────────────────────────
+# Ignore default fullscreen keybind
+keybind = ctrl+enter=ignore 
+
+# Main
+keybind = shift+ctrl+r=reload_config
+keybind = ctrl+w=close_surface
+confirm-close-surface = false
+
+# Split screen
+keybind = ctrl+.=toggle_split_zoom
+keybind = ctrl+\=new_split:right
+keybind = shift+ctrl+\=new_split:down
+
+# Focus
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:down
+keybind = ctrl+k=goto_split:up
+keybind = ctrl+l=goto_split:right
+#keybind = super+h=goto_split:left
+#keybind = super+j=goto_split:down
+#keybind = super+k=goto_split:up
+#keybind = super+l=goto_split:right
+#keybind = super+;=goto_split:right
+
+# Resize
+keybind = ctrl+shift+h=resize_split:left,40
+keybind = ctrl+shift+j=resize_split:down,40
+keybind = ctrl+shift+k=resize_split:up,40
+keybind = ctrl+shift+l=resize_split:right,40
+
+# Tabs
+keybind = ctrl+t=new_tab
+#keybind = ctrl+[=previous_tab # For nvim
+#keybind = ctrl+]=next_tab # For nvim
+keybind = alt+[=previous_tab
+keybind = alt+]=next_tab
+keybind = ctrl+shift+[=move_tab:-1
+keybind = ctrl+shift+]=move_tab:1
+keybind = ctrl+shift+left=move_tab:-1
+keybind = ctrl+shift+right=move_tab:1
+#keybind = super+[=previous_tab
+#keybind = super+]=next_tab

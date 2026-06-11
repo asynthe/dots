@@ -1,0 +1,130 @@
+#souce $BASHDIR/keybindings
+#source $BASHDIR/scripts/lfcd
+
+#set -o vi
+force_color_prompt=yes
+
+shopt -s autocd
+
+export HISTSIZE=10000
+export HISTFILESIZE=120000
+
+export PASSWORD_STORE_DIR=$HOME/sync/ben/pass/pass
+
+##### KEYBINDINGS #####
+#bind '"\C-u":"Hello!"'
+#bind '"\C-a":"ncmpcpp\n"'
+#bind '"\C-z":"lfcd\n"'
+#bind '"\C-v":"vis\n"'
+bind '"\C-x":"lfcd\C-m"'
+set -o ignoreeof # unbind C-d
+
+lfcd () {
+    tmp="$(mktemp)"
+    # `command` is needed in case `lfcd` is aliased to `lf`
+    command lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}
+
+#alias off='doas poweroff'
+alias off='doas shutdown now'
+alias restart='doas reboot'
+alias shell='which $SHELL'
+alias fstab='doas nvim /etc/fstab'
+alias mkd='mkdir'
+
+alias hdd='doas mkdir -p /mnt/hdd ; doas mount /dev/sdb2 /mnt/hdd ; lfcd /mnt/hdd'
+alias usb='doas mkdir /run/media/usb && doas mount /dev/sdb2 /run/media/usb && lf /run/media/usb'
+alias echo-off='doas echo 0 | doas tee /sys/module/snd_hda_intel/parameters/power_save && doas echo 0 | doas tee /sys/module/snd_hda_intel/parameters/power_save_controller'
+
+alias scan='iwctl station wlan0 scan'
+alias nm='doas nmtui'
+# trash-cli
+alias rmv='trash-put'
+#alias rm='echo "This is not the command you are looking for."; false'
+alias rmv-list='trash-list'
+alias rmv-empty='trash-empty'
+alias rmv-restore='trash-restore'
+
+alias ,='cd -'
+alias ..='cd ..'
+alias ls='exa --icons --group-directories-first'
+alias la='exa --icons -a --group-directories-first'
+alias ll='exa --long --group-directories-first'
+alias lla='exa --long -a --group-directories-first'
+alias lg='exa --long --git --group-directories-first'
+#alias cat='bat'
+
+alias srcbash='source ~/.config/bash/bashrc'
+alias bashrc='nvim ~/.config/bash/bashrc'
+alias b-alias='nvim ~/.config/bash/aliases'
+alias histbash='nvim ~/.bash_history'
+# SHELL - BASH
+# SHELL - ZSH
+alias srczsh='source ~/.config/zsh/.zshrc'
+alias zshrc='nvim ~/.config/zsh/.zshrc'
+alias zshenv='nvim ~/.zshenv'
+alias keybinds='nvim ~/.config/zsh/keybinds'
+alias z-alias='nvim ~/.config/zsh/aliases'
+alias histzsh='nvim ~/.bash_history'
+
+##### OS - NIXOS / NIX #####
+alias nixconf='doas nvim /etc/nixos/configuration.nix'
+alias rebuild='doas nixos-rebuild switch'
+
+
+##### X11 ######
+alias xinit='nvim ~/.xinitrc'
+#alias xwall='fd . /home/asynthe/sync/system/wallpaper -e jpg -e png | fzf | xargs feh' # INSTALL FEH AND FIX
+# HDMI
+#alias hdmi='xrandr --output eDP-1 --mode 1920x1080 --rate 144.00 && xrandr --output HDMI-1-0 --primary --mode 1920x1080 --rate 60.00 --right-of eDP-1'
+#alias hdmi-bigtv='xrandr --output eDP-1 --primary --mode 1920x1080 --rate 144.00 --output HDMI-1-0 --mode 1920x1080 --rate 60.00 --right-of eDP-1'
+#alias hdmi-off='xrandr --output HDMI-1-0 --off'
+
+##### WAYLAND #####
+alias ss='grim -g "$(slurp)"'
+alias bg-start='swww init'
+alias bg-kill='swww kill'
+alias wall-loop='fd . /home/asynthe/sync/system/wallpaper/loops -e jpg -e png | fzf | xargs swww img'
+#alias wall-video='fd . /home/asynthe/sync/system/wallpaper/video -e mp4 | fzf | xargs mpvpaper -f -o "loop-file=inf"'
+#alias retrowave='mpvpaper -f -o "loop-file=inf" eDP-1 ~/main-not-synced/system/wallpapers/video/loops_1920x1080/retrowave_1920x1080.mp4'
+
+alias pdf='zathura'
+alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
+alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
+
+# Nvim 
+alias nv='nvim' 
+alias nvv='doas nvim'
+
+alias clock='peaclock --config-dir ~/.config/peaclock'
+alias rice='neofetch --source ~/mega/system/dotfiles/neofetch/ascii-art/shiny-eyes'
+alias map='mapscii'
+alias pipes='pipes-rs'
+
+# Kernel's Soul
+alias kernel-soul='aplay -c 2 -f S16_LE -r 44100 /dev/random'
+alias kernel-soul-8hz='aplay /dev/random'
+alias kernel-soul-pa='pacat /dev/urandom'
+
+alias book='fd . /home/asynthe/sync/study/books -e pdf -e epub | fzf | xargs zathura'
+alias cissp='zathura ~/sync/study/platform/frsecure/1_book.pdf'
+alias sicp='zathura ~/sync/study/books/various/structure_and_interpretation_of_computer_programs.pdf'
+alias mgs='zathura ~/sync/study/books/various/art/the_art_of_metal_gear_solid_i_iv_studio_works.pdf'
+alias mgsv='zathura ~/sync/study/book/various/art/the_art_of_metal_gear_soliv_v.pdf'
+#alias genki=''
+#alias genki-wb=''
+#alias eh='zathura'
+#alias cyberwr='zathura'
+#alias bj
+#alias lcl
+#alias art-exploit
+#alias smart-notes

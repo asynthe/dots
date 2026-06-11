@@ -1,0 +1,27 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+email = "ben"
+name = "asynthe"
+
+[git]
+push-new-bookmarks = true
+
+[ui]
+default-command = ["log", "-T", "builtin_log_oneline"]
+editor = "nvim"
+paginate = "never"
+
+[template-aliases]
+# Username part of the email address
+'format_short_signature(signature)' = 'signature.email().local()'
+# Relative timestamp rendered as "x days/hours/seconds ago"
+'format_timestamp(timestamp)' = 'timestamp.ago()'
+# Hide git commit id
+'format_short_commit_id(id)' = '""'
+
+[templates]
+log = "builtin_log_comfortable"
+
+[snapshot]
+max-new-file-size = "45MiB"

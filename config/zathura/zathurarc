@@ -1,0 +1,33 @@
+# ───────────────────────── Settings ─────────────────────────
+set guioptions ""
+set selection-clipboard clipboard
+set adjust-open "best-fit"
+set pages-per-row 1
+set zoom-min 10
+set render-loading "false"
+
+# UI
+set font "Iosevka Nerd Font 16"
+set default-bg "#000000" #00
+set default-fg "#F7F7F6" #01
+
+set statusbar-fg "#B0B0B0" #04
+set statusbar-bg "#000000" #01
+	    
+# Dark mode
+set recolor true # Start in dark mode
+#set recolor-lightcolor "#E0E0E0" #06
+set recolor-reverse-video "true"
+#set recolor-keephue "true"
+
+# Scroll
+set scroll-page-aware "true"
+#set smooth-scroll "true"
+set scroll-full-overlap 0.01
+#set scroll-step 100
+set scroll-step 50
+
+# ───────────────────────── Keybinds ─────────────────────────
+unmap f
+map f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen

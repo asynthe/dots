@@ -1,0 +1,105 @@
+// ───────────────────────── Hyprland ─────────────────────────
+{
+    // Workspaces
+    "hyprland/workspaces": {
+        "active-only": false,
+        "all-outputs": true,
+        "disable-scroll": true,
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        //"warp-on-scroll": true,
+        "persistent_workspaces": {
+            "*": 10
+            //"1": [],
+            //"2": [],
+            //"3": [],
+            //"4": [],
+            //"5": [],
+            //"6": [],
+            //"7": [],
+            //"8": [],
+            //"9": [],
+            //"10": []
+       }
+
+        // Numbers
+        //"format": "{icon}",
+        //"format-icons": {
+            //"1": "1",
+            //"2": "2",
+            //"3": "3",
+            //"4": "4",
+            //"5": "5", 
+            //"6": "6",
+            //"7": "7",
+            //"8": "", // 
+            //"9": "", // 
+            //"10": "󰊴",
+            //"urgent": "",
+            //"focused": "",
+            //"default": ""
+        //}
+
+        // Kanji
+        //"format": "{icon}",
+        //"format-icons": {
+            //"1": "一",
+            //"2": "二",
+            //"3": "三",
+            //"4": "四",
+            //"5": "五", 
+            //"6": "六",
+            //"7": "七",
+            //"8": "八",
+            //"9": "九",
+            //"10": "十",
+            //"urgent": "",
+            //"focused": ""
+          // "default": ""
+        //}
+    },
+
+    // Window
+    "hyprland/window": {
+        "separate-outputs": true,
+        "max-length": 50,
+        "rewrite": {
+            "(.*) - Mozilla Firefox": "$1",
+            "(.*) - QGIS": "$1",
+            "(.*) - Tor Browser": "$1",
+            "(.*) - YouTube — Librewolf": "$1",
+            "(.*) - mpv": "$1",
+            "(.*) - zsh": "> [$1]",
+            "(.*) on QEMU/KVM": "$1",
+            "(.*) — Librewolf": "Librewolf",
+            "Yazi: (.*)": "$1",
+            "(.*) WebCord (.*)": "Discord",
+            "Spotify Premium": "Spotify",
+            "qBittorrent (.*)": "qBittorrent"
+            // "(.*) — Librewolf": "$1",
+            // "(.*) - GNU Emacs at server": "$1"
+            // "/home/asynthe/jp/N3JP.pdf -> N3JP
+        }
+    },
+
+    // Mode
+    "hyprland/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+
+    // Scratchpad
+    "hyprland/scratchpad": {
+        "format": "{icon} {count}",
+        //"show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+
+    // Submap
+    "hyprland/submap": {
+        "format": "[ {} ]",
+        //"max-length": 8,
+        "tooltip": false
+    }
+}

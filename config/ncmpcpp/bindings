@@ -1,0 +1,101 @@
+# ncmpcpp works by having a main playlist being played and a list of playlists.
+
+# ───────────────────────── Main keybinds ─────────────────────────
+def_key "<"
+  seek_backward
+def_key ">"
+  seek_forward
+def_key "="
+  volume_up
+def_key "I"
+  show_server_info
+def_key "R"
+  add_random_items
+def_key "d"
+  delete_playlist_items
+  delete_browser_items
+  delete_stored_playlist
+def_key "p"
+  pause
+def_key "q"
+  quit
+def_key "tab"
+  next_screen
+def_key "u"
+  update_database
+
+# Vi keys
+def_key "J"
+  move_selected_items_down
+def_key "K"
+  move_selected_items_up
+def_key "G"
+  move_end
+def_key "g"
+  move_home
+# Movement
+def_key "h"
+  jump_to_parent_directory
+  previous_column
+def_key "j"
+  scroll_down
+def_key "k"
+  scroll_up
+def_key "l"
+  enter_directory
+
+# Arrow keys
+def_key "left"
+  previous_column
+  jump_to_parent_directory
+def_key "down"
+  scroll_down
+def_key "up"
+  scroll_up
+def_key "right"
+  enter_directory
+
+# ───────────────────────── Playlist ─────────────────────────
+# FIX - IN PROGRESS
+#def_key "e"
+#  edit_playlist_name
+#def_key "space"
+#  add_item_to_playlist
+#def_key "delete"
+#  delete_playlist_items
+#def_key "delete"
+#  delete_stored_playlist
+
+# ───────────────────────── Toggle ─────────────────────────
+def_key "z"
+  toggle_random
+def_key "Z"
+  shuffle
+def_key "x"
+  toggle_single
+def_key "X"
+  toggle_crossfade
+def_key "c"
+  toggle_repeat
+def_key "v"
+  toggle_consume
+def_key "b"
+  toggle_replay_gain_mode
+def_key "B"
+  toggle_bitrate_visibility
+
+# ───────────────────────── Views ─────────────────────────
+def_key "1"
+  show_playlist
+def_key "2"
+  show_browser
+def_key "3"
+  show_clock
+def_key "4"
+  show_help
+def_key "5"
+  show_playlist_editor
+
+# This messes up ghostty focus right pane.
+def_key "ctrl-l"
+  dummy

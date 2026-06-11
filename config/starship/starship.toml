@@ -1,0 +1,162 @@
+# ------------------------- Configuration -------------------------
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true # Insert a new line between shell prompts
+command_timeout = 20000
+continuation_prompt = "▶▶"
+right_format = "」にゃ~(white)"
+
+[line_break]
+disabled = true # Two lines.
+
+[cmd_duration]
+disabled = true
+show_milliseconds = false
+style = "bold italic red"
+
+# Username
+[username]
+disabled = false
+format = "[$user ](#0099ff)"
+show_always = true
+style_root = "bg:#9A348E"
+style_user = "bg:#9A348E"
+
+# Hostname
+[hostname]
+disabled = false
+format = "on [$hostname](#ff3399) "
+ssh_only = false
+trim_at = "."
+
+# Prompt
+[character]
+success_symbol = "[「](white)"
+error_symbol = "[ >_< [「]()](bold red)"
+vimcmd_replace_one_symbol = "[「](white)"
+vimcmd_replace_symbol = "[「](white)"
+vimcmd_symbol = "[「](white)"
+vimcmd_visual_symbol = "[「](white)"
+#error_symbol = "[ ノ_< [「]()](bold red)"
+# Prompt - Vim mode
+
+# Directory
+[directory]
+disabled = false
+format = "in [$path]($style) "
+read_only = ""
+truncation_length = 2
+truncation_symbol = ".../"
+
+[directory.substitutions]
+"~" = "󰋜 "
+".config" = " "
+"Desktop" = " "
+"Downloads" = "󰇚 "
+"games" = " "
+"music" = " "
+"sync" = " "
+
+# ------------------------ Icons ------------------------
+
+# Git
+[git_branch]
+symbol = " "
+#[git_status]
+#style = "167"
+#conflicted = "🏳"
+#ahead = "🏎💨"
+#behind = "😰"
+#diverged = "😵"
+#up_to_date = "✓"
+#untracked = "🤷‍"
+#stashed = "📦"
+#modified = "📝"
+#staged = '[++\($count\)](green)'
+#renamed = "👅"
+#deleted = "🗑"
+
+[package]
+disabled = false
+symbol = " "
+
+# Others
+[aws]
+symbol = "  "
+
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[container]
+disabled = true
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[meson]
+symbol = "喝 "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "ﳒ "
+
+[ruby]
+disabled = true
+symbol = " "
+
+[rust]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[spack]
+symbol = "🅢 "

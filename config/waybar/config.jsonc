@@ -1,0 +1,48 @@
+[
+    // eDP-1 -> MSI Raider GE68HX
+    // DP-2 -> CRUA Ultrawide
+    {
+        "output": [ "eDP-1", "DP-2" ],
+        "layer": "top",
+        "position": "bottom", // top, bottom, left, right
+        "height": 36, // TODO to be removed for auto height (?)
+        //"width": 1280,
+        "spacing": 2, // Gaps between modules (4px)
+
+        // Module setup
+        "modules-left": [ "hyprland/workspaces", "hyprland/submap", "custom/media" ],
+        "modules-right": [ "tray", "battery", "clock" ],
+        //"modules-center": [ "hyprland/window" ],
+        //"modules-center": [ "tray" ],
+        //"modules-right": [ "mpd", "cava", "tray", "network", "battery", "clock" ],
+
+        // Modules
+        "include": [
+            "~/.config/waybar/modules/default.jsonc",
+            "~/.config/waybar/modules/hyprland.jsonc",
+            "~/.config/waybar/modules/cava.jsonc",
+            "~/.config/waybar/modules/mpd.jsonc"
+        ]
+    },
+
+    // DP-1 -> Arzopa F1ZC
+    // DP-3 -> Arzopa F1ZC
+    {
+        "output": [ "!eDP-1", "!DP-2" ],
+        "layer": "top",
+        "position": "bottom", // top, bottom, left, right
+
+        // Modules
+        //"modules-left": [ "" ],
+        //"modules-center": [ "" ],
+        "modules-right": [ "clock" ],
+
+        // Imports
+        "include": [
+            "~/.config/waybar/modules/default.jsonc",
+            "~/.config/waybar/modules/hyprland.jsonc",
+            "~/.config/waybar/modules/cava.jsonc",
+            "~/.config/waybar/modules/mpd.jsonc"
+        ]
+    }
+]

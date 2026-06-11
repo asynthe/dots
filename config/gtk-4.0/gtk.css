@@ -1,0 +1,55 @@
+@define-color window_bg_color #000000;
+@define-color headerbar_bg_color #000000;
+@define-color view_bg_color #000000;
+@define-color popover_bg_color #1e1e1e;
+@define-color dialog_bg_color #000000;
+@define-color sidebar_bg_color #000000;
+@define-color card_bg_color #0a0a0a;
+@define-color window_fg_color #ffffff;
+@define-color view_fg_color #ffffff;
+@define-color headerbar_fg_color #ffffff;
+@define-color popover_fg_color #ffffff;
+
+/* Base window */
+window, .background,
+window.background, window.background:backdrop {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Headerbar */
+headerbar, headerbar:backdrop {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Sidebar - stays dark even when unfocused */
+.sidebar, .sidebar:backdrop,
+.navigation-sidebar, .navigation-sidebar:backdrop {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Popovers and dropdowns */
+popover, popover.background,
+combobox window.popup,
+.combo window.popup,
+menu, menuitem {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+menuitem:hover, menuitem:selected {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+combobox .combo, .combo .entry, combobox button {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+/* File chooser */
+window.filechooser:backdrop {
+    background-color: #000000;
+}

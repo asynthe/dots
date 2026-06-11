@@ -1,0 +1,5 @@
+mp.register_event("file-loaded", function()
+    local path = mp.get_property("path")
+    local filename = mp.get_property("filename")
+    mp.osd_message("▶ Playing: " .. filename, 2)
+end)

@@ -1,0 +1,124 @@
+#! /usr/bin/env bash
+
+# ASCII
+# TODO Use this cat on LUKS unlock
+
+# TODO Zsh setup
+# symlink to .zshenv in dots/config/zsh?
+
+# TODO Can I run the flake from inside a Windows folder?
+# TODO If WSL is detected, then add a symlink to `/mnt/c/Users/ben/Desktop` to `$HOME`.
+# -> Ask what the Windows username is?
+
+display_ascii_art() {
+    cat << "EOF" | pv -qL 470
+  ⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣤⣶⣶⣿⣿⡗
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟ 
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀
+⣿⣿⡇⠜⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ ⠀  
+⣿⣿⣿⣶⣿⣿⣿⣿⣿⠋⡹⠙⣿⣿⣿⡇⠀⠀  
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣾⣿⣿⠛⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠁⠀⠀⠀⠀⠀⠀
+⣿⣿⡿⠻⠿⠿⠿⠿⠛⠹⠑⠀⠀       
+⠟                   
+EOF
+}
+
+echo "--------------- Symlink script for dotfiles ---------------"
+display_ascii_art
+sleep 1
+
+# Set variables based on OS
+# $OSTYPE -> Given by the system or `uname`.
+
+# Linux
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  source_base="$HOME/dots/config"
+  dest_path="$HOME/.config"
+
+# macOS
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  source_base="$HOME/ben/dots/config"
+  dest_path="$HOME/.config"
+else
+  echo "[X] Unsupported OS: $OSTYPE"
+  exit 1
+fi
+
+sleep 0.5
+echo "[!] Detected OS: $OSTYPE"
+sleep 0.5
+echo "[!] Dotfiles will be symlinked to: $dest_path"
+sleep 1
+
+# Ensure .config directory exists
+mkdir -p "$dest_path"
+
+# Confirmation Prompt
+read -rp "[?] Do you want to continue? (y/n) " confirm
+if [[ "$confirm" != [Yy] ]]; then
+  echo "[-] Operation cancelled."
+  exit 0
+fi
+
+#configs=(
+#  "alacritty"
+#  "bash" # TODO Haven't got a config yet, but this can do.
+#  "cava"
+#  "direnv"
+#  "emacs"
+#  "ghostty"
+#  "hypr"
+#  "kitty"
+#  "mako"
+#  "mpd"
+#  "mpv"
+#  "ncmpcpp"
+#  "nushell"
+#  "nvim"
+#  "rofi"
+#  "sioyek"
+#  "starship"
+#  "tmux"
+#  "vis"
+#  "waybar"
+#  "wayfire"
+#  "wezterm"
+#  "wofi"
+#  "xmobar"
+#  "xmonad"
+#  "yazi"
+#  "zathura"
+#  "zsh"
+#)
+
+# Create directories and symlink files
+# TODO librewolf symlink ../config/librewolf/librewolf.overrides.cfg -> ~/.librewolf/librewolf.overrides.cfg
+for config in "${configs[@]}"; do
+  src="$source_base/$config"
+  target="$dest_path/$config"
+
+  echo "[+] Symlinking $config..."
+  sleep 0.2
+
+  if [[ -e "$src" ]]; then
+    mkdir -p "$(dirname "$target")"
+    ln -sfn "$src" "$target"
+  else
+    echo "[!] Warning: Source $src does not exist. Skipping..."
+  fi
+done
+
+sleep 1
+echo "--------------- Finished! ---------------"
+
+# zsh
+#ln -sf $HOME/.config/zsh/.zshenv $HOME/.zshenv
+
+# mpd
+#touch $HOME/.config/mpd/playlists
+#ln -sf $HOME/.config/zsh/.zshenv $HOME/.zshenv
+#ln -sf $XDG_DATA_HOME/Trash $HOME/trash
