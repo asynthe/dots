@@ -1,8 +1,10 @@
-# https://github.com/farberbrodsky/nix/blob/fe6757ddc74535473aaa8b123d86b5d565e18863/system/btrfs-impermanence.nix
-# https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/nix/hosts/mephistopheles/impermanence.nix
+/*
+https://github.com/farberbrodsky/nix/blob/fe6757ddc74535473aaa8b123d86b5d565e18863/system/btrfs-impermanence.nix
+https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/nix/hosts/mephistopheles/impermanence.nix
+*/
 
 { config, lib, ... }: 
-    let
+let
     cfg = config.sys.modules.impermanence;
 in {
     options.sys.modules.impermanence = {
@@ -24,15 +26,9 @@ in {
                 "/etc/nixos" # TODO which one?
                 "/var/lib/nixos"
                 "/etc/NetworkManager/system-connections" # networking.networkmanager.enable
-                "/var/lib/fprint" # TODO fprint.nix
                 "/var/lib/fwupd" # TODO fwupdmgr update
-                "/var/lib/sbctl" # TODO secure_boot.nix
                 "/var/lib/systemd" # https://nixos.org/manual/nixos/unstable/#sec-var-systemd
                 #"/var/lib/systemd/coredump"
-
-                # MOVE THESE NEXT FILES
-                #"/var/lib/tailscale" -> tailscale.nix if persistence is enabled.
-                #"/etc/secureboot" -> secure.nix if persistence is enabled.
             ];
             files = [
                 "/etc/machine-id"

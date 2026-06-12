@@ -70,7 +70,10 @@ refer to readme.md for more information on how to use this flake.
             mkPkgs = nixpkgsInput: arch:
                 import nixpkgsInput {
                     system = arch;
-                    config.allowUnfree = true;
+                    config = {
+                        allowUnfree = true;
+                        android_sdk.accept_license = true;
+                    };
                 };
 
             mkArchConfig = path:

@@ -12,7 +12,7 @@ in {
         hardware.bluetooth.enable = true;
         hardware.bluetooth.powerOnBoot = true;
 
-        # TODO set this variable, maybe in impermanence file
+        # TODO Set this variable in impermanence device (`/persist`)
         environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/bluetooth" ];
 
         #hardware.bluetooth.settings = {

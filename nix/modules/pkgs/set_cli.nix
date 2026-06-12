@@ -70,5 +70,16 @@
         networkmanagerapplet
         zathura sioyek
         signal-desktop
+
+        # music
+        mpd ncmpcpp
+        mixxx
+        spek
+        projectm_3 # Milkdrop 3
+
+        # Audio vis and others
+        alsa-utils pulsemixer
+        cava
+        cmus
     ];
 }

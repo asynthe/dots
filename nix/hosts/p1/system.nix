@@ -134,15 +134,35 @@ in {
 
         modules = {
             impermanence.enable = true;
+            lanzaboote.enable = true;
+            tpm.enable = true;
+            intel.enable = true;
+            nvidia.enable = true;
 
+            hyprland.enable = true;
+            greetd.enable = true;
+            laptop.enable = true;
+
+            android.enable = true;
             bluetooth.enable = true;
             controller.enable = true; # ps5 controller
             docker.enable = true;
+            fonts.enable = true;
+            fprintd.enable = true;
+            gimp.enable = true;
+            ime.enable = true;
+            kiwix.enable = true;
             kubernetes.enable = true;
+            minecraft.enable = true;
             mullvad-vpn.enable = true;
+            nvim-nvf.enable = true;
             opencode.enable = true;
+            paraview.enable = true;
             password-store.enable = true; # gpg + pass
+            qbittorrent.enable = true;
             rpcs3.enable = false;
+            steam.enable = true;
+            syncthing.enable = true;
             tailscale.enable = true;
             tectonic.enable = true;
             terraform.enable = true;
