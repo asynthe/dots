@@ -22,6 +22,11 @@ in {
             qemu.package = pkgs.qemu_kvm;
             qemu.runAsRoot = true;
             qemu.swtpm.enable = true; # tpm
+
+            # Disable or try to skip vm wait
+            onShutdown = "shutdown";
+            shutdownTimeout = 10;
+            parallelShutdown = 2;
         };
 
         # VMware

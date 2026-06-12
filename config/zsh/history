@@ -1,0 +1,4 @@
+: 1781240596:0;nvim .zshenv
+: 1781240602:0;nvim .zshenv
+: 1781240606:0;nvim .zshrc
+: 1781240610:0;rm .zshenv

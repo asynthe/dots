@@ -70,6 +70,7 @@ in {
         wifi.scanRandMacAddress = true;
         wifi.macAddress = "random";
     };
+    networking.nftables.enable = true;
 
     # SSH
     services.openssh.enable = true;

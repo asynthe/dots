@@ -7,14 +7,24 @@ in {
     };
 
     config = lib.mkIf cfg.enable {
+        programs.nix-ld.enable = true;
+
         virtualisation.waydroid.enable = true;
         #services.gvfs.enable = true;
         users.users.meow.extraGroups = [ "kvm" "adbusers" ];
         environment.systemPackages = with pkgs; [
-            android-studio-full
+            androidsdk
             android-tools
+            android-studio
             jmtpfs
             scrcpy
+
+            gcc
+            gradle
+            jdk11
+            nodejs
+            pnpm
+            wget
         ];
     };
 }
