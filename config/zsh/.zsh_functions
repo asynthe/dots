@@ -1,0 +1,31 @@
+# Flatpak
+# - Fightcade
+# - RPCS3
+# - Space Cadet Pinball
+# - Upscayl
+
+flatpak_check() {
+  if ! command -v flatpak &>/dev/null; then
+    echo "[!] Flatpak is not installed on this system. Please install it first." >&2
+    return 1
+  fi
+}
+
+flatpak_run() {
+  local app_id="$1"
+  flatpak_check || return 1
+  if ! command flatpak info "$app_id" &>/dev/null; then
+    read "reply?[?] $app_id is not installed. Install it now? [y/N] "
+    if [[ "$reply" =~ ^[Yy]$ ]]; then
+      flatpak install flathub "$app_id" || return 1
+    else
+      return 1
+    fi
+  fi
+  flatpak run "$app_id"
+}
+
+fightcade() { flatpak_run com.fightcade.Fightcade }
+ps3() { flatpak_run net.rpcs3.RPCS3 }
+pinball()   { flatpak_run com.github.k4zmu2a.spacecadetpinball }
+upscayl()   { flatpak_run org.upscayl.Upscayl }

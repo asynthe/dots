@@ -1,6 +1,7 @@
 -- ───────────────────────── Monitors ─────────────────────────
 local laptop   = "desc:AU Optronics 0xB0AE"
-local external = "desc:Nreal MGMG2710C"
+local external = "desc:Sony SONY TV 0x01010101"
+--local external = "desc:Nreal MGMG2710C"
 --local external = "desc:HP Inc. HP P24v G4 1CR10315PN"
 --local external = "desc:Samsung Electric Company S34CG50 HNBYC00076"
 local side     = "left" -- "left", "right"
@@ -17,7 +18,7 @@ end
 
 local pos           = positions(side)
 local cfg_laptop    = { output = laptop,   mode = "1920x1200@60",  position = pos.laptop,   scale = "1" }
-local cfg_external  = { output = external, mode = "1920x1080@165.00", position = pos.external, scale = "1" }
+local cfg_external  = { output = external, mode = "1920x1080@60", position = pos.external, scale = "1" }
 
 local function get_external()
     local handle = io.popen(

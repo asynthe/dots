@@ -1,0 +1,96 @@
+alias aliases='nvim $ZDOTDIR/.zsh_aliases'
+alias chat='weechat'
+alias rm='rm -i'
+alias info='mediainfo'
+#alias cp='rsync -ah --info=progress2'
+
+# terminal image viewing, per terminal
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+    alias img='kitty +kitten icat'
+elif [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
+    alias img='wezterm imgat'
+fi
+
+#alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
+#alias wtr='curl wttr.in/Perth'
+#alias h='history | grep --color=auto'
+#alias t='peaclock --config-dir ~/.config/peaclock'
+#alias t='tty-clock -ScB'
+#alias time='peaclock --config-dir ~/.config/peaclock'
+
+# Directories
+#alias ls='eza --icons --group-directories-first'
+#alias la='eza --icons -a --group-directories-first'
+#alias ll='eza --long --group-directories-first'
+#alias lla='eza --long -a --group-directories-first'
+#alias lg='eza --long --git --group-directories-first'
+
+# Git
+#alias ga='git add -A'
+#alias gc='git commit -m "updating"'
+#alias gp='git push'
+
+# Mistakes
+#alias apci='acpi'
+#alias sl='ls'
+#alias fuck='sudo !!'
+#alias dicker='docker'
+#alias dokcer='docker'
+#alias focker='docker'
+
+# Main
+#alias ,='cd -'
+#alias ..='cd ..'
+#alias @='neomutt'
+#alias -g cat='bat'
+#alias -g n='nvim'
+#alias -g nvv='sudo nvim'
+#alias -g pdf='zathura'
+#alias bt='bluetuith'
+#alias c='clear'
+#alias cls='clear' # Look ma i'm Powershell
+#alias dsize='ncdu ${pwd}'
+#alias h='history | sk'
+#alias m='ncmpcpp'
+#alias mime='xdg-mime query default'
+#alias nani='xdg-mime query filetype'
+#alias mimetype='xdg-mime query filetype'
+#alias py='python'
+#alias shell='which $SHELL'
+#alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
+#alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
+#alias book='zathura $BOOK_CURRENT'
+#alias book_2='zathura $BOOK_CURRENT_2'
+#alias book='fd . $BOOK_FOLDER --type f -e "pdf" -e "epub" | sk | xargs sioyek'
+
+# Grep
+#alias grep='grep -i --color=auto'
+#alias egrep='egrep --color=auto'
+#alias fgrep='fgrep --color=auto'
+
+# Net
+#alias scan='iwctl station wlan0 scan' # not using iwd now
+#alias wifi='sudo nmtui'
+#alias ifconfig='echo "ipconfig is deprecated, use ip instead."; false'
+#alias port='ss -naptu state listening'
+#alias ports='ss -tulanp'
+
+# Other
+#alias doc='libreoffice'
+#alias docx='libreoffice'
+#alias excel='libreoffice'
+#alias word='libreoffice'
+#alias ani-on='hyprctl keyword animations:enabled 1'
+#alias ani-off='hyprctl keyword animations:enabled 0'
+#alias ani-off='hyprgame'
+
+# Fun
+#alias kernel-soul-8hz='aplay /dev/random'
+#alias kernel-soul-pa='pacat /dev/urandom'
+#alias kernel-soul='aplay -c 2 -f S16_LE -r 44100 /dev/random'
+#alias rickroll='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+
+# Wallpaper
+#alias wall='fd . $WALLPAPER_FOLDER -e jpg -e png | sk | xargs swww img'
+#alias video='fd . $WALLPAPER_VIDEO_FOLDER -e mp4 | sk | xargs mpvpaper -vp -o "loop-file=inf --hwdec=nvdec --panscan=1 --no-resume-playback" "*"'
+#alias playlist='fd . $WALLPAPER_VIDEO_PLAYLISTS -e m3u | sk | xargs mpvpaper -vp -o "loop-playlist=inf --hwdec=nvdec --panscan=1 --shuffle --no-resume-playback" "*"'

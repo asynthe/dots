@@ -16,6 +16,7 @@
         ./bluetooth.nix
         ./controller.nix # ps5 controller
         ./docker.nix
+        ./flatpak.nix
         ./fonts.nix
         ./fprintd.nix # fingerprint
         ./gimp.nix

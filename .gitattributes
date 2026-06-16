@@ -1,0 +1,15 @@
+# CRLF (Windows) -> LF (Linux)
+* text=auto eol=lf
+*.py    text eol=lf
+*.tf    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.sh    text eol=lf
+*.nix   text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+*.toml  text eol=lf
+*.png   binary
+*.jpg   binary
+*.pdf   binary
+*.zip   binary

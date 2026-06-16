@@ -1,3 +1,10 @@
+-- TODO
+-- -> Set up cycle next
+-- -> Set up split move there if theres two
+--   One upper 50% windows and one 50% window down.
+--   If i do ALT + j the upper or down should go down
+--   But instead it changes to 50% and 50% vertical
+
 -- Variables
 -- Environment
 -- Monitors
@@ -330,7 +337,11 @@ for dir, v in pairs(keys) do
 
     for _, key in ipairs({ vim, arrow }) do
         -- focus
+        -- TODO test hl.dsp.layout("cyclenext") !!! IT MAY NOT WORK ON DWINDLE LAYOUT
+        -- { action = hl.dsp.layout("cyclenext"), opts = { repeating = true }, },
         hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir }))
+
+
         -- resize (floating and tiling)
         hl.bind(mainMod .. " + CTRL + " .. key, hl.dsp.window.resize({ x = delta.x * 8, y = delta.y * 8, relative = true }), { repeating = true })
         -- move tiled window

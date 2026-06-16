@@ -46,10 +46,10 @@ in {
             wl-clipboard
             brightnessctl
             playerctl
+            walker
 
             # Libs
             hyprpolkitagent
-            libsForQt5.qt5.qtwayland
             adw-gtk3 # dark mode
 
             # Term

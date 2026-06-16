@@ -11,15 +11,12 @@ in {
         services.thermald.enable = true;
         services.auto-cpufreq.enable = true;
 
-        # "ignore", "poweroff", "reboot", "halt", "kexec", 
+        # "ignore", "poweroff", "reboot", "halt", "kexec",
         # "suspend", "hibernate", "hybrid-sleep"
         services.logind.settings.Login = {
-            HandleLidSwitch = "ignore";                 # on battery
-            HandleLidSwitchDocked = "ignore";           # when docked
-
-            # TODO Test, this should not suspend
-            # when there is more than one monitor plugged
-            HandleLidSwitchExternalPower = "ignore";    # plugged in 
+            HandleLidSwitch = "suspend";                # on battery
+            HandleLidSwitchDocked = "ignore";           # when docked (external display connected)
+            HandleLidSwitchExternalPower = "suspend";   # plugged in, no external display
         };
     };
 }

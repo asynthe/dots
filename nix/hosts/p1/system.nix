@@ -17,13 +17,19 @@ in {
     boot.kernelPackages = pkgs.linuxPackages_latest; # pkgs.linuxPackages_zen;
     services.fstrim.enable = true;
 
+    # TODO Remove once rpcs3 works or see if would be good to optionize (zram and zswap?)
+    # zram swap for memory-hungry builds (rpcs3 linker needs ~14GB+)
+        #zramSwap = {
+        #enable = true;
+        #memoryPercent = 50;
+    #};
+
     # Nix
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
     nix.settings.warn-dirty = false;
 
     # Boot loader
     boot = {
-        # Kernel params
         supportedFilesystems = [ "btrfs" "vfat" ];
 
         # Silent Boot
@@ -37,30 +43,6 @@ in {
             "udev.log_priority=3"
             "video=1920x1200"
         ];
-
-        # ASCII art on encryption
-        # TODO NOT WORKING
-        # TODO Option to choose a specific ascii
-        # TODO A markdown file that shows this files inside (to test)
-        #initrd.extraFiles."ascii.txt".source = ../../../other/ascii/cat_looking.txt; 
-            #initrd.systemd.services.show-ascii = {
-            #description = "Show ASCII art before LUKS";
-            #wantedBy = [ "cryptsetup-pre.target" ];
-            #before = [ "cryptsetup-pre.target" ];
-            #unitConfig.DefaultDependencies = false;
-            #serviceConfig.Type = "oneshot";
-            #script = ''
-        #cat /ascii.txt
-            #echo ""
-        #echo "enter password to decrypt"
-            #'';
-        #};
-        # IF NO SYSTEMD ENABLED ON INITRD
-        #initrd.preDeviceCommands = ''
-        #    cat /ascii.txt
-        #    echo ""
-        #    echo "enter password to decrypt"
-        #'';
     };
 
     # Networking
@@ -148,6 +130,7 @@ in {
             bluetooth.enable = true;
             controller.enable = true; # ps5 controller
             docker.enable = true;
+            flatpak.enable = true;
             fonts.enable = true;
             fprintd.enable = true;
             gimp.enable = true;

@@ -34,6 +34,7 @@ in {
             statusline.lualine.enable = true;
             telescope.enable = true;
             fzf-lua.enable = true;
+            mini.align.enable = true;
 
             # Languages for treesitter
             languages = {
@@ -63,7 +64,7 @@ in {
                     setupOpts.workspaces = [
                         {
                             name = "main";
-                            path = "~/sync/notes";
+                            path = "~/notes";
                         }
                     ];
                 };
