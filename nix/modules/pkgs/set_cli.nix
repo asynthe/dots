@@ -11,7 +11,6 @@
         ffmpeg-full ffmpegthumbnailer
         file
         fzf skim
-        git bfg-repo-cleaner jujutsu
         htop btop
         hyperfine
         imagemagickBig

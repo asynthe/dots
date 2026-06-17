@@ -6,10 +6,11 @@ alias info='mediainfo'
 alias m='ncmpcpp'
 alias n='nvim'
 alias net='impala'
+alias off='poweroff'
 alias rm='rm -i'
 alias v='alsamixer'
-alias vv='wiremix'
 alias vis='projectM-pulseaudio &>/dev/null & disown'
+alias vv='wiremix'
 
 # terminal image viewing, per terminal
 if [[ "$TERM_PROGRAM" == "ghostty" ]]; then

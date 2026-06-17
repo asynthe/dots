@@ -131,6 +131,7 @@ in {
             fonts.enable = true;
             fprintd.enable = true;
             gimp.enable = true;
+            git.enable = true;
             ime.enable = true;
             kiwix.enable = true;
             kubernetes.enable = true;

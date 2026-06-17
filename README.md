@@ -16,6 +16,13 @@ asynthe's system flake, 2026
 > ![NOTE]
 > I'm always updating this repository as it is my current system.
 
+Clone this repository with the next commands.
+```bash
+# Make sure git lfs is installed to pull my wallpapers.
+git lfs install
+git clone https://gitlab.com/asynthe/dots.git
+```
+
 --- TODO TABLE HERE ---
 My current setup
 - Thinkpad P1 Gen 7         -> Current laptop
@@ -24,6 +31,10 @@ My current setup
 
 My favourite programs
 - Music: **ncmpcpp** (cli) and **MusicBee** (running on wine)
+- Music (S24 Ultra): **BlackPlayerEX**
 
-Resources
+*Resources*
 - [Nice collection of ASCII art](https://steamcommunity.com/sharedfiles/filedetails/?id=3079007278)
+
+*Thanks*
+RedDragon: 1920x1200 NASA Wallpaper Set

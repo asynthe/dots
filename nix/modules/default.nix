@@ -22,6 +22,7 @@
         ./fonts.nix
         ./fprintd.nix # fingerprint
         ./gimp.nix
+        ./git.nix
         ./ime.nix
         ./kiwix.nix
         ./kubernetes.nix
