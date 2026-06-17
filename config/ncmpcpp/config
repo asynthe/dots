@@ -1,11 +1,11 @@
 # ─────────────── Configuration ───────────────
 ncmpcpp_directory = "/home/meow/.config/ncmpcpp"
 mpd_music_dir = "/home/meow/music"
+lyrics_directory = "/home/meow/music/.lyrics"
 allow_for_physical_item_deletion = no
 mpd_crossfade_time = "6"
 mpd_host = "localhost"
 mpd_port = "6600"
-lyrics_directory = "~/.local/share/lyrics"
 mouse_support = "yes"; # Scrollbar use
 
 # ─────────────── Colors ───────────────

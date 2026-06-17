@@ -1,29 +1,14 @@
 # Don't do anything if not running interactively.
 [[ $- != *i* ]] && return
+
 export EDITOR=nvim
-export NOTES=$HOME/notes
+export NOTES_DIR=$HOME/notes
 export PASSWORD_STORE_DIR=$HOME/sync/ben/pass
 
+# Notes
 function note() {
-  cd "$NOTES_DIR" && nvim "${1:-Main.md}"
+  cd "$NOTES_DIR" && nvim "${1:-main.md}"
 }
-
-# ALIASES
-alias n='nvim'
-alias m='ncmpcpp'
-alias v='projectM-pulseaudio &>/dev/null & disown'
-
-# NOTE: In case of FUNCNEST error, then do `unset yy` then `\yazi` or `command yazi`
-function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	command yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
-	command rm -f -- "$tmp"
-}
-alias yazi='yy'
-alias l='yy'
-alias lf='yy'
 
 # Inactivity auto-command
 if [[ -o interactive ]]; then
@@ -38,33 +23,38 @@ if [[ -o interactive ]]; then
 fi
 
 # Configuration
-HISTSIZE=10000
-SAVEHIST=10000
-HISTFILE=$ZDOTDIR/history
-HISTORY_IGNORE="(ls|ls *|cd|cd *|bat *|cat *|pwd|clear|history)"
+#HISTSIZE=10000
+#SAVEHIST=10000
+#HISTFILE=$ZDOTDIR/history
+#HISTORY_IGNORE="(ls|ls *|cd|cd *|bat *|cat *|pwd|clear|history)"
+unset HISTFILE # Disable history -> using atuin
 
+# Keybinds
 bindkey -v # vi mode
 setopt extended_glob
 setopt no_flowcontrol
-
-# ───────────────────────── Keybinds ─────────────────────────
-bindkey -M viins '^[OH' beginning-of-line
-bindkey -M viins '^[OF' end-of-line
 bindkey -M viins '^[[H' beginning-of-line
 bindkey -M viins '^[[F' end-of-line
-bindkey -M viins '^[[1~' beginning-of-line
-bindkey -M viins '^[[4~' end-of-line
-bindkey -M vicmd '^[OH' beginning-of-line
-bindkey -M vicmd '^[OF' end-of-line
+bindkey -M viins '^[OH' beginning-of-line
+bindkey -M viins '^[OF' end-of-line
 bindkey -M vicmd '^[[H' beginning-of-line
 bindkey -M vicmd '^[[F' end-of-line
-bindkey -M vicmd '^[[1~' beginning-of-line
-bindkey -M vicmd '^[[4~' end-of-line
+bindkey -M vicmd '^[OH' beginning-of-line
+bindkey -M vicmd '^[OF' end-of-line
+# bindkey -M viins '^[[1~' beginning-of-line
+# bindkey -M viins '^[[4~' end-of-line
+# bindkey -M vicmd '^[[1~' beginning-of-line
+# bindkey -M vicmd '^[[4~' end-of-line
 
-# Tab / Tab + Shift -> menu-complete / reverse-menu-complete
-bindkey -M vicmd '^[[Z' reverse-menu-complete
-bindkey -M viins '^[[Z' reverse-menu-complete
+# # Tab / Tab + Shift -> menu-complete / reverse-menu-complete
+# bindkey -M vicmd '^[[Z' reverse-menu-complete
+# bindkey -M viins '^[[Z' reverse-menu-complete
 
 # Sources
 source "$ZDOTDIR/.zsh_aliases"
 source "$ZDOTDIR/.zsh_functions"
+
+# Eval
+eval "$(atuin init zsh --disable-up-arrow)"
+
+starfetch

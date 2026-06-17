@@ -192,3 +192,7 @@ case "$answer" in
 esac
 
 echo "\nDone."
+
+# TODO Add
+# ln -sf $HOME/dots/config/VSCodium/User/settings.json $HOME/.config/VSCodium/User/settings.json
+# ln -sf $HOME/dots/config/VSCodium/User/keybindings.json $HOME/.config/VSCodium/User/keybindings.json

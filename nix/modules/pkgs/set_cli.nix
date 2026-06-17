@@ -21,6 +21,7 @@
         killall
         libqalculate
         lsof
+        #macchanger
         mediainfo
         ncdu
         neomutt

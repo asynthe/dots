@@ -12,7 +12,6 @@ in {
     };
 
     config = lib.mkIf cfg.enable {
-
         fileSystems = {
             "/persist".neededForBoot = true;
             "/var/log".neededForBoot = true;
@@ -25,7 +24,6 @@ in {
             directories = [
                 "/etc/nixos" # TODO which one?
                 "/var/lib/nixos"
-                "/etc/NetworkManager/system-connections" # networking.networkmanager.enable
                 "/var/lib/fwupd" # TODO fwupdmgr update
                 "/var/lib/systemd" # https://nixos.org/manual/nixos/unstable/#sec-var-systemd
                 #"/var/lib/systemd/coredump"

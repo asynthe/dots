@@ -1,0 +1,30 @@
+{
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "editor.fontFamily": "JetBrainsMono Nerd Font, monospace",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
+    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "workbench.colorCustomizations": {
+        "editor.background": "#000000",
+        "sideBar.background": "#080808",
+        "sideBarSectionHeader.background": "#080808",
+        "activityBar.background": "#080808",
+        "statusBar.background": "#000000",
+        "statusBarItem.remoteBackground": "#000000",
+        "panel.background": "#000000",
+        "terminal.background": "#000000",
+        "tab.inactiveBackground": "#000000",
+        "tab.activeBackground": "#111111",
+        "editorGroupHeader.tabsBackground": "#000000",
+        "titleBar.activeBackground": "#000000",
+        "titleBar.inactiveBackground": "#000000",
+        "sideBar.border": "#000000",
+        "panel.border": "#000000",
+        "activityBar.border": "#000000",
+        "editorGroup.border": "#000000"
+    },
+    "editor.inlayHints.enabled": "off"
+}

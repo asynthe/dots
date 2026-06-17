@@ -141,6 +141,7 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, rounding = 0 })
+
 -- Ignore smart gaps in special workspaces
 hl.workspace_rule({ workspace = "w[tv1]s[false]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = 0, gaps_in = 0 })
@@ -227,20 +228,25 @@ hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
 hl.window_rule({ match = { title = "^(Export Image as PNG)$" }, center = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
 --hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0, move = "2800 1000" })
-hl.window_rule({ 
-    -- Choose wallpaper
-    -- Enter name of file to save to
-    -- File Upload
-    -- Library
-    -- Open File
-    -- Open Folder
-    -- Save As
-    -- Select a File
-	match = { title = "^(Choose wallpaper|Enter name of file to save to|File Upload|Library|Open File|Open Folder|Save As|Select a File)(.*)$" }, 
-	float = true, 
-	center = true, 
-	border_size = 0, 
-	size = "1230 690" 
+hl.window_rule({
+  match = {
+    title = "^("
+      .. "Choose wallpaper|"
+      .. "Enter name of file to save to|"
+      .. "File Upload|"
+      .. "Library|"
+      .. "Open File|"
+      .. "Open Folder|"
+      .. "Save As|"
+      .. "Select a File|"
+      .. "Select ISO|"
+      .. "Select Game Folder"
+      .. ")(.*)$"
+  },
+  float       = true,
+  center      = true,
+  border_size = 0,
+  size        = "1230 690"
 })
 
 -- Other
@@ -274,14 +280,10 @@ hl.window_rule({
 -- ───────────────────────── Keybinds ─────────────────────────
 local mainMod = "ALT"
 
--- Apps
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("ghostty"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill rofi || rofi -show drun"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
---hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
---hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
---closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 
 -- Screenshot
@@ -303,9 +305,9 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshots
 -- submap = reset
 
 -- Windows
--- TODO
-hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next())
-hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("hyprctl dispatch bringactivetotop"))
+hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next({ repeating = true }))
+hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
+
 hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mainMod .. " + O", hl.dsp.window.pseudo())
@@ -321,42 +323,23 @@ local keys = {
     up    = { "k", "up",    "u" },
     down  = { "j", "down",  "d" },
 }
-
 local deltas = {
     left  = { x = -10, y = 0 },
     right = { x =  10, y = 0 },
     up    = { x = 0, y = -10 },
     down  = { x = 0, y =  10 },
 }
-
 for dir, v in pairs(keys) do
     local vim   = v[1]
     local arrow = v[2]
-    local short = v[3]
     local delta = deltas[dir]
-
     for _, key in ipairs({ vim, arrow }) do
-        -- focus
-        -- TODO test hl.dsp.layout("cyclenext") !!! IT MAY NOT WORK ON DWINDLE LAYOUT
-        -- { action = hl.dsp.layout("cyclenext"), opts = { repeating = true }, },
-        hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir }))
-
-
-        -- resize (floating and tiling)
-        hl.bind(mainMod .. " + CTRL + " .. key, hl.dsp.window.resize({ x = delta.x * 8, y = delta.y * 8, relative = true }), { repeating = true })
-        -- move tiled window
-        hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }), { repeating = true })
-        -- move floating window
-        hl.bind(mainMod .. " + SUPER + " .. key, hl.dsp.window.move({ x = delta.x * 5, y = delta.y * 5, relative = true }), { repeating = true })
+        hl.bind(mainMod .. " + " .. key,          hl.dsp.focus({ direction = dir }))
+        hl.bind(mainMod .. " + CTRL + "  .. key,  hl.dsp.window.resize({ x = delta.x * 8, y = delta.y * 8, relative = true }), { repeating = true })
+        hl.bind(mainMod .. " + SHIFT + " .. key,  hl.dsp.window.move({ direction = dir }), { repeating = true })
+        hl.bind(mainMod .. " + SUPER + " .. key,  hl.dsp.window.move({ x = delta.x * 5, y = delta.y * 5, relative = true }), { repeating = true })
     end
 end
-
--- TODO vim motions on dwindle only goes with the tiled windows
--- I want vim motions to also cycle through the floating, tiled and floating
---hl.bind(mainMod .. " + h", function() hl.dispatch(hl.dsp.layout("cycleprev")) end)
---hl.bind(mainMod .. " + l", function() hl.dispatch(hl.dsp.layout("cyclenext")) end)
---hl.bind(mainMod .. " + j", function() hl.dispatch(hl.dsp.layout("cyclenext")) end)
---hl.bind(mainMod .. " + k", function() hl.dispatch(hl.dsp.layout("cycleprev")) end)
 
 -- Workspaces
 for i = 1, 10 do

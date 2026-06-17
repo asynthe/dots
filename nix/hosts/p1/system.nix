@@ -1,6 +1,14 @@
 /*   
 TODO The thing is most of systems shouldn't have to be multiple options
 But it's the name of the host that makes the system with a specific configuration
+
+TODO A module `ssh` should only have ssh configuration
+Here there should be a ssh-keys with a mkIf, so it automatically build
+This file is for this system specific configuration
+
+TODO Set up secrets agenix or sops-nix, same as before, there's a workign
+"base" config, and we can get a good `laptop` but some specific stuff
+should use that agenix ssh key or something
 */
 
 { pkgs, ... }:
@@ -45,19 +53,6 @@ in {
         ];
     };
 
-    # Networking
-    networking.networkmanager = {
-        enable = true;
-        ethernet.macAddress = "random";
-        wifi.scanRandMacAddress = true;
-        wifi.macAddress = "random";
-    };
-    networking.nftables.enable = true;
-
-    # SSH
-    services.openssh.enable = true;
-    #users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAA... example@email.com" ];     
-
     # Shell
     programs.zsh.enable = true;
     users.users.${user} = {
@@ -95,8 +90,7 @@ in {
 
     # ─────────────── Modules ───────────────
     sys = {
-
-        #disk.disk0 = "/dev/nvme0n1";
+        #disk.disk0 = "/dev/nvme0n1"; # TODO ASSERTION, ATLEAST ONE OF THIS SHOULD BE MANDATORY
         #disk.disk1 = "/dev/nvme1n1";
         # disk = {
         #   raid0 = "" # mirroring
@@ -121,13 +115,16 @@ in {
             tpm.enable = true;
             intel.enable = true;
             nvidia.enable = true;
+            networking.enable = true;
 
             hyprland.enable = true;
             greetd.enable = true;
             laptop.enable = true;
 
             android.enable = true;
+            atuin.enable = true;
             bluetooth.enable = true;
+            colord.enable = true;
             controller.enable = true; # ps5 controller
             docker.enable = true;
             flatpak.enable = true;
@@ -140,11 +137,12 @@ in {
             minecraft.enable = true;
             mullvad-vpn.enable = true;
             nvim-nvf.enable = true;
+            openclaw.enable = false;
             opencode.enable = true;
             paraview.enable = true;
             password-store.enable = true; # gpg + pass
             qbittorrent.enable = true;
-            rpcs3.enable = false;
+            ssh.enable = true;
             steam.enable = true;
             syncthing.enable = true;
             tailscale.enable = true;
@@ -152,8 +150,14 @@ in {
             terraform.enable = true;
             typst.enable = true;
             vm.enable = true; # vmware, libvirt, virt-manager
+            vscodium.enable = true;
             wine.enable = true;
+            xdg.enable = true;
             xenia.enable = true;
         };
     };
+
+    # mkIf's
+    # mkIf config.ssh -> Add public key here
+    # users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed ... ];
 }

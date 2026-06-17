@@ -4,6 +4,7 @@
         ./hardware.nix
         #./hardware_qemu.nix
         ../../modules/pkgs/set_cli.nix
+        ../../modules/pkgs/work.nix
 
         # Disk setup
         ../../modules/disko/disko.nix # MDADM RAID0

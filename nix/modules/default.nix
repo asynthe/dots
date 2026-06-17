@@ -13,7 +13,9 @@
         ./laptop.nix # make custom option custom.laptop (?)
 
         ./android.nix
+        ./atuin.nix
         ./bluetooth.nix
+        ./colord.nix
         ./controller.nix # ps5 controller
         ./docker.nix
         ./flatpak.nix
@@ -25,12 +27,14 @@
         ./kubernetes.nix
         ./minecraft.nix
         ./mullvad-vpn.nix
+        ./networking.nix
         ./nvim-nvf.nix
+        ./openclaw.nix
         ./opencode.nix
         ./paraview.nix
         ./password-store.nix
-        ./qbittorrent.nix # ps3
-        ./rpcs3.nix # ps3
+        ./qbittorrent.nix
+        ./ssh.nix
         ./steam.nix
         ./syncthing.nix
         ./tailscale.nix
@@ -38,7 +42,9 @@
         ./terraform.nix
         ./typst.nix
         ./vm.nix # vmware, libvirt, virt-manager
+        ./vscodium.nix
         ./wine.nix
+        ./xdg.nix
         ./xenia.nix # xbox 360
     ];
 }

@@ -1,14 +1,21 @@
 alias aliases='nvim $ZDOTDIR/.zsh_aliases'
 alias chat='weechat'
-alias rm='rm -i'
+alias cp='rsync -ah --info=progress2'
+alias hist='h'
 alias info='mediainfo'
-#alias cp='rsync -ah --info=progress2'
+alias m='ncmpcpp'
+alias n='nvim'
+alias net='impala'
+alias rm='rm -i'
+alias v='alsamixer'
+alias vv='wiremix'
+alias vis='projectM-pulseaudio &>/dev/null & disown'
 
 # terminal image viewing, per terminal
 if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
     alias img='kitty +kitten icat'
 elif [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
-    alias img='wezterm imgat'
+    alias img='wezterm imgcat'
 fi
 
 #alias jp='mpv --no-resume-playback https://iptv-org.github.io/iptv/countries/jp.m3u > /dev/null 2>&1 & disown'
@@ -70,7 +77,6 @@ fi
 
 # Net
 #alias scan='iwctl station wlan0 scan' # not using iwd now
-#alias wifi='sudo nmtui'
 #alias ifconfig='echo "ipconfig is deprecated, use ip instead."; false'
 #alias port='ss -naptu state listening'
 #alias ports='ss -tulanp'
@@ -80,9 +86,6 @@ fi
 #alias docx='libreoffice'
 #alias excel='libreoffice'
 #alias word='libreoffice'
-#alias ani-on='hyprctl keyword animations:enabled 1'
-#alias ani-off='hyprctl keyword animations:enabled 0'
-#alias ani-off='hyprgame'
 
 # Fun
 #alias kernel-soul-8hz='aplay /dev/random'

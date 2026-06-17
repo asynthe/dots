@@ -1,9 +1,6 @@
 -- ───────────────────────── Monitors ─────────────────────────
 local laptop   = "desc:AU Optronics 0xB0AE"
-local external = "desc:Sony SONY TV 0x01010101"
---local external = "desc:Nreal MGMG2710C"
---local external = "desc:HP Inc. HP P24v G4 1CR10315PN"
---local external = "desc:Samsung Electric Company S34CG50 HNBYC00076"
+local external = "desc:Samsung Electric Company S34CG50 HNBYC00076"
 local side     = "left" -- "left", "right"
 local disable_laptop_screen = false
 
@@ -11,14 +8,13 @@ local function positions(side)
     if side == "left" then
         return { laptop = "0x0", external = "1920x0" }
     else
-        -- FIX, make specific case 'right' ?
         return { laptop = "1920x0", external = "0x0" }
     end
 end
 
 local pos           = positions(side)
 local cfg_laptop    = { output = laptop,   mode = "1920x1200@60",  position = pos.laptop,   scale = "1" }
-local cfg_external  = { output = external, mode = "1920x1080@60", position = pos.external, scale = "1" }
+local cfg_external  = { output = external, mode = "3440x1440@100", position = pos.external, scale = "1" }
 
 local function get_external()
     local handle = io.popen(
