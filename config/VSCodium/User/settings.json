@@ -26,5 +26,7 @@
         "activityBar.border": "#000000",
         "editorGroup.border": "#000000"
     },
-    "editor.inlayHints.enabled": "off"
+    "editor.inlayHints.enabled": "off",
+    "explorer.confirmDelete": false,
+    "claudeCode.preferredLocation": "panel"
 }

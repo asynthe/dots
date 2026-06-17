@@ -1,4 +1,17 @@
-- [Nice collection of ASCII art](https://steamcommunity.com/sharedfiles/filedetails/?id=3079007278)
+ ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣤⣶⣶⣿⣿⡗
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀
+⣿⣿⡇⠜⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ ⠀
+⣿⣿⣿⣶⣿⣿⣿⣿⣿⠋⡹⠙⣿⣿⣿⡇⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣾⣿⣿⠛⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠁⠀⠀⠀⠀⠀⠀
+⣿⣿⡿⠻⠿⠿⠿⠿⠛⠹⠑
+⠟
+
+asynthe's system flake, 2026
 
 > ![NOTE]
 > I'm always updating this repository as it is my current system.
@@ -11,3 +24,6 @@ My current setup
 
 My favourite programs
 - Music: **ncmpcpp** (cli) and **MusicBee** (running on wine)
+
+Resources
+- [Nice collection of ASCII art](https://steamcommunity.com/sharedfiles/filedetails/?id=3079007278)
