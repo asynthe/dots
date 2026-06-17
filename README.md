@@ -1,3 +1,5 @@
+```html
+<pre>
  ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -10,15 +12,15 @@
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠁⠀⠀⠀⠀⠀⠀
 ⣿⣿⡿⠻⠿⠿⠿⠿⠛⠹⠑
 ⠟
-
+</pre>
+```
 asynthe's system flake, 2026
 
-> ![NOTE]
+> **NOTE**
 > I'm always updating this repository as it is my current system.
 
-Clone this repository with the next commands.
+Clone this repository with the next commands, make sure `git-lfs` is installed to pull the wallpapers.
 ```bash
-# Make sure git lfs is installed to pull my wallpapers.
 git lfs install
 git clone https://gitlab.com/asynthe/dots.git
 ```
