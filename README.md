@@ -1,5 +1,4 @@
-```html
-<pre>
+```
  ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -12,11 +11,11 @@
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠁⠀⠀⠀⠀⠀⠀
 ⣿⣿⡿⠻⠿⠿⠿⠿⠛⠹⠑
 ⠟
-</pre>
 ```
-asynthe's system flake, 2026
+*asynthe's system flake*, 2026
 
 > **NOTE**
+>
 > I'm always updating this repository as it is my current system.
 
 Clone this repository with the next commands, make sure `git-lfs` is installed to pull the wallpapers.
