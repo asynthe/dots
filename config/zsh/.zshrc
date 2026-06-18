@@ -2,6 +2,7 @@
 [[ $- != *i* ]] && return
 
 export EDITOR=nvim
+export DOTS_DIR=$HOME/dots
 export NOTES_DIR=$HOME/notes
 export PASSWORD_STORE_DIR=$HOME/sync/ben/pass
 
@@ -57,4 +58,5 @@ source "$ZDOTDIR/.zsh_functions"
 # Eval
 eval "$(atuin init zsh --disable-up-arrow)"
 
-starfetch
+#starfetch
+source "$DOTS_DIR/scripts/bash/check_repo.sh"

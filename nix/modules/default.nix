@@ -27,6 +27,7 @@
         ./kiwix.nix
         ./kubernetes.nix
         ./minecraft.nix
+        ./monero.nix
         ./mullvad-vpn.nix
         ./networking.nix
         ./nvim-nvf.nix

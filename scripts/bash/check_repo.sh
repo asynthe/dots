@@ -1,8 +1,9 @@
 check_repo() {
   REPOS=(
     "/home/meow/ben/pass:pass"
-    "/home/meow/sync/dots:dots"
-    "/home/meow/sync/notes:notes"
+    "/home/meow/dots:dots"
+    "/home/meow/notes:notes"
+    "/home/meow/sakuhin:sakuhin"
   )
 
   local yellow='\033[1;33m'

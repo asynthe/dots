@@ -136,6 +136,7 @@ in {
             kiwix.enable = true;
             kubernetes.enable = true;
             minecraft.enable = true;
+            monero.enable = true;
             mullvad-vpn.enable = true;
             nvim-nvf.enable = true;
             openclaw.enable = false;
