@@ -1,14 +1,14 @@
 -- ───────────────────────── Monitors ─────────────────────────
 local laptop   = "desc:AU Optronics 0xB0AE"
 local external = "desc:Samsung Electric Company S34CG50 HNBYC00076"
-local side     = "left" -- "left", "right"
+local side     = "right" -- "left", "right"
 local disable_laptop_screen = false
 
 local function positions(side)
     if side == "left" then
         return { laptop = "0x0", external = "1920x0" }
     else
-        return { laptop = "1920x0", external = "0x0" }
+        return { laptop = "3440x0", external = "0x0" }
     end
 end
 
