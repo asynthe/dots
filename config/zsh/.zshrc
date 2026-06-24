@@ -4,7 +4,7 @@
 export EDITOR=nvim
 export DOTS_DIR=$HOME/dots
 export NOTES_DIR=$HOME/notes
-export PASSWORD_STORE_DIR=$HOME/sync/ben/pass
+export PASSWORD_STORE_DIR=$HOME/ben/pass
 
 # Notes
 function note() {

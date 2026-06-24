@@ -13,6 +13,9 @@
 # TODO If WSL is detected, then add a symlink to `/mnt/c/Users/ben/Desktop` to `$HOME`.
 # -> Ask what the Windows username is?
 
+# TODO Firefox symlink of user overrides, just copying command i ran
+# ln -sf ~/dots/config/firefox/user-overrides.js ~/.config/mozilla/firefox/q5a5uclv.default/
+
 display_ascii_art() {
     cat << "EOF" | pv -qL 470
   ⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

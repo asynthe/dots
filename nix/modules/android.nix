@@ -12,7 +12,7 @@ in {
 
         virtualisation.waydroid.enable = true;
         #services.gvfs.enable = true;
-        users.users.meow.extraGroups = [ "kvm" "adbusers" ];
+        users.users.${config.sys.user}.extraGroups = [ "kvm" "adbusers" ];
         environment.systemPackages = with pkgs; [
             androidsdk
             android-tools

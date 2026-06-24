@@ -22,17 +22,18 @@ local screenshotsDir = (os.getenv("HOME") or "~") .. "/Downloads/screenshots"
 
 
 -- ───────────────────────── Monitors ─────────────────────────
-require("monitors")
+local monitors = require("monitors")
 
 
 -- ───────────────────────── Autostart ─────────────────────────
-hl.on("hyprland.start", function () 
+hl.on("hyprland.start", function ()
     hl.exec_cmd("awww-daemon")
     hl.exec_cmd("nm-applet")
     hl.exec_cmd("mpd")
     hl.exec_cmd("mullvad-vpn")
+    hl.exec_cmd("hypridle")
     --hl.exec_cmd("[workspace 9 silent] webcord")
-    --hl.exec_cmd("[workspace 10 silent] tidal-hifi")
+    --hl.exec_cmd("[workspace 10 silent] MusicBee")
     --hl.exec_cmd("waybar & hyprpaper & firefox")
 
     -- Plugins
@@ -56,9 +57,12 @@ hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
 -- Wayland specific
 hl.env("NIXOS_OZONE_WL", "1")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
+hl.env("AQ_DRM_DEVICES", "/dev/dri/card1")
 
+-- Force Hyprland to use only the Intel DRM device; NVIDIA (card0) has no
+-- display outputs and causes DPMS multi-monitor rendering bugs if included.
 
------ PERMISSIONS -----
+-- Permissions
 hl.config({
     ecosystem = {
         enforce_permissions = true,
@@ -75,7 +79,7 @@ hl.config({
         layout = "dwindle",
         border_size = 1,
         gaps_in  = 4,
-        gaps_out = 15,
+        gaps_out = 14,
         col = {
             active_border = { colors = { "rgb(451F67)" }, },
             inactive_border = "rgb(000000)",
@@ -99,16 +103,22 @@ hl.config({
     scrolling = {
         fullscreen_on_one_column = true,
     },
+
+    -- Misc
     misc = {
-        force_default_wallpaper = 0,
-        disable_hyprland_logo   = true,
-        disable_splash_rendering = true, 
+        force_default_wallpaper  = 0,
+        disable_hyprland_logo    = true,
+        disable_splash_rendering = true,
+
+        -- This makes any windows children open on the same workspace (eg. Steam and games)
+        initial_workspace_tracking = 2,
 
         -- Window swallowing
         --enable_swallow = true,
         --swallow_regex = "(Alacritty|com.mitchellh.ghostty|kitty|org.wezfurlong.wezterm)",
     },
 
+    -- Decoration
     decoration = {
         rounding       = 0,
         rounding_power = 2,
@@ -131,6 +141,11 @@ hl.config({
             passes    = 1,
             vibrancy  = 0.1696,
         },
+
+        -- Motion blur
+        --motion_blur = {
+        --    enabled = true,
+        --},
     },
 })
 
@@ -170,6 +185,7 @@ hl.window_rule({ -- Fix some dragging issues with XWayland
 hl.config({
     animations = {
         enabled = true,
+        workspace_wraparound = true,
     },
 })
 
@@ -219,15 +235,13 @@ hl.device({
 
 
 -- ───────────────────────── Window Rules ─────────────────────────
-hl.window_rule({ match = { xwayland = true }, rounding = 0 })            -- xwayland
+hl.window_rule({ match = { xwayland = true }, rounding = 0 }) -- xwayland
 hl.window_rule({ match = { class = "^(mpv|steam_app)(.*)$" }, opacity = "1 override 1 override" })
 hl.window_rule({ match = { class = "com.mitchellh.ghostty" }, float = true, size = "1360 825" })
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
--- TODO Can i do one window rule in one monitor and another in another
 hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
 hl.window_rule({ match = { title = "^(Export Image as PNG)$" }, center = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
---hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0, move = "2800 1000" })
 hl.window_rule({
   match = {
     title = "^("
@@ -281,10 +295,16 @@ hl.window_rule({
 local mainMod = "ALT"
 
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("ghostty"))
-hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill rofi || rofi -show drun"))
+--hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("ghostty"))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
+--hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+
+-- Monitor
+hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
 
 -- Screenshot
 hl.bind("Print",       hl.dsp.exec_cmd("hyprshot -m region -o "  .. screenshotsDir))
@@ -307,7 +327,6 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshots
 -- Windows
 hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next({ repeating = true }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
-
 hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mainMod .. " + O", hl.dsp.window.pseudo())
@@ -353,8 +372,8 @@ hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mainMod .. " + bracketright",   hl.dsp.focus({ monitor = "r" }))
 hl.bind(mainMod .. " + period", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + comma",   hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + SHIFT + period", hl.dsp.focus({ monitor = "l" }))
-hl.bind(mainMod .. " + SHIFT + comma",   hl.dsp.focus({ monitor = "r" }))
+hl.bind(mainMod .. " + SHIFT + comma",   hl.dsp.focus({ monitor = "l" }))
+hl.bind(mainMod .. " + SHIFT + period", hl.dsp.focus({ monitor = "r" }))
 
 -- zoom
 local function zoomfunction(value)

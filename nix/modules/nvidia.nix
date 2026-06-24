@@ -3,7 +3,11 @@ let
     cfg = config.sys.modules.nvidia;
 in {
     options.sys.modules.nvidia = {
-        enable = lib.mkEnableOption "Nvidia";
+        enable = lib.mkEnableOption "NVIDIA";
+        bus-id = lib.mkOption {
+            type        = lib.types.str;
+            description = "PCI bus ID of the NVIDIA GPU (e.g. PCI:1:0:0)";
+        };
     };
 
     config = lib.mkIf cfg.enable {
@@ -17,19 +21,21 @@ in {
             modesetting.enable = true;
             nvidiaSettings = true;
             open = true;
-            package = config.boot.kernelPackages.nvidiaPackages.production;
+            package = config.boot.kernelPackages.nvidiaPackages.latest;
+            powerManagement.enable = true;
+            powerManagement.finegrained = true;
         };
 
         hardware.nvidia.prime = {
             offload.enable = true;
             offload.enableOffloadCmd = true;
-            # TODO See how to make this option or get it from a command
-            intelBusId = "PCI:0:2:0";
-            nvidiaBusId = "PCI:1:0:0";
+            intelBusId  = config.sys.modules.intel.bus-id;
+            nvidiaBusId = cfg.bus-id;
         };
 
         environment.systemPackages = with pkgs; [
             nvtopPackages.full
+            mesa-demos
         ];
     };
 }

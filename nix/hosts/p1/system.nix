@@ -1,4 +1,4 @@
-/*   
+/*
 TODO The thing is most of systems shouldn't have to be multiple options
 But it's the name of the host that makes the system with a specific configuration
 
@@ -11,10 +11,8 @@ TODO Set up secrets agenix or sops-nix, same as before, there's a workign
 should use that agenix ssh key or something
 */
 
-{ pkgs, ... }:
-let
-    user = "meow";
-in {
+{ pkgs, config, ... }: {
+
     # ─────────────── System ───────────────
     system.name = "p1";
     system.nixos.label = "p1";
@@ -39,23 +37,12 @@ in {
     # Boot loader
     boot = {
         supportedFilesystems = [ "btrfs" "vfat" ];
-
-        # Silent Boot
-        consoleLogLevel = 0;
-        initrd.verbose = false;
-        kernelParams = [
-            "splash"
-            "quiet"
-            "rd.systemd.show_status=false"
-            "rd.udev.log_level=3"
-            "udev.log_priority=3"
-            "video=1920x1200"
-        ];
+        kernelParams = [ "video=1920x1200" ]; # framebuffer resolution for internal display
     };
 
     # Shell
     programs.zsh.enable = true;
-    users.users.${user} = {
+    users.users.${config.sys.user} = {
         shell = pkgs.zsh;
         isNormalUser = true;
         initialPassword = "meows123";
@@ -76,56 +63,60 @@ in {
         QT_STYLE_OVERRIDE = "adwaita-dark";
     };
 
-    # Audio - Pipewire
-    security.rtkit.enable = true;
-    services.pipewire = {
-        enable = true;
-        audio.enable = true; # Use as primary sound server
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-        jack.enable = true;
-        wireplumber.enable = true;
+    # ─────────────── Laptop ───────────────
+    powerManagement.enable = true;
+    services.thermald.enable = true;
+    services.auto-cpufreq.enable = true;
+    services.logind.settings.Login = {
+        HandleLidSwitch = "suspend";             # on battery
+        HandleLidSwitchDocked = "ignore";        # docked (external display)
+        HandleLidSwitchExternalPower = "suspend"; # plugged in, no external display
     };
+
+    # mkIf's
+    # mkIf config.ssh -> Add public key here
+    # users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed ... ];
 
     # ─────────────── Modules ───────────────
     sys = {
-        #disk.disk0 = "/dev/nvme0n1"; # TODO ASSERTION, ATLEAST ONE OF THIS SHOULD BE MANDATORY
-        #disk.disk1 = "/dev/nvme1n1";
-        # disk = {
-        #   raid0 = "" # mirroring
-        #   raid1 = true;
-        #   raid2 = true;
-        #   raid3 = true;
-        #   raid4 = true;
-        #   raid5 = true;
-        #   raid6 = true;
-        # };
-
-        # MOVE TO SYSTEM
-        #system = {
-            #impermanence.enable = true;
-            #nvidia.enable = true;
-            #intel.enable = true;
-        #};
-
+        user = "meow";
         modules = {
+            # disk and partitions
+            #encryption = true; # luks
             impermanence.enable = true;
-            lanzaboote.enable = true;
+            #disk.disk0 = ""; # TODO ASSERTION, at least one of this should be mandatory, use uuid from now on
+            #disk.disk0 = "";
+            #raid.raid0 = true;  # ?
+            #raid.raid1 = true; # mirroring
+            #raid.raid2 = true;
+            #raid.raid3 = true;
+
+            # system
+            audio.enable = true;
+            boot.enable = true;
+            boot.silent = true;
+            boot.lanzaboote.enable = false;
             tpm.enable = true;
             intel.enable = true;
+            intel.bus-id = "PCI:0:2:0";
             nvidia.enable = true;
+            nvidia.bus-id = "PCI:1:0:0";
             networking.enable = true;
 
-            hyprland.enable = true;
-            greetd.enable = true;
-            laptop.enable = true;
+            # desktop
+            dev.python.enable = true;
+            desktop.hyprland.enable = true;
+            desktop.hyprland.cache = false;
+            desktop.greetd.enable = true;
+            desktop.greetd.autologin.enable = true;
+            desktop.greetd.autologin.user = config.sys.user;
 
+            # modules
             android.enable = true;
             atuin.enable = true;
             bluetooth.enable = true;
             colord.enable = true;
-            controller.enable = true; # ps5 controller
+            controller.enable = false; # ps5 controller
             docker.enable = true;
             flatpak.enable = true;
             fonts.enable = true;
@@ -133,14 +124,14 @@ in {
             gimp.enable = true;
             git.enable = true;
             ime.enable = true;
+            incus.enable = true; # linux containers
             kiwix.enable = true;
             kubernetes.enable = true;
             minecraft.enable = true;
             monero.enable = true;
             mullvad-vpn.enable = true;
+            nh.enable = true;
             nvim-nvf.enable = true;
-            openclaw.enable = false;
-            opencode.enable = true;
             paraview.enable = true;
             password-store.enable = true; # gpg + pass
             qbittorrent.enable = true;
@@ -151,15 +142,30 @@ in {
             tectonic.enable = true;
             terraform.enable = true;
             typst.enable = true;
-            vm.enable = true; # vmware, libvirt, virt-manager
+            vm.enable = true; # libvirt, virt-manager, vmware
+            vm.gpu-passthrough = false; # WARNING this will bind the gpu to vfio-pci driver
             vscodium.enable = true;
             wine.enable = true;
             xdg.enable = true;
-            xenia.enable = true;
+
+            # AI
+            ai.claude-code.enable = true;
+            ai.ollama.enable = true;
+            ai.ollama.cuda = true;
+            ai.ollama.models = [ "qwen3-coder:30b" ];
+            ai.openclaw.enable = false;
+            ai.opencode.enable = true;
+
+            # Gaming
+            gaming.enable = true;
+            gaming.star-citizen.enable = true;
+            gaming.star-citizen.cache = true;
+            gaming.eden.enable = true; # switch
+            gaming.lutris.enable = true;
+            gaming.pcsx2.enable = true; # ps2
+            gaming.rpcs3.enable = false; # ps3 (NOTE using flatpak for now)
+            gaming.ryubing.enable = true; # switch
+            gaming.xenia.enable = true; # x360
         };
     };
-
-    # mkIf's
-    # mkIf config.ssh -> Add public key here
-    # users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed ... ];
 }

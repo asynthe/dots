@@ -1,38 +1,35 @@
 {
     imports = [
-        # Setup
-        ./impermanence.nix
-        ./lanzaboote.nix # -> boot.nix (?)
-        ./tpm.nix # -> cpu.nix (?)
-        ./intel.nix # -> cpu.nix (?)
-        ./nvidia.nix # -> gpu.nix (?)
-
-        # Environment
-        ./hyprland.nix
-        ./greetd.nix
-        ./laptop.nix # make custom option custom.laptop (?)
-
+        ./ai.nix
         ./android.nix
         ./atuin.nix
+        ./audio.nix
         ./bluetooth.nix
+        ./boot.nix
         ./colord.nix
-        ./controller.nix # ps5 controller
+        ./controller.nix
+        ./desktop.nix
+        ./dev.nix
         ./docker.nix
         ./flatpak.nix
         ./fonts.nix
-        ./fprintd.nix # fingerprint
+        ./fprintd.nix
+        ./gaming.nix
         ./gimp.nix
         ./git.nix
         ./ime.nix
+        ./impermanence.nix
+        ./incus.nix
+        ./intel.nix
         ./kiwix.nix
         ./kubernetes.nix
         ./minecraft.nix
         ./monero.nix
         ./mullvad-vpn.nix
         ./networking.nix
+        ./nh.nix
+        ./nvidia.nix
         ./nvim-nvf.nix
-        ./openclaw.nix
-        ./opencode.nix
         ./paraview.nix
         ./password-store.nix
         ./qbittorrent.nix
@@ -42,11 +39,12 @@
         ./tailscale.nix
         ./tectonic.nix
         ./terraform.nix
+        ./tpm.nix
         ./typst.nix
-        ./vm.nix # vmware, libvirt, virt-manager
+        ./user.nix
+        ./vm.nix
         ./vscodium.nix
         ./wine.nix
         ./xdg.nix
-        ./xenia.nix # xbox 360
     ];
 }

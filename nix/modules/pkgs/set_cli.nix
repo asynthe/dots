@@ -41,10 +41,6 @@
         yt-dlp
         zoxide
 
-        # ai
-        claude-code
-        opencode
-
         # net
         ntfs3g
         rsync
@@ -75,7 +71,7 @@
         mpd ncmpcpp
         mixxx
         spek
-        projectm_3 # Milkdrop 3
+        #projectm_3 # Milkdrop 3
 
         # Audio vis and others
         alsa-utils pulsemixer

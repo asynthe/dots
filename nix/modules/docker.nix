@@ -8,8 +8,7 @@ in {
 
     config = lib.mkIf cfg.enable {
         virtualisation.docker.enable = true;
-        # TODO Refer option like sys.username = "meow"
-        users.users.meow.extraGroups = [ "docker" ]; # TODO Change user
+        users.users.${config.sys.user}.extraGroups = [ "docker" ];
         # TODO Option like sys.system.filesystem = "btrfs"
         virtualisation.docker.storageDriver = "btrfs";
     };

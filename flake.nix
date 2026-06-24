@@ -3,18 +3,19 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
         nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-        home-manager.url = "github:nix-community/home-manager";
-        home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
         disko.inputs.nixpkgs.follows = "nixpkgs";
         disko.url = "github:nix-community/disko";
         impermanence.url = "github:nix-community/impermanence";
         nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-        nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
         nvf.url = "github:notashelf/nvf";
         sops-nix.url = "github:Mic92/sops-nix"; # TODO
 
+        hyprland.url = "github:hyprwm/Hyprland";
+        hyprland.inputs.nixpkgs.follows = "nixpkgs";
+
         # Testing
+        nix-citizen.url = "github:LovingMelody/nix-citizen";
         lanzaboote.url = "github:nix-community/lanzaboote/v1.0.0";
         lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -23,10 +24,8 @@
         self,
         nixpkgs,
         nixpkgs-stable,
-        home-manager,
         lanzaboote,
-
-        nixos-wsl,
+        nix-citizen,
         nvf,
         ...
         } @ inputs:
@@ -39,12 +38,6 @@
                 lib.filterAttrs
                 (name: type: type == "directory")
                 (builtins.readDir ./nix/hosts)
-            );
-
-            homeDirs = builtins.attrNames (
-                lib.filterAttrs
-                (name: type: type == "directory")
-                (builtins.readDir ./nix/home)
             );
 
             mkPkgs = nixpkgsInput: arch:
@@ -97,26 +90,7 @@
                             inputs.impermanence.nixosModules.impermanence
                             inputs.lanzaboote.nixosModules.lanzaboote
                             inputs.nvf.nixosModules.default
-                        ];
-                    };
-                };
-
-            mkHome = user:
-                let
-                    cfg = mkArchConfig ./nix/home/${user}/arch.nix;
-                in {
-                    name = user;
-                    value = home-manager.lib.homeManagerConfiguration {
-                        pkgs = cfg.pkgs;
-
-                        extraSpecialArgs = {
-                            inherit inputs outputs;
-                            channel = cfg.channel;
-                            pkgs-stable = cfg.pkgs-stable;
-                        };
-
-                        modules = [
-                            ./nix/home/${user}
+                            inputs.nix-citizen.nixosModules.default
                         ];
                     };
                 };
@@ -124,8 +98,5 @@
         in {
             nixosConfigurations =
                 builtins.listToAttrs (map mkHost hostDirs);
-
-            homeConfigurations =
-                builtins.listToAttrs (map mkHome homeDirs);
         };
 }

@@ -7,7 +7,6 @@ sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+2+7+12 --wipe-slot=tpm
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.tpm;
-    user = "meow";
 in {
     options.sys.modules.tpm = {
         enable = lib.mkEnableOption "TPM";
@@ -17,6 +16,6 @@ in {
         security.tpm2.enable = true;
         security.tpm2.pkcs11.enable = true;
         security.tpm2.tctiEnvironment.enable = true;
-        users.users.${user}.extraGroups = [ "tss" ];
+        users.users.${config.sys.user}.extraGroups = [ "tss" ];
     };
 }

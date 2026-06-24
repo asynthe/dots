@@ -9,21 +9,20 @@ in {
 
     config = lib.mkIf cfg.enable {
 
-        # TODO Testing
-        users.extraGroups.input.members = [ "meow" ];
-        boot.kernelModules = [ "hid-sony" "hid-playstation" ];
-
-        hardware.bluetooth.powerOnBoot = true;
         hardware.xpadneo.enable = true;
+        users.extraGroups.input.members = [ config.sys.user ];
         environment.systemPackages = with pkgs; [
             dualsensectl
         ];
 
-        hardware.bluetooth.settings.General = lib.mkIf bluetoothCfg.enable {
-            Enable = "Source,Sink,Media,Socket";
-            AutoEnable = true;
-            ControllerMode = "bredr";
-            Experimental = true;
-        };
+        # TODO Fix
+        #hardware.bluetooth.powerOnBoot = true;
+        #boot.kernelModules = [ "hid-sony" "hid-playstation" ];
+        #hardware.bluetooth.settings.General = lib.mkIf bluetoothCfg.enable {
+        #    Enable = "Source,Sink,Media,Socket";
+        #    AutoEnable = true;
+        #    ControllerMode = "bredr";
+        #    Experimental = true;
+        #};
     };
 }

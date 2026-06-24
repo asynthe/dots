@@ -3,6 +3,7 @@ check_repo() {
     REPOS=(
       "$HOME/dots:dots"
       "$HOME/notes:notes"
+      "$HOME/pass:pass"
       "$HOME/sakuhin:sakuhin"
     )
   else
