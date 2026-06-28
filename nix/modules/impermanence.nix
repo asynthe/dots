@@ -5,44 +5,37 @@ https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/
 
 { config, lib, ... }: 
 let
-    cfg = config.sys.modules.impermanence;
+    cfg = config.sys.disk.impermanence;
 in {
-    options.sys.modules.impermanence = {
+    options.sys.disk.impermanence = {
         enable = lib.mkEnableOption "Impermanence";
+        folder = lib.mkOption {
+            type    = lib.types.str;
+            default = "/persist";
+            description = "Path to the persistent storage mountpoint";
+        };
     };
 
     config = lib.mkIf cfg.enable {
         fileSystems = {
-            "/persist".neededForBoot = true;
+            ${cfg.folder}.neededForBoot = true;
             "/var/log".neededForBoot = true;
-            # TODO NOTE
-            # Should it be good to save all of this, or better to save specific directories?
         };
 
-        environment.persistence."/persist" = {
+        environment.persistence.${cfg.folder} = {
             hideMounts = true;
             directories = [
-                "/etc/nixos" # TODO which one?
+                "/var/log"
                 "/var/lib/nixos"
-                "/var/lib/fwupd" # TODO fwupdmgr update
-                "/var/lib/systemd" # https://nixos.org/manual/nixos/unstable/#sec-var-systemd
+                "/var/lib/systemd"
                 #"/var/lib/systemd/coredump"
+                #"/var/lib/systemd/timers"
+                #"/var/lib/systemd/backlight"
+                #"/var/lib/systemd/rfkill"
             ];
             files = [
                 "/etc/machine-id"
-                "/etc/adjtime" # Hardware clock # TODO Check
-                "/var/lib/systemd/random-seed"
-                #"/root/.bash_history"
-
-                # ZSH
-                #"/etc/zfs/zpool.cache"
-
-                # agenix
-                # TODO Set a proper secret management
-                #"/etc/ssh/ssh_host_ed25519_key"
-                #"/etc/ssh/ssh_host_ed25519_key.pub"
-                #"/etc/ssh/ssh_host_rsa_key"
-                #"/etc/ssh/ssh_host_rsa_key.pub"
+                #"/var/lib/systemd/random-seed"
             ];
         };
 

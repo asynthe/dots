@@ -4,7 +4,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.mullvad-vpn;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.mullvad-vpn = {
         enable = lib.mkEnableOption "Mullvad VPN";
@@ -14,7 +14,6 @@ in {
         services.mullvad-vpn.enable = true;
         services.mullvad-vpn.package = pkgs.mullvad-vpn; # gui
 
-        # TODO set this variable, maybe in impermanence file
-        environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/etc/mullvad-vpn" ];
+        environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/etc/mullvad-vpn" ];
     };
 }

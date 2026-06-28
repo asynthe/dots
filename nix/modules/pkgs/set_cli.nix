@@ -24,7 +24,8 @@
         mediainfo
         ncdu
         neomutt
-        neovim helix
+        vim
+        helix
         nh
         pass-wayland
         pv
@@ -62,7 +63,6 @@
         unimatrix
 
         # gui
-        ghostty
         networkmanagerapplet
         zathura sioyek
         signal-desktop

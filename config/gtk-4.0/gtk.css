@@ -17,6 +17,13 @@ window.background, window.background:backdrop {
     color: #ffffff;
 }
 
+/* Ghostty: allow its own background-opacity to control transparency */
+window.com-mitchellh-ghostty,
+window.com-mitchellh-ghostty.background,
+window.com-mitchellh-ghostty.background:backdrop {
+    background-color: transparent;
+}
+
 /* Headerbar */
 headerbar, headerbar:backdrop {
     background-color: #000000;

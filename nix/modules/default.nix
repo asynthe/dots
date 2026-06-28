@@ -1,6 +1,7 @@
 {
     imports = [
         ./ai.nix
+        ./fwupd.nix
         ./android.nix
         ./atuin.nix
         ./audio.nix
@@ -29,7 +30,7 @@
         ./networking.nix
         ./nh.nix
         ./nvidia.nix
-        ./nvim-nvf.nix
+        ./nvim.nix
         ./paraview.nix
         ./password-store.nix
         ./qbittorrent.nix

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg             = config.sys.modules.boot;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.boot = {
         enable = lib.mkEnableOption "systemd-boot";
@@ -58,7 +58,7 @@ in {
             boot.loader.systemd-boot.enable              = lib.mkForce false;
             boot.loader.systemd-boot.configurationLimit  = 3;
 
-            environment.persistence."/persist".directories =
+            environment.persistence.${impermanenceCfg.folder}.directories =
                 lib.mkIf impermanenceCfg.enable [ "/var/lib/sbctl" ];
         })
     ];

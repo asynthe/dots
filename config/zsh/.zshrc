@@ -57,6 +57,7 @@ source "$ZDOTDIR/.zsh_functions"
 
 # Eval
 eval "$(atuin init zsh --disable-up-arrow)"
+eval "$(direnv hook zsh)"
 
 #starfetch
 source "$DOTS_DIR/scripts/bash/check_repo.sh"

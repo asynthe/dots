@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.bluetooth;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.bluetooth = {
         enable = lib.mkEnableOption "Bluetooth";
@@ -12,8 +12,7 @@ in {
         hardware.bluetooth.enable = true;
         hardware.bluetooth.powerOnBoot = true;
 
-        # TODO Set this variable in impermanence device (`/persist`)
-        environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/bluetooth" ];
+        environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/bluetooth" ];
 
         #hardware.bluetooth.settings = {
         # TODO Test this with the nothing earphones

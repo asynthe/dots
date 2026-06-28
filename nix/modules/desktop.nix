@@ -58,18 +58,18 @@ in {
             environment.systemPackages = with pkgs; [
 
                 # Apps
+                brightnessctl
+                fuzzel rofi 
+                walker elephant
                 gromit-mpx
+                hypridle
                 hyprshot
                 imv
                 mako libnotify
-                ripdrag
-                fuzzel rofi walker
-                socat
-                hypridle
-                wl-clipboard
-                brightnessctl
                 playerctl
-                walker
+                ripdrag
+                socat
+                wl-clipboard
 
                 # Libs
                 hyprpolkitagent

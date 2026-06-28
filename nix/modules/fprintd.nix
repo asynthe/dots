@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.fprintd;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.fprintd = {
         enable = lib.mkEnableOption "fprintd";
@@ -14,7 +14,6 @@ in {
             sudo.fprintAuth = true;
         };
 
-        # TODO Set this variable in impermanence device (`/persist`)
-        environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/fprint" ];
+        environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/fprint" ];
     };
 }

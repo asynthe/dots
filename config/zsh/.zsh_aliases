@@ -1,6 +1,7 @@
 alias aliases='nvim $ZDOTDIR/.zsh_aliases'
 alias chat='weechat'
 alias cp='rsync -ah --info=progress2'
+alias cr='claude --resume'
 alias hist='h'
 alias info='mediainfo'
 alias m='ncmpcpp'

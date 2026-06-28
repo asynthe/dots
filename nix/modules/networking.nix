@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.networking;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.networking = {
         enable = lib.mkEnableOption "Networking";
@@ -22,7 +22,7 @@ in {
         #     wifi.scanRandMacAddress = true;
         #     wifi.macAddress = "random";
         # };
-        # environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/etc/NetworkManager/system-connections" ];
+        # environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/etc/NetworkManager/system-connections" ];
 
         # iwd
         networking.networkmanager.enable = false;
@@ -38,7 +38,7 @@ in {
             #settings.General.AddressRandomization = "network";
             #settings.General.AddressRandomizationRange = "full";
         };
-        environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/iwd" ];
+        environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/iwd" ];
 
         # TODO Is this setup because of Tailscale (?)
         services.resolved = {

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.ssh;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.ssh = {
         enable = lib.mkEnableOption "SSH";

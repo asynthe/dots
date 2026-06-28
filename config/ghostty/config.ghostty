@@ -1,15 +1,18 @@
-# ───────────────────────── Ghostty ─────────────────────────
-# Settings
+# ───────────────────────── Settings ─────────────────────────
 focus-follows-mouse = false
 window-inherit-font-size = true
 window-inherit-working-directory = true 
 working-directory = home
 
+# Font
+font-family = JetBrainsMono Nerd Font
+font-style = Regular
+font-size = 14
+font-thicken = true
+
 # Opacity
 #background-opacity = 0.2
-
 background-opacity = 0.1
-
 #unfocused-split-opacity = 0.9
 
 # Padding
@@ -25,12 +28,6 @@ background-opacity = 0.1
 #gtk-wide-tabs = true
 #window-theme = dark
 #window-theme = ghostty
-
-# Font
-font-family = JetBrainsMono Nerd Font
-font-style = Regular
-font-size = 14
-font-thicken = true
 
 # Colors
 #background = #080808

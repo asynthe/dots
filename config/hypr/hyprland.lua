@@ -1,43 +1,21 @@
--- TODO
--- -> Set up cycle next
--- -> Set up split move there if theres two
---   One upper 50% windows and one 50% window down.
---   If i do ALT + j the upper or down should go down
---   But instead it changes to 50% and 50% vertical
-
--- Variables
--- Environment
--- Monitors
--- Autostart
--- Configuration
--- Animations
--- Input
--- Keybinds
-
--- ───────────────────────── Variables ─────────────────────────
-local terminal    = "ghostty"
-local fileManager = "thunar"
-local menu        = "rofi"
-local screenshotsDir = (os.getenv("HOME") or "~") .. "/Downloads/screenshots"
-
-
 -- ───────────────────────── Monitors ─────────────────────────
 local monitors = require("monitors")
 
 
 -- ───────────────────────── Autostart ─────────────────────────
 hl.on("hyprland.start", function ()
-    hl.exec_cmd("awww-daemon")
-    hl.exec_cmd("nm-applet")
     hl.exec_cmd("mpd")
-    hl.exec_cmd("mullvad-vpn")
-    hl.exec_cmd("hypridle")
-    --hl.exec_cmd("[workspace 9 silent] webcord")
-    --hl.exec_cmd("[workspace 10 silent] MusicBee")
-    --hl.exec_cmd("waybar & hyprpaper & firefox")
+    hl.exec_cmd("uwsm app -- mullvad-vpn")
+    hl.exec_cmd("uwsm app -- nm-applet --indicator")
+    --hl.exec_cmd("[workspace 9 silent] musicbee")
+    hl.exec_cmd("[workspace 10 silent] webcord")
 
-    -- Plugins
-    --hl.exec_cmd("hyprctl plugin load '$HYPR_PLUGIN_DIR/lib/libhyprexpo.so")
+    -- services and daemons
+    --hl.exec_cmd("elephant")
+    --hl.exec_cmd("walker --gapplication-service")
+    hl.exec_cmd("systemctl --user enable --now hypridle.service")
+    hl.exec_cmd("uwsm app -- awww-daemon")
+    hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh &")
 end)
 
 
@@ -57,10 +35,6 @@ hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
 -- Wayland specific
 hl.env("NIXOS_OZONE_WL", "1")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
-hl.env("AQ_DRM_DEVICES", "/dev/dri/card1")
-
--- Force Hyprland to use only the Intel DRM device; NVIDIA (card0) has no
--- display outputs and causes DPMS multi-monitor rendering bugs if included.
 
 -- Permissions
 hl.config({
@@ -111,7 +85,7 @@ hl.config({
         disable_splash_rendering = true,
 
         -- This makes any windows children open on the same workspace (eg. Steam and games)
-        initial_workspace_tracking = 2,
+        initial_workspace_tracking = 0,
 
         -- Window swallowing
         --enable_swallow = true,
@@ -147,6 +121,34 @@ hl.config({
         --    enabled = true,
         --},
     },
+})
+
+-- Input
+hl.config({
+    input = {
+        kb_layout  = "us",
+        kb_variant = "",
+        kb_model   = "",
+        kb_options = "ctrl:nocaps", -- switch caps lock for ctrl
+        kb_rules   = "",
+        follow_mouse = 1,
+        sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
+        touchpad = {
+            natural_scroll = false,
+        },
+    },
+})
+
+hl.gesture({
+    fingers = 3,
+    direction = "horizontal",
+    action = "workspace"
+})
+
+-- per-device config
+hl.device({
+    name        = "epic-mouse-v1",
+    sensitivity = -0.5,
 })
 
 -- Smart gaps
@@ -185,7 +187,6 @@ hl.window_rule({ -- Fix some dragging issues with XWayland
 hl.config({
     animations = {
         enabled = true,
-        workspace_wraparound = true,
     },
 })
 
@@ -200,53 +201,50 @@ hl.animation({ leaf = "windowsIn",        enabled = true, speed = 2.427, bezier 
 hl.animation({ leaf = "windowsOut",       enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
 hl.animation({ leaf = "windowsMove",      enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
-hl.animation({ leaf = "layers",           enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
+hl.animation({ leaf = "layers",           enabled = true, speed = 2.427, bezier = "ease", style = "fade"      })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.427, bezier = "ease", style = "fade"      })
 hl.animation({ leaf = "fadePopups",       enabled = true, speed = 2.427, bezier = "ease"                      })
-
-
--- ───────────────────────── Input ─────────────────────────
-hl.config({
-    input = {
-        kb_layout  = "us",
-        kb_variant = "",
-        kb_model   = "",
-        kb_options = "ctrl:nocaps", -- switch caps lock for ctrl
-        kb_rules   = "",
-        follow_mouse = 1,
-        sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
-        touchpad = {
-            natural_scroll = false,
-        },
-    },
-})
-
-hl.gesture({
-    fingers = 3,
-    direction = "horizontal",
-    action = "workspace"
-})
-
--- per-device config
-hl.device({
-    name        = "epic-mouse-v1",
-    sensitivity = -0.5,
-})
-
 
 -- ───────────────────────── Window Rules ─────────────────────────
 hl.window_rule({ match = { xwayland = true }, rounding = 0 }) -- xwayland
 hl.window_rule({ match = { class = "^(mpv|steam_app)(.*)$" }, opacity = "1 override 1 override" })
-hl.window_rule({ match = { class = "com.mitchellh.ghostty" }, float = true, size = "1360 825" })
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
-hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
-hl.window_rule({ match = { title = "^(Export Image as PNG)$" }, center = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
+hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
+
+-- Terminal
+hl.window_rule({ 
+    match = { 
+        class = "^("
+            .. "com.mitchellh.ghostty|" 
+            .. "org.wezfurlong.wezterm" 
+            .. ")(.*)$"
+    }, 
+    border_size = 0,
+    float = true, 
+    size = "1360 825" 
+})
+
+hl.window_rule({ 
+    match = { 
+        title = "^("
+            .. "Mullvad VPN|"
+            .. "Input Error|"
+            -- TODO Fix
+            --.. "<vm> on QEMU/KVM|"
+            .. "Add New Virtual Hardware|"
+            .. "New VM"
+            .. ")(.*)$"
+    }, 
+    border_size = 0,
+    center = true,
+})
 hl.window_rule({
   match = {
     title = "^("
       .. "Choose wallpaper|"
       .. "Enter name of file to save to|"
+      .. "Export Image as PNG|"
       .. "File Upload|"
       .. "Library|"
       .. "Open File|"
@@ -260,15 +258,29 @@ hl.window_rule({
   float       = true,
   center      = true,
   border_size = 0,
-  size        = "1230 690"
+  size        = "1230 690",
+})
+
+-- Layer rules
+hl.layer_rule({
+    match = { namespace = "walker" },
+    blur = true,
+    dim_around = true,
+    ignore_alpha = 1,
+    animation = "slide",
+})
+
+hl.layer_rule({
+    match = { namespace = "logout_dialog" },
+    blur = true,
+    ignore_alpha = 0.5,
+    dim_around = true,
 })
 
 -- Other
 local suppressMaximizeRule = hl.window_rule({
-    -- Ignore maximize requests from all apps. You'll probably like this.
     name  = "suppress-maximize-events",
     match = { class = ".*" },
-
     suppress_event = "maximize",
 })
 -- suppressMaximizeRule:set_enabled(false)
@@ -293,10 +305,13 @@ hl.window_rule({
 
 -- ───────────────────────── Keybinds ─────────────────────────
 local mainMod = "ALT"
+local terminal    = "wezterm"
+local fileManager = "thunar"
+local menu        = "fuzzel"
+local screenshotsDir = (os.getenv("HOME") or "~") .. "/Downloads/screenshots"
 
-hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("ghostty"))
---hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("ghostty"))
-hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"))
+hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
@@ -398,8 +413,8 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 
 -- Brightnessctl
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
 
 -- Playerctl
 --hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })

@@ -15,7 +15,11 @@ should use that agenix ssh key or something
 
     # ─────────────── System ───────────────
     system.name = "p1";
+
+    # TODO
+    # Set up a custom name for generations
     system.nixos.label = "p1";
+
     networking.hostName = "p1";
     system.stateVersion = "25.05";
     i18n.defaultLocale = "en_US.UTF-8";
@@ -80,31 +84,43 @@ should use that agenix ssh key or something
     # ─────────────── Modules ───────────────
     sys = {
         user = "meow";
+        disk = {
+            #filesystem = "btrfs"; # only using btfs for now # <- Chooses specific disko file
+            #encryption = true; # enables luks section on the chosen disko file
+            impermanence.enable = true; # enables impermanence section on the chosen disko file
+            impermanence.folder = "/persist"; # requires true on the previous, and disko will build this folder
+            #impermanence.persist-home = false; # removes "/home" from the disko file. requires the others
+            #disko.disk0 = "/dev/nvme0n1"; # mandatory
+            #disko.disk1 = "/dev/nvme1n1"; # optional but required if raid is enabled
+            #disko.raid.enable = true; # -> +mdadm, add assertion
+            #disko.raid.type = [ "raid0" ]; # requires previous 3 configs.
+        };
+
+        # TODO
+        #secrets = {
+        #};
+
         modules = {
-            # disk and partitions
-            #encryption = true; # luks
-            impermanence.enable = true;
-            #disk.disk0 = ""; # TODO ASSERTION, at least one of this should be mandatory, use uuid from now on
-            #disk.disk0 = "";
-            #raid.raid0 = true;  # ?
-            #raid.raid1 = true; # mirroring
-            #raid.raid2 = true;
-            #raid.raid3 = true;
 
             # system
             audio.enable = true;
             boot.enable = true;
             boot.silent = true;
+
+            #boot.secure = true; # +automatic lanzaboote, -systemd-boot
             boot.lanzaboote.enable = false;
+
             tpm.enable = true;
             intel.enable = true;
             intel.bus-id = "PCI:0:2:0";
             nvidia.enable = true;
             nvidia.bus-id = "PCI:1:0:0";
             networking.enable = true;
+            #zram.enable = true;
 
             # desktop
             dev.python.enable = true;
+            dev.javascript.enable = true;
             desktop.hyprland.enable = true;
             desktop.hyprland.cache = false;
             desktop.greetd.enable = true;
@@ -116,11 +132,12 @@ should use that agenix ssh key or something
             atuin.enable = true;
             bluetooth.enable = true;
             colord.enable = true;
-            controller.enable = false; # ps5 controller
+            controller.enable = true; # ps5 controller
             docker.enable = true;
             flatpak.enable = true;
             fonts.enable = true;
             fprintd.enable = true;
+            fwupd.enable = true; # firmware updater
             gimp.enable = true;
             git.enable = true;
             ime.enable = true;
@@ -131,7 +148,7 @@ should use that agenix ssh key or something
             monero.enable = true;
             mullvad-vpn.enable = true;
             nh.enable = true;
-            nvim-nvf.enable = true;
+            nvim.enable = true;
             paraview.enable = true;
             password-store.enable = true; # gpg + pass
             qbittorrent.enable = true;
@@ -144,6 +161,7 @@ should use that agenix ssh key or something
             typst.enable = true;
             vm.enable = true; # libvirt, virt-manager, vmware
             vm.gpu-passthrough = false; # WARNING this will bind the gpu to vfio-pci driver
+            vm.vmware = false;
             vscodium.enable = true;
             wine.enable = true;
             xdg.enable = true;
@@ -163,7 +181,7 @@ should use that agenix ssh key or something
             gaming.eden.enable = true; # switch
             gaming.lutris.enable = true;
             gaming.pcsx2.enable = true; # ps2
-            gaming.rpcs3.enable = false; # ps3 (NOTE using flatpak for now)
+            gaming.rpcs3.enable = false; # ps3
             gaming.ryubing.enable = true; # switch
             gaming.xenia.enable = true; # x360
         };

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
     cfg = config.sys.modules.tailscale;
-    impermanenceCfg = config.sys.modules.impermanence;
+    impermanenceCfg = config.sys.disk.impermanence;
 in {
     options.sys.modules.tailscale = {
         enable = lib.mkEnableOption "Tailscale";
@@ -24,7 +24,6 @@ in {
         systemd.network.wait-online.enable = false;
         boot.initrd.systemd.network.wait-online.enable = false;
 
-        # TODO option for /persist
-        environment.persistence."/persist".directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/tailscale" ];
+        environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/tailscale" ];
     };
 }

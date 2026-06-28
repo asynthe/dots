@@ -5,7 +5,7 @@ hl.config({
     },
 })
 
-local side        = "left" -- "left": laptop left | "right": laptop right
+local side        = "right" -- "left": laptop left | "right": laptop right
 local laptop_bare = "AU Optronics 0xB0AE"
 local laptop      = "desc:" .. laptop_bare
 local laptop_w    = 1920
@@ -21,8 +21,15 @@ local known_externals = {
     {
         match  = "0x01000E00",
         output = "desc:Samsung Electric Company SAMSUNG 0x01000E00",
-        mode   = "3840x2160@60",
-        scale  = "2",
+        mode   = "1920x1080@60",
+        scale  = "1",
+        width  = 1920,
+    },
+    {
+        match  = "0x01010101",
+        output = "desc:Panasonic Industry Company Panasonic-TV 0x01010101",
+        mode   = "1920x1080@60",
+        scale  = "1",
         width  = 1920,
     },
 }

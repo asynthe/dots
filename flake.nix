@@ -8,7 +8,6 @@
         disko.url = "github:nix-community/disko";
         impermanence.url = "github:nix-community/impermanence";
         nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-        nvf.url = "github:notashelf/nvf";
         sops-nix.url = "github:Mic92/sops-nix"; # TODO
 
         hyprland.url = "github:hyprwm/Hyprland";
@@ -26,7 +25,6 @@
         nixpkgs-stable,
         lanzaboote,
         nix-citizen,
-        nvf,
         ...
         } @ inputs:
 
@@ -89,7 +87,6 @@
                             inputs.disko.nixosModules.disko
                             inputs.impermanence.nixosModules.impermanence
                             inputs.lanzaboote.nixosModules.lanzaboote
-                            inputs.nvf.nixosModules.default
                             inputs.nix-citizen.nixosModules.default
                         ];
                     };
