@@ -9,14 +9,11 @@ in {
             cache  = lib.mkEnableOption "Build caches for Hyprland (requires flake)";
         };
 
-        greetd = {
-            enable    = lib.mkEnableOption "greetd display manager";
-            autologin = {
-                enable = lib.mkEnableOption "autologin into Hyprland, falling back to tuigreet on failure";
-                user   = lib.mkOption {
-                    type        = lib.types.str;
-                    description = "User to autologin as";
-                };
+        autologin = {
+            enable = lib.mkEnableOption "passwordless getty login on tty1";
+            user   = lib.mkOption {
+                type        = lib.types.str;
+                description = "User to autologin as";
             };
         };
     };
@@ -38,11 +35,14 @@ in {
         })
 
         (lib.mkIf cfg.hyprland.enable {
-            services.displayManager.defaultSession = "hyprland-uwsm";
             programs.hyprland = {
                 enable   = true;
                 withUWSM = true;
             };
+
+            # Was `systemctl --user enable` in .zprofile, unreachable after exec.
+            systemd.packages = [ pkgs.hyprpolkitagent ];
+            systemd.user.services.hyprpolkitagent.wantedBy = [ "graphical-session.target" ];
 
             systemd.user.services."hyprland-dpms-resume" = {
                 description = "Re-enable Hyprland displays after resume";
@@ -97,25 +97,13 @@ in {
             ];
         })
 
-        (lib.mkIf cfg.greetd.enable {
-            services.greetd = {
-                enable        = true;
-                useTextGreeter = true;
-                settings = {
-                    default_session.command = lib.concatStringsSep " " [
-                        "${pkgs.tuigreet}/bin/tuigreet"
-                        "--remember"
-                        "--asterisks"
-                        "--cmd"
-                        "'uwsm start hyprland-uwsm.desktop'"
-                    ];
-                } // lib.optionalAttrs cfg.greetd.autologin.enable {
-                    initial_session = {
-                        command = "uwsm start hyprland-uwsm.desktop";
-                        user    = cfg.greetd.autologin.user;
-                    };
-                };
-            };
+        # No display manager: getty logs in on tty1 and zsh's .zprofile hands
+        # off to `uwsm start`. Quitting Hyprland returns to that shell.
+        (lib.mkIf cfg.autologin.enable {
+            services.getty.autologinUser = cfg.autologin.user;
+            # First tty only, once per boot -- tty2-6 still prompt, so this is
+            # no looser than greetd's autologin was.
+            services.getty.autologinOnce = true;
         })
     ];
 }

@@ -6,11 +6,6 @@ export DOTS_DIR=$HOME/dots
 export NOTES_DIR=$HOME/notes
 export PASSWORD_STORE_DIR=$HOME/ben/pass
 
-# Notes
-function note() {
-  cd "$NOTES_DIR" && nvim "${1:-main.md}"
-}
-
 # Inactivity auto-command
 if [[ -o interactive ]]; then
   TMOUT=180

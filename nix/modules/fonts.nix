@@ -14,12 +14,6 @@ in {
         fonts = {
             fontconfig.enable = true;
             fontDir.enable = true;
-            #fontconfig.defaultFonts = {
-            #serif = [ "DejaVu Serif" "IPAGothic" ];
-            #sansSerif = [ "DejaVu Sans" "IPAPGothic" ];
-            #monospace = [ "JetBrainsMono Nerd Font Mono" ];
-            #emoji = [ "Noto Color Emoji" ];
-            #};
             packages = with pkgs; [
                 corefonts
                 dejavu_fonts

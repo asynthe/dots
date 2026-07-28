@@ -11,19 +11,6 @@ in {
             xdg-ninja
         ];
 
-        # environment.sessionVariables = {
-        #     XDG_CONFIG_HOME = "$HOME/.config";
-        #     XDG_DATA_HOME   = "$HOME/.local/share";
-        #     XDG_CACHE_HOME  = "$HOME/.cache";
-        #     XDG_STATE_HOME  = "$HOME/.local/state";
-        #
-        #     # Per-app redirects
-        #     GNUPGHOME             = "$HOME/.config/gnupg";
-        #     ANDROID_USER_HOME     = "$HOME/.config/android";
-        #     WINEPREFIX            = "$HOME/wine_prefixes/default";
-        #     NPM_CONFIG_USERCONFIG = "$HOME/.config/npm/npmrc";
-        #     GRADLE_USER_HOME      = "$HOME/.local/share/gradle";
-        #     EXPO_HOME             = "$HOME/.config/expo";
-        # };
+        # TODO Set XDG base dirs + per-app redirects (gnupg, android, wine, npm, gradle, expo)
     };
 }

@@ -11,18 +11,7 @@ in {
         environment.systemPackages = with pkgs; [ macchanger impala ];
         networking.nftables.enable = true;
 
-        # ASSERTION
-        # Please set sys.modules.networking.backend = "networkmanager" or "iwd"
-
-        # NetworkManager
-        # networking.networkmanager.enable = true;
-        # TODO mkIf laptop (?)
-        # networking.networkmanager = {
-        #     ethernet.macAddress = "random";
-        #     wifi.scanRandMacAddress = true;
-        #     wifi.macAddress = "random";
-        # };
-        # environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/etc/NetworkManager/system-connections" ];
+        # TODO Add a sys.modules.networking.backend option ("networkmanager" or "iwd") with an assertion
 
         # iwd
         networking.networkmanager.enable = false;
@@ -32,11 +21,7 @@ in {
             settings.General.EnableNetworkConfiguration = true;
             settings.Network.NameResolvingService = "systemd";
 
-            # TODO mkIf laptop (?)
-            #settings.Network.EnableIPv6 = true;
-            #settings.Network.RoutePriorityOffset = 300;
-            #settings.General.AddressRandomization = "network";
-            #settings.General.AddressRandomizationRange = "full";
+            # TODO mkIf laptop: IPv6, RoutePriorityOffset, address randomization
         };
         environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/iwd" ];
 
@@ -47,10 +32,6 @@ in {
         };
         networking.interfaces.tailscale0.useDHCP = false;
 
-        # TODO Get iproute2, macchanger, test this for mac randomization
-        #services.udev.extraRules = ''
-        #ACTION=="add", SUBSYSTEM=="net", KERNEL=="eth*", \
-        #RUN+="${pkgs.iproute2}/bin/ip link set dev $name address $(${pkgs.macchanger}/bin/macchanger -r $name | awk '/New MAC/{print $3}')"
-        #'';
+        # TODO udev rule with iproute2 + macchanger for ethernet mac randomization
     };
 }

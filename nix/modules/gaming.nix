@@ -10,6 +10,15 @@ let
             sha256 = "1jbldny7k2qx4apbp9nd9m4j79w5pgdzykb47wsc80rzav0xsxaw";
         };
     };
+
+    emulation-station-bin = pkgs.appimageTools.wrapType2 {
+        pname   = "es-de";
+        version = "3.4.1";
+        src     = pkgs.fetchurl {
+            url    = "https://gitlab.com/es-de/emulationstation-de/-/package_files/288156961/download";
+            sha256 = "109mfa3aag6x4gf08326cbgs09dl403ygvaqm8yicmcdfd6s8q9w";
+        };
+    };
 in {
     options.sys.modules.gaming = {
         enable = lib.mkEnableOption "Gaming";
@@ -20,6 +29,7 @@ in {
         };
 
         eden.enable     = lib.mkEnableOption "Eden Switch emulator";
+        emulation-station.enable = lib.mkEnableOption "EmulationStation frontend";
         lutris.enable   = lib.mkEnableOption "Lutris launcher";
         pcsx2.enable    = lib.mkEnableOption "PCSX2 PS2 emulator";
         rpcs3.enable    = lib.mkEnableOption "RPCS3 PS3 emulator (binary)";
@@ -47,6 +57,15 @@ in {
 
         (lib.mkIf cfg.eden.enable {
             environment.systemPackages = with pkgs; [ eden ];
+        })
+
+        (lib.mkIf cfg.emulation-station.enable {
+            # Dropped from nixpkgs 2025-10-23 (freeimage CVEs), so packaged from the upstream ES-DE AppImage
+            assertions = [{
+                assertion = pkgs.stdenv.hostPlatform.isx86_64 && pkgs.stdenv.hostPlatform.isLinux;
+                message   = "sys.modules.gaming: emulation-station AppImage is only available for x86_64-linux";
+            }];
+            environment.systemPackages = [ emulation-station-bin ];
         })
 
         (lib.mkIf cfg.lutris.enable {

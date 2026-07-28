@@ -28,13 +28,15 @@ in {
                 "/var/log"
                 "/var/lib/nixos"
                 "/var/lib/systemd"
-                #"/var/lib/systemd/coredump"
-                #"/var/lib/systemd/timers"
-                #"/var/lib/systemd/backlight"
-                #"/var/lib/systemd/rfkill"
             ];
             files = [
                 "/etc/machine-id"
+                # Stable host identity across rollbacks. Also the sops-nix
+                # decryption key -- must survive or secrets become unreadable.
+                "/etc/ssh/ssh_host_ed25519_key"
+                "/etc/ssh/ssh_host_ed25519_key.pub"
+                "/etc/ssh/ssh_host_rsa_key"
+                "/etc/ssh/ssh_host_rsa_key.pub"
                 #"/var/lib/systemd/random-seed"
             ];
         };

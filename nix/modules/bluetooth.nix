@@ -14,16 +14,6 @@ in {
 
         environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/var/lib/bluetooth" ];
 
-        #hardware.bluetooth.settings = {
-        # TODO Test this with the nothing earphones
-        # No hands free mode
-        #settings.General = {
-        #Enable = "Source,Sink,Headset,Gateway,Handsfree";
-        #Disable = "Headset";
-        #DiscoverableTimeout = 0;
-        #FastConnectable = true;
-        #};
-        #settings.Policy.AutoEnable = true;
-        #};
+        # TODO hardware.bluetooth.settings to disable hands-free mode, test with the nothing earphones
     };
 }

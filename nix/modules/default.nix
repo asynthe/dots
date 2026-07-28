@@ -22,6 +22,7 @@
         ./impermanence.nix
         ./incus.nix
         ./intel.nix
+        ./k3s.nix
         ./kiwix.nix
         ./kubernetes.nix
         ./minecraft.nix
@@ -32,8 +33,8 @@
         ./nvidia.nix
         ./nvim.nix
         ./paraview.nix
-        ./password-store.nix
         ./qbittorrent.nix
+        ./secrets.nix
         ./ssh.nix
         ./steam.nix
         ./syncthing.nix

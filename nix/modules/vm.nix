@@ -12,7 +12,10 @@ in {
     config = lib.mkIf cfg.enable {
 
         # libvirt / QEMU
-        networking.firewall.trustedInterfaces = [ "virbr0" ];
+        networking.firewall.trustedInterfaces = [ 
+            "virbr0" 
+            "virbr1" 
+        ];
         programs.dconf.enable = true;
         programs.virt-manager.enable = true;
         services.spice-vdagentd.enable = true;
@@ -60,8 +63,7 @@ in {
             dnsmasq
             guestfs-tools
             libguestfs
-            spice
-            spice-gtk
+            spice spice-gtk
             spice-protocol
             spice-vdagent
             virtio-win

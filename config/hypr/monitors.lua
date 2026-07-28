@@ -5,24 +5,46 @@ hl.config({
     },
 })
 
-local side        = "right" -- "left": laptop left | "right": laptop right
-local laptop_bare = "AU Optronics 0xB0AE"
+local disable_internal = false
+local side             = "left" -- "left": laptop left | "right": laptop right
+local laptop_bare      = "AU Optronics 0xB0AE"
 local laptop      = "desc:" .. laptop_bare
 local laptop_w    = 1920
 
 local known_externals = {
     {
         match  = "S34CG50",
-        output = "desc:Samsung Electric Company S34CG50 HNBYC00076",
+        output = "desc: Samsung Electric Company S34CG50 HNBYC00076",
         mode   = "3440x1440@100",
         scale  = "1",
         width  = 3440,
     },
     {
+        match  = "0x00011011",
+        output = "desc: @@@ 5655SMART TV 0x00011011",
+        mode   = "1920x1080@60",
+        scale  = "1.3",
+        width  = 1920,
+    },
+    {
         match  = "0x01000E00",
-        output = "desc:Samsung Electric Company SAMSUNG 0x01000E00",
+        output = "desc: Samsung Electric Company SAMSUNG 0x01000E00",
         mode   = "1920x1080@60",
         scale  = "1",
+        width  = 1920,
+    },
+    {
+        match  = "0x01010101",
+        output = "desc: Sony SONY TV 0x01010101",
+        mode   = "1920x1080@60",
+        scale  = "1",
+        width  = 1920,
+    },
+    {
+        match  = "0x00000001",
+        output = "desc: Hisense Electric Co. Ltd. HISENSE 0x00000001",
+        mode   = "1920x1080@60",
+        scale  = "1.25",
         width  = 1920,
     },
     {
@@ -43,7 +65,9 @@ local function detect_external()
     return nil
 end
 
-local function apply_monitors()
+local function apply_monitors(force_disable_internal)
+    local disable = force_disable_internal or disable_internal
+
     local ext_desc = detect_external()
     if not ext_desc then
         hl.monitor({ output = laptop, mode = "1920x1200@60", position = "0x0", scale = "1" })
@@ -60,9 +84,13 @@ local function apply_monitors()
 
     local ext_w = ext and ext.width or laptop_w
     local lpos  = side == "left" and "0x0"           or (ext_w    .. "x0")
-    local epos  = side == "left" and (laptop_w .. "x0") or "0x0"
+    local epos  = disable and "0x0" or (side == "left" and (laptop_w .. "x0") or "0x0")
 
-    hl.monitor({ output = laptop, mode = "1920x1200@60", position = lpos, scale = "1" })
+    if not disable then
+        hl.monitor({ output = laptop, mode = "1920x1200@60", position = lpos, scale = "1" })
+    else
+        hl.monitor({ output = laptop, disabled = true })
+    end
     if ext then
         hl.monitor({ output = ext.output, mode = ext.mode, position = epos, scale = ext.scale })
     else
@@ -80,7 +108,7 @@ hl.on("monitor.removed", function() apply_monitors() end)
 -- Lid switch
 hl.bind("switch:on:Lid Switch", function()
     if detect_external() then
-        hl.monitor({ output = laptop, disabled = true })
+        apply_monitors(true)
     end
 end, { locked = true })
 
@@ -102,6 +130,7 @@ local function toggle_laptop_screen()
     end
     if active then
         hl.monitor({ output = laptop, disabled = true })
+        hl.timer(function() apply_monitors(true) end, { timeout = 500, type = "oneshot" })
     else
         hl.monitor({ output = laptop, disabled = false })
         apply_monitors()

@@ -1,7 +1,6 @@
 alias aliases='nvim $ZDOTDIR/.zsh_aliases'
 alias chat='weechat'
 alias cp='rsync -ah --info=progress2'
-alias cr='claude --resume'
 alias hist='h'
 alias info='mediainfo'
 alias m='ncmpcpp'
@@ -12,6 +11,12 @@ alias rm='rm -i'
 alias v='alsamixer'
 alias vis='projectM-pulseaudio &>/dev/null & disown'
 alias vv='wiremix'
+alias wm='uwsm start -e -D Hyprland hyprland.desktop'
+alias yt-mp3='yt-dlp -x --audio-format best'
+alias yt-mp4='yt-dlp'
+
+alias c='claude'
+alias cr='claude --resume'
 
 # terminal image viewing, per terminal
 if [[ "$TERM_PROGRAM" == "ghostty" ]]; then

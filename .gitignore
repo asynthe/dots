@@ -10,6 +10,10 @@ config/zsh/history
 config/zsh/.zcompdump
 config/nvim/lazy-lock.json
 
+# qBittorrent
+config/qBittorrent/*
+!config/qBittorrent/themes/
+
 # Emacs
 config/emacs/.org-id-locations
 config/emacs/auto-save-list

@@ -9,6 +9,11 @@ in {
     config = lib.mkIf cfg.enable {
         environment.systemPackages = with pkgs; [
             typst
+
+            # fonts
+            et-book
+            garamond-libre
+            nerd-fonts.zed-mono
         ];
     };
 }

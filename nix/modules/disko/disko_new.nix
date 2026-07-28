@@ -62,8 +62,7 @@ in {
         };
 
         # ── mdadm array → LUKS2 → btrfs ─────────────────────────────────────
-        # level 0 = RAID-0 stripe.  Both members above share the name "nixraid"
-        # so disko assembles them into /dev/md/nixraid before opening LUKS.
+        # RAID-0 stripe; both members share the name "nixraid" so disko assembles it before opening LUKS
         mdadm.nixraid = {
             type  = "mdadm";
             level = 0;
@@ -77,9 +76,8 @@ in {
             content.content.type      = "btrfs";
             content.content.extraArgs = [ "-L" "nixos" "-f" ];
 
-            # Snapshot /root immediately after the filesystem is created.
-            # The initrd rollback service restores from this on every boot.
-            # Keep root-blank read-only (-r) so it can never be accidentally modified.
+            # Snapshot /root at creation; the initrd rollback service restores from this every boot
+            # Kept read-only (-r) so it can never be accidentally modified
             content.content.postCreateHook = ''
                 MNTPOINT=$(mktemp -d)
                 mount -t btrfs "/dev/mapper/${disk_encrypted}" "$MNTPOINT"

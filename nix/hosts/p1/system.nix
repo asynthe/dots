@@ -2,13 +2,6 @@
 TODO The thing is most of systems shouldn't have to be multiple options
 But it's the name of the host that makes the system with a specific configuration
 
-TODO A module `ssh` should only have ssh configuration
-Here there should be a ssh-keys with a mkIf, so it automatically build
-This file is for this system specific configuration
-
-TODO Set up secrets agenix or sops-nix, same as before, there's a workign
-"base" config, and we can get a good `laptop` but some specific stuff
-should use that agenix ssh key or something
 */
 
 { pkgs, config, ... }: {
@@ -27,12 +20,7 @@ should use that agenix ssh key or something
     boot.kernelPackages = pkgs.linuxPackages_latest; # pkgs.linuxPackages_zen;
     services.fstrim.enable = true;
 
-    # TODO Remove once rpcs3 works or see if would be good to optionize (zram and zswap?)
-    # zram swap for memory-hungry builds (rpcs3 linker needs ~14GB+)
-        #zramSwap = {
-        #enable = true;
-        #memoryPercent = 50;
-    #};
+    # TODO Optionize zram/zswap for memory-hungry builds (the rpcs3 linker needs ~14GB+)
 
     # Nix
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -41,7 +29,7 @@ should use that agenix ssh key or something
     # Boot loader
     boot = {
         supportedFilesystems = [ "btrfs" "vfat" ];
-        kernelParams = [ "video=1920x1200" ]; # framebuffer resolution for internal display
+        kernelParams = [ "i915.enable_psr=0" ]; # works around internal panel blanking bug
     };
 
     # Shell
@@ -49,7 +37,7 @@ should use that agenix ssh key or something
     users.users.${config.sys.user} = {
         shell = pkgs.zsh;
         isNormalUser = true;
-        initialPassword = "meows123";
+        hashedPasswordFile = config.sops.secrets.user-password.path;
         extraGroups = [ "audio" "networkmanager" "input" "wheel" ];
     };
 
@@ -70,35 +58,22 @@ should use that agenix ssh key or something
     # ─────────────── Laptop ───────────────
     powerManagement.enable = true;
     services.thermald.enable = true;
-    services.auto-cpufreq.enable = true;
+    services.auto-cpufreq.enable = false;
     services.logind.settings.Login = {
         HandleLidSwitch = "suspend";             # on battery
         HandleLidSwitchDocked = "ignore";        # docked (external display)
         HandleLidSwitchExternalPower = "suspend"; # plugged in, no external display
     };
 
-    # mkIf's
-    # mkIf config.ssh -> Add public key here
-    # users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed ... ];
-
     # ─────────────── Modules ───────────────
     sys = {
         user = "meow";
+        secrets = [ "pass" "gpg" "sops" ];
         disk = {
-            #filesystem = "btrfs"; # only using btfs for now # <- Chooses specific disko file
-            #encryption = true; # enables luks section on the chosen disko file
-            impermanence.enable = true; # enables impermanence section on the chosen disko file
-            impermanence.folder = "/persist"; # requires true on the previous, and disko will build this folder
-            #impermanence.persist-home = false; # removes "/home" from the disko file. requires the others
-            #disko.disk0 = "/dev/nvme0n1"; # mandatory
-            #disko.disk1 = "/dev/nvme1n1"; # optional but required if raid is enabled
-            #disko.raid.enable = true; # -> +mdadm, add assertion
-            #disko.raid.type = [ "raid0" ]; # requires previous 3 configs.
+            # TODO Add sys.disk options for filesystem, encryption and disko raid to pick the disko file
+            impermanence.enable = true;
+            impermanence.folder = "/persist";
         };
-
-        # TODO
-        #secrets = {
-        #};
 
         modules = {
 
@@ -106,10 +81,8 @@ should use that agenix ssh key or something
             audio.enable = true;
             boot.enable = true;
             boot.silent = true;
-
             #boot.secure = true; # +automatic lanzaboote, -systemd-boot
             boot.lanzaboote.enable = false;
-
             tpm.enable = true;
             intel.enable = true;
             intel.bus-id = "PCI:0:2:0";
@@ -119,13 +92,38 @@ should use that agenix ssh key or something
             #zram.enable = true;
 
             # desktop
-            dev.python.enable = true;
-            dev.javascript.enable = true;
             desktop.hyprland.enable = true;
             desktop.hyprland.cache = false;
-            desktop.greetd.enable = true;
-            desktop.greetd.autologin.enable = true;
-            desktop.greetd.autologin.user = config.sys.user;
+            desktop.autologin.enable = true;
+            desktop.autologin.user = config.sys.user;
+
+            # dev + ai
+            dev.python.enable = true;
+            dev.javascript.enable = true;
+            ai.claude-code.enable = true;
+            ai.ollama.enable = false;
+            ai.ollama.cuda = true;
+            ai.ollama.models = [ "qwen3-coder:30b" ];
+            ai.openclaw.enable = false;
+            ai.opencode.enable = true;
+
+            # gaming
+            gaming.enable = true;
+            gaming.star-citizen.enable = true;
+            gaming.star-citizen.cache = true;
+            gaming.eden.enable = true; # switch
+            gaming.emulation-station.enable = true;
+            gaming.lutris.enable = true;
+            gaming.pcsx2.enable = true; # ps2
+            gaming.rpcs3.enable = false; # ps3
+            gaming.ryubing.enable = true; # switch
+            gaming.xenia.enable = true; # x360
+
+            # ssh
+            ssh.enable = true;
+            ssh.authorizedKeys = [
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDnUPjUAi2Red+yEOocv3LorVYbA3VHTI6z4QjGX+9T s24"
+            ];
 
             # modules
             android.enable = true;
@@ -142,17 +140,16 @@ should use that agenix ssh key or something
             git.enable = true;
             ime.enable = true;
             incus.enable = true; # linux containers
+            k3s.enable = true; # replaces the broken raw `kubernetes` module below
             kiwix.enable = true;
-            kubernetes.enable = true;
-            minecraft.enable = true;
+            kubernetes.enable = false; # fragile easyCerts setup, never came up cleanly
+            minecraft.enable = false;
             monero.enable = true;
             mullvad-vpn.enable = true;
             nh.enable = true;
             nvim.enable = true;
-            paraview.enable = true;
-            password-store.enable = true; # gpg + pass
+            paraview.enable = false;
             qbittorrent.enable = true;
-            ssh.enable = true;
             steam.enable = true;
             syncthing.enable = true;
             tailscale.enable = true;
@@ -165,25 +162,6 @@ should use that agenix ssh key or something
             vscodium.enable = true;
             wine.enable = true;
             xdg.enable = true;
-
-            # AI
-            ai.claude-code.enable = true;
-            ai.ollama.enable = true;
-            ai.ollama.cuda = true;
-            ai.ollama.models = [ "qwen3-coder:30b" ];
-            ai.openclaw.enable = false;
-            ai.opencode.enable = true;
-
-            # Gaming
-            gaming.enable = true;
-            gaming.star-citizen.enable = true;
-            gaming.star-citizen.cache = true;
-            gaming.eden.enable = true; # switch
-            gaming.lutris.enable = true;
-            gaming.pcsx2.enable = true; # ps2
-            gaming.rpcs3.enable = false; # ps3
-            gaming.ryubing.enable = true; # switch
-            gaming.xenia.enable = true; # x360
         };
     };
 }

@@ -1,7 +1,7 @@
 # ─────────────── Configuration ───────────────
 ncmpcpp_directory = "/home/meow/.config/ncmpcpp"
-mpd_music_dir = "/home/meow/music"
-lyrics_directory = "/home/meow/music/.lyrics"
+mpd_music_dir = "/home/meow/archive/media/music"
+lyrics_directory = "/home/meow/archive/media/music/.lyrics"
 allow_for_physical_item_deletion = no
 mpd_crossfade_time = "6"
 mpd_host = "localhost"

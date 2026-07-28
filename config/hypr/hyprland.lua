@@ -220,22 +220,22 @@ hl.window_rule({
             .. "org.wezfurlong.wezterm" 
             .. ")(.*)$"
     }, 
-    border_size = 0,
+    --border_size = 0,
     float = true, 
     size = "1360 825" 
 })
 
-hl.window_rule({ 
-    match = { 
+hl.window_rule({
+    match = {
         title = "^("
-            .. "Mullvad VPN|"
             .. "Input Error|"
             -- TODO Fix
             --.. "<vm> on QEMU/KVM|"
             .. "Add New Virtual Hardware|"
+            .. "Locate ISO media volume|"
             .. "New VM"
             .. ")(.*)$"
-    }, 
+    },
     border_size = 0,
     center = true,
 })

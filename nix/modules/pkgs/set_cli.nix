@@ -68,6 +68,7 @@
         signal-desktop
 
         # music
+        rmpc
         mpd ncmpcpp
         mixxx
         spek

@@ -93,8 +93,11 @@ return {
     --treat_east_asian_ambiguous_width_as_wide = true,
 
     -- Transparency
-    window_background_opacity = 0.6,
+    window_background_opacity = 0.7,
     text_background_opacity = 1,
+
+    -- No native titlebar/border (request none from the compositor, like Steam does)
+    window_decorations = "NONE",
 
     -- Keys
     disable_default_key_bindings = true,

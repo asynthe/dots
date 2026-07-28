@@ -4,9 +4,8 @@ let
     btrfs_device = "/dev/mapper/${disk_encrypted}";
 in {
     
-    # ─────────────── Impermanence ───────────────    
-    # NOTE: Could maybe put all the imports here and just check if the xd is enabled
-    # + Impermanence option obviously
+    # ─────────────── Impermanence ───────────────
+    # TODO Move the imports here and gate them on the impermanence option
     fileSystems = {
         "/persist".neededForBoot = true;
         "/var/log".neededForBoot = true;
@@ -36,9 +35,7 @@ in {
             "/var/lib/sbctl" # TODO secure_boot.nix
             "/var/lib/fprint" # TODO fprint.nix
 
-            # MOVE THESE NEXT FILES
-            #"/var/lib/tailscale" -> tailscale.nix if persistence is enabled.
-            #"/etc/secureboot" -> secure.nix if persistence is enabled.
+            # TODO Move /var/lib/tailscale to tailscale.nix and /etc/secureboot to secure.nix
         ];
     };
 

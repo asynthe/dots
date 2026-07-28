@@ -1,4 +1,7 @@
 // user-overrides.js
+// General
+user_pref("general.autoScroll", true);
+
 // DRM
 user_pref("media.eme.enabled", true);
 user_pref("media.gmp-widevinecdm.enabled", true);

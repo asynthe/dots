@@ -8,7 +8,7 @@
         disko.url = "github:nix-community/disko";
         impermanence.url = "github:nix-community/impermanence";
         nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-        sops-nix.url = "github:Mic92/sops-nix"; # TODO
+        sops-nix.url = "github:Mic92/sops-nix";
 
         hyprland.url = "github:hyprwm/Hyprland";
         hyprland.inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +45,16 @@
                         allowUnfree = true;
                         android_sdk.accept_license = true;
                     };
+                    overlays = [
+                        # flannel 0.28.6 has a wrong hash in nixpkgs; actual hash from upstream
+                        (final: prev: {
+                            flannel = prev.flannel.overrideAttrs (old: {
+                                src = old.src.overrideAttrs (_: {
+                                    outputHash = "sha256-sqpsUAKBza96AMQMUCG94KOht5ExnHRLR7eGna3m3Xg=";
+                                });
+                            });
+                        })
+                    ];
                 };
 
             mkArchConfig = path:

@@ -7,25 +7,18 @@ in {
     };
 
     config = lib.mkIf cfg.enable {
-        programs.nix-ld.enable = true;
-        programs.nix-ld.libraries = [ pkgs.libGL pkgs.glib ];
+        #programs.nix-ld.enable = true;
+        #programs.nix-ld.libraries = [ pkgs.libGL pkgs.glib ];
 
-        virtualisation.waydroid.enable = true;
+        #virtualisation.waydroid.enable = true;
         #services.gvfs.enable = true;
         users.users.${config.sys.user}.extraGroups = [ "kvm" "adbusers" ];
         environment.systemPackages = with pkgs; [
-            androidsdk
+            #androidsdk
             android-tools
-            android-studio
-            jmtpfs
+            #android-studio
+            #jmtpfs
             scrcpy
-
-            gcc
-            gradle
-            jdk11
-            nodejs
-            pnpm
-            wget
         ];
     };
 }

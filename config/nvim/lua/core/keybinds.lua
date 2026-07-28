@@ -2,6 +2,9 @@ local map = vim.keymap.set
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+map("n", ".", "<cmd>lua require('core.notes').picker()<CR>", { desc = "Note picker" })
+map("n", "<leader>.", "<cmd>Yazi cwd<CR>", { desc = "Open yazi at cwd" })
+
 map("n", "<leader>fs", "<cmd>w<CR>", { desc = "Save file" })
 map("n", "<leader>fk", "<cmd>bd!<CR>", { desc = "Close file without saving" })
 map("n", "<leader>fn", "<cmd>ObsidianNew<CR>", { desc = "New obsidian note" })

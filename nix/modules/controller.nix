@@ -19,12 +19,6 @@ in {
         #boot.kernelModules = [ "hid-sony" "hid-playstation" ]; (?)
         hardware.bluetooth = lib.mkIf bluetoothCfg.enable {
             powerOnBoot = true;
-            # settings.General = {
-            #     Enable = "Source,Sink,Media,Socket";
-            #     AutoEnable = true;
-            #     ControllerMode = "bredr";
-            #     Experimental = true;
-            # };
         };
     };
 }

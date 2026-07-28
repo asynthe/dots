@@ -15,8 +15,11 @@ in {
         hardware.graphics.enable32Bit = true;
 
         environment.systemPackages = with pkgs; [
+            gamemode
+            protontricks
             protonup-ng
             protonup-rs
+            #steamtinkerlaunch
         ];
     };
 }
