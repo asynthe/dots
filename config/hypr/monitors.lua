@@ -27,6 +27,13 @@ local known_externals = {
         width  = 1920,
     },
     {
+        match  = "0x01010101",
+        output = "desc: LG Electronics LG TV 0x01010101",
+        mode   = "1920x1080@60",
+        scale  = "1",
+        width  = 1920,
+    },
+    {
         match  = "0x01000E00",
         output = "desc: Samsung Electric Company SAMSUNG 0x01000E00",
         mode   = "1920x1080@60",
