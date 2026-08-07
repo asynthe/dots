@@ -6,19 +6,22 @@ hl.config({
 })
 
 local disable_internal = false
-local side             = "left" -- "left": laptop left | "right": laptop right
+-- "left": laptop left | "right": laptop right
+local side             = "left"
 local laptop_bare      = "AU Optronics 0xB0AE"
 local laptop      = "desc:" .. laptop_bare
 local laptop_w    = 1920
 
+-- @@@ 5655SMART TV 0x00011011
+-- HP Inc. HP P24v G4 1CR10315PN
+-- Hisense Electric Co. Ltd. HISENSE 0x00000001
+-- LG Electronics LG TV 0x01010101
+-- Nreal MGMG2710C
+-- Panasonic Industry Company Panasonic-TV 0x01010101
+-- Samsung Electric Company S34CG50 HNBYC00076
+-- Samsung Electric Company SAMSUNG 0x01000E00
+-- Sony SONY TV 0x01010101
 local known_externals = {
-    {
-        match  = "S34CG50",
-        output = "desc: Samsung Electric Company S34CG50 HNBYC00076",
-        mode   = "3440x1440@100",
-        scale  = "1",
-        width  = 3440,
-    },
     {
         match  = "0x00011011",
         output = "desc: @@@ 5655SMART TV 0x00011011",
@@ -27,22 +30,8 @@ local known_externals = {
         width  = 1920,
     },
     {
-        match  = "0x01010101",
-        output = "desc: LG Electronics LG TV 0x01010101",
-        mode   = "1920x1080@60",
-        scale  = "1",
-        width  = 1920,
-    },
-    {
-        match  = "0x01000E00",
-        output = "desc: Samsung Electric Company SAMSUNG 0x01000E00",
-        mode   = "1920x1080@60",
-        scale  = "1",
-        width  = 1920,
-    },
-    {
-        match  = "0x01010101",
-        output = "desc: Sony SONY TV 0x01010101",
+        match  = "1CR10315PN",
+        output = "desc: HP Inc. HP P24v G4 1CR10315PN",
         mode   = "1920x1080@60",
         scale  = "1",
         width  = 1920,
@@ -56,7 +45,43 @@ local known_externals = {
     },
     {
         match  = "0x01010101",
-        output = "desc:Panasonic Industry Company Panasonic-TV 0x01010101",
+        output = "desc: LG Electronics LG TV 0x01010101",
+        mode   = "1920x1080@60",
+        scale  = "1.3",
+        width  = 1920,
+    },
+    {
+        match  = "MGMG2710C",
+        output = "desc: Nreal MGMG2710C",
+        mode   = "1920x1080@60",
+        scale  = "1",
+        width  = 1920,
+    },
+    {
+        match  = "0x01010101",
+        output = "desc: Panasonic Industry Company Panasonic-TV 0x01010101",
+        mode   = "1920x1080@60",
+        scale  = "1",
+        width  = 1920,
+    },
+    {
+        match  = "S34CG50",
+        output = "desc: Samsung Electric Company S34CG50 HNBYC00076",
+        mode   = "3440x1440@100",
+        scale  = "1",
+        width  = 3440,
+    },
+    -- Samsung Electric Company SAMSUNG 0x01000E00
+    -- {
+    --     match  = "0x01000E00",
+    --     output = "desc: Samsung Electric Company SAMSUNG 0x01000E00",
+    --     mode   = "1920x1080@60",
+    --     scale  = "1",
+    --     width  = 1920,
+    -- },
+    {
+        match  = "0x01010101",
+        output = "desc: Sony SONY TV 0x01010101",
         mode   = "1920x1080@60",
         scale  = "1",
         width  = 1920,

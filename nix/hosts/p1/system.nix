@@ -7,20 +7,16 @@ But it's the name of the host that makes the system with a specific configuratio
 { pkgs, config, ... }: {
 
     # ─────────────── System ───────────────
-    system.name = "p1";
-
-    # TODO
-    # Set up a custom name for generations
+    # TODO test what changes the name in the systemd-boot menu
     system.nixos.label = "p1";
-
+    system.name = "p1";
     networking.hostName = "p1";
+
     system.stateVersion = "25.05";
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = "America/Santiago";
     boot.kernelPackages = pkgs.linuxPackages_latest; # pkgs.linuxPackages_zen;
     services.fstrim.enable = true;
-
-    # TODO Optionize zram/zswap for memory-hungry builds (the rpcs3 linker needs ~14GB+)
 
     # Nix
     nix.settings.experimental-features = [ "nix-command" "flakes" ];

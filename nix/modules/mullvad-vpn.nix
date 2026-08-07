@@ -12,7 +12,8 @@ in {
 
     config = lib.mkIf cfg.enable {
         services.mullvad-vpn.enable = true;
-        services.mullvad-vpn.package = pkgs.mullvad-vpn; # gui
+        services.mullvad-vpn.gui.enable = true;
+        #services.mullvad-vpn.enableEarlyBootBlocking = true;
 
         environment.persistence.${impermanenceCfg.folder}.directories = lib.mkIf impermanenceCfg.enable [ "/etc/mullvad-vpn" ];
     };

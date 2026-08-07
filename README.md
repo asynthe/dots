@@ -1,3 +1,7 @@
+> **NOTE**
+>
+> I'm always updating this repository as it is my current system.
+
 ```
  ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -13,10 +17,6 @@
 ⠟
 ```
 *asynthe's system flake*, 2026
-
-> **NOTE**
->
-> I'm always updating this repository as it is my current system.
 
 Clone this repository with the next commands, make sure `git-lfs` is installed to pull the wallpapers.
 ```bash
@@ -39,3 +39,4 @@ My favourite programs
 
 *Thanks*
 RedDragon: 1920x1200 NASA Wallpaper Set
+
