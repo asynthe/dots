@@ -24,19 +24,17 @@ git lfs install
 git clone https://gitlab.com/asynthe/dots.git
 ```
 
---- TODO TABLE HERE ---
-My current setup
-- Thinkpad P1 Gen 7         -> Current laptop
-- Steam Deck                -> Only games
-- Samsung S24 Ultra         -> Syncthing music from PC to Phone
+## My current setup
 
-My favourite programs
-- Music: **ncmpcpp** (cli) and **MusicBee** (running on wine)
-- Music (S24 Ultra): **BlackPlayerEX**
+| Device            | OS               |
+| ----------------- | ---------------- |
+| Thinkpad P1 Gen 7 | NixOS (unstable) |
+| Steam Deck        | SteamOS          |
+| Samsung S24 Ultra | Android          |
 
 *Resources*
 - [Nice collection of ASCII art](https://steamcommunity.com/sharedfiles/filedetails/?id=3079007278)
 
 *Thanks*
-RedDragon: 1920x1200 NASA Wallpaper Set
+- RedDragon: 1920x1200 NASA Wallpaper Set
 

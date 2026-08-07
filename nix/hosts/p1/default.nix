@@ -3,7 +3,6 @@
 
         ./system.nix
         ./hardware.nix
-        #./hardware_qemu.nix
         ../../modules
 
         ../../modules/pkgs/set_cli.nix
