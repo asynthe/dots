@@ -18,6 +18,7 @@
         ./gaming.nix
         ./gimp.nix
         ./git.nix
+        ./hermes.nix
         ./ime.nix
         ./impermanence.nix
         ./incus.nix

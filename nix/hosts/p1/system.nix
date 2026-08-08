@@ -97,6 +97,7 @@ But it's the name of the host that makes the system with a specific configuratio
             dev.python.enable = true;
             dev.javascript.enable = true;
             ai.claude-code.enable = true;
+            ai.hermes.enable = false;
             ai.ollama.enable = false;
             ai.ollama.cuda = true;
             ai.ollama.models = [ "qwen3-coder:30b" ];
@@ -127,7 +128,7 @@ But it's the name of the host that makes the system with a specific configuratio
             bluetooth.enable = true;
             colord.enable = true;
             controller.enable = true; # ps5 controller
-            docker.enable = true;
+            docker.enable = false;
             flatpak.enable = true;
             fonts.enable = true;
             fprintd.enable = true;
@@ -136,7 +137,7 @@ But it's the name of the host that makes the system with a specific configuratio
             git.enable = true;
             ime.enable = true;
             incus.enable = true; # linux containers
-            k3s.enable = true; # replaces the broken raw `kubernetes` module below
+            k3s.enable = false;
             kiwix.enable = true;
             kubernetes.enable = false; # fragile easyCerts setup, never came up cleanly
             minecraft.enable = false;

@@ -29,6 +29,25 @@ in {
         boot.extraModprobeConfig = "options kvm_intel nested=1"
             + lib.optionalString cfg.gpu-passthrough "\noptions vfio-pci ids=10de:28b8";
 
+        systemd.services.libvirt-networks-no-autostart = {
+            description = "Disable autostart on libvirt networks";
+            after = [ "libvirtd.service" ];
+            requires = [ "libvirtd.service" ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+            };
+            script = let
+                virsh = "${config.virtualisation.libvirtd.package}/bin/virsh -c qemu:///system";
+            in ''
+                for net in $(${virsh} net-list --all --name); do
+                    ${virsh} net-autostart --disable "$net" || true
+                    ${virsh} net-destroy "$net" || true
+                done
+            '';
+        };
+
         # impermanence
         environment.persistence = lib.mkIf impermanenceCfg.enable {
             ${impermanenceCfg.folder}.directories = [
