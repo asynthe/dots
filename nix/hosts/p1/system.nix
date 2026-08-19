@@ -1,7 +1,6 @@
 /*
 TODO The thing is most of systems shouldn't have to be multiple options
 But it's the name of the host that makes the system with a specific configuration
-
 */
 
 { pkgs, config, ... }: {

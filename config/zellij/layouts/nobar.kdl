@@ -1,0 +1,19 @@
+// Bare layout: no tab bar, no status bar.
+// Alt ] / Alt [ cycle the swap layouts below to bring the bars back.
+layout {
+    pane
+
+    swap_tiled_layout name="bare" {
+        tab {
+            pane split_direction="vertical" { children; }
+        }
+    }
+
+    swap_tiled_layout name="bars" {
+        tab {
+            pane size=1 borderless=true { plugin location="zellij:tab-bar"; }
+            pane split_direction="vertical" { children; }
+            pane size=2 borderless=true { plugin location="zellij:status-bar"; }
+        }
+    }
+}

@@ -78,8 +78,9 @@ in {
                 # Terminals
                 alacritty
                 ghostty
-                wezterm
                 kitty
+                warp-terminal
+                wezterm
 
                 # GUI
                 pavucontrol

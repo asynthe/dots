@@ -305,7 +305,7 @@ hl.window_rule({
 
 -- ───────────────────────── Keybinds ─────────────────────────
 local mainMod = "ALT"
-local terminal    = "wezterm"
+local terminal    = "alacritty"
 local fileManager = "thunar"
 local menu        = "fuzzel"
 local screenshotsDir = (os.getenv("HOME") or "~") .. "/Downloads/screenshots"

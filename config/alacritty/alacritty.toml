@@ -1,0 +1,55 @@
+[env]
+TERM = "xterm-256color"
+
+# configuration
+[window]
+padding.x = 16
+padding.y = 16
+opacity = 0.7
+blur = true
+decorations = "None"
+#decorations = "Buttonless"
+#dynamic_title = true
+#option_as_alt = "Both"
+
+[cursor]
+style = {
+    shape = "Block",
+    blinking = "Off"
+}
+
+# font
+[font]
+#normal.family = "TX-02 Condensed"
+normal.family = "JetBrains Mono Nerd Font"
+size = 16
+
+# keybindings
+[keyboard]
+bindings = [
+    { key = "C", mods = "Control|Shift", action = "Copy" },
+    { key = "V", mods = "Control|Shift", action = "Paste" },
+    { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+    { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+    { key = "0", mods = "Control", action = "ResetFontSize" },
+    #{ key = "W", mods = "Control", action = "Quit" }, # tmux
+]
+
+# colors
+[colors]
+[colors.primary]
+background = "#000000"
+foreground = "#EFEFEF"
+dim_foreground = "#8a8a8d"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#EFEFEF"
+
+[colors.vi_mode_cursor]
+text = "#000000"
+cursor = "#EFEFEF"
+
+[colors.selection]
+text = "CellForeground"
+background = "#333333"

@@ -5,9 +5,9 @@ window-inherit-working-directory = true
 working-directory = home
 
 # Font
-font-family = JetBrainsMono Nerd Font
+font-family = TX-02 Condensed
 font-style = Regular
-font-size = 14
+font-size = 16
 font-thicken = true
 
 # Opacity
