@@ -10,18 +10,16 @@
 @define-color headerbar_fg_color #ffffff;
 @define-color popover_fg_color #ffffff;
 
-/* Base window */
+/* Base window
+   Do NOT set background-color on bare `window`/`.background` here. This file
+   loads at GTK_STYLE_PROVIDER_PRIORITY_USER (800), which outranks the
+   APPLICATION priority (600) an app uses for its own styles, so a blanket rule
+   paints Ghostty's window opaque and `background-opacity` has nothing to show
+   through to. The @define-color values above already darken GTK4/libadwaita
+   apps at theme priority, which apps are still able to override. */
 window, .background,
 window.background, window.background:backdrop {
-    background-color: #000000;
     color: #ffffff;
-}
-
-/* Ghostty: allow its own background-opacity to control transparency */
-window.com-mitchellh-ghostty,
-window.com-mitchellh-ghostty.background,
-window.com-mitchellh-ghostty.background:backdrop {
-    background-color: transparent;
 }
 
 /* Headerbar */
@@ -33,8 +31,8 @@ headerbar, headerbar:backdrop {
 /* Sidebar - stays dark even when unfocused */
 .sidebar, .sidebar:backdrop,
 .navigation-sidebar, .navigation-sidebar:backdrop {
-    background-color: #000000 !important;
-    color: #ffffff !important;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 /* Popovers and dropdowns */

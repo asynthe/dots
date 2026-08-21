@@ -10,11 +10,6 @@ font-style = Regular
 font-size = 16
 font-thicken = true
 
-# Opacity
-#background-opacity = 0.2
-background-opacity = 0.1
-#unfocused-split-opacity = 0.9
-
 # Padding
 #window-padding-balance = true
 #window-padding-x = 5, 0
@@ -29,8 +24,10 @@ background-opacity = 0.1
 #window-theme = dark
 #window-theme = ghostty
 
-# Colors
-#background = #080808
+# Colors and opacity
+background-opacity = 0.6
+#unfocused-split-opacity = 0.9
+background = #000000
 #foreground = #dddddd
 #selection-background = #1c2f39
 #selection-foreground = #dddddd

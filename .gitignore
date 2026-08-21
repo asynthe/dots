@@ -34,3 +34,5 @@ config/emacs/transient
 # Emacs backup files
 .#*
 \#*.org\#
+result
+result-*

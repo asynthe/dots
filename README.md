@@ -2,8 +2,7 @@
 >
 > I'm always updating this repository as it is my current system.
 
-```
- ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+``` ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣤⣶⣶⣿⣿⡗
@@ -37,4 +36,5 @@ git clone https://gitlab.com/asynthe/dots.git
 
 *Thanks*
 - RedDragon: 1920x1200 NASA Wallpaper Set
+- SCL: TX-02 Font
 

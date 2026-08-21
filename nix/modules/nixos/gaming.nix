@@ -1,0 +1,119 @@
+{ inputs, ... }:
+{
+    flake.modules.nixos.steam = { pkgs, ... }: {
+        programs.steam.enable = true;
+        programs.steam.remotePlay.openFirewall = true;
+        programs.steam.dedicatedServer.openFirewall = true;
+        programs.steam.localNetworkGameTransfers.openFirewall = true;
+        programs.steam.gamescopeSession.enable = true;
+        hardware.graphics.enable32Bit = true;
+
+        environment.systemPackages = with pkgs; [
+            gamemode
+            protontricks
+            protonup-ng
+            protonup-rs
+            #steamtinkerlaunch
+        ];
+    };
+
+    flake.modules.nixos.wine = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            winetricks
+            mono # .NET
+            wineWow64Packages.staging
+            wineWow64Packages.waylandFull
+            wineWow64Packages.fonts
+        ];
+    };
+
+    flake.modules.nixos.lutris = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ lutris ];
+    };
+
+    flake.modules.nixos.star-citizen = { pkgs, ... }: {
+        imports = [ inputs.nix-citizen.nixosModules.default ];
+        environment.systemPackages = [
+            inputs.nix-citizen.packages.${pkgs.system}.rsi-launcher
+        ];
+    };
+
+    # Only useful with `star-citizen`.
+    flake.modules.nixos.star-citizen-cache = { ... }: {
+        nix.settings = {
+            substituters        = [ "https://nix-citizen.cachix.org" ];
+            trusted-public-keys = [ "nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo=" ];
+        };
+    };
+
+    flake.modules.nixos.minecraft = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            fabric-installer
+            optifine
+            prismlauncher
+        ];
+
+        services.minecraft-server = {
+            enable = true;
+            eula = true;
+            package = pkgs.papermc;
+        };
+    };
+
+    # ─────────────── Emulators ───────────────
+
+    flake.modules.nixos.eden = { pkgs, ... }: {          # switch
+        environment.systemPackages = with pkgs; [ eden ];
+    };
+
+    flake.modules.nixos.ryubing = { pkgs, ... }: {       # switch
+        environment.systemPackages = with pkgs; [ ryubing ];
+    };
+
+    flake.modules.nixos.pcsx2 = { pkgs, ... }: {         # ps2
+        environment.systemPackages = with pkgs; [ pcsx2 ];
+    };
+
+    flake.modules.nixos.xenia = { pkgs, ... }: {         # x360
+        environment.systemPackages = with pkgs; [ xenia-canary ];
+    };
+
+    # ps3 -- upstream binary, x86_64-linux only
+    flake.modules.nixos.rpcs3 = { pkgs, ... }:
+    let
+        rpcs3-bin = pkgs.appimageTools.wrapType2 {
+            pname   = "rpcs3";
+            version = "0.0.41-19515-a7fc31f3";
+            src     = pkgs.fetchurl {
+                url    = "https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-a7fc31f3212c55bf0b70b45875c52dfc94f6641a/rpcs3-v0.0.41-19515-a7fc31f3_linux64.AppImage";
+                sha256 = "1jbldny7k2qx4apbp9nd9m4j79w5pgdzykb47wsc80rzav0xsxaw";
+            };
+        };
+    in {
+        assertions = [{
+            assertion = pkgs.stdenv.hostPlatform.isx86_64 && pkgs.stdenv.hostPlatform.isLinux;
+            message   = "rpcs3: AppImage is only available for x86_64-linux";
+        }];
+        environment.systemPackages = [ rpcs3-bin ];
+    };
+
+    # Dropped from nixpkgs 2025-10-23 (freeimage CVEs), so packaged from the
+    # upstream ES-DE AppImage
+    flake.modules.nixos.emulation-station = { pkgs, ... }:
+    let
+        emulation-station-bin = pkgs.appimageTools.wrapType2 {
+            pname   = "es-de";
+            version = "3.4.1";
+            src     = pkgs.fetchurl {
+                url    = "https://gitlab.com/es-de/emulationstation-de/-/package_files/288156961/download";
+                sha256 = "109mfa3aag6x4gf08326cbgs09dl403ygvaqm8yicmcdfd6s8q9w";
+            };
+        };
+    in {
+        assertions = [{
+            assertion = pkgs.stdenv.hostPlatform.isx86_64 && pkgs.stdenv.hostPlatform.isLinux;
+            message   = "emulation-station: AppImage is only available for x86_64-linux";
+        }];
+        environment.systemPackages = [ emulation-station-bin ];
+    };
+}

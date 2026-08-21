@@ -1,5 +1,10 @@
 { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
+
+        # wiztree
+        kdePackages.filelight
+        qdirstat
+
         acpi
         bat
         bc

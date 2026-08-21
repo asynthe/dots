@@ -22,7 +22,7 @@ style = {
 [font]
 #normal.family = "TX-02 Condensed"
 normal.family = "JetBrains Mono Nerd Font"
-size = 16
+size = 14
 
 # keybindings
 [keyboard]
