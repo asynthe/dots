@@ -47,7 +47,7 @@
 
             # ─────────────── Apps ───────────────
             atuin flatpak gimp kiwix monero qbittorrent
-            tectonic typst nh
+            music tectonic typst nh
         ];
 
         # ─────────────── Identity ───────────────

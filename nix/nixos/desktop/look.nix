@@ -4,6 +4,17 @@
 { ... }:
 {
     flake.modules.nixos.fonts = { pkgs, ... }: {
+        # Previewing a family, and looking up whether a glyph actually exists
+        # in one -- handy with nerd-fonts icons and CJK.
+        # `font-manager` is the fuller alternative (enable/disable, compare),
+        # but it drags in webkitgtk for ~170 MiB.
+        environment.systemPackages = with pkgs; [
+            font-manager
+            fontpreview
+            gnome-font-viewer
+            gucharmap
+        ];
+
         fonts = {
             fontconfig.enable = true;
             fontDir.enable = true;

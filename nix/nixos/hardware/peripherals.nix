@@ -1,6 +1,12 @@
 { ... }:
 {
-    flake.modules.nixos.audio = { ... }: {
+    flake.modules.nixos.audio = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            alsa-utils
+            pulsemixer
+            wiremix
+        ];
+
         security.rtkit.enable = true;
         services.pipewire = {
             enable = true;
@@ -31,9 +37,6 @@
         environment.systemPackages = with pkgs; [
             dualsensectl
         ];
-
-        # TODO Fix
-        #boot.kernelModules = [ "hid-sony" "hid-playstation" ]; (?)
     };
 
     flake.modules.nixos.colord = { ... }: {

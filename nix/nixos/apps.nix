@@ -12,6 +12,17 @@
         environment.systemPackages = with pkgs; [ kiwix ];
     };
 
+    flake.modules.nixos.music = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            cmus
+            mpd ncmpcpp rmpc
+            mixxx
+            spek
+            cava
+            #projectm_3 # Milkdrop 3
+        ];
+    };
+
     flake.modules.nixos.monero = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             monero-cli

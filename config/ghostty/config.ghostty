@@ -4,16 +4,11 @@ window-inherit-font-size = true
 window-inherit-working-directory = true 
 working-directory = home
 
-# Font
-font-family = TX-02 Condensed
-font-style = Regular
-font-size = 16
-font-thicken = true
-
-# Padding
+# Padding 
+# (one value is both left/right, two values is left and right)
 #window-padding-balance = true
-#window-padding-x = 5, 0
-#window-padding-y = 10, 0
+window-padding-x = 14
+window-padding-y = 14
 
 # Titlebar
 #window-decoration = auto
@@ -24,9 +19,19 @@ font-thicken = true
 #window-theme = dark
 #window-theme = ghostty
 
+# ───────────────────────── Font and Colors ─────────────────────────
+# Font
+font-size = 16
+#font-thicken = true
+font-family = TX-02
+font-style = Condensed
+#font-style-bold = 
+#font-style-italic = 
+#font-style-bold-italic = 
+
 # Colors and opacity
 background-opacity = 0.6
-#unfocused-split-opacity = 0.9
+unfocused-split-opacity = 0.85
 background = #000000
 #foreground = #dddddd
 #selection-background = #1c2f39

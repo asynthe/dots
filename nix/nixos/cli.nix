@@ -41,7 +41,6 @@
             tmux tmuxp zellij
             tree
             unzip unar rar
-            wiremix
             yazi lf
             yt-dlp
             zoxide
@@ -65,23 +64,6 @@
             pipes-rs
             tty-clock peaclock tenki clock-rs
             unimatrix
-
-            # gui
-            networkmanagerapplet
-            zathura sioyek
-            signal-desktop
-
-            # music
-            rmpc
-            mpd ncmpcpp
-            mixxx
-            spek
-            #projectm_3 # Milkdrop 3
-
-            # Audio vis and others
-            alsa-utils pulsemixer
-            cava
-            cmus
         ];
     };
 }

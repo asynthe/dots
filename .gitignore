@@ -1,6 +1,8 @@
 .DS_Store
 .claude
 CLAUDE.md
+result
+result-*
 
 # Dots
 config/mpd/database
@@ -34,5 +36,3 @@ config/emacs/transient
 # Emacs backup files
 .#*
 \#*.org\#
-result
-result-*

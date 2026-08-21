@@ -17,7 +17,7 @@
         imports = [ inputs.sops-nix.nixosModules.sops ];
 
         environment.systemPackages = [ pkgs.sops pkgs.age ];
-        sops.defaultSopsFile = ../../../secrets/secrets.yaml;
+        sops.defaultSopsFile = ../../secrets/secrets.yaml;
         # Root-owned and outside /home: activation unlocks user passwords
         # before /home is guaranteed mounted. Same age identity as
         # ~/.config/sops/age/keys.txt, just readable this early.

@@ -23,19 +23,22 @@
 
         environment.systemPackages = with pkgs; [
 
-            # Apps
+            # Session: only things that presuppose a running Hyprland.
             brightnessctl
             fuzzel rofi
             walker elephant
             gromit-mpx
             hypridle
             hyprshot
-            imv
             mako libnotify
             playerctl
             ripdrag
             socat
             wl-clipboard
+
+            # Bar and wallpaper
+            waybar
+            awww mpvpaper waypaper
 
             # Libs
             hyprpolkitagent
