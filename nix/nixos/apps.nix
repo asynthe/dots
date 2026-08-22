@@ -12,6 +12,13 @@
         environment.systemPackages = with pkgs; [ kiwix ];
     };
 
+    flake.modules.nixos.irc = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            irssi
+            weechat
+        ];
+    };
+
     flake.modules.nixos.music = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             cmus

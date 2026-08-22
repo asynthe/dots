@@ -7,7 +7,7 @@ set zoom-min 10
 set render-loading "false"
 
 # UI
-set font "Iosevka Nerd Font 16"
+set font "JetBrainsMono Nerd Font 14"
 set default-bg "#000000" #00
 set default-fg "#F7F7F6" #01
 

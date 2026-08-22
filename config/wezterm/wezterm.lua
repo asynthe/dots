@@ -88,6 +88,11 @@ return {
     --},
 
     -- General
+    font = wezterm.font_with_fallback({
+        { family = "TX-02", stretch = "Condensed" },
+        "JetBrainsMono Nerd Font",
+        "Noto Color Emoji",
+    }),
     font_size = 14.0,
     --use_ime = true,
     --treat_east_asian_ambiguous_width_as_wide = true,

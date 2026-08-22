@@ -27,6 +27,7 @@
 
             # ─────────────── Desktop ───────────────
             hyprland autologin
+            quickshell
             terminals desktop-apps
             fonts theme xdg ime
 
@@ -47,7 +48,7 @@
 
             # ─────────────── Apps ───────────────
             atuin flatpak gimp kiwix monero qbittorrent
-            music tectonic typst nh
+            irc music tectonic typst nh
         ];
 
         # ─────────────── Identity ───────────────

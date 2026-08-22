@@ -1,14 +1,13 @@
 # The shell environment that makes a machine feel like this machine. Every host
-# gets it; it is the one package list that is not feature-scoped.
+# gets it; it is the one package list that is not feature-scoped -- so anything
+# in here has to be defensible on a headless box too. Tools that belong to a
+# subsystem live with that subsystem instead (bluetooth, boot, network, audio).
 { ... }:
 {
     flake.modules.nixos.cli = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-            acpi
             bat
             bc
-            bluez-tools bluetuith
-            efibootmgr
             exiftool
             eza
             fd ripgrep
@@ -18,39 +17,29 @@
             htop btop
             hyperfine
             imagemagickBig
-            impala
             inxi
             jq
             killall
             libqalculate
             lsof
-            #macchanger
             mediainfo
             ncdu
             neomutt
-            vim
-            helix
             nh
-            pass-wayland
+            ntfs3g
             pv
-            ripgrep
+            rsync
             sox
-            starfetch
             starship
             superfile
             tmux tmuxp zellij
             tree
             unzip unar rar
+            vim helix
+            wget curl
             yazi lf
             yt-dlp
             zoxide
-
-            # net
-            ntfs3g
-            rsync
-            speedtest-cli
-            weechat irssi
-            wget curl
 
             # nix / dev
             cachix
@@ -62,6 +51,7 @@
             fastfetch pfetch-rs
             figlet lolcat
             pipes-rs
+            starfetch
             tty-clock peaclock tenki clock-rs
             unimatrix
         ];

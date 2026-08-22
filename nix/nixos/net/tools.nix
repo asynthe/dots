@@ -2,8 +2,9 @@
 {
     flake.modules.nixos.net-tools = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-            nethogs
             bandwhich
+            nethogs
+            speedtest-cli
         ];
     };
 

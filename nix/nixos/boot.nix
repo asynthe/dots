@@ -1,6 +1,8 @@
 { inputs, ... }:
 {
-    flake.modules.nixos.boot = { ... }: {
+    flake.modules.nixos.boot = { pkgs, ... }: {
+        environment.systemPackages = [ pkgs.efibootmgr ];
+
         boot.loader.efi.efiSysMountPoint             = "/efi";
         boot.loader.efi.canTouchEfiVariables         = true;
         boot.loader.systemd-boot.enable              = true;

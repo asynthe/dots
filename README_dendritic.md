@@ -123,6 +123,7 @@ Find the aspect that owns it and add the line:
 | LSP / editor tooling | the `neovim` aspect in `nix/nixos/dev/tools.nix` |
 | font, or a tool for fonts | the `fonts` aspect, `nix/nixos/desktop/look.nix` |
 | audio mixer / control | the `audio` aspect, `nix/nixos/hardware/peripherals.nix` |
+| CLI for a subsystem | that subsystem's own aspect -- `bluetooth`, `boot`, `network` |
 | music player, visualiser | the `music` aspect, `nix/nixos/apps.nix` |
 | one self-contained app | its own aspect in `nix/nixos/apps.nix` |
 
@@ -136,7 +137,11 @@ starts a compositor. CLI-vs-GUI is not the axis — it never varies per host, so
 it cannot help you decide anything.
 
 Anything in `cli.nix` is on **every** host, including a future headless one, so
-it has to be defensible there.
+it has to be defensible there. A tool that only makes sense because some
+subsystem is enabled belongs *with* that subsystem, not in `cli.nix` --
+`bluetuith` ships with `bluetooth`, `efibootmgr` with `boot`, `impala` with
+`network`, `acpi` with `laptop`. Keeping them together means a host that
+declines the subsystem also declines its tooling, with nothing to remember.
 
 ## Turning a feature off
 

@@ -19,7 +19,12 @@
         };
     };
 
-    flake.modules.nixos.bluetooth = { config, lib, ... }: {
+    flake.modules.nixos.bluetooth = { config, lib, pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            bluetuith
+            bluez-tools
+        ];
+
         services.blueman.enable = true;
         hardware.bluetooth.enable = true;
         hardware.bluetooth.powerOnBoot = true;

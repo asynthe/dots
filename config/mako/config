@@ -1,7 +1,7 @@
 # vim:fileencoding=utf-8:ft=dosini:fdm=marker foldlevel=0
 
 # Appearance {{{
-font=Inter Medium 11
+font=JetBrainsMono Nerd Font 14
 width=350
 padding=10
 margin=10

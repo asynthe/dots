@@ -1,8 +1,10 @@
 /* ───────────────────────── Main ───────────────────────── */
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: FontAwesome, Fira Code Nerd Font, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 18px;
+    /* JetBrainsMono NF carries both the text and the Nerd Font icons, so no
+       separate icon family is needed. `monospace` resolves through
+       fonts.fontconfig.defaultFonts in nix/nixos/desktop/look.nix. */
+    font-family: JetBrainsMono Nerd Font, monospace;
+    font-size: 19px;
     border: none;
     border-radius: 0;
 }

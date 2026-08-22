@@ -270,7 +270,7 @@
 
 ;; ───────────────────────── Settings - Font (JetBrainsMono) ─────────────────────────
 ;; General Font Settings
-(set-face-attribute 'default nil :height 120)                                       ; Font size
+(set-face-attribute 'default nil :height 140)                                       ; Font size
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
 (set-face-attribute 'font-lock-keyword-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
 
@@ -280,15 +280,15 @@
   (progn
 
     ; Linux and macOS configuration
-    (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 12"))       ; Required by emacsclient, if not used fonts will appear smaller
+    (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 14"))       ; Required by emacsclient, if not used fonts will appear smaller
     (set-face-attribute 'default nil
-                        :font "JetBrainsMono Nerd Font 12"
+                        :font "JetBrainsMono Nerd Font 14"
                         :weight 'regular)
     (set-face-attribute 'variable-pitch nil
-                        :font "JetBrainsMono Nerd Font 12"
+                        :font "JetBrainsMono Nerd Font 14"
                         :weight 'regular)
     (set-face-attribute 'fixed-pitch nil
-                        :font "JetBrainsMono Nerd Font 12"
+                        :font "JetBrainsMono Nerd Font 14"
                         :weight 'regular)
 
   ))
@@ -296,15 +296,15 @@
   (progn
   
     ; Windows configuration
-    (add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 12"))              ; Required by emacsclient, if not used fonts will appear smaller
+    (add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 14"))              ; Required by emacsclient, if not used fonts will appear smaller
     (set-face-attribute 'default nil
-                        :font "JetBrainsMono NF 12"
+                        :font "JetBrainsMono NF 14"
                         :weight 'regular)
     (set-face-attribute 'variable-pitch nil
-                        :font "JetBrainsMono NF 12"
+                        :font "JetBrainsMono NF 14"
                         :weight 'regular)
     (set-face-attribute 'fixed-pitch nil
-                        :font "JetBrainsMono NF 12"
+                        :font "JetBrainsMono NF 14"
                         :weight 'regular)
     )))
 

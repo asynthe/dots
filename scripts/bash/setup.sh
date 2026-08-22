@@ -161,11 +161,12 @@ make_link() {
 }
 
 for name in \
-  bash cava direnv emacs ghostty \
-  gtk-3.0 gtk-4.0 hypr jj mako \
-  mpd mpv opencode qBittorrent sioyek \
-  starship tmux waybar wezterm yazi \
-  zathura zsh
+  alacritty bash cava direnv emacs \
+  fuzzel ghostty gtk-3.0 gtk-4.0 hypr \
+  jj kitty mako mpd mpv \
+  opencode qBittorrent quickshell sioyek starship \
+  tmux waybar wezterm yazi zathura \
+  zsh
 do
   make_link "$DOTS/$name" "$CFG/$name"
 done
@@ -199,3 +200,8 @@ echo "\nDone."
 # TODO Add
 # ln -sf $HOME/dots/config/VSCodium/User/settings.json $HOME/.config/VSCodium/User/settings.json
 # ln -sf $HOME/dots/config/VSCodium/User/keybindings.json $HOME/.config/VSCodium/User/keybindings.json
+
+# TODO What logic should we use (?)
+# -> Symlinking folders and gitignoring extra files that may be created by apps
+# -> Symlinking specific files (and creating their directory in ~/.config) - verbose (?)
+# Both, separated.

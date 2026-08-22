@@ -3,7 +3,7 @@
         "asvetliakov.vscode-neovim": 1
     },
     "editor.fontFamily": "JetBrainsMono Nerd Font, monospace",
-    "editor.fontSize": 14,
+    "editor.fontSize": 19,
     "editor.fontLigatures": true,
     "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
     "workbench.colorTheme": "One Dark Pro Night Flat",

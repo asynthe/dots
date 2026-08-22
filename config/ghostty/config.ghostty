@@ -11,28 +11,34 @@ window-padding-x = 14
 window-padding-y = 14
 
 # Titlebar
+#gtk-tabs-location = bottom
 #window-decoration = auto
 #gtk-titlebar = true
 #adw-toolbar-style = raised-border # TODO Remove bc old
-#gtk-tabs-location = bottom
 #gtk-wide-tabs = true
 #window-theme = dark
 #window-theme = ghostty
 
 # ───────────────────────── Font and Colors ─────────────────────────
 # Font
-font-size = 16
-#font-thicken = true
+font-size = 14
 font-family = TX-02
 font-style = Condensed
-#font-style-bold = 
-#font-style-italic = 
-#font-style-bold-italic = 
+font-style-bold = Bold Condensed
+font-style-italic = Condensed Oblique
+font-style-bold-italic = Bold Condensed Oblique
+
+# macOS only
+#font-thicken = true
 
 # Colors and opacity
-background-opacity = 0.6
+# `background-opacity` is the lever that decides how much of Hyprland's blur
+# shows through; `background` is only the colour of what is left tinting it.
+# Pure black at 0.6 read as a heavy slab, so: let more blur through, and lift
+# the tint just off dead black so the dark reads as dark rather than a void.
+background-opacity = 0.48
 unfocused-split-opacity = 0.85
-background = #000000
+background = #0d0d12
 #foreground = #dddddd
 #selection-background = #1c2f39
 #selection-foreground = #dddddd

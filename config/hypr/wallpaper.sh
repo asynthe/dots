@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-WALLPAPER_DIR="$HOME/sync/wallpaper/3440x1440"
+WALLPAPER_DIR="$HOME/dots/wallpaper/3440x1440"
 
 # Wait for awww-daemon to be ready
 sleep 2

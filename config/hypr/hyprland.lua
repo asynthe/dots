@@ -15,6 +15,7 @@ hl.on("hyprland.start", function ()
     --hl.exec_cmd("walker --gapplication-service")
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
     hl.exec_cmd("uwsm app -- awww-daemon")
+    hl.exec_cmd("uwsm app -- qs -n -c bar")
     hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh &")
 end)
 
@@ -26,10 +27,11 @@ hl.env("HYPRCURSOR_SIZE", "26")
 hl.env("XCURSOR_THEME", "rose-pine-hyprcursor")
 hl.env("XCURSOR_SIZE", "26")
 
--- Dark mode
+-- Dark mode. Qt goes through the gtk3 platform theme, which reads GTK_THEME
+-- and hands Qt a matching dark palette -- no QT_STYLE_OVERRIDE, which only ever
+-- named the adwaita-qt style that is not installed here.
 hl.env("GTK_THEME", "adw-gtk3-dark")
-hl.env("QT_STYLE_OVERRIDE", "adwaita-dark")
-hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
+hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
 
 -- Wayland specific
@@ -51,7 +53,7 @@ hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencop
 hl.config({
     general = {
         layout = "dwindle",
-        border_size = 1,
+        border_size = 0,
         gaps_in  = 4,
         gaps_out = 14,
         col = {
@@ -96,8 +98,8 @@ hl.config({
     decoration = {
         rounding       = 0,
         rounding_power = 2,
-        active_opacity   = 1.0, --0.9
-        inactive_opacity = 1.0, --0.6
+        active_opacity   = 1.0,
+        inactive_opacity = 0.95,
 
         -- Shadow
         shadow = {
@@ -111,8 +113,8 @@ hl.config({
         blur = {
             enabled   = true,
             xray      = false,
-            size      = 3,
-            passes    = 1,
+            size      = 8,
+            passes    = 3,
             vibrancy  = 0.1696,
         },
 
@@ -314,6 +316,12 @@ hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
+-- Wallpaper picker (quickshell). Toggles: `kill` exits non-zero when nothing
+-- is running, so the second half launches it. Esc quits it too.
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
+-- Show/hide the bar. IPC rather than a global shortcut so the bar keeps one
+-- toggle point: `qs -c bar ipc call bar toggle` works from a shell too.
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("qs -c bar ipc call bar toggle"))
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))

@@ -19,10 +19,14 @@ style = {
 }
 
 # font
+# TX-02 covers Powerline itself; the rest of the Nerd Font icons come from
+# the fontconfig fallback behind it (nix/nixos/desktop/look.nix).
 [font]
-#normal.family = "TX-02 Condensed"
-normal.family = "JetBrains Mono Nerd Font"
 size = 14
+normal = { family = "TX-02", style = "Condensed" }
+bold = { family = "TX-02", style = "Bold Condensed" }
+italic = { family = "TX-02", style = "Condensed Oblique" }
+bold_italic = { family = "TX-02", style = "Bold Condensed Oblique" }
 
 # keybindings
 [keyboard]

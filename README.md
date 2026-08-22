@@ -2,7 +2,8 @@
 >
 > I'm always updating this repository as it is my current system.
 
-``` ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+```
+ ⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⣼⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣼⣿⣿⣿⣿⣿⣿⣿⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣤⣶⣶⣿⣿⡗
@@ -20,7 +21,8 @@
 Clone this repository with the next commands, make sure `git-lfs` is installed to pull the wallpapers.
 ```bash
 git lfs install
-git clone https://gitlab.com/asynthe/dots.git
+git clone https://github.com/asynthe/dots.git
+# or https://gitlab.com/asynthe/dots.git
 ```
 
 ## My current setup
