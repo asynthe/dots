@@ -195,6 +195,23 @@ case "$answer" in
   *) echo "skipped dark mode" ;;
 esac
 
+# Fonts
+# GTK reads dconf *before* gtk-3.0/settings.ini, so these keys silently win over
+# the repo's gtk-font-name. They shipped as 'Segoe UI 9' / 'Hack 10' -- neither
+# font installed -- which is why Firefox's chrome ignored the dotfiles entirely.
+# Keep these in step with config/gtk-{3,4}.0/settings.ini.
+printf "\nApply font settings via dconf? [y/N] "
+read -r answer
+case "$answer" in
+  [yY])
+    dconf write /org/gnome/desktop/interface/font-name "'JetBrainsMono Nerd Font 10'"
+    dconf write /org/gnome/desktop/interface/monospace-font-name "'JetBrainsMono Nerd Font 14'"
+    dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans 14'"
+    echo "fonts applied"
+    ;;
+  *) echo "skipped font setup" ;;
+esac
+
 echo "\nDone."
 
 # TODO Add

@@ -5,7 +5,8 @@
 // github.com/iamsurjog/hyprquickpaper (d380bee), where cache.sh and the
 // config.json keys come from. Local changes are commented in place: full-width
 // layer anchors, selection-centred zoom via StrictlyEnforceRange, endless
-// scroll, hover borders, a quick fade, and tile-shaped JPEG thumbnails.
+// scroll, opening on the current wallpaper, hover borders, a quick fade, and
+// tile-shaped JPEG thumbnails.
 //
 // Needs: bash, jq, magick (ImageMagick), and awww to set the wallpaper.
 
@@ -69,6 +70,38 @@ PanelWindow {
         showDirs: false
         nameFilters: ["*.png", "*.jpg"]
         sortField: FolderListModel.Name
+    }
+
+    // Which wallpaper is up right now, so the picker opens on it rather than
+    // restarting from the middle of the folder every time. Asking awww beats
+    // keeping a state file of our own: it is the authority either way, and it
+    // also knows about wallpapers set by the rotation script, not only picks
+    // made here.
+    property string currentWallpaper: ""
+    property bool queryDone: false
+
+    Process {
+        running: true
+        command: ["awww", "query"]
+
+        // One line per output, of the form
+        //   DP-2: 3440x1440, scale: 1, currently displaying: image: /path/to.jpg
+        // A monitor showing a plain colour has no "image:" and is skipped.
+        stdout: StdioCollector {
+            id: awwwQuery
+            onStreamFinished: {
+                const m = /image:\s*(.+)/.exec(awwwQuery.text)
+                main.currentWallpaper = m ? m[1].trim() : ""
+                main.queryDone = true
+                list.tryStart()
+            }
+        }
+
+        // No daemon running, or no awww at all: open on the middle, as before.
+        onExited: {
+            main.queryDone = true
+            list.tryStart()
+        }
     }
 
     ListView {
@@ -164,17 +197,47 @@ PanelWindow {
             fadeOut.start()
         }
 
-        // Open on the middle wallpaper of the middle copy. FolderListModel fills
-        // in asynchronously, so this waits for the first non-empty count.
+        // Open on the current wallpaper, in the middle copy of the strip. The
+        // folder listing and the awww query both land asynchronously, so whichever
+        // arrives last is the one that starts things.
         property bool started: false
-        onCountChanged: {
-            if (started || count === 0) return
+        onCountChanged: tryStart()
+
+        function tryStart() {
+            if (started || folderModel.count === 0 || !main.queryDone) return
             started = true
             const n = folderModel.count
             highlightMoveDuration = 0
-            selectedIndex = n * Math.floor(main.copies / 2) + Math.floor((n - 1) / 2)
+            selectedIndex = n * Math.floor(main.copies / 2) + indexOfCurrent()
             settle.tries = 0
             settle.running = true
+        }
+
+        // Matched on file name rather than full path: awww echoes back the path it
+        // was handed, which need not be spelled the way FolderListModel spells it.
+        // Falls back to the middle of the folder when there is no match -- first
+        // run, or the wallpaper on screen is not from this folder.
+        function indexOfCurrent() {
+            const n = folderModel.count
+            const cur = main.currentWallpaper
+            const want = cur.substring(cur.lastIndexOf("/") + 1)
+            if (want !== "") {
+                for (let i = 0; i < n; i++) {
+                    if (folderModel.get(i, "fileName") === want) return i
+                }
+            }
+            return Math.floor((n - 1) / 2)
+        }
+
+        // awww is fast (a millisecond or two), but if it were to answer with
+        // neither signal -- the binary missing entirely -- the picker must not sit
+        // there empty. Give up on the query after a moment and open regardless.
+        Timer {
+            interval: 250; running: true
+            onTriggered: {
+                main.queryDone = true
+                list.tryStart()
+            }
         }
 
         // One positionViewAtIndex at that moment is not enough: the view has not
