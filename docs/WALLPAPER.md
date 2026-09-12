@@ -35,8 +35,9 @@ wallpaper.sh --set FILE [FADE]  show FILE now (what commands.sh calls)
 There is **no rotation** — the wallpaper changes only when you pick one. The
 `--set` path writes the file to `~/.cache/quickshell/current-wallpaper`, and the
 bare form reads it back at login so the wallpaper survives a reboot. If that
-file is missing or names something deleted, it falls back to the first still in
-the folder.
+file is missing or names something deleted, it falls back to
+`wallpaper/minimal_dark_dots.jpg` — the one wallpaper kept in the repo, so a
+fresh machine is never blank.
 
 At login `wallpaper.sh` may beat `awww-daemon` to the socket, so the bare form
 retries for a few seconds instead of giving up on the first failure.

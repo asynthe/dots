@@ -24,7 +24,7 @@ book() {
   local root=${BOOK_DIR:-$HOME/archive/media/book/reading}
   [[ -d $root ]] || { print -ru2 "book: not a directory: $root"; return 1 }
 
-  local preview=${DOTS_DIR:-$HOME/git/dots}/scripts/bash/book_preview.sh
+  local preview=${DOTS_DIR:-$HOME/git/dots}/scripts/book_preview.sh
   local -a picks
   picks=("${(@f)$(cd -- "$root" && fd --type f -e pdf -e epub . | sort |
     fzf --multi \

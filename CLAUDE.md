@@ -12,12 +12,12 @@ Laptop NixOS config (host `p1`). The server lives in `~/git/flakes`.
 - `config/` is plain upstream dotfiles, symlinked into place, not generated.
   There is no home-manager. `config/<name>` becomes `~/.config/<name>`, but
   only if `<name>` is in the `CONFIGS` array in
-  `scripts/bash/home_setup.sh` — the list is explicit so a stray directory
+  `scripts/home_setup.sh` — the list is explicit so a stray directory
   never silently becomes live config. **Adding a directory to `config/` is
   half the job; add it to that array too.** Anything that does not map
   name-for-name (VSCodium's two files, tide-island, `.zshenv`, the firefox
   profile, `other/icons/`) has its own `link` line below the array.
-- Scripts live in `scripts/<lang>/`. Anything that sets up a machine or a
+- Scripts live flat in `scripts/`, bash only (PowerShell is in `~/git/dots-win`). Anything that sets up a machine or a
   `$HOME` belongs here, not in a one-off command — if it was worth doing once
   it is worth re-running after a reinstall. `scripts/` is for things you
   *execute*: a shell function sourced at every prompt is config, and belongs in
@@ -43,11 +43,11 @@ Paths are absolute in `nix/` (`/home/meow/git/dots`) and `~`-relative in
 
 ```bash
 nh os switch                    # nix/ changes
-./scripts/bash/home_setup.sh    # dry run; --apply to do it
-./scripts/bash/sync_repos.sh    # pull every ~/git repo, fix .gitignore/.gitattributes
+./scripts/home_setup.sh         # dry run; --apply to do it
+./scripts/sync_repos.sh         # pull every ~/git repo, fix .gitignore/.gitattributes
 ```
 
-A new machine starts at `scripts/bash/bootstrap.sh` (the curl one-liner is in
+A new machine starts at `scripts/bootstrap.sh` (the curl one-liner is in
 `HOME_STRUCTURE.md`): it clones this repo, links `~/CLAUDE.md`, then runs
 `home_setup.sh`. It is fetched raw from gitlab, so it only knows what is pushed.
 

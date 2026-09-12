@@ -3,7 +3,7 @@
 set -uo pipefail
 
 STATE="${XDG_CACHE_HOME:-$HOME/.cache}/quickshell/current-wallpaper"
-DEFAULT="$HOME/git/dots/wallpaper/3440x1440"
+DEFAULT="$HOME/git/dots/wallpaper/minimal_dark_dots.jpg"
 
 if [[ ${1:-} == --set ]]; then
     f=${2:?--set needs a file}
@@ -14,11 +14,10 @@ if [[ ${1:-} == --set ]]; then
     exit 0
 fi
 
-# No argument: restore the last pick at login, or fall back to any still.
+# No argument: restore the last pick at login, or fall back to the default.
 f=$(cat "$STATE" 2>/dev/null)
-[[ -f ${f:-} ]] || f=$(find "$DEFAULT" -type f \
-    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) | sort | head -n1)
-[[ -f ${f:-} ]] || exit 0
+[[ -f ${f:-} ]] || f=$DEFAULT
+[[ -f $f ]] || exit 0
 
 for _ in {1..10}; do
     awww img "$f" --transition-type none && break

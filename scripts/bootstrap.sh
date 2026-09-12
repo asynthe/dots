@@ -3,8 +3,8 @@
 # First thing to run on a new machine. Clones this repo to ~/git/dots, points
 # ~/CLAUDE.md at the $HOME layout doc, then hands off to home_setup.sh.
 #
-#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bash/bootstrap.sh | bash
-#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bash/bootstrap.sh | bash -s -- --apply
+#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bootstrap.sh | bash
+#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bootstrap.sh | bash -s -- --apply
 #
 # Without --apply, home_setup.sh only prints what it would do. Safe to re-run:
 # an existing clone is pulled instead of re-cloned.
@@ -59,4 +59,4 @@ fi
 
 # ── the rest
 echo
-exec "$DOTS/scripts/bash/home_setup.sh" "$@"
+exec "$DOTS/scripts/home_setup.sh" "$@"

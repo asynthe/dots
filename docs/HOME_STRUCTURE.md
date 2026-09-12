@@ -2,7 +2,7 @@
 
 The layout of `/home/meow`, and the rules that decide where a new thing goes.
 Symlinked to `~/CLAUDE.md` — an agent working anywhere under `$HOME` reads this
-first. Linked by `scripts/bash/bootstrap.sh`, kept linked by `home_setup.sh`.
+first. Linked by `scripts/bootstrap.sh`, kept linked by `home_setup.sh`.
 
 ```
 ~
@@ -107,14 +107,14 @@ state, not archive. It's at `~/.local/share/monero` now.
 ## New machine
 
 ```bash
-curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bash/bootstrap.sh | bash -s -- --apply
+curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bootstrap.sh | bash -s -- --apply
 ```
 
 Clones this repo to `~/git/dots` over https (remotes switched to ssh after),
 links `~/CLAUDE.md` to this file, then runs `home_setup.sh`. Drop `--apply`
 for a dry run; prefix `nix-shell -p git --run '…'` if git isn't there yet.
 Clone the other repos into `~/git/<name>` by hand — after that,
-`scripts/bash/sync_repos.sh` pulls them all and enforces `.gitignore` (`.claude`,
+`scripts/sync_repos.sh` pulls them all and enforces `.gitignore` (`.claude`,
 `.DS_Store`) and the LF `.gitattributes`.
 
 ## Dotfiles
@@ -129,7 +129,7 @@ Migrations to those new paths are done by `home_setup.sh`, which leaves a
 symlink at the old location so a running gpg-agent doesn't break mid-session.
 
 There is no home-manager. Everything under `git/dots/config/` reaches
-`~/.config/` as a plain symlink, and **`scripts/bash/home_setup.sh` is the only
+`~/.config/` as a plain symlink, and **`scripts/home_setup.sh` is the only
 place that mapping is written down** — a new directory in `config/` is not live
 until it is listed in the `CONFIGS` array there. Run the script after adding
 one; it is idempotent and dry-run by default.
@@ -147,12 +147,12 @@ Three cases it handles that a `ln -s` loop would get wrong:
 
 ## Working fast
 
-Both editors and the file manager are pointed at this layout:
+The editor is pointed at this layout:
 
-- `yazi` — `g` then `g d f n b a w c` → git, dots, flakes, notes, ben,
-  archive, downloads, config. (`z`/`Z` are still zoxide and fzf.)
-- `nvim` — `<leader>h` + the same letters, each one `tcd`s the tab and opens
-  the file picker there. `<leader>fp` picks a repo by name instead.
+- `yazi` — stock keymap. `z`/`Z` are zoxide and fzf.
+- `nvim` — `<leader>h` then `g d f n b a w c` → git, dots, flakes, notes,
+  ben, archive, downloads, config. Each one `tcd`s the tab and opens the file
+  picker there. `<leader>fp` picks a repo by name instead.
   `<leader>nm` opens `notes/main.md`, `<leader>;` drops into yazi at cwd.
 - `z <name>` (zoxide) beats both once a path is warm.
 - `check_repo` runs on shell start and flags uncommitted/unpushed work across
