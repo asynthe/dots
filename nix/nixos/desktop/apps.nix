@@ -23,6 +23,7 @@
             tidal-hifi
             webcord
             zathura sioyek
+            poppler-utils
         ];
     };
 }

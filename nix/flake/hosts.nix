@@ -1,6 +1,4 @@
-# A host is just an aspect named `host-<name>`. Declaring one anywhere in the
-# tree is the only step needed to get a nixosConfiguration -- nothing else in
-# the repo has to learn about it.
+# A host is an aspect named `host-<name>`; declaring one is the whole registration.
 { config, lib, inputs, ... }:
 let
     prefix = "host-";

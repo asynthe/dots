@@ -32,11 +32,13 @@ font-style-bold-italic = Bold Condensed Oblique
 #font-thicken = true
 
 # Colors and opacity
-# `background-opacity` is the lever that decides how much of Hyprland's blur
-# shows through; `background` is only the colour of what is left tinting it.
-# Pure black at 0.6 read as a heavy slab, so: let more blur through, and lift
-# the tint just off dead black so the dark reads as dark rather than a void.
-background-opacity = 0.48
+# At 0 there is no terminal background at all -- text sits straight on
+# hyprglass. The tint and the readability both moved to the glass:
+# `tint_color` and `dark.adaptive_dim` in hypr/hyprland.lua. `background`
+# below is inert while this is 0, kept as the colour to restore to.
+# See docs/HYPRGLASS.md.
+#background-opacity = 0.48
+background-opacity = 0
 unfocused-split-opacity = 0.85
 background = #0d0d12
 #foreground = #dddddd
@@ -61,6 +63,10 @@ keybind = ctrl+enter=ignore
 keybind = shift+ctrl+r=reload_config
 keybind = ctrl+w=close_surface
 confirm-close-surface = false
+
+# Scrollback
+keybind = alt+arrow_up=scroll_page_lines:-3
+keybind = alt+arrow_down=scroll_page_lines:3
 
 # Split screen
 keybind = ctrl+.=toggle_split_zoom

@@ -13,6 +13,10 @@ border-color=#bb9af7
 text-color=#a9b1d6
 # }}}
 
+# Tide Island draws the notifications; mako only owns the DBus name and
+# feeds it. See docs/TIDE.md.
+invisible=1
+
 default-timeout=5000
 on-button-middle=exec makoctl menu -n "$id" wofi --dmenu -p 'Select action: '
 on-notify=exec mpv /usr/share/sounds/freedesktop/stereo/message.oga

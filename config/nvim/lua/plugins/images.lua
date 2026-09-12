@@ -1,7 +1,10 @@
+local host = require("host")
+
 return {
   {
     "3rd/image.nvim",
     ft = { "markdown" },
+    cond = function() return host.graphics_terminal() and host.has("magick") end,
     opts = {
       backend = "kitty",
       processor = "magick_cli",

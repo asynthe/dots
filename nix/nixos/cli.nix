@@ -1,19 +1,19 @@
-# The shell environment that makes a machine feel like this machine. Every host
-# gets it; it is the one package list that is not feature-scoped -- so anything
-# in here has to be defensible on a headless box too. Tools that belong to a
-# subsystem live with that subsystem instead (bluetooth, boot, network, audio).
+# The shell environment every host gets, so it has to be defensible headless.
+# Subsystem tools live with their subsystem instead.
 { ... }:
 {
     flake.modules.nixos.cli = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             bat
             bc
+            chafa
             exiftool
             eza
             fd ripgrep
             ffmpeg-full ffmpegthumbnailer
             file
             fzf skim
+            ghostty.terminfo   # ssh from a ghostty client needs this end too
             htop btop
             hyperfine
             imagemagickBig
@@ -27,8 +27,11 @@
             neomutt
             nh
             ntfs3g
+            pciutils
+            poppler-utils
             pv
             rsync
+            smartmontools
             sox
             starship
             superfile

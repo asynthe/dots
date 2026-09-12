@@ -2,67 +2,54 @@ local map = vim.keymap.set
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
-map("n", ".", "<cmd>lua require('core.notes').picker()<CR>", { desc = "Note picker" })
-map("n", "<leader>.", "<cmd>Yazi cwd<CR>", { desc = "Open yazi at cwd" })
+map("n", "<C-h>", "<C-w>h", { desc = "Window left" })
+map("n", "<C-j>", "<C-w>j", { desc = "Window down" })
+map("n", "<C-k>", "<C-w>k", { desc = "Window up" })
+map("n", "<C-l>", "<C-w>l", { desc = "Window right" })
 
-map("n", "<leader>fs", "<cmd>w<CR>", { desc = "Save file" })
-map("n", "<leader>fk", "<cmd>bd!<CR>", { desc = "Close file without saving" })
-map("n", "<leader>fn", "<cmd>ObsidianNew<CR>", { desc = "New obsidian note" })
-
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-j>", "<C-w>j")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-l>", "<C-w>l")
-
-map("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 map("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
-map("n", "<C-]>", "<cmd>bnext<CR>", { desc = "Next buffer" })
-map("n", "<C-[>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+map("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 
-map("n", "<Tab>", "<cmd>Neotree toggle<CR>", { desc = "Toggle file tree" })
+map("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
+map("n", "<leader>q", "<cmd>quit<CR>", { desc = "Quit window" })
+map("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+map("n", "<leader>bD", "<cmd>bdelete!<CR>", { desc = "Delete buffer, discard changes" })
 
-map("v", "J", ":m '>+1<CR>gv=gv")
-map("v", "K", ":m '<-2<CR>gv=gv")
+map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+map("v", "<", "<gv")
+map("v", ">", ">gv")
 
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
+local function toggle(name, on, off)
+  return function()
+    local cur = vim.opt_local[name]:get()
+    vim.opt_local[name] = cur == on and off or on
+    vim.notify(name .. " = " .. tostring(vim.opt_local[name]:get()))
+  end
+end
+
+map("n", "<leader>uw", toggle("wrap", true, false), { desc = "Toggle wrap" })
+map("n", "<leader>un", toggle("number", true, false), { desc = "Toggle line numbers" })
+map("n", "<leader>ur", toggle("relativenumber", true, false), { desc = "Toggle relative numbers" })
+map("n", "<leader>uc", toggle("conceallevel", 2, 0), { desc = "Toggle conceal" })
+map("n", "<leader>ud", function()
+  local on = not vim.diagnostic.is_enabled()
+  vim.diagnostic.enable(on)
+  vim.notify("diagnostics = " .. tostring(on))
+end, { desc = "Toggle diagnostics" })
+
 vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("UserMarkdownKeys", { clear = true }),
   pattern = "markdown",
   callback = function(ev)
-    map("n", "<leader>n", "<cmd>Obsidian new<CR>", { buffer = ev.buf, desc = "New note" })
-
-    -- Ctrl+Enter: continue list with same marker on new line
     map("i", "<C-CR>", function()
-      local line = vim.api.nvim_get_current_line()
-      local marker = line:match("^(%s*[-*+] )")
-      if marker then
-        return "<CR>" .. marker
-      end
-      return "<CR>"
+      local marker = vim.api.nvim_get_current_line():match("^(%s*[-*+] )")
+      return marker and ("<CR>" .. marker) or "<CR>"
     end, { buffer = ev.buf, expr = true, desc = "New list item" })
-
-    -- Ctrl+Right: indent list item by 2 spaces
-    map({ "i", "n" }, "<C-Right>", function()
-      local line = vim.api.nvim_get_current_line()
-      if line:match("^%s*[-*+] ") then
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        vim.api.nvim_set_current_line("  " .. line)
-        vim.api.nvim_win_set_cursor(0, { row, col + 2 })
-      end
-    end, { buffer = ev.buf, desc = "Indent list item" })
-
-    -- Ctrl+Left: dedent list item by 2 spaces
-    map({ "i", "n" }, "<C-Left>", function()
-      local line = vim.api.nvim_get_current_line()
-      local dedented = line:match("^  (.*)")
-      if dedented and dedented:match("^%s*[-*+] ") then
-        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-        vim.api.nvim_set_current_line(dedented)
-        vim.api.nvim_win_set_cursor(0, { row, math.max(0, col - 2) })
-      end
-    end, { buffer = ev.buf, desc = "Dedent list item" })
   end,
 })

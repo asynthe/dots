@@ -8,7 +8,7 @@
 // scroll, opening on the current wallpaper, hover borders, a quick fade, and
 // tile-shaped JPEG thumbnails.
 //
-// Needs: bash, jq, magick (ImageMagick), and awww to set the wallpaper.
+// Needs: bash, jq, magick, ffmpeg, ~/.config/hypr/wallpaper.sh. See ~/git/dots/docs/WALLPAPER.md.
 
 import Quickshell
 import Quickshell.Io
@@ -66,32 +66,29 @@ PanelWindow {
 
     FolderListModel {
         id: folderModel
-        folder: "file://" + configs.wallpaper_path
+        folder: configs.wallpaper_path ? "file://" + configs.wallpaper_path : ""
         showDirs: false
-        nameFilters: ["*.png", "*.jpg"]
+        nameFilters: ["*.png", "*.jpg", "*.jpeg"]
         sortField: FolderListModel.Name
     }
 
     // Which wallpaper is up right now, so the picker opens on it rather than
-    // restarting from the middle of the folder every time. Asking awww beats
-    // keeping a state file of our own: it is the authority either way, and it
-    // also knows about wallpapers set by the rotation script, not only picks
-    // made here.
+    // restarting from the middle of the folder every time.
     property string currentWallpaper: ""
     property bool queryDone: false
 
     Process {
         running: true
-        command: ["awww", "query"]
+        command: ["bash", "-c",
+            "cat \"${XDG_CACHE_HOME:-$HOME/.cache}/quickshell/current-wallpaper\" 2>/dev/null | grep . || awww query"]
 
-        // One line per output, of the form
-        //   DP-2: 3440x1440, scale: 1, currently displaying: image: /path/to.jpg
-        // A monitor showing a plain colour has no "image:" and is skipped.
         stdout: StdioCollector {
-            id: awwwQuery
+            id: currentQuery
             onStreamFinished: {
-                const m = /image:\s*(.+)/.exec(awwwQuery.text)
-                main.currentWallpaper = m ? m[1].trim() : ""
+                const out = currentQuery.text.trim()
+                const m = /image:\s*(.+)/.exec(out)
+                main.currentWallpaper = m ? m[1].trim()
+                    : (out.startsWith("/") ? out.split("\n")[0].trim() : "")
                 main.queryDone = true
                 list.tryStart()
             }

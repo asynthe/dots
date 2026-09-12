@@ -7,15 +7,12 @@
         services.thermald.enable = true;
         services.auto-cpufreq.enable = false;
 
-        # Battery, lid and AC state over dbus. Every shell's battery widget
-        # reads it; without it they show nothing on a machine that has a battery.
+        # Battery, lid and AC state over dbus; every shell's battery widget reads it.
         services.upower.enable = true;
-        # The performance/balanced/power-saver switch those widgets write to.
-        # Mutually exclusive with tlp and auto-cpufreq -- neither is enabled here.
+        # The power-profile switch those widgets write to; excludes tlp and auto-cpufreq.
         services.power-profiles-daemon.enable = true;
 
-        # Charge history and the calibrated capacity estimate, both of which
-        # take days to rebuild from scratch.
+        # Charge history and capacity estimate; both take days to rebuild.
         environment.persistence.${config.sys.impermanence.folder}.directories =
             lib.mkIf config.sys.impermanence.enable [ "/var/lib/upower" ];
 

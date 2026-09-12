@@ -15,37 +15,38 @@ return {
       }
 
       dashboard.section.buttons.val = {
-        dashboard.button(".", "open note",    "<cmd>lua require('core.notes').picker()<CR>"),
-        dashboard.button("m", "main.md",      "<cmd>edit ~/notes/main.md<CR>"),
-        dashboard.button("r", "recent",       "<cmd>FzfLua oldfiles<CR>"),
-        dashboard.button("q", "quit",         "<cmd>qa<CR>"),
+        dashboard.button(".", "open note", "<cmd>lua require('core.notes').picker()<CR>"),
+        dashboard.button("m", "main.md",   "<cmd>edit ~/git/notes/main.md<CR>"),
+        dashboard.button("f", "find file", "<cmd>FzfLua files<CR>"),
+        dashboard.button("r", "recent",    "<cmd>FzfLua oldfiles<CR>"),
+        dashboard.button("q", "quit",      "<cmd>qa<CR>"),
       }
+
+      local width = 0
+      for _, b in ipairs(dashboard.section.buttons.val) do
+        local w = vim.fn.strdisplaywidth(b.val) + vim.fn.strdisplaywidth(b.opts.shortcut)
+        width = math.max(width, w)
+      end
+      for _, b in ipairs(dashboard.section.buttons.val) do
+        b.opts.width = width + 4
+      end
 
       dashboard.section.footer.val = os.date("  %A, %B %d")
 
-      alpha.setup(dashboard.config)
+      dashboard.config.layout = {
+        {
+          type = "group",
+          opts = { position = "v_center" },
+          val = {
+            dashboard.section.header,
+            { type = "padding", val = 2 },
+            dashboard.section.buttons,
+            dashboard.section.footer,
+          },
+        },
+      }
 
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "AlphaReady",
-        callback = function()
-          local buf = vim.api.nvim_get_current_buf()
-          vim.opt.laststatus = 0
-          -- lualine loads after AlphaReady (VeryLazy), re-hide once all plugins are done
-          vim.api.nvim_create_autocmd("User", {
-            pattern = "LazyDone",
-            once = true,
-            callback = function()
-              if vim.api.nvim_get_current_buf() == buf then
-                vim.opt.laststatus = 0
-              end
-            end,
-          })
-          vim.api.nvim_create_autocmd("BufUnload", {
-            buffer = buf,
-            callback = function() vim.opt.laststatus = 3 end,
-          })
-        end,
-      })
+      alpha.setup(dashboard.config)
     end,
   },
 }

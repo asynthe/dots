@@ -334,7 +334,7 @@
 
 (setq 
       ; TODO Set condition for Linux, macOS, and Windows
-      org-directory "~/notes/org"
+      org-directory "~/git/notes/org"
       org-id-track-globally t
       org-return-follows-link t
       org-hide-block-startup nil      ; Don't fold code blocks
@@ -360,10 +360,10 @@
   :straight t
   :custom
   (org-roam-directory (cond
-                       ((eq system-type 'gnu/linux) "~/notes/org")
+                       ((eq system-type 'gnu/linux) "~/git/notes/org")
                        ((eq system-type 'darwin) "~/ben/notes/org")
                        ((eq system-type 'windows-nt) "C:/Users/Ben/Desktop/ben/notes/org")
-                       (t "~/notes")))
+                       (t "~/git/notes")))
   :config
   (condition-case err
       (progn

@@ -2,8 +2,8 @@
 [[ $- != *i* ]] && return
 
 export EDITOR=nvim
-export DOTS_DIR=$HOME/dots
-export NOTES_DIR=$HOME/notes
+export DOTS_DIR=$HOME/git/dots
+export NOTES_DIR=$HOME/git/notes
 export PASSWORD_STORE_DIR=$HOME/ben/pass
 
 # Inactivity auto-command
@@ -54,5 +54,5 @@ source "$ZDOTDIR/.zsh_functions"
 eval "$(atuin init zsh --disable-up-arrow)"
 eval "$(direnv hook zsh)"
 
-#starfetch
-source "$DOTS_DIR/scripts/bash/check_repo.sh"
+# Repo status (defined in .zsh_functions)
+check_repo

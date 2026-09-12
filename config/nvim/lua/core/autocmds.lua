@@ -13,37 +13,25 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = augroup,
-  pattern = "*.md",
-  callback = function() vim.opt.laststatus = 0 end,
-})
-
-vim.api.nvim_create_autocmd("BufLeave", {
-  group = augroup,
-  pattern = "*.md",
-  callback = function() vim.opt.laststatus = 3 end,
-})
-
-vim.api.nvim_create_autocmd("BufWriteCmd", {
+vim.api.nvim_create_autocmd("BufWritePre", {
   group = augroup,
   pattern = "*.md",
   callback = function(ev)
     local buf = ev.buf
-    local path = vim.fn.expand("%:p")
     local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     local last = #lines
     while last > 1 and lines[last]:match("^%s*$") do
       last = last - 1
     end
-    local f = io.open(path, "w")
-    if f then
-      for i = 1, last do
-        f:write(lines[i] .. "\n")
-      end
-      f:write("\n")
-      f:close()
-      vim.bo[buf].modified = false
+    if last == #lines - 1 then
+      return
+    end
+    local win = vim.fn.bufwinid(buf)
+    local cursor = win ~= -1 and vim.api.nvim_win_get_cursor(win) or nil
+    vim.api.nvim_buf_set_lines(buf, last, -1, false, { "" })
+    if cursor then
+      local count = vim.api.nvim_buf_line_count(buf)
+      vim.api.nvim_win_set_cursor(win, { math.min(cursor[1], count), cursor[2] })
     end
   end,
 })
@@ -81,6 +69,16 @@ vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave", "TextChanged" }, {
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup,
   callback = function()
-    vim.highlight.on_yank({ timeout = 150 })
+    (vim.hl or vim.highlight).on_yank({ timeout = 150 })
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = augroup,
+  callback = function(ev)
+    local mark = vim.api.nvim_buf_get_mark(ev.buf, '"')
+    if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(ev.buf) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
   end,
 })

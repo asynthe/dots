@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
     flake.modules.nixos.claude-code = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.claude-code ];
@@ -8,55 +8,72 @@
         environment.systemPackages = [ pkgs.opencode ];
     };
 
-    flake.modules.nixos.fabric = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.fabric-ai ];
-    };
+    flake.modules.nixos.hermes = { config, lib, ... }: {
+        imports = [ inputs.hermes-agent.nixosModules.default ];
 
-    flake.modules.nixos.openclaw = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.openclaw ];
-    };
+        options.sys.hermes = {
+            model = lib.mkOption {
+                type        = lib.types.str;
+                default     = "anthropic/claude-opus-4.6";
+                description = "Default model id, `<provider>/<model>`";
+            };
 
-    flake.modules.nixos.hermes = { pkgs, ... }: {
-        environment.systemPackages = with pkgs; [ ];
-    };
+            env = lib.mkOption {
+                type        = lib.types.attrsOf lib.types.str;
+                default     = { CLAUDE_CODE_OAUTH_TOKEN = "hermes/CLAUDE_CODE_OAUTH_TOKEN"; };
+                description = "Provider env vars mapped to their sops key paths; `{}` defers auth to `hermes auth`";
+            };
 
-    flake.modules.nixos.ollama = { config, lib, pkgs, ... }: {
-        options.sys.ollama = {
-            cuda = lib.mkEnableOption "CUDA-accelerated Ollama (needs the nvidia-prime aspect)";
-            models = lib.mkOption {
-                type        = lib.types.listOf lib.types.str;
-                default     = [];
-                description = "Models to preload on startup";
+            dashboard = lib.mkEnableOption "the browser admin panel and /api sockets";
+
+            bind = lib.mkOption {
+                type        = lib.types.str;
+                default     = "127.0.0.1";
+                description = "Address the dashboard binds to; anything but loopback turns on its auth gate";
+            };
+
+            waitForHost = lib.mkOption {
+                type        = lib.types.bool;
+                default     = false;
+                description = "Poll until `bind` resolves before binding, for names that appear late (tailscale)";
             };
         };
 
-        config.services.ollama = {
-            enable     = true;
-            package    = if config.sys.ollama.cuda then pkgs.ollama-cuda else pkgs.ollama;
-            syncModels = true;
-            loadModels = config.sys.ollama.models;
+        config = let
+            env    = config.sys.hermes.env;
+            hasEnv = env != { };
+        in {
+            sops.secrets = lib.mapAttrs' (name: key:
+                lib.nameValuePair "hermes-${name}" { inherit key; }
+            ) env;
+
+            sops.templates = lib.mkIf hasEnv {
+                hermes-env.content = lib.concatStringsSep "\n" (
+                    lib.mapAttrsToList
+                        (name: _: "${name}=${config.sops.placeholder."hermes-${name}"}")
+                        env
+                );
+            };
+
+            services.hermes-agent = {
+                enable              = true;
+                addToSystemPackages = true;
+                environmentFiles    =
+                    lib.optional hasEnv config.sops.templates.hermes-env.path;
+
+                settings.model.default = config.sys.hermes.model;
+
+                backend.mode    = if config.sys.hermes.dashboard then "dashboard" else "none";
+                backend.host    = config.sys.hermes.bind;
+                backend.waitFor = lib.mkIf config.sys.hermes.waitForHost "hostname";
+            };
+
+            users.users.${config.sys.user}.extraGroups = [ "hermes" ];
+
+            environment.persistence.${config.sys.impermanence.folder}.directories =
+                lib.mkIf config.sys.impermanence.enable [
+                    { directory = "/var/lib/hermes"; user = "hermes"; group = "hermes"; mode = "2770"; }
+                ];
         };
-    };
-
-    # RAG CLI (LlamaIndex + ChromaDB via Ollama). Needs `ollama` alongside it.
-    # NOTE: expects modules/nixos/rag/rag.py, which does not exist yet -- the
-    # aspect is here for parity with the old tree but is not host-ready.
-    flake.modules.nixos.rag = { pkgs, ... }:
-    let
-        ragEnv = pkgs.python3.withPackages (ps: with ps; [
-            llama-index
-            llama-index-core
-            llama-index-embeddings-ollama
-            llama-index-llms-ollama
-            llama-index-vector-stores-chroma
-            chromadb
-            pypdf
-        ]);
-
-        ragScript = pkgs.writeShellScriptBin "rag" ''
-            exec ${ragEnv}/bin/python ${./rag/rag.py} "$@"
-        '';
-    in {
-        environment.systemPackages = [ ragScript ];
     };
 }

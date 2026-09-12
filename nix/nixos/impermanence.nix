@@ -24,8 +24,7 @@ https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/
             ];
             files = [
                 "/etc/machine-id"
-                # Stable host identity across rollbacks. Also the sops-nix
-                # decryption key -- must survive or secrets become unreadable.
+                # Stable host identity, and the sops-nix key: must survive or secrets die.
                 "/etc/ssh/ssh_host_ed25519_key"
                 "/etc/ssh/ssh_host_ed25519_key.pub"
                 "/etc/ssh/ssh_host_rsa_key"

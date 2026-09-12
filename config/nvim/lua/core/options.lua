@@ -8,6 +8,11 @@ opt.signcolumn = "yes"
 opt.termguicolors = true
 opt.conceallevel = 1
 
+opt.laststatus = 0
+opt.ruler = false
+opt.showmode = false
+opt.showcmd = false
+
 opt.mousescroll = "ver:1"
 opt.scrolloff = 0
 opt.sidescrolloff = 0
@@ -34,7 +39,6 @@ opt.incsearch = true
 opt.timeoutlen = 500
 opt.updatetime = 300
 
-opt.lazyredraw = true
 opt.synmaxcol = 300
 
 opt.undofile = true

@@ -5,10 +5,21 @@ search_mode = "fuzzy"
 invert = true
 enter_accept = true
 
-# history_filter = [
-#   "^secret-cmd",
-#   "^innocuous-cmd .*--secret=.+",
-# ]
+## Don't record commands that exited non-zero (typos, aborted ^C, etc.)
+store_failed = false
+
+## Commands matching any of these regexes are never recorded.
+## Regexes are unanchored, so anchor with ^ / $ to avoid over-matching.
+## Applies to NEW commands only -- run `atuin history prune` to clear old ones.
+history_filter = [
+  "^(ls|ll|la|lt|l)(\\s|$)",
+  "^cd(\\s|$)",
+  "^(cat|bat)\\s",
+  "^(pwd|clear|exit|history|h)$",
+  "^(yy|lf|yazi)(\\s|$)",
+]
+
+## Directories whose commands are never recorded.
 # cwd_filter = [
 #   "^/very/secret/area",
 # ]

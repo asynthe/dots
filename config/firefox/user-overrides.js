@@ -29,8 +29,8 @@ user_pref("font.default.x-western", "sans-serif");
 user_pref("font.name.sans-serif.x-western", "Noto Sans");
 user_pref("font.name.serif.x-western", "Noto Serif");
 user_pref("font.name.monospace.x-western", "JetBrainsMono Nerd Font");
-user_pref("font.size.variable.x-western", 16);
-user_pref("font.size.monospace.x-western", 16);
+user_pref("font.size.variable.x-western", 15);
+user_pref("font.size.monospace.x-western", 15);
 
 // Japanese, to match the fontconfig CJK fallbacks in nix/nixos/desktop/look.nix
 user_pref("font.name.sans-serif.ja", "Noto Sans CJK JP");

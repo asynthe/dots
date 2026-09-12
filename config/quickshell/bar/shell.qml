@@ -15,6 +15,9 @@
 // UseQApplication is required by QsMenuAnchor -- tray menus are platform
 // menus, and QGuiApplication cannot build them.
 //
+// A bar tucks itself away while its screen shows a fullscreen window, so games
+// -- which ../../hypr/hyprland.lua forces fullscreen -- get the whole output.
+//
 // Run:    qs -c bar
 // Toggle: qs -c bar ipc call bar toggle   (bound in ../../hypr/hyprland.lua)
 
@@ -36,8 +39,9 @@ ShellRoot {
     property string fontFamily : "JetBrainsMono Nerd Font"
     property int    fontSize   : 16
     property int    sideMargin : 16
+    property int    shadowHeight: 14
 
-    property color bg      : "#000000"
+    property color bg      : "#870d0d12"  // ARGB: ~53% of ghostty's tint
     property color fg      : "#ffffff"
     property color fgDim   : "#6a6a6a"
     property color fgFaint : "#2a2a2a"
@@ -48,6 +52,10 @@ ShellRoot {
     property int animFast : 160
     property int animSlow : 260
 
+    // Get out of the way of fullscreen windows. The bar is on the Top layer,
+    // which Hyprland still draws over a fullscreen client, so this is on us.
+    property bool hideOnFullscreen: true
+
     // Source address of the default route. With Mullvad up this is the tunnel
     // address, which is normally what "my current IP" means; swap in
     // `hostname -I | cut -d' ' -f1` if you want the LAN address instead.
@@ -55,6 +63,8 @@ ShellRoot {
     // ────────────────────────────────────────────────────────────
 
     property bool   hidden   : false
+    // Summoned over a fullscreen window by the toggle. Cleared on the way out.
+    property bool   overFull : false
     property bool   showIp   : false
     property string ipAddress: "..."
 
@@ -64,6 +74,11 @@ ShellRoot {
     function isInternal(screen) {
         return /^(eDP|LVDS|DSI)/i.test(screen.name);
     }
+
+    // What the toggle acts on -- the bar you are looking at is the one on the
+    // monitor with focus.
+    readonly property bool focusedFullscreen:
+        Hyprland.focusedMonitor?.activeWorkspace?.hasFullscreen ?? false
 
     // Widest external if one is plugged in, else the internal panel.
     readonly property var mainScreen: {
@@ -85,14 +100,25 @@ ShellRoot {
     IpcHandler {
         target: "bar"
 
+        // Under a fullscreen window the toggle flips the override rather than
+        // `hidden`, so one keypress always swaps what you can actually see.
         function toggle(): void {
-            root.hidden = !root.hidden;
+            if (root.hideOnFullscreen && root.focusedFullscreen) {
+                root.overFull = !root.overFull;
+                root.hidden = false;
+            } else {
+                root.hidden = !root.hidden;
+            }
         }
-        function show(): void {
+        // Not `show` -- quickshell 0.3.0 silently drops an IPC function by that
+        // name; it never appears in `qs -c bar ipc show bar`.
+        function unhide(): void {
             root.hidden = false;
+            root.overFull = true;
         }
         function hide(): void {
             root.hidden = true;
+            root.overFull = false;
         }
     }
 
@@ -122,7 +148,15 @@ ShellRoot {
 
             readonly property bool isMain    : modelData === root.mainScreen
             readonly property bool isInternal: root.isInternal(modelData)
-            readonly property bool shown     : !root.hidden
+
+            // This screen's own workspace, not the focused one: a game on the
+            // ultrawide should not blank the laptop's clock.
+            readonly property var  hlMonitor : Hyprland.monitorFor(modelData)
+            readonly property bool covered   : root.hideOnFullscreen
+                && !root.overFull
+                && (hlMonitor?.activeWorkspace?.hasFullscreen ?? false)
+
+            readonly property bool shown     : !root.hidden && !covered
 
             // 1 = out, 0 = tucked below the screen edge. Driven imperatively so
             // the Behavior animates it; a plain binding would just snap.
@@ -133,7 +167,7 @@ ShellRoot {
             screen: modelData
             visible: reveal > 0.01
             color: "transparent"
-            implicitHeight: root.barHeight
+            implicitHeight: root.barHeight + root.shadowHeight
 
             anchors {
                 left: true
@@ -143,6 +177,11 @@ ShellRoot {
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "quickshell:bar"
+
+            mask: Region {
+                width: bar.width
+                height: root.barHeight
+            }
 
             // Stepped rather than tied to `reveal`: one resize for Hyprland to
             // animate on its own, instead of a reflow on every frame of the slide.
@@ -156,7 +195,12 @@ ShellRoot {
             }
 
             Item {
-                anchors.fill: parent
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+                height: root.barHeight
                 opacity: bar.reveal
 
                 transform: Translate {
@@ -166,6 +210,24 @@ ShellRoot {
                 Rectangle {
                     anchors.fill: parent
                     color: root.bg
+                }
+
+                Rectangle {
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.bottom
+                    }
+                    height: root.shadowHeight
+
+                    gradient: Gradient {
+                        GradientStop { position: 0.00; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a) }
+                        GradientStop { position: 0.15; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.68) }
+                        GradientStop { position: 0.30; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.44) }
+                        GradientStop { position: 0.50; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.21) }
+                        GradientStop { position: 0.70; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.085) }
+                        GradientStop { position: 1.00; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, 0) }
+                    }
                 }
 
                 // ───────────────────────── Left: workspaces ─────────────────────────

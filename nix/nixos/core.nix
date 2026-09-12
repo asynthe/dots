@@ -1,11 +1,9 @@
-# Imported by every host. Deliberately small: nix daemon settings, the primary
-# user, and the nixpkgs instance. Everything else is opt-in per host.
+# Imported by every host: nix daemon settings, the primary user, the nixpkgs instance.
 { inputs, ... }:
 {
     flake.modules.nixos.core = { config, pkgs, ... }: {
 
-        # Always available so any aspect can declare persistence unconditionally;
-        # `sys.impermanence.enable` is what decides whether it does anything.
+        # Always available, so aspects can declare persistence unconditionally.
         imports = [ inputs.impermanence.nixosModules.impermanence ];
 
         nixpkgs.config = {

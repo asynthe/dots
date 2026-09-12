@@ -1,6 +1,5 @@
 .DS_Store
 .claude
-CLAUDE.md
 result
 result-*
 
@@ -11,7 +10,6 @@ config/mpd/playlists
 config/ncmpcpp/error.log
 config/zsh/history
 config/zsh/.zcompdump
-config/nvim/lazy-lock.json
 
 # qBittorrent
 config/qBittorrent/*

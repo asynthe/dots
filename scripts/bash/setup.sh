@@ -14,7 +14,7 @@
 # -> Ask what the Windows username is?
 
 # TODO Firefox symlink of user overrides, just copying command i ran
-# ln -sf ~/dots/config/firefox/user-overrides.js ~/.config/mozilla/firefox/q5a5uclv.default/
+# ln -sf ~/git/dots/config/firefox/user-overrides.js ~/.config/mozilla/firefox/q5a5uclv.default/
 
 display_ascii_art() {
     cat << "EOF" | pv -qL 470
@@ -42,7 +42,7 @@ sleep 1
 
 # Linux
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  source_base="$HOME/dots/config"
+  source_base="$HOME/git/dots/config"
   dest_path="$HOME/.config"
 
 # macOS
@@ -135,7 +135,7 @@ if [ "$(uname -s)" != "Linux" ]; then
   exit 1
 fi
 
-DOTS="$HOME/dots/config"
+DOTS="$HOME/git/dots/config"
 CFG="$HOME/.config"
 
 make_link() {
@@ -172,7 +172,7 @@ do
 done
 
 # Cursor theme
-make_link "$HOME/dots/other/icons/volantes" "$HOME/.local/share/icons/volantes"
+make_link "$HOME/git/dots/other/icons/volantes" "$HOME/.local/share/icons/volantes"
 
 # Zsh setup
 # TODO ...
@@ -215,8 +215,8 @@ esac
 echo "\nDone."
 
 # TODO Add
-# ln -sf $HOME/dots/config/VSCodium/User/settings.json $HOME/.config/VSCodium/User/settings.json
-# ln -sf $HOME/dots/config/VSCodium/User/keybindings.json $HOME/.config/VSCodium/User/keybindings.json
+# ln -sf $HOME/git/dots/config/VSCodium/User/settings.json $HOME/.config/VSCodium/User/settings.json
+# ln -sf $HOME/git/dots/config/VSCodium/User/keybindings.json $HOME/.config/VSCodium/User/keybindings.json
 
 # TODO What logic should we use (?)
 # -> Symlinking folders and gitignoring extra files that may be created by apps

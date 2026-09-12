@@ -1,8 +1,4 @@
-# Thinkpad P1 Gen 7 -- primary laptop.
-#
-# Declaring `flake.modules.nixos.host-p1` is the whole registration: the
-# generator in modules/flake/hosts.nix turns every `host-*` aspect into a
-# nixosConfiguration, so nothing else in the repo mentions this machine.
+# Thinkpad P1 Gen 7, the primary laptop. Declaring `host-p1` is the whole registration.
 { config, ... }:
 {
     flake.modules.nixos.host-p1 = { pkgs, ... }: {
@@ -21,13 +17,14 @@
             gpg pass sops
 
             # ─────────────── Network ───────────────
-            network tailscale mullvad
+            network tailscale mullvad mullvad-tailscale
             ssh syncthing
-            net-tools soc-tools
+            net-tools soc-tools pentest
+            wazuh-syslog
 
             # ─────────────── Desktop ───────────────
-            hyprland autologin
-            quickshell
+            hyprland hyprglass autologin
+            quickshell quickshell-tide-island
             terminals desktop-apps
             fonts theme xdg ime
 
@@ -36,15 +33,18 @@
             python javascript
             terraform vscodium
             web-dev work
-            incus virtualisation
+            deploy-rs
+            virtualisation
 
             # ─────────────── AI ───────────────
-            claude-code opencode
+            claude-code opencode hermes
 
             # ─────────────── Gaming ───────────────
             steam wine lutris
+            osu-lazer stepmania
             star-citizen star-citizen-cache
             eden ryubing pcsx2 xenia emulation-station
+            uzdoom
 
             # ─────────────── Apps ───────────────
             atuin flatpak gimp kiwix monero qbittorrent
@@ -59,7 +59,7 @@
         time.timeZone = "America/Santiago";
 
         sys.user = "meow";
-        sys.flake = "/home/meow/dots";
+        sys.flake = "/home/meow/git/dots";
 
         sys.impermanence.folder = "/persist";
 

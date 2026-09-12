@@ -1,8 +1,7 @@
 { ... }:
 {
     flake.modules.nixos.ssh = { config, lib, ... }: {
-        # Passwords stay enabled until a key can actually get in, so adding the
-        # first key is what locks the door -- never a rebuild that locks you out.
+        # Adding the first key is what locks the door, never a rebuild.
         options.sys.ssh.authorizedKeys = lib.mkOption {
             type    = lib.types.listOf lib.types.str;
             default = [];
@@ -11,6 +10,17 @@
                 Public keys allowed to log in as sys.user. Generate one per
                 client device; do not reuse the GitHub key, whose private half
                 lives on this host. While empty, password auth stays on.
+            '';
+        };
+
+        # Additive: sys.user is always in the list, so no edit here can lock it out.
+        options.sys.ssh.extraUsers = lib.mkOption {
+            type    = lib.types.listOf lib.types.str;
+            default = [];
+            example = [ "sarten" ];
+            description = ''
+                Further accounts the keys above may log in as, alongside
+                sys.user. Listing a name here does not create the account.
             '';
         };
 
@@ -26,8 +36,9 @@
                 };
             };
 
-            users.users.${config.sys.user}.openssh.authorizedKeys.keys =
-                config.sys.ssh.authorizedKeys;
+            users.users = lib.genAttrs
+                ([ config.sys.user ] ++ config.sys.ssh.extraUsers)
+                (_: { openssh.authorizedKeys.keys = config.sys.ssh.authorizedKeys; });
         };
     };
 

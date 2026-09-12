@@ -15,8 +15,9 @@ hl.on("hyprland.start", function ()
     --hl.exec_cmd("walker --gapplication-service")
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
     hl.exec_cmd("uwsm app -- awww-daemon")
-    hl.exec_cmd("uwsm app -- qs -n -c bar")
-    hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh &")
+    hl.exec_cmd("systemctl --user enable --now tide-island.service")
+    hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh")
+    hl.exec_cmd("uwsm app -- " .. os.getenv("HOME") .. "/.config/hypr/cursor_shake.py")
 end)
 
 
@@ -47,6 +48,122 @@ hl.config({
 hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
 hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
 -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
+
+
+-- ───────────────────────── Plugins ─────────────────────────
+-- hyprglass: liquid-glass decorations behind transparent surfaces. Nix builds
+-- it against this host's Hyprland and puts it in the system profile, so the
+-- path is stable across rebuilds. See docs/HYPRGLASS.md.
+local hyprglass = "/run/current-system/sw/lib/libhyprglass.so"
+hl.permission(hyprglass, "plugin", "allow")
+hl.plugin.load(hyprglass)
+
+-- False on the first parse. Loading a plugin triggers a config reload, and the
+-- table exists on the second pass.
+if hl.plugin.hyprglass then
+    local hg = hl.plugin.hyprglass
+
+    -- "#RRGGBB" + alpha -> the packed RRGGBBAA int the plugin wants, so tints
+    -- can be written as the same hex the island and ghostty use.
+    local function tint(c, alpha)
+        return tonumber(c:match("%x%x%x%x%x%x"), 16) * 256
+             + math.floor(alpha * 255 + 0.5)
+    end
+
+    -- The three presets below are the reference config verbatim.
+    hg.preset("clear", {
+        glass_opacity = 0.8,
+        blur_strength = 1.0,
+        dark  = { brightness = 0.82 },
+        light = { brightness = 1.2 },
+    })
+
+    hg.preset("contrasted", {
+        inherits     = "high_contrast",
+        contrast     = 1.2,
+        adaptive_dim = 1.0,
+        dark = { tint_color = 0x02142aa9 },    -- tint("#02142a", 0.663)
+    })
+
+    hg.preset("apple", {
+        blur_strength        = 2.2,
+        blur_iterations      = 3,
+        refraction_strength  = 0.55,
+        chromatic_aberration = 0.3,
+        fresnel_strength     = 0.5,
+        specular_strength    = 0.75,
+        edge_thickness       = 0.05,
+        lens_distortion      = 0.3,
+
+        -- Both tables are the plugin's own per-theme defaults written out --
+        -- inert as they stand, kept as the surface to tune from.
+        dark  = { brightness = 0.82, contrast = 0.90, saturation = 0.80, vibrancy = 0.15, adaptive_dim   = 0.4 },
+        light = { brightness = 1.12, contrast = 0.92, saturation = 0.85, vibrancy = 0.12, adaptive_boost = 0.4 },
+    })
+
+    -- Same slab, pushed hard. Refraction only reads as distortion when there is
+    -- high-frequency detail behind it to bend, so this widens the bezel and
+    -- *lowers* the blur -- heavy blur destroys the very detail being displaced.
+    hg.preset("apple_strong", {
+        inherits             = "apple",
+        blur_strength        = 1.4,
+        blur_iterations      = 2,
+        refraction_strength  = 0.9,
+        chromatic_aberration = 0.7,
+        lens_distortion      = 0.8,
+        edge_thickness       = 0.12,
+
+        -- The two pure-white terms, both added *after* the tint and both
+        -- scaled by the bezel, which `edge_thickness` just widened. Cut low
+        -- rather than to zero: the rim is what reads as an edge. See
+        -- docs/HYPRGLASS.md.
+        fresnel_strength     = 0.25,
+        specular_strength    = 0.15,
+
+        -- With `background-opacity = 0` there is no terminal background left,
+        -- so readability is this line's job. `adaptive_dim` crushes bright
+        -- areas and leaves dark ones alone, which is what keeps text legible
+        -- over a pale wallpaper without flattening a dark one. A flat tint
+        -- cannot do that -- it dims both equally.
+        -- No brightness override: the old 1.16 existed to punch through
+        -- ghostty's dark sheet and only washed the glass out once that went.
+        -- `contrast` pivots on 0.5, so the inherited 0.90 lifted black toward
+        -- grey across the whole slab; 1.0 is the neutral pivot. Saturation is
+        -- a mix toward luminance grey -- 0.80 was the milky half of the haze.
+        dark = { adaptive_dim = 0.85, contrast = 1.0, saturation = 0.9 },
+    })
+
+    -- No-op while layers are off, kept because the reference config excludes
+    -- the shell layer too -- same conclusion.
+    hg.layer("quickshell", { exclude = true })
+
+    hg.config({
+        default_theme  = "dark",
+        default_preset = "apple_strong",
+
+        -- Ghostty's background, so glass tints the same colour as the rest of
+        -- the desktop. With `background-opacity = 0` this is the *only* thing
+        -- darkening the terminal, so it carries the readability -- it was 0.13
+        -- back when ghostty painted its own sheet on top. See docs/SURFACE.md.
+        tint_color = tint("#0d0d12", 0.40),
+
+        -- Off: layer glass hooks a private Hyprland internal, and it would
+        -- replace the bar's own blur. See docs/HYPRGLASS.md.
+        layers = { enabled = false },
+    })
+
+    -- Anything where the glass fights the content rather than framing it.
+    -- Class only: a `fullscreen = true` match tags once and never untags, so a
+    -- window that was fullscreen once would lose glass for the rest of its life.
+    hl.window_rule({ match = { class = "^(mpv|imv|steam_app_[0-9]+)$" }, tag = "+hyprglass_disabled" })
+
+    -- XWayland windows get no glass. They already opt out of `rounding` further
+    -- down, and refraction is driven by the rounded-rect edge gradient, so with
+    -- square corners the effect has nothing to bend and only costs a blur pass.
+    -- Safe as a static match: `xwayland` never changes over a window's life, so
+    -- the tag-once caveat above does not apply. See docs/HYPRGLASS.md.
+    hl.window_rule({ match = { xwayland = true }, tag = "+hyprglass_disabled" })
+end
 
 
 -- ───────────────────────── Configuration ─────────────────────────
@@ -96,7 +213,9 @@ hl.config({
 
     -- Decoration
     decoration = {
-        rounding       = 0,
+        -- Non-zero for hyprglass: refraction is driven by the edge gradient of
+        -- the window's rounded-rect SDF, and square corners have none.
+        rounding       = 14,
         rounding_power = 2,
         active_opacity   = 1.0,
         inactive_opacity = 0.95,
@@ -136,7 +255,7 @@ hl.config({
         follow_mouse = 1,
         sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
         touchpad = {
-            natural_scroll = false,
+            natural_scroll = true,
         },
     },
 })
@@ -209,7 +328,26 @@ hl.animation({ leaf = "fadePopups",       enabled = true, speed = 2.427, bezier 
 
 -- ───────────────────────── Window Rules ─────────────────────────
 hl.window_rule({ match = { xwayland = true }, rounding = 0 }) -- xwayland
-hl.window_rule({ match = { class = "^(mpv|steam_app)(.*)$" }, opacity = "1 override 1 override" })
+-- Windows that must never dim. `inactive_opacity` multiplies the whole
+-- surface, which video players and wine apps repaint badly. `override` on all
+-- three slots pins active, inactive and fullscreen alike.
+local noDimClasses = {
+    "^(mpv|steam_app)(.*)$",
+    "(?i)^.*\\.exe$",    -- wine: the window class is the exe name (MusicBee.exe, ...)
+}
+
+for _, class in ipairs(noDimClasses) do
+    hl.window_rule({ match = { class = class }, opacity = "1 override 1 override 1 override" })
+end
+
+-- Steam games open fullscreen. Games are class `steam_app_<appid>`; the client
+-- itself is plain `steam`, and non-Steam apps never match, so only games are hit.
+-- The island gets out of the way on its own -- see docs/TIDE.md.
+hl.window_rule({
+    name       = "steam-games-fullscreen",
+    match      = { class = "^steam_app_[0-9]+$" },
+    fullscreen = true,
+})
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
@@ -273,6 +411,12 @@ hl.layer_rule({
 })
 
 hl.layer_rule({
+    match = { namespace = "quickshell" },
+    blur = true,
+    ignore_alpha = 0.5,
+})
+
+hl.layer_rule({
     match = { namespace = "logout_dialog" },
     blur = true,
     ignore_alpha = 0.5,
@@ -310,18 +454,25 @@ local mainMod = "ALT"
 local terminal    = "ghostty"
 local fileManager = "thunar"
 local menu        = "fuzzel"
-local screenshotsDir = (os.getenv("HOME") or "~") .. "/Downloads/screenshots"
+local island      = "quickshell ipc --any-display -p " ..
+                    os.getenv("HOME") .. "/.local/share/tide-island"
+-- Auto-hide is runtime state inside the shell and cannot be read back, so the
+-- marker file is what remembers which way the pin went. See docs/TIDE.md.
+local islandPin   = 'p="${XDG_RUNTIME_DIR:-/tmp}/tide-pinned"; ' ..
+                    'if [ -e "$p" ]; then rm -f "$p"; ' ..
+                    island .. ' call island enableAutoHide; ' ..
+                    'else : > "$p"; ' ..
+                    island .. ' call island disableAutoHide; fi'
+local screenshotsDir = (os.getenv("HOME") or "~") .. "/downloads/screenshots"
 
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
--- Wallpaper picker (quickshell). Toggles: `kill` exits non-zero when nothing
--- is running, so the second half launches it. Esc quits it too.
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
--- Show/hide the bar. IPC rather than a global shortcut so the bar keeps one
--- toggle point: `qs -c bar ipc call bar toggle` works from a shell too.
-hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("qs -c bar ipc call bar toggle"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
+-- Pin the island open, or hand it back to auto-hide. IPC rather than a global
+-- shortcut so it keeps one toggle point that works from a shell too.
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(islandPin))
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
@@ -351,7 +502,12 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshots
 hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next({ repeating = true }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
 hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))    -- dwindle only
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
+-- Hyprland skips *all* window decorations when the internal mode is
+-- FSMODE_FULLSCREEN, and hyprglass is a decoration -- so true fullscreen has
+-- no glass. Splitting the state keeps it: internal 1 (maximized) still
+-- decorates, client 2 (fullscreen) still tells the app it is fullscreen.
+-- Costs the island's exclusive zone. See docs/HYPRGLASS.md.
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 1, client = 2, action = "toggle" }))
 hl.bind(mainMod .. " + O", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pin())    -- dwindle only
@@ -375,8 +531,9 @@ for dir, v in pairs(keys) do
     local vim   = v[1]
     local arrow = v[2]
     local delta = deltas[dir]
+    -- Bare mainMod + arrow is left to the focused app (ghostty scrollback); focus uses vim keys
+    hl.bind(mainMod .. " + " .. vim,              hl.dsp.focus({ direction = dir }))
     for _, key in ipairs({ vim, arrow }) do
-        hl.bind(mainMod .. " + " .. key,          hl.dsp.focus({ direction = dir }))
         hl.bind(mainMod .. " + CTRL + "  .. key,  hl.dsp.window.resize({ x = delta.x * 8, y = delta.y * 8, relative = true }), { repeating = true })
         hl.bind(mainMod .. " + SHIFT + " .. key,  hl.dsp.window.move({ direction = dir }), { repeating = true })
         hl.bind(mainMod .. " + SUPER + " .. key,  hl.dsp.window.move({ x = delta.x * 5, y = delta.y * 5, relative = true }), { repeating = true })

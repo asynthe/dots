@@ -72,8 +72,7 @@
         ];
     };
 
-    # WARNING this binds the GPU to the vfio-pci driver. Import alongside
-    # `virtualisation`.
+    # WARNING binds the GPU to vfio-pci. Import alongside `virtualisation`.
     flake.modules.nixos.vfio = { ... }: {
         boot.extraModprobeConfig = "options vfio-pci ids=10de:28b8";
         boot.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];

@@ -32,6 +32,20 @@
             rust-analyzer
             typescript-language-server
             marksman
+            lua-language-server
+            gopls
+            vscode-langservers-extracted
+            yaml-language-server
+
+            # formatters
+            stylua
+            nixfmt
+            ruff
+            shfmt
+            prettierd
+
+            # clipboard
+            wl-clipboard
 
             # images
             imagemagick
@@ -41,6 +55,14 @@
     flake.modules.nixos.terraform = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             opentofu
+        ];
+    };
+
+    # Drives ~/git/flakes: `deploy .#<host>`, and ssh-to-age for per-host sops keys.
+    flake.modules.nixos.deploy-rs = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            deploy-rs
+            ssh-to-age
         ];
     };
 

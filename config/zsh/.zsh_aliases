@@ -1,4 +1,5 @@
 alias aliases='nvim $ZDOTDIR/.zsh_aliases'
+alias bt='bluetoothctl'
 alias chat='weechat'
 alias cp='rsync -ah --info=progress2'
 alias hist='h'
@@ -60,7 +61,6 @@ fi
 #alias -g cat='bat'
 #alias -g n='nvim'
 #alias -g nvv='sudo nvim'
-#alias -g pdf='zathura'
 #alias bt='bluetuith'
 #alias c='clear'
 #alias cls='clear' # Look ma i'm Powershell

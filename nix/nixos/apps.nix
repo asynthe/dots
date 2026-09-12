@@ -21,11 +21,12 @@
 
     flake.modules.nixos.music = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-            cmus
-            mpd ncmpcpp rmpc
-            mixxx
-            spek
             cava
+            cliamp
+            cmus
+            mixxx
+            mpd ncmpcpp rmpc
+            spek
             #projectm_3 # Milkdrop 3
         ];
     };

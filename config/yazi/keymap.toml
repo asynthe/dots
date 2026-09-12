@@ -1,0 +1,15 @@
+# Jumps for the $HOME layout in docs/HOME_STRUCTURE.md.
+# `g` then one letter — same letters as the nvim <leader>g maps.
+
+[mgr]
+prepend_keymap = [
+  { on = ["g", "g"], run = "cd ~/git",           desc = "git — all repos" },
+  { on = ["g", "d"], run = "cd ~/git/dots",      desc = "dots — laptop nixos" },
+  { on = ["g", "f"], run = "cd ~/git/flakes",    desc = "flakes — sarten" },
+  { on = ["g", "n"], run = "cd ~/git/notes",     desc = "notes" },
+  { on = ["g", "b"], run = "cd ~/ben",           desc = "ben — personal" },
+  { on = ["g", "a"], run = "cd ~/archive",       desc = "archive" },
+  { on = ["g", "w"], run = "cd ~/downloads",     desc = "downloads" },
+  { on = ["g", "c"], run = "cd ~/.config",       desc = "config" },
+
+]

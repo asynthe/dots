@@ -24,8 +24,7 @@
         ];
     };
 
-    # Offload-mode discrete GPU. Needs `intel-gpu` alongside it, and both bus
-    # IDs set on the host.
+    # Offload-mode discrete GPU; needs `intel-gpu` and both bus IDs set on the host.
     flake.modules.nixos.nvidia-prime = { config, pkgs, ... }: {
         services.xserver.videoDrivers = [ "nvidia" ];
         hardware.graphics = {

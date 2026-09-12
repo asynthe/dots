@@ -24,7 +24,7 @@ end
 
 function M.picker()
   local fzf = require("fzf-lua")
-  local notes_dir = vim.fn.expand("~/notes")
+  local notes_dir = vim.fn.expand("~/git/notes")
   local files = vim.fn.systemlist(
     "find " .. vim.fn.shellescape(notes_dir) .. " -name '*.md' -type f 2>/dev/null"
   )

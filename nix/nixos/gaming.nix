@@ -17,13 +17,22 @@
         ];
     };
 
-    flake.modules.nixos.wine = { pkgs, ... }: {
-        environment.systemPackages = with pkgs; [
+    flake.modules.nixos.wine = { pkgs, ... }:
+    let
+        # Pinned: 11.16 breaks MusicBee. First, so its `wine` wins over waylandFull.
+        wine-staging = inputs.nixpkgs-wine.legacyPackages.${pkgs.system}.wineWow64Packages.staging;
+    in {
+        environment.systemPackages = [ wine-staging ] ++ (with pkgs; [
             winetricks
             mono # .NET
-            wineWow64Packages.staging
             wineWow64Packages.waylandFull
             wineWow64Packages.fonts
+        ]);
+    };
+
+    flake.modules.nixos.uzdoom = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            uzdoom
         ];
     };
 
@@ -58,6 +67,18 @@
             eula = true;
             package = pkgs.papermc;
         };
+    };
+
+    flake.modules.nixos.osu-lazer = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            osu-lazer #osu-lazer-bin
+        ];
+    };
+
+    flake.modules.nixos.stepmania = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+            stepmania
+        ];
     };
 
     # ─────────────── Emulators ───────────────
@@ -97,8 +118,7 @@
         environment.systemPackages = [ rpcs3-bin ];
     };
 
-    # Dropped from nixpkgs 2025-10-23 (freeimage CVEs), so packaged from the
-    # upstream ES-DE AppImage
+    # Dropped from nixpkgs 2025-10-23 (freeimage CVEs); packaged from the AppImage.
     flake.modules.nixos.emulation-station = { pkgs, ... }:
     let
         emulation-station-bin = pkgs.appimageTools.wrapType2 {

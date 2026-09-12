@@ -1,5 +1,4 @@
-# Enables `flake.modules.<class>.<name>`, the registry every aspect file writes
-# into. Without this flake-parts module the option does not exist.
+# Enables `flake.modules.<class>.<name>`, the registry every aspect writes into.
 { inputs, ... }:
 {
     imports = [ inputs.flake-parts.flakeModules.modules ];

@@ -18,6 +18,33 @@ function h() {
     [[ -n "$cmd" ]] && print -z -- "$cmd"
 }
 
+# Books
+book() {
+  emulate -L zsh
+  local root=${BOOK_DIR:-$HOME/archive/media/book/reading}
+  [[ -d $root ]] || { print -ru2 "book: not a directory: $root"; return 1 }
+
+  local preview=${DOTS_DIR:-$HOME/git/dots}/scripts/bash/book_preview.sh
+  local -a picks
+  picks=("${(@f)$(cd -- "$root" && fd --type f -e pdf -e epub . | sort |
+    fzf --multi \
+        --prompt='book > ' \
+        --header='enter: open in zathura   tab: select several' \
+        --preview="'$preview' '$root'/{}" \
+        --preview-window='right,55%,border-left')}")
+
+  [[ -n ${picks[1]:-} ]] || return 0
+  pdf "${(@)picks/#/$root/}"
+}
+
+# Zathura
+pdf() {
+  local f
+  for f in "$@"; do
+    setsid zathura "$f" >/dev/null 2>&1 &!
+  done
+}
+
 # Flatpak
 flatpak_check() {
   if ! command -v flatpak &>/dev/null; then
@@ -44,3 +71,113 @@ fightcade() { flatpak_run com.fightcade.Fightcade }
 ps3() { flatpak_run net.rpcs3.RPCS3 }
 pinball()   { flatpak_run com.github.k4zmu2a.spacecadetpinball }
 upscayl()   { flatpak_run org.upscayl.Upscayl }
+
+# Repo status, printed by .zshrc on every new shell.
+#
+# Repos are resolved by name against a few roots rather than listed by path, so
+# the laptop (~/git, ~/ben/pass) and the phone (flat ~/) both work with no
+# platform branch — first hit wins, anything missing is skipped. Nothing here
+# hardcodes /home/meow or assumes a layout.
+check_repo() {
+  emulate -L zsh
+  local -a want roots
+  want=(dots notes sakuhin pass)
+  roots=("$HOME/git" "$HOME/ben" "$HOME")
+
+  local yellow=$'\033[1;33m' red=$'\033[0;31m' nc=$'\033[0m'
+  local name root repo
+
+  for name in $want; do
+    repo=
+    for root in $roots; do
+      [[ -d $root/$name/.jj || -d $root/$name/.git ]] && { repo=$root/$name; break }
+    done
+    [[ -n $repo ]] || continue
+
+    # No cd: this runs at every prompt, and moving the shell's cwd to print a
+    # status is how you end up somewhere unexpected when a repo goes missing.
+    if [[ -d $repo/.jj ]] && (( $+commands[jj] )); then
+      [[ "$(jj -R $repo log -r '@' --no-graph -T empty 2>/dev/null)" != true ]] &&
+        print -r -- "  ${yellow}[✎]${nc} Uncommitted changes in '$name'"
+      [[ -n "$(jj -R $repo log -r '@- ~ remote_bookmarks()' --no-graph -T change_id 2>/dev/null)" ]] &&
+        print -r -- "  ${red}[⚠]${nc} Unpushed changes in '$name'"
+    elif [[ -d $repo/.git ]]; then
+      [[ -n "$(git -C $repo status --porcelain 2>/dev/null)" ]] &&
+        print -r -- "  ${yellow}[✎]${nc} Uncommitted changes in '$name'"
+      [[ -n "$(git -C $repo log '@{u}..' --oneline 2>/dev/null)" ]] &&
+        print -r -- "  ${red}[⚠]${nc} Unpushed changes in '$name'"
+    fi
+  done
+  print ""
+  return 0
+}
+
+# NixOS garbage collection.
+#
+#   nix-clean          keep the last 2 system generations, then GC
+#   nix-clean 5        keep 5
+#   nix-clean -n       dry run: show what would go, delete nothing
+#
+# Two things have to happen in this order. Deleting generations only drops the
+# profile symlinks; the store paths stay alive until a GC pass finds nothing
+# pointing at them. Running `nix-collect-garbage` on its own reclaims almost
+# nothing while old generations still root everything they reference.
+nix-clean() {
+  emulate -L zsh
+  local keep=2 dry=0
+  while (( $# )); do
+    case $1 in
+      -n|--dry-run) dry=1 ;;
+      <->)          keep=$1 ;;
+      *) print -ru2 "nix-clean: usage: nix-clean [-n] [keep=2]"; return 1 ;;
+    esac
+    shift
+  done
+
+  local sys=/nix/var/nix/profiles/system
+  local before=$(du -sh /nix/store 2>/dev/null | cut -f1)
+  print -r -- "store now: $before"
+
+  # Never touch the booted or current generation, whatever the count says.
+  # sudo first, on its own, so a failed auth is an error and not an empty
+  # list that reads as "nothing to delete".
+  sudo -v || { print -ru2 "nix-clean: need sudo to read the system profile"; return 1 }
+
+  local -a all doomed
+  all=(${(f)"$(sudo nix-env --list-generations -p $sys | awk '{print $1}')"})
+  all=(${all:#})
+  (( $#all )) || { print -ru2 "nix-clean: could not list generations"; return 1 }
+  local current=$(readlink $sys | sed 's/[^0-9]//g')
+  doomed=(${all[1,-$((keep+1))]})
+  doomed=(${doomed:#$current})
+
+  if (( ! $#doomed )); then
+    print -r -- "nothing to delete: $#all generations, keeping $keep"
+  else
+    local show=$(( keep > $#all ? $#all : keep ))
+    print -r -- "delete: ${(j:, :)doomed}   keep: ${(j:, :)all[-$show,-1]}"
+    if (( dry )); then
+      print -r -- "(dry run)"
+    else
+      sudo nix-env --delete-generations -p $sys $doomed
+      sudo nix-env --delete-generations -p ~/.local/state/nix/profiles/profile +$keep 2>/dev/null
+    fi
+  fi
+
+  if (( ! dry )); then
+    sudo nix-collect-garbage --delete-old
+    nix-collect-garbage --delete-old        # per-user roots
+    sudo /run/current-system/bin/switch-to-configuration boot >/dev/null 2>&1 &&
+      print -r -- "boot entries refreshed"
+    print -r -- "store was $before, now $(du -sh /nix/store 2>/dev/null | cut -f1)"
+  fi
+}
+
+# What is still holding the store open, biggest first. Run this when a GC
+# frees less than expected — usually a result symlink in a project dir.
+nix-roots() {
+  emulate -L zsh
+  nix-store --gc --print-roots 2>/dev/null |
+    grep -v '^/proc/\|censored\|^{memory\|/var/nix/profiles/\|^{censored' |
+    sort -u
+}

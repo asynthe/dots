@@ -1,6 +1,4 @@
-# The only options this config declares. Dendritic drops per-feature `enable`
-# flags -- a host enables a feature by importing its aspect -- so what is left
-# here is strictly the values that genuinely differ between machines.
+# The only options this config declares: values that genuinely differ between machines.
 { ... }:
 {
     flake.modules.nixos.core = { lib, ... }: {
@@ -12,7 +10,7 @@
 
             flake = lib.mkOption {
                 type        = lib.types.str;
-                default     = "/home/meow/dots";
+                default     = "/home/meow/git/dots";
                 description = "Path to this flake, used by nh";
             };
 
