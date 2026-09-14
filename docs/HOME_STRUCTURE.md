@@ -157,7 +157,7 @@ The editor is pointed at this layout:
   `<leader>nm` opens `notes/main.md`, `<leader>;` drops into yazi at cwd.
 - `z <name>` (zoxide) beats both once a path is warm.
 - `check_repo` runs on shell start and flags uncommitted, unpushed, diverged
-  or missing work in the personal repos — dots flakes notes study sakuhin pass —
+  or missing work in the personal repos — dots flakes notes study sakuhin auth —
   per host. Its `record` is the list of where each lives (github, gitlab or
   both, public or private); drift from it is flagged too. Silent when all is
   pushed; `-a` shows every repo, `-r` asks the hosts now instead of the

@@ -82,9 +82,8 @@ upscayl()   { flatpak_run org.upscayl.Upscayl }
 # `record` is where they should live. Reality is checked against it and drift
 # (a host missing, a private repo gone public) shows in red — change the line
 # and the repo together. Repos resolve by name against a few roots, so the
-# laptop (~/git) and the phone (flat ~/) both work, a move
-# (pass -> auth) is one edit here, and anything not found is skipped. The
-# slug is asynthe/<name> on both hosts.
+# laptop (~/git) and the phone (flat ~/) both work, a move is one edit here,
+# and anything not found is skipped. The slug is asynthe/<name> on both hosts.
 #
 # A new shell never waits on the network. What the hosts hold comes from a
 # cache that a disowned job refreshes at most every 10 minutes; local state is
@@ -141,22 +140,22 @@ check_repo() {
     _check_repo_refresh $cache $todo &>/dev/null &!
   fi
 
-  local name repo want head branch c sha s k l n
+  local name repo want head branch c sha s k l n dirty
   local -a lines rv w pushers pushed_refs kinds
   local -A on
   for line in $record; do
     f=(${=line}); name=${f[1]}; want=${f[3]}
     repo=${repo_of[$name]}
     [[ -n $repo ]] || continue
-    kinds=() on=()
+    kinds=() on=() dirty=0
 
     # jj has no index: a non-empty working copy is the uncommitted work.
     if [[ -d $repo/.jj ]] && (( $+commands[jj] )); then
-      [[ "$(jj -R $repo log -r @ --no-graph -T empty 2>/dev/null)" == true ]] ||
-        print -r -- "  ${yellow}[✎]${nc} Uncommitted changes in '$name'"
+      [[ "$(jj -R $repo log -r @ --no-graph -T empty 2>/dev/null)" == true ]] || dirty=1
     elif [[ -n "$(git -C $repo status --porcelain 2>/dev/null)" ]]; then
-      print -r -- "  ${yellow}[✎]${nc} Uncommitted changes in '$name'"
+      dirty=1
     fi
+    (( dirty )) && print -r -- "  ${yellow}[✎]${nc} Uncommitted changes in '$name'"
 
     head=$(git -C $repo rev-parse -q --verify HEAD 2>/dev/null)
     branch=$(git -C $repo symbolic-ref --short -q HEAD 2>/dev/null)
@@ -224,7 +223,7 @@ check_repo() {
 
     (( ${+on[vis]} )) &&
       print -r -- "  ${red}[!]${nc} '$name' is not $want on ${on[vis]}"
-    (( all && ! $#kinds && ! ${+on[vis]} )) && print -r -- "  ${green}[✓]${nc} '$name' on ${f[2]/,/, } ($want)"
+    (( all && ! dirty && ! $#kinds && ! ${+on[vis]} )) && print -r -- "  ${green}[✓]${nc} '$name' on ${f[2]/,/, } ($want)"
   done
   print ""
   return 0
