@@ -131,7 +131,7 @@ already staged on the box. To redo it:
 
 ```bash
 ssh root@192.168.1.135 'install -d -m 0755 /var/lib/sops'
-scp ~/.config/sops/age/keys.txt root@192.168.1.135:/var/lib/sops/age-keys.txt
+scp ~/git/auth/age/keys.txt root@192.168.1.135:/var/lib/sops/age-keys.txt
 ssh root@192.168.1.135 'chmod 0600 /var/lib/sops/age-keys.txt'
 ```
 

@@ -41,14 +41,14 @@ local known_externals = {
 		width = 1920,
 	},
 	{
-		match = "0x00000001",
+		match = "HISENSE",
 		output = "desc: Hisense Electric Co. Ltd. HISENSE 0x00000001",
 		mode = "1920x1080@60",
 		scale = "1.25",
 		width = 1920,
 	},
 	{
-		match = "0x01010101",
+		match = "LG TV",
 		output = "desc: LG Electronics LG TV 0x01010101",
 		mode = "1920x1080@60",
 		scale = "1.3",
@@ -62,14 +62,14 @@ local known_externals = {
 		width = 1920,
 	},
 	{
-		match = "0x01010101",
+		match = "Panasonic-TV",
 		output = "desc: Panasonic Industry Company Panasonic-TV 0x01010101",
 		mode = "1920x1080@60",
 		scale = "1",
 		width = 1920,
 	},
 	{
-		match = "0x01010101",
+		match = "S2-TEK TV",
 		output = "desc: SANTAK CORP. S2-TEK TV SN-000000001",
 		mode = "1920x1080@60",
 		scale = "1",
@@ -91,7 +91,7 @@ local known_externals = {
 	--     width  = 1920,
 	-- },
 	{
-		match = "0x01010101",
+		match = "SONY TV",
 		output = "desc: Sony SONY TV 0x01010101",
 		mode = "1920x1080@60",
 		scale = "1",

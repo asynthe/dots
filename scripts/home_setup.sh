@@ -47,7 +47,7 @@ migrate() {
     run ln -sfn "$new" "$old"
 }
 
-migrate "$HOME/.gnupg"   "$DATA/gnupg"
+migrate "$HOME/.gnupg"   "$HOME/git/auth/gpg"
 migrate "$HOME/.cargo"   "$DATA/cargo"
 migrate "$HOME/.rustup"  "$DATA/rustup"
 migrate "$HOME/.android" "$DATA/android"
@@ -63,10 +63,10 @@ migrate "$HOME/.hermes"  "$DATA/hermes"
 migrate "$HOME/.wine"    "$HOME/wine/prefix/default"
 
 # gnupg is the one that actually cares about permissions
-if [ -d "$DATA/gnupg" ] && [ $APPLY -eq 1 ]; then
-    chmod 700 "$DATA/gnupg"
-    find "$DATA/gnupg" -type f -exec chmod 600 {} +
-    find "$DATA/gnupg" -type d -exec chmod 700 {} +
+if [ -d "$HOME/git/auth/gpg" ] && [ $APPLY -eq 1 ]; then
+    chmod 700 "$HOME/git/auth/gpg"
+    find "$HOME/git/auth/gpg" -type f -exec chmod 600 {} +
+    find "$HOME/git/auth/gpg" -type d -exec chmod 700 {} +
 fi
 
 # ─────────────── 3. Symlinks into dots ───────────────

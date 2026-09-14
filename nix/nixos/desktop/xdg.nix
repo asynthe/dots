@@ -62,8 +62,9 @@
             WINEPREFIX             = "$HOME/wine/prefix/default";
 
             # ─────────────── Shell / misc ───────────────
-            GNUPGHOME              = "$HOME/.local/share/gnupg";
-            PASSWORD_STORE_DIR     = "$HOME/ben/pass";
+            GNUPGHOME              = "$HOME/git/auth/gpg";
+            PASSWORD_STORE_DIR     = "$HOME/git/auth/pass";
+            SOPS_AGE_KEY_FILE      = "$HOME/git/auth/age/keys.txt";
             LESSHISTFILE           = "$HOME/.local/state/less_history";
             WGETRC                 = "$HOME/.config/wgetrc";
             XCOMPOSECACHE          = "$HOME/.cache/X11/xcompose";

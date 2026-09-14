@@ -4,7 +4,9 @@
 export EDITOR=nvim
 export DOTS_DIR=$HOME/git/dots
 export NOTES_DIR=$HOME/git/notes
-export PASSWORD_STORE_DIR=$HOME/ben/pass
+export GNUPGHOME=$HOME/git/auth/gpg
+export PASSWORD_STORE_DIR=$HOME/git/auth/pass
+export SOPS_AGE_KEY_FILE=$HOME/git/auth/age/keys.txt
 
 # Inactivity auto-command
 if [[ -o interactive ]]; then
