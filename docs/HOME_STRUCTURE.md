@@ -1,8 +1,9 @@
 # $HOME
 
-The layout of `/home/meow`, and the rules that decide where a new thing goes.
-Symlinked to `~/CLAUDE.md` — an agent working anywhere under `$HOME` reads this
-first. Linked by `scripts/bootstrap.sh`, kept linked by `home_setup.sh`.
+The layout of `/home/meow` on `p1` (NixOS), and the rules that decide where a
+new thing goes. Symlinked to `~/CLAUDE.md` — an agent working anywhere under
+`$HOME` reads this first. Linked by `scripts/bootstrap.sh`, kept linked by
+`home_setup.sh`.
 
 ```
 ~
@@ -17,6 +18,16 @@ first. Linked by `scripts/bootstrap.sh`, kept linked by `home_setup.sh`.
 
 Seven directories. Nothing else at root but dotfiles and two symlinks
 (`.zshenv`, `CLAUDE.md`), both into `git/dots`.
+
+**This is `p1`. On `m2` (macOS) only `git/` exists.** No `ben/`, `archive/`,
+`downloads/`, `desktop/`, `vm/` or `wine/` — those tiers live on `p1` and
+`sarten`, not on the laptop. `~/git/<name>`, flat, is the entire surface; the
+naming rule and per-project `CLAUDE.md` placement below still apply there
+unchanged, but nothing else in this file — the six-directory table, the
+`archive/` section, the `ben`/`archive`/`downloads`/`wine`/`vm` legs of "Adding
+something new" — has a target to land in. An agent working under `~` on `m2`
+should never create or suggest any of those six; if something doesn't belong
+in a repo, it doesn't go on the Mac at all.
 
 ## The one rule
 

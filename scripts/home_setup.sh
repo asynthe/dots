@@ -15,8 +15,14 @@ note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 
 echo "── skeleton"
-for d in git ben archive downloads desktop vm wine \
-         "$DATA" "$STATE" "$CONF" "$HOME/.cache"; do
+# macOS only ever gets git/ -- ben/archive/downloads/desktop/vm/wine are p1's
+# lifecycle tiers, not a Mac's; see docs/HOME_STRUCTURE.md.
+if [ "$(uname)" = "Darwin" ]; then
+    dirs=(git)
+else
+    dirs=(git ben archive downloads desktop vm wine)
+fi
+for d in "${dirs[@]}" "$DATA" "$STATE" "$CONF" "$HOME/.cache"; do
     case "$d" in /*) p="$d" ;; *) p="$HOME/$d" ;; esac
     [ -d "$p" ] || { note "mkdir $p"; run mkdir -p "$p"; }
 done
@@ -141,8 +147,12 @@ else
 fi
 
 echo "── check"
-[ -d "$HOME/Downloads" ] && warn "~/Downloads still exists (should be ~/downloads)"
-[ -d "$HOME/Desktop" ]   && warn "~/Desktop still exists (should be ~/desktop)"
+# macOS ties ~/Desktop and ~/Downloads to Finder/Spotlight/screenshots -- unlike
+# Linux, they're not just a folder you can rename away, so don't nag about them.
+if [ "$(uname)" != "Darwin" ]; then
+    [ -d "$HOME/Downloads" ] && warn "~/Downloads still exists (should be ~/downloads)"
+    [ -d "$HOME/Desktop" ]   && warn "~/Desktop still exists (should be ~/desktop)"
+fi
 for f in "$HOME"/*; do
     [ -f "$f" ] && [ ! -L "$f" ] && warn "loose file at \$HOME root: $(basename "$f")"
 done

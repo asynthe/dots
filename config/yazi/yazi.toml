@@ -9,7 +9,6 @@ sort_reverse = false
 sort_sensitive = true
 
 [preview]
-cache_dir = "/home/meow/.cache"
 max_height = 900
 max_width = 600
 tab_size = 2

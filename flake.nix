@@ -9,6 +9,9 @@
         flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
         import-tree.url = "github:vic/import-tree";
 
+        nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+        nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
         disko.url = "github:nix-community/disko";
         disko.inputs.nixpkgs.follows = "nixpkgs";
         impermanence.url = "github:nix-community/impermanence";

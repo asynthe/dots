@@ -16,18 +16,26 @@ auth.nix                      who may log in, and with which key -- data, not a 
 nix/
   flake/
     registry.nix              turns on flake.modules.<class>.<name>
-    hosts.nix                 every `host-*` aspect becomes a nixosConfiguration
-    checks.nix                `nix flake check` builds every host
+    nixos-hosts.nix           every `host-*` aspect in the nixos class becomes a nixosConfiguration
+    darwin-hosts.nix          every `host-*` aspect in the darwin class becomes a darwinConfiguration
+    checks.nix                `nix flake check` builds every host, either class
     devshell.nix              sops, age, ssh-to-age, nom
   nixos/
     options.nix               values that differ between machines
     base/                     what any machine gets: core cli auth security ssh net boot
     profiles/                 role bundles; a host names one instead of a dozen aspects
     desktop/ dev/ hardware/ net/   the rest of the aspect library, one domain per file
-  hosts/p1/                   the Thinkpad
+  darwin/                     the macOS half of the tree, see DARWIN.md
+    options.nix / base/       same shape as nixos/, class `darwin` instead of `nixos`
+  hosts/p1/                   the Thinkpad, class nixos
+  hosts/m2/                   the MacBook, class darwin
 assets/                       images the config points at
 secrets/                      sops-encrypted, see .sops.yaml
 ```
+
+`nix/nixos/` and `nix/darwin/` are separate classes in the same registry, not
+two flakes glued together — see [DARWIN.md](DARWIN.md) for what's genuinely
+different about the macOS side (no `auth.nix`, no `nix.enable`, Homebrew).
 
 Same shape as `~/git/flakes`, so a file is in the same place in both repos.
 `profile-laptop` is the layer that pays off at the second machine: it bundles

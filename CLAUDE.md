@@ -22,6 +22,11 @@ Laptop NixOS config (host `p1`). The server lives in `~/git/flakes`.
 - `nix/nixos/base/` is what any machine gets, `nix/nixos/profiles/` bundles
   those for a role, and the rest of the aspect library is one file per domain.
   `~/git/flakes` has the same layout.
+- `nix/darwin/` is the same dendritic tree for macOS (`flake.modules.darwin.*`
+  instead of `flake.modules.nixos.*`), for the M2 MacBook (`nix/hosts/m2/`).
+  See [docs/DARWIN.md](docs/DARWIN.md) for what's different there — no
+  `auth.nix`, no `nix.enable`, Homebrew instead of a package manager already
+  owning the daemon.
 - `config/` is plain upstream dotfiles, symlinked into place, not generated.
   There is no home-manager. `config/<name>` becomes `~/.config/<name>`, but
   only if `<name>` is in the `CONFIGS` array in

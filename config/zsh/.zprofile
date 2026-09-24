@@ -1,3 +1,10 @@
+# Homebrew's own PATH/MANPATH/HOMEBREW_PREFIX setup -- nix-darwin doesn't
+# manage Homebrew's shell env, only its own. Apple Silicon only; there's no
+# Intel Mac in this repo to also check /usr/local/bin/brew for.
+if [[ "$(uname)" == "Darwin" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # Hand off to Hyprland on tty1. No `exec`: quitting the compositor returns
 # here, dropping to this shell instead of logging out.
 #
