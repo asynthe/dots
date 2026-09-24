@@ -7,7 +7,7 @@
         boot.loader.efi.canTouchEfiVariables         = true;
         boot.loader.systemd-boot.enable              = true;
         boot.loader.systemd-boot.configurationLimit  = 3;
-        boot.loader.timeout                          = null;
+        boot.loader.timeout                          = 3;
     };
 
     flake.modules.nixos.boot-silent = { ... }: {
@@ -22,7 +22,6 @@
         ];
     };
 
-    # Replaces systemd-boot; import instead of `boot`, not alongside it.
     flake.modules.nixos.lanzaboote = { config, lib, pkgs, ... }: {
         imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
 
@@ -36,7 +35,7 @@
             autoEnrollKeys.autoReboot = true;
         };
 
-        boot.loader.timeout                          = null;
+        boot.loader.timeout                          = 3;
         boot.loader.efi.efiSysMountPoint             = "/efi";
         boot.loader.efi.canTouchEfiVariables         = true;
         boot.loader.systemd-boot.enable              = lib.mkForce false;

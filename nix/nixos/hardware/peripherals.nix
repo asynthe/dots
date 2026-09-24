@@ -35,10 +35,9 @@
         # TODO hardware.bluetooth.settings to disable hands-free mode, test with the nothing earphones
     };
 
-    # PS5 controller. Pairs over bluetooth, so import `bluetooth` too.
-    flake.modules.nixos.controller = { config, pkgs, ... }: {
+    flake.modules.nixos.controller = { config, lib, pkgs, ... }: {
         hardware.xpadneo.enable = true;
-        users.extraGroups.input.members = [ config.sys.user ];
+        users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "input" ]; });
         environment.systemPackages = with pkgs; [
             dualsensectl
         ];
@@ -48,13 +47,13 @@
         services.colord.enable = true;
     };
 
-    flake.modules.nixos.android = { config, pkgs, ... }: {
+    flake.modules.nixos.android = { config, lib, pkgs, ... }: {
         #programs.nix-ld.enable = true;
         #programs.nix-ld.libraries = [ pkgs.libGL pkgs.glib ];
 
         #virtualisation.waydroid.enable = true;
         #services.gvfs.enable = true;
-        users.users.${config.sys.user}.extraGroups = [ "kvm" "adbusers" ];
+        users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "kvm" "adbusers" ]; });
         environment.systemPackages = with pkgs; [
             #androidsdk
             android-tools

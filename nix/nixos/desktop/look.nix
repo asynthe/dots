@@ -1,10 +1,8 @@
 /*
-# Note: if fonts are not working, try doing a `fc-cache -f`
 */
 { ... }:
 {
     flake.modules.nixos.fonts = { pkgs, ... }: {
-        # Glyph lookup and family preview; `font-manager` is fuller but pulls webkitgtk.
         environment.systemPackages = with pkgs; [
             font-manager
             fontpreview
@@ -18,8 +16,6 @@
             fontconfig = {
                 enable = true;
 
-                # The whole font policy: app configs ask for a role, not a family.
-                # Terminals (TX-02) and Firefox are the two exceptions.
                 defaultFonts = {
                     monospace = [
                         "JetBrainsMono Nerd Font"
@@ -40,8 +36,6 @@
                     emoji = [ "Noto Color Emoji" ];
                 };
 
-                # TX-02 is licensed and unpacked by hand; JetBrainsMono NF sits behind it for
-                # the icons it lacks. Escaped as `TX\-02`: a bare pattern parses as `TX` size 2.
                 localConf = ''
                     <?xml version="1.0"?>
                     <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
@@ -61,7 +55,7 @@
             packages = with pkgs; [
                 corefonts
                 dejavu_fonts
-                et-book # https://edwardtufte.github.io/et-book/
+                et-book
                 font-awesome
                 liberation_ttf
                 office-code-pro
@@ -83,15 +77,12 @@
     };
 
     flake.modules.nixos.theme = { pkgs, ... }: {
-        # Named explicitly: gtk-icon-theme-name points at it, and Qt reaches it via qgtk3.
         environment.systemPackages = with pkgs; [
             adwaita-icon-theme
         ];
 
         environment.sessionVariables = {
             GTK_THEME = "adw-gtk3-dark";
-            # Must be here, not only hyprland.lua: `uwsm app` inherits the systemd user
-            # environment. qgtk3 derives the palette from GTK_THEME, so no QT_STYLE_OVERRIDE.
             QT_QPA_PLATFORMTHEME = "gtk3";
         };
     };

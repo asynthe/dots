@@ -1,47 +1,63 @@
-# Bar surface: tint, blur, and the bottom edge
+# Bar surface: black, blur, and the bottom edge
 
-Three settings decide how the bar sits against the desktop. They are coupled —
-changing one without the others breaks the look.
+How the bar sits against the desktop. All three settings below used to be
+coupled — a tint that had to match ghostty, a blur that had to stay on to flatten
+what the tint sat over, and an `ignore_alpha` threshold pinned just under the
+tint's alpha. **Going opaque decoupled them.** This page is mostly a record of
+why there is nothing left to balance.
 
-## Tint — `bg` in `shell.qml`
+## Black — `bg` in `../config/quickshell/bar/shell.qml`
 
-`#870d0d12`: alpha `0x87` (~53%) over ghostty's background colour `#0d0d12`.
+`#000000`, fully opaque. OLED black: the panel emits no light along the top edge.
 
-**This pairing is currently broken and the bar is the heavier half.** Ghostty
-ran `background-opacity = 0.48` over the same `#0d0d12`, so bar and terminals
-tinted the same blur with the same colour. Ghostty is now at `0` — it paints no
-background, and its share of the tinting moved to hyprglass `tint_color`
-(`#0d0d12` at 0.40, the same hex). The bar still paints its own `0x87`, so it
-reads as a heavier slab than the terminals rather than the same material one
-step up. Dropping the bar's alpha toward `0x66` would restore the match, but
-that drags `ignore_alpha` with it — see below.
+It was `#cc0d0d12` — ghostty's background at 80% — and before that `#870d0d12`
+at ~53%, chosen so the bar and the terminals tinted the same blur with the same
+colour. That pairing had already drifted: ghostty moved to
+`background-opacity = 0` and handed its share of the tinting to hyprglass
+`tint_color`, while the bar kept painting its own alpha and read as the heavier
+slab. Opaque ends the matching problem instead of re-tuning it — the strip is
+its own surface now, not a layer of the same material.
 
-## Blur — the `quickshell:bar` layer rule in `../../hypr/hyprland.lua`
+`bg` is read in exactly one place, the strip's backing rectangle. Nothing else
+derives from it.
 
-Blur must stay on. Unblurred, the bar transmits sharp wallpaper: measured
-against a wallpaper with hard architectural edges, brightness swung 3.1x across
-the bar's own width (luminance 7.7 to 23.7) and the wallpaper's diagonals cut
-visibly through the workspace dots. A tint only reads as a surface when what it
-tints is already flat.
+## Blur — the `^quickshell$` layer rule in `../config/hypr/hyprland.lua`
 
-`ignore_alpha = 0.5` is the lever that keeps the shadow band (below) from
-blurring the windows underneath it. Hyprland skips blur behind pixels whose
-alpha falls under this threshold, so the value must sit just below `bg`'s alpha:
-the bar proper (0.53) blurs, everything in the falloff does not.
+**The bar is not blurred, and must not be.** Nothing shows through an opaque
+surface, so blurring behind it is GPU spent on an invisible result.
 
-**This means `bg`'s alpha can never drop below 0.5 without also lowering
-`ignore_alpha`** — otherwise the bar silently stops blurring altogether.
+This mattered when the bar was translucent: unblurred, it transmitted sharp
+wallpaper, and measured against one with hard architectural edges the brightness
+swung 3.1x across the bar's own width (luminance 7.7 to 23.7), with the
+wallpaper's diagonals cutting visibly through the widgets. A tint only reads as
+a surface when what it tints is already flat. Black is flat by itself.
 
-## Bottom edge — `shadowHeight` and the gradient in `shell.qml`
+The rule is still there, because the namespace is shared. `hyprquickpaper` sets
+no namespace of its own and so defaults to `quickshell`, and its root really is
+transparent — it needs the blur. So the rule is anchored to `^quickshell$`,
+which reaches the picker and not the bar, and the bar declares
+`WlrLayershell.namespace: "quickshell:bar"` to stay out of it.
 
-The window is `barHeight + shadowHeight` tall while `exclusiveZone` stays at
-`barHeight`, so tiled windows still start at y=34 and the extra 14px hang over
-them as a drop shadow rather than displacing anything.
+`ignore_alpha = 0.5` survives for the same reason: it is the picker's threshold
+now, not the bar's. Hyprland skips blur behind pixels whose alpha falls under it.
 
-The gradient's stops fall off on a curve (1.0, 0.68, 0.44, 0.21, 0.085, 0)
-rather than linearly, which is what makes it read as a shadow instead of a
-ramp. Stops are derived from `bg` via `Qt.rgba`, so retinting the bar retints
-the falloff with it.
+The hyprglass exclusion, `hg.layer("quickshell", { exclude = true })`, matches on
+the prefix and so still covers `quickshell:bar`. It is a no-op while hyprglass
+layers are off regardless.
 
-`mask` restricts the input region to the top `barHeight`. Without it the
-shadow band would swallow clicks meant for the window below.
+## Bottom edge — there isn't one
+
+The bar ends at `barHeight` with a hard edge. No drop shadow, no gradient
+falloff, no `shadowHeight`, and no `mask` to keep a shadow band from swallowing
+clicks — the window is exactly as tall as the bar, so its whole surface is the
+bar.
+
+The old translucent bar faded out over 14px below itself on a curve (1.0, 0.68,
+0.44, 0.21, 0.085, 0) so the edge read as a shadow rather than a ramp, with the
+window `barHeight + shadowHeight` tall while `exclusiveZone` stayed at
+`barHeight` so tiled windows were not displaced by it. Against black the falloff
+had nothing to soften, so it went.
+
+The window is still taller than the strip — `barHeight + 420` — but that is the
+name menu's room, and `mask` tracks whether a menu is open rather than covering
+a fixed band.

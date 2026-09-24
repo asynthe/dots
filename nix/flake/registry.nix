@@ -1,4 +1,3 @@
-# Enables `flake.modules.<class>.<name>`, the registry every aspect writes into.
 { inputs, ... }:
 {
     imports = [ inputs.flake-parts.flakeModules.modules ];

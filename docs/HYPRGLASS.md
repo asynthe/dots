@@ -71,24 +71,43 @@ hyprctl dispatch tagwindow +hyprglass_preset_high_contrast
 
 Built-in presets: `high_contrast`, `subtle`, `clear`, `glass`.
 
-## Rounding is not optional
+## Rounding is independent of the bezel
 
-`decoration.rounding` was 0 and is now 14. This is the one setting outside the
-plugin that the look depends on.
+`decoration.rounding` is 0 — square corners — and the glass edge survives it.
+This section previously claimed the opposite. It was wrong, and the error is
+worth recording because it is the intuitive reading of the shader.
 
-Refraction is driven by the gradient of the window's rounded-rect distance
-field. Inside the window the gradient is flat and nothing bends; at the edge it
-is steep and pushes sample UVs outward, pulling in content from beyond the
-window boundary. A square corner has no curvature to build that gradient from,
-so at `rounding = 0` the bezel collapses to a thin straight band and the corner
-lensing — the part that reads as *glass* rather than as blur — never appears.
+The bezel comes from `edgeProximity = exp(cornerSdf / (edge_thickness *
+min(w, h)))` (`src/Shaders.hpp`). That reads the *magnitude* of the signed
+distance field, not its gradient or curvature. At `radius = 0`,
+`getRoundedBoxSDF` reduces to `max(q.x, q.y)` — the exact negative distance to
+the nearest edge, smooth and well-defined across the whole window. Sampled at
+`edge_thickness = 0.12` on an 800x800 window, `edgeProximity` is identical at
+`radius` 0 and 14 at every point except the corner pixel itself, which at 14 is
+outside the window and discarded anyway.
 
-Two places still force it back to 0, both deliberate and both left alone:
-`xwayland = true` windows, and the smart-gaps rules for the `w[tv1]` and `f[1]`
-workspaces. A single tiled window on its own workspace therefore has square
-corners and no glass edge. That is a real trade against the flush-when-alone
-behaviour those rules exist for; drop the `rounding = 0` lines from them if the
-glass matters more.
+The refraction *direction* never touches the SDF either:
+
+```
+// Pixel-space direction toward window center — perfectly smooth everywhere,
+// no SDF gradient needed.
+vec2 refractionDir(vec2 uv) { ... }
+```
+
+So `refraction_strength`, `chromatic_aberration`, `fresnel_strength`,
+`specular_strength` and the inner shadow all behave the same at 0. Only the
+shape of the iso-contour changes: at 14 the band curves around the corner arc,
+at 0 the two edge bands meet in a square L.
+
+The old claim probably described an earlier build — the changelog has "attempt
+with glass shader using SDF bezel refraction" and later "split corner/bezel
+SDF ... to avoid weird corners", which is the gradient-based approach that got
+replaced by the toward-centre one.
+
+**The bezel-width knob is `edge_thickness`, not `rounding`.** `apple_strong`
+runs 0.12, a bezel of `0.12 * min(w, h)`. Widen that, or raise
+`refraction_strength` / `chromatic_aberration`, to make the edge read harder.
+`rounding_power` is inert at `rounding = 0`; it only shapes the corner arc.
 
 ## The presets
 
@@ -114,11 +133,13 @@ written as ghostty's `#0d0d12` instead of a magic constant, so the colour stays
 in step with [SURFACE.md](SURFACE.md).
 
 **The alpha is tint strength, not surface opacity.** These are different numbers
-that both happen to describe "how much colour". The bar's `0x87` is how opaque
-its own background is; a glass tint alpha is how hard the tint is pushed into
-what shows through. The plugin defaults to `0x22`, so `0.13` here sits in the
-same register — reaching for the bar's `0.53` gives a murky slab nothing like
-the reference.
+that both happen to describe "how much colour". A surface opacity is how much
+of its own background a window paints; a glass tint alpha is how hard the tint
+is pushed into what shows through. The plugin defaults to `0x22`, so `0.13` here
+sits in the same register — reaching for a surface-opacity figure like `0.53`
+gives a murky slab nothing like the reference. (The bar itself is no longer in
+this conversation at all: it is opaque `#000000` now. See
+[SURFACE.md](SURFACE.md).)
 
 ## Where the white comes from
 
@@ -193,19 +214,22 @@ hg.config({ layers = { enabled = true } })
 hg.layer("quickshell:bar", { preset = "subtle", mask_threshold = 0.5 })
 ```
 
-`mask_threshold` is the same lever as the bar's `ignore_alpha` — 0.5 sits just
-under `bg`'s 0.53, so the bar proper is glassed and the shadow falloff below it
-is not. The number has to move with `bg`'s alpha, exactly as documented in
-[SURFACE.md](SURFACE.md).
+`mask_threshold` is the same lever as `ignore_alpha`. It mattered when the bar
+was translucent and had a shadow falloff below it: 0.5 sat just under `bg`'s
+0.53, so the bar proper was glassed and the falloff was not. The bar is opaque
+black now with no falloff and is excluded from blur outright, so there is
+nothing left for the threshold to separate — see [SURFACE.md](SURFACE.md).
 
 The reference config reaches the same conclusion from the same starting point —
 it runs quickshell under the same `quickshell:bar` namespace and excludes it
 explicitly, `hg.layer("quickshell:bar", { exclude = true })`.
 
-It stays off here for two further reasons. Glass replaces blur, so the
-`quickshell:bar` layer rule's `blur = true` would have to come off with it — and that blur is load
-bearing, it is what flattens the wallpaper into something a tint can read
-against. And layer support hooks `renderLayer`, a private Hyprland internal that
+It stays off here for one further reason — and one that used to apply and no
+longer does. Glass replaces blur, so a layer's `blur = true` has to come off
+with it; that used to be disqualifying, because the bar's blur was what
+flattened the wallpaper into something its tint could read against. An opaque
+bar needs no blur, so that objection is gone. What remains: layer support hooks
+`renderLayer`, a private Hyprland internal that
 upstream warns may break on any Hyprland update; a broken hook takes the
 compositor with it, not just the bar.
 
@@ -267,3 +291,58 @@ zone stays claimed and the window stops just short of the top edge. `ALT+SHIFT+B
 hides the bar, but the zone is reserved on map, not on visibility — hiding it
 does not hand the strip back. For genuinely edge-to-edge, real fullscreen with
 no glass is the only option.
+
+## Tuning notes
+
+The per-parameter reasoning behind the numbers in `hyprland.lua`, which carries
+none of its own.
+
+**`refraction_strength = 1.1`** — ×50 in the shader, so ~55px of inward UV
+offset. Raised on measured headroom: the iGPU sits power-gated ~64% of the time
+even while cycling a six-window glass workspace. Blur was left alone — it is low
+on purpose, not for performance. Refraction only reads as distortion when there
+is high-frequency detail behind it to bend, so the `apple_strong` preset widens
+the bezel and *lowers* the blur: heavy blur destroys the very detail being
+displaced.
+
+**`chromatic_aberration`** is the only one of those that costs anything. Above
+`0.001` it samples the blur three times in the bezel band instead of once.
+
+**`edge_thickness = 0.18`** — bezel = `0.18 * min(w, h)`.
+
+**`adaptive_dim = 0.55`.** With `background-opacity = 0` there is no terminal
+background left, so readability is this line's job. `adaptive_dim` crushes
+bright areas and leaves dark ones alone, which keeps text legible over a pale
+wallpaper without flattening a dark one; a flat tint cannot do that, it dims
+both equally. At `0.85` it did not just darken, it **inverted**: `lumCurve` is
+`smoothstep(0.25, 0.55, lum)`, so a lum-0.55 region came out at 0.068 and a
+lum-0.25 region at 0.205 — the brighter the wallpaper behind a patch of glass,
+the darker that patch read. `0.55` keeps over half the pale-wallpaper guard and
+restores the ordering.
+
+**`brightness = 1.0`.** It multiplies with the above — `color *= brightness *
+(1 - adaptive_dim * lumCurve)` — so `0.82 × 0.15` was an 88% cut on anything lit
+before the tint took its 40%. `brightness` is flat and hits the dark end too,
+where nothing threatens legibility; it was only ever the inherited default, not
+a decision. 1.0 is the no-op, and not above it: the old 1.16 existed to punch
+through ghostty's dark sheet and washes the glass out now that sheet is gone.
+
+**`glass_opacity = 0.25`** over ghostty's background hex, so glass tints the
+same colour as the rest of the desktop. With `background-opacity = 0` this is
+the only thing darkening the terminal, so it carries the readability — it was
+0.13 back when ghostty painted its own sheet. It is applied last in the tone
+stage, after `adaptive_dim` has already taken its cut, so the two compound: at
+0.40 over a near-black hex it was a quarter of the remaining light again. 0.25
+holds the colour identity without being a second dimmer.
+
+**`contrast = 1.0`, `saturation = 0.9`.** `contrast` pivots on 0.5, so the
+inherited 0.90 lifted black toward grey across the whole slab. Saturation is a
+mix toward luminance grey — 0.80 was the milky half of the haze.
+
+The `apple` and `clear` preset tables are the plugin's own per-theme defaults
+written out: inert as they stand, kept as the surface to tune from. `dark = {
+tint_color = 0x02142aa9 }` is `tint("#02142a", 0.663)`.
+
+The `hg.layer(...)` line for the shell namespace is a no-op while layers are
+off. It is kept because the reference config excludes the shell layer too —
+same conclusion, reached the same way.

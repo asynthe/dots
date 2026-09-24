@@ -6,10 +6,9 @@
 
         # TODO Add a backend aspect split ("networkmanager" vs "iwd")
 
-        # iwd
         networking.networkmanager.enable = false;
         networking.wireless.iwd = {
-            enable = true; # for `impala` command
+            enable = true;
             settings.Settings.AutoConnect = true; # TODO ?
             settings.General.EnableNetworkConfiguration = true;
             settings.Network.NameResolvingService = "systemd";

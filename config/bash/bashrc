@@ -9,7 +9,7 @@ shopt -s autocd
 export HISTSIZE=10000
 export HISTFILESIZE=120000
 
-export PASSWORD_STORE_DIR=$HOME/sync/ben/pass/pass
+export PASSWORD_STORE_DIR=$HOME/git/auth/pass
 
 ##### KEYBINDINGS #####
 #bind '"\C-u":"Hello!"'

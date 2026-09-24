@@ -1,339 +1,703 @@
-//@ pragma UseQApplication
-
-// ───────────────────────── Minimal Hyprland bar ─────────────────────────
-//
-// Layout is decided by a screen's *role*, never by its name:
-//
-//   main    -- workspaces (left), clock (centre), tray (right)
-//   laptop  -- clock (centre), battery (right)
-//
-// "Main" is the widest external output, or the laptop panel when nothing is
-// plugged in -- so plugging the ultrawide in moves the workspaces and tray to
-// it and leaves the laptop with time and battery. The battery only ever lives
-// on the laptop's own bar; when the laptop *is* main it carries the full set.
-//
-// UseQApplication is required by QsMenuAnchor -- tray menus are platform
-// menus, and QGuiApplication cannot build them.
-//
-// A bar tucks itself away while its screen shows a fullscreen window, so games
-// -- which ../../hypr/hyprland.lua forces fullscreen -- get the whole output.
-//
-// Run:    qs -c bar
-// Toggle: qs -c bar ipc call bar toggle   (bound in ../../hypr/hyprland.lua)
 
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-import Quickshell.Widgets
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
-import Quickshell.Services.SystemTray
 
 ShellRoot {
     id: root
 
-    // ───────────────────────── Settings ─────────────────────────
-    property int    barHeight  : 34
+    property int    barHeight  : 26
     property string fontFamily : "JetBrainsMono Nerd Font"
-    property int    fontSize   : 16
-    property int    sideMargin : 16
-    property int    shadowHeight: 14
+    property int    fontSize   : 13
+    property int    sideMargin : 14
 
-    property color bg      : "#870d0d12"  // ARGB: ~53% of ghostty's tint
-    property color fg      : "#ffffff"
-    property color fgDim   : "#6a6a6a"
-    property color fgFaint : "#2a2a2a"
-    property color accent  : "#8a5cd6"    // rgb(451F67), the hyprland active border, lifted to read on black
-    property color warn    : "#e78a4e"    // waybar's warning orange
-    property color crit    : "#e04f4f"
+    property color bg     : "#000000"
+    property color fg     : "#c8c8c8"
+    property color fgDim  : "#5a5a5a"
+    property color fgFaint: "#2c2c2c"
 
-    property int animFast : 160
-    property int animSlow : 260
+    property color accent : "#00ff9c"
+    property color warn   : "#e7c84e"
+    property color crit   : "#e04f4f"
+    property color white  : "#f2f2f2"
 
-    // Get out of the way of fullscreen windows. The bar is on the Top layer,
-    // which Hyprland still draws over a fullscreen client, so this is on us.
-    property bool hideOnFullscreen: true
+    property int   latOk  : 60
+    property int   latBad : 200
 
-    // Source address of the default route. With Mullvad up this is the tunnel
-    // address, which is normally what "my current IP" means; swap in
-    // `hostname -I | cut -d' ' -f1` if you want the LAN address instead.
-    property string ipCommand: "ip -4 route get 1.1.1.1 | sed -n 's/.*src \\([0-9.]*\\).*/\\1/p'"
-    // ────────────────────────────────────────────────────────────
+    property color menuBg : "#0a0a0e"
 
-    property bool   hidden   : false
-    // Summoned over a fullscreen window by the toggle. Cleared on the way out.
-    property bool   overFull : false
-    property bool   showIp   : false
-    property string ipAddress: "..."
+    property int menuWidth : 704
+    property int railWidth : 132
+    property int keyWidth  : 140
 
-    // The panel behind the lid. eDP/LVDS/DSI is the kernel's naming for an
-    // internal display, so this outlives any particular laptop -- unlike the
-    // "AU Optronics 0xB0AE" match in hypr/monitors.lua.
+    property int logoWidth : 214
+    property int logoSize  : 8
+
+    property int   pollMs : 5000
+
+    property int   dotsMs   : 2000
+    property int   dotsFade : 450
+    property int   wsCount  : 10
+
+    property bool  hideOnFullscreen: true
+
+    property bool hidden    : false
+    property bool menuOpen  : false   // the name menu, left
+    property bool ipMenuOpen: false   // the address menu, right
+
+    property int    bars : -1
+    property int    rssi : 0
+    property string ip   : "..."
+    property string flag : ""
+    property string label: ""
+
+    readonly property bool online: ip !== "offline" && ip !== "..."
+
+    readonly property var wsOccupied: {
+        const m = {};
+        const v = Hyprland.workspaces?.values ?? [];
+        for (let i = 0; i < v.length; i++)
+            m[v[i].id] = true;
+        return m;
+    }
+
     function isInternal(screen) {
         return /^(eDP|LVDS|DSI)/i.test(screen.name);
     }
 
-    // What the toggle acts on -- the bar you are looking at is the one on the
-    // monitor with focus.
-    readonly property bool focusedFullscreen:
-        Hyprland.focusedMonitor?.activeWorkspace?.hasFullscreen ?? false
+    FileView {
+        id: hostFile
+        path: "/proc/sys/kernel/hostname"
+        blockLoading: true
+    }
+    readonly property string host: hostFile.text().trim() || "?"
 
-    // Widest external if one is plugged in, else the internal panel.
-    readonly property var mainScreen: {
-        const all = Quickshell.screens;
-        let best = null;
-        for (let i = 0; i < all.length; i++) {
-            const s = all[i];
-            if (root.isInternal(s))
-                continue;
-            if (best === null || s.width > best.width)
-                best = s;
-        }
-        if (best !== null)
-            return best;
-        return all.length > 0 ? all[0] : null;
+    FileView {
+        id: kernelFile
+        path: "/proc/sys/kernel/osrelease"
+        blockLoading: true
+    }
+    readonly property string kernel: kernelFile.text().trim() || "?"
+
+    FileView {
+        id: logoFile
+        path: Qt.resolvedUrl("logo.txt").toString().replace("file://", "")
+        blockLoading: true
+    }
+    readonly property string logo: logoFile.text()
+
+    readonly property int logoLines: {
+        const t = logo.replace(/\n+$/, "");
+        return t === "" ? 0 : t.split("\n").length;
+    }
+    readonly property int logoHeight: logoLines * Math.round(logoSize * 1.25)
+
+    property string uptime: ""
+    property int    latency: -1
+
+    readonly property color linkColor: {
+        if (bars < 0)                       return fgDim;   // no radio: wired
+        if (bars <= 1 || latency < 0
+            || latency > latBad)            return crit;
+        if (bars === 2 || latency > latOk)  return warn;
+        return accent;
     }
 
-    // ───────────────────────── Hide toggle ─────────────────────────
+    readonly property var  batDev    : UPower.displayDevice
+    readonly property bool batPresent: batDev !== null
+        && batDev.isLaptopBattery && batDev.isPresent
+    readonly property int  batPct    : batPresent
+        ? Math.round(batDev.percentage * 100) : 0
+    readonly property bool batOnAc   : !UPower.onBattery
+
+    readonly property color batColor: {
+        if (batOnAc)     return accent;
+        if (batPct <= 15) return crit;
+        if (batPct <= 30) return warn;
+        return fg;
+    }
+
+    Process {
+        id: netProbe
+        command: [Qt.resolvedUrl("netstat.sh").toString().replace("file://", "")]
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const f = text.trim().split("\t");
+                if (f.length < 5)
+                    return;
+                root.bars  = parseInt(f[0]);
+                root.rssi  = parseInt(f[1]);
+                root.ip    = f[2];
+                root.flag  = f[3];
+                root.label = f[4];
+            }
+        }
+    }
+
+    Timer {
+        interval: root.pollMs
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: if (!netProbe.running) netProbe.running = true
+    }
+
+    Process {
+        id: latProbe
+        command: [Qt.resolvedUrl("latency.sh").toString().replace("file://", "")]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const v = parseInt(text.trim());
+                root.latency = isNaN(v) ? -1 : v;
+            }
+        }
+    }
+
+    Timer {
+        interval: 15000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: if (!latProbe.running) latProbe.running = true
+    }
+
+    property var addrList: []
+
+    Process {
+        id: addrProbe
+        command: [Qt.resolvedUrl("addrs.sh").toString().replace("file://", "")]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const rows = [];
+                const lines = text.trim().split("\n");
+                for (let i = 0; i < lines.length; i++) {
+                    if (!lines[i])
+                        continue;
+                    const f = lines[i].split("\t");
+                    if (f.length >= 2)
+                        rows.push({ dev: f[0], addr: f[1], tag: f[2] ?? "" });
+                }
+                root.addrList = rows;
+            }
+        }
+    }
+
+    Process {
+        id: uptimeProbe
+        command: ["sh", "-c", "uptime -p 2>/dev/null || uptime"]
+        stdout: StdioCollector {
+            onStreamFinished: root.uptime = text.trim().replace(/^up /, "")
+        }
+    }
+
+    onMenuOpenChanged: {
+        if (!menuOpen)
+            return;
+        ipMenuOpen = false;
+        if (!uptimeProbe.running)
+            uptimeProbe.running = true;
+        loadPane(menuPane);
+    }
+
+    onIpMenuOpenChanged: {
+        if (!ipMenuOpen)
+            return;
+        menuOpen = false;
+        if (!addrProbe.running) addrProbe.running = true;
+        if (!latProbe.running)  latProbe.running  = true;
+    }
+
+    property string menuPane: "system"
+
+    property var paneRows: ({})
+    readonly property var currentRows: paneRows[menuPane] ?? []
+
+    Process {
+        id: paneProbe
+
+        property string pane   : ""
+        property string pending: ""
+
+        command: [Qt.resolvedUrl("sysinfo.sh").toString().replace("file://", ""), pane]
+
+        onRunningChanged: {
+            if (running || pending === "")
+                return;
+            const next = pending;
+            pending = "";
+            root.loadPane(next);
+        }
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const rows  = [];
+                const lines = text.trim().split("\n");
+                for (let i = 0; i < lines.length; i++) {
+                    if (!lines[i])
+                        continue;
+                    const f = lines[i].split("\t");
+                    if (f.length >= 2)
+                        rows.push({ k: f[0], v: f[1] });
+                }
+                const next = {};
+                for (const key in root.paneRows)
+                    next[key] = root.paneRows[key];
+                next[paneProbe.pane] = rows;
+                root.paneRows = next;
+            }
+        }
+    }
+
+    function loadPane(p) {
+        if (paneProbe.running) {
+            paneProbe.pending = p;
+            return;
+        }
+        paneProbe.pane = p;
+        paneProbe.running = true;
+    }
+
+    onMenuPaneChanged: if (menuOpen) loadPane(menuPane)
+
+    Component.onCompleted: if (menuOpen) loadPane(menuPane)
+
+    function run(cmd) { Quickshell.execDetached(cmd); }
+    function term(cmd) { Quickshell.execDetached(["ghostty", "-e"].concat(cmd)); }
+
+    readonly property var menuPanes: [
+        {
+            id: "system", label: "System",
+            apps: [
+                { label: "btop",     act: function() { root.term(["btop"]); } },
+                { label: "htop",     act: function() { root.term(["htop"]); } },
+                { label: "Files",    act: function() { root.term(["yazi"]); } },
+                { label: "Terminal", act: function() { root.run(["ghostty"]); } },
+                { label: "Editor",   act: function() { root.run(["codium"]); } },
+                { label: "Launcher", act: function() { root.run(["fuzzel"]); } },
+            ]
+        },
+        {
+            id: "network", label: "Network",
+            apps: [
+                { label: "impala",      act: function() { root.term(["impala"]); } },
+                { label: "iwctl",       act: function() { root.term(["iwctl"]); } },
+                { label: "Mullvad",     act: function() { root.run(["mullvad-vpn"]); } },
+                { label: "qBittorrent", act: function() { root.run(["qbittorrent"]); } },
+                { label: "Firefox",     act: function() { root.run(["firefox"]); } },
+                { label: "Copy IP",     stay: true, act: function() { Quickshell.clipboardText = root.ip; } },
+                { label: "Rescan",      stay: true, act: function() { if (!netProbe.running) netProbe.running = true;
+                                                          root.loadPane("network"); } },
+            ]
+        },
+        {
+            id: "audio", label: "Audio",
+            apps: [
+                { label: "pavucontrol", act: function() { root.run(["pavucontrol"]); } },
+                { label: "wiremix",     act: function() { root.term(["wiremix"]); } },
+                { label: "cava",        act: function() { root.term(["cava"]); } },
+                { label: "ncmpcpp",     act: function() { root.term(["ncmpcpp"]); } },
+                { label: "Mixxx",       act: function() { root.run(["mixxx"]); } },
+                { label: "mpv",         act: function() { root.run(["mpv"]); } },
+            ]
+        },
+        {
+            id: "display", label: "Display",
+            apps: [
+                { label: "Reload WM",   act: function() { root.run(["hyprctl", "reload"]); } },
+                { label: "Wallpaper",   act: function() { root.run(["awww", "restore"]); } },
+                { label: "Bright +",    stay: true, act: function() { root.run(["brightnessctl", "set", "+10%"]);
+                                                          root.loadPane("display"); } },
+                { label: "Bright -",    stay: true, act: function() { root.run(["brightnessctl", "set", "10%-"]);
+                                                          root.loadPane("display"); } },
+                { label: "Steam",       act: function() { root.run(["steam"]); } },
+            ]
+        },
+        {
+            id: "storage", label: "Storage",
+            apps: [
+                { label: "Files",       act: function() { root.term(["yazi"]); } },
+                { label: "archive",     act: function() { root.term(["yazi", Quickshell.env("HOME") + "/archive"]); } },
+                { label: "git",         act: function() { root.term(["yazi", Quickshell.env("HOME") + "/git"]); } },
+                { label: "ncdu",        act: function() { root.term(["ncdu", Quickshell.env("HOME")]); } },
+                { label: "qBittorrent", act: function() { root.run(["qbittorrent"]); } },
+            ]
+        },
+    ]
+
+    readonly property var currentPane: {
+        for (let i = 0; i < menuPanes.length; i++)
+            if (menuPanes[i].id === menuPane)
+                return menuPanes[i];
+        return menuPanes[0];
+    }
+
+    readonly property var menuActions: [
+        { label: "Reload bar", act: function() { Quickshell.reload(true); } },
+        { label: "Log Out\u2026", act: function() { Hyprland.dispatch("hl.dsp.exit()"); } },
+    ]
+
     IpcHandler {
         target: "bar"
 
-        // Under a fullscreen window the toggle flips the override rather than
-        // `hidden`, so one keypress always swaps what you can actually see.
-        function toggle(): void {
-            if (root.hideOnFullscreen && root.focusedFullscreen) {
-                root.overFull = !root.overFull;
-                root.hidden = false;
-            } else {
-                root.hidden = !root.hidden;
+        function toggle(): void { root.hidden = !root.hidden; root.menuOpen = false; root.ipMenuOpen = false; }
+        function unhide(): void { root.hidden = false; }
+        function hide(): void   { root.hidden = true; root.menuOpen = false; root.ipMenuOpen = false; }
+        function poll(): void   { if (!netProbe.running) netProbe.running = true; }
+        function menu(): void {
+            if (!root.menuOpen)
+                root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
+            root.menuOpen = !root.menuOpen;
+        }
+        function addresses(): void {
+            if (!root.ipMenuOpen)
+                root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
+            root.ipMenuOpen = !root.ipMenuOpen;
+        }
+        function pane(which: string): string {
+            let known = [];
+            for (let i = 0; i < root.menuPanes.length; i++)
+                known.push(root.menuPanes[i].id);
+            if (known.indexOf(which) < 0)
+                return "no such pane: " + which + " (have: " + known.join(" ") + ")";
+
+            if (!root.menuOpen) {
+                root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
+                root.menuOpen = true;
             }
+            root.menuPane = which;
+            return which;
         }
-        // Not `show` -- quickshell 0.3.0 silently drops an IPC function by that
-        // name; it never appears in `qs -c bar ipc show bar`.
-        function unhide(): void {
-            root.hidden = false;
-            root.overFull = true;
-        }
-        function hide(): void {
-            root.hidden = true;
-            root.overFull = false;
-        }
-    }
-
-    // ───────────────────────── Address probe ─────────────────────────
-    Process {
-        id: ipProbe
-        command: ["sh", "-c", root.ipCommand]
-
-        stdout: StdioCollector {
-            onStreamFinished: root.ipAddress = text.trim() || "offline"
+        function state(): string {
+            return root.bars + " bars  " + root.rssi + " dBm  "
+                 + root.ip + "  " + root.flag + "  " + root.label
+                 + "  | lat=" + root.latency + "ms"
+                 + "  menu=" + root.menuOpen + " ipmenu=" + root.ipMenuOpen
+                 + " on '" + root.menuScreen + "'"
+                 + "  bat=" + (root.batPresent
+                        ? root.batPct + "%" + (root.batOnAc ? " ac" : "")
+                        : "none")
+                 + "  ws=" + (Hyprland.focusedMonitor?.activeWorkspace?.id ?? "?")
+                 + " occupied=" + Object.keys(root.wsOccupied).join(",")
+                 + "  pane=" + root.menuPane
+                 + " rows=" + root.currentRows.length
+                 + "  addrs=" + root.addrList.length;
         }
     }
 
-    Component.onCompleted: ipProbe.running = true
-    // Re-probe on every flip, so a click never shows a stale address.
-    onShowIpChanged: if (showIp)
-        ipProbe.running = true
-
-    // ───────────────────────── The bars ─────────────────────────
     Variants {
         model: Quickshell.screens
 
         PanelWindow {
-            id: bar
+            id: strip
 
             required property var modelData
 
-            readonly property bool isMain    : modelData === root.mainScreen
-            readonly property bool isInternal: root.isInternal(modelData)
-
-            // This screen's own workspace, not the focused one: a game on the
-            // ultrawide should not blank the laptop's clock.
-            readonly property var  hlMonitor : Hyprland.monitorFor(modelData)
-            readonly property bool covered   : root.hideOnFullscreen
-                && !root.overFull
+            readonly property var  hlMonitor: Hyprland.monitorFor(modelData)
+            readonly property bool covered  : root.hideOnFullscreen
                 && (hlMonitor?.activeWorkspace?.hasFullscreen ?? false)
+            readonly property bool shown    : !root.hidden && !covered
 
-            readonly property bool shown     : !root.hidden && !covered
+            readonly property bool ownsMenu  : root.menuOpen   && root.menuScreen === modelData.name
+            readonly property bool ownsIpMenu: root.ipMenuOpen && root.menuScreen === modelData.name
+            readonly property bool anyMenu   : ownsMenu || ownsIpMenu
 
-            // 1 = out, 0 = tucked below the screen edge. Driven imperatively so
-            // the Behavior animates it; a plain binding would just snap.
-            property real reveal: 0
-            onShownChanged: reveal = shown ? 1 : 0
-            Component.onCompleted: reveal = shown ? 1 : 0
+            readonly property int activeWs: hlMonitor?.activeWorkspace?.id ?? -1
+
+            property bool dotsShown: false
+
+            onActiveWsChanged: {
+                if (activeWs < 0)
+                    return;
+                dotsShown = true;
+                dotsHold.restart();
+            }
+
+            Timer {
+                id: dotsHold
+                interval: root.dotsMs
+                onTriggered: strip.dotsShown = false
+            }
 
             screen: modelData
-            visible: reveal > 0.01
+            visible: shown
             color: "transparent"
-            implicitHeight: root.barHeight + root.shadowHeight
 
-            anchors {
-                left: true
-                right: true
-                top: true
-            }
+            implicitHeight: root.barHeight + 420
+
+            anchors { left: true; right: true; top: true }
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "quickshell:bar"
+            WlrLayershell.keyboardFocus: anyMenu
+                ? WlrKeyboardFocus.OnDemand
+                : WlrKeyboardFocus.None
 
-            mask: Region {
-                width: bar.width
-                height: root.barHeight
-            }
-
-            // Stepped rather than tied to `reveal`: one resize for Hyprland to
-            // animate on its own, instead of a reflow on every frame of the slide.
             exclusiveZone: shown ? root.barHeight : 0
 
-            Behavior on reveal {
-                NumberAnimation {
-                    duration: root.animSlow
-                    easing.type: Easing.OutCubic
-                }
+            mask: Region {
+                width: strip.width
+                height: strip.anyMenu ? strip.implicitHeight : root.barHeight
             }
 
-            Item {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.top
-                }
+            MouseArea {
+                anchors.fill: parent
+                visible: strip.anyMenu
+                onClicked: { root.menuOpen = false; root.ipMenuOpen = false; }
+            }
+
+            Rectangle {
+                id: barRect
+                anchors { left: parent.left; right: parent.right; top: parent.top }
                 height: root.barHeight
-                opacity: bar.reveal
-
-                transform: Translate {
-                    y: -(1 - bar.reveal) * root.barHeight
-                }
+                color: root.bg
 
                 Rectangle {
-                    anchors.fill: parent
-                    color: root.bg
-                }
-
-                Rectangle {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.bottom
-                    }
-                    height: root.shadowHeight
-
-                    gradient: Gradient {
-                        GradientStop { position: 0.00; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a) }
-                        GradientStop { position: 0.15; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.68) }
-                        GradientStop { position: 0.30; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.44) }
-                        GradientStop { position: 0.50; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.21) }
-                        GradientStop { position: 0.70; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, root.bg.a * 0.085) }
-                        GradientStop { position: 1.00; color: Qt.rgba(root.bg.r, root.bg.g, root.bg.b, 0) }
-                    }
-                }
-
-                // ───────────────────────── Left: workspaces ─────────────────────────
-                Row {
-                    visible: bar.isMain
-                    spacing: 7
+                    id: nameButton
 
                     anchors {
                         left: parent.left
-                        leftMargin: root.sideMargin
+                        leftMargin: root.sideMargin - 6
                         verticalCenter: parent.verticalCenter
                     }
+                    width: nameText.implicitWidth + 12
+                    height: root.barHeight - 6
+                    color: "transparent"
 
-                    // Ten fixed slots, matching waybar's `persistent_workspaces: {"*": 10}`.
-                    // Hyprland only reports workspaces that exist, so the empty ones
-                    // would otherwise pop in and out as you move around.
+                    Text {
+                        id: nameText
+                        anchors.centerIn: parent
+                        text: (Quickshell.env("USER") || "user") + "@" + root.host
+                        color: strip.ownsMenu ? root.white : root.fgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            root.menuScreen = strip.modelData.name;
+                            root.menuOpen = !root.menuOpen;
+                        }
+                    }
+                }
+
+                Row {
+                    id: wsDots
+
+                    anchors {
+                        left: nameButton.right
+                        leftMargin: 12
+                        verticalCenter: parent.verticalCenter
+                    }
+                    spacing: 5
+
+                    opacity: strip.dotsShown ? 1 : 0
+                    visible: opacity > 0.01
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: root.dotsFade
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
                     Repeater {
-                        model: 10
+                        model: root.wsCount
 
-                        // The slot is the click target and is only as wide as its dot,
-                        // so the row still collapses to the pill-and-dots shape -- but
-                        // it spans the full bar height, and the hit areas stop half a
-                        // gap short of each other instead of overlapping by 5px.
-                        Item {
-                            id: slot
-
+                        Rectangle {
                             required property int index
                             readonly property int wsId: index + 1
 
-                            readonly property bool focused: Hyprland.focusedWorkspace !== null && Hyprland.focusedWorkspace.id === wsId
+                            readonly property bool isActive  : wsId === strip.activeWs
+                            readonly property bool isOccupied: root.wsOccupied[wsId] === true
 
-                            // Reads `values` directly rather than through a helper, so
-                            // the binding picks up a dependency on the model changing.
-                            readonly property bool occupied: {
-                                const list = Hyprland.workspaces.values;
-                                for (let i = 0; i < list.length; i++) {
-                                    if (list[i].id === slot.wsId)
-                                        return true;
-                                }
-                                return false;
-                            }
+                            width: isActive ? 16 : 6
+                            height: 6
+                            radius: 0
+                            anchors.verticalCenter: parent.verticalCenter
 
-                            width: dot.width
-                            height: root.barHeight
+                            color: isActive   ? root.accent
+                                 : isOccupied ? root.fgDim
+                                              : root.fgFaint
 
-                            Rectangle {
-                                id: dot
-
-                                anchors.centerIn: parent
-                                width: slot.focused ? 20 : 7
-                                height: 7
-                                radius: height / 2
-                                color: slot.focused ? root.accent : slot.occupied ? root.fgDim : root.fgFaint
-                                opacity: hit.containsMouse && !slot.focused ? 1 : 0.85
-
-                                Behavior on width {
-                                    NumberAnimation {
-                                        duration: root.animFast
-                                        easing.type: Easing.OutBack
-                                    }
-                                }
-                                Behavior on color {
-                                    ColorAnimation {
-                                        duration: root.animFast
-                                    }
-                                }
-                                Behavior on opacity {
-                                    NumberAnimation {
-                                        duration: root.animFast
-                                    }
+                            Behavior on width {
+                                NumberAnimation {
+                                    duration: 160
+                                    easing.type: Easing.OutCubic
                                 }
                             }
-
-                            MouseArea {
-                                id: hit
-
-                                anchors.fill: parent
-                                anchors.leftMargin: -3   // half the row spacing, so a 7px dot is still hittable
-                                anchors.rightMargin: -3
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-
-                                // Hyprland is on the lua parser here, so a dispatch is
-                                // evaluated as lua -- the legacy "workspace 3" string
-                                // comes back as `hl.dispatch(workspace 3)` and fails to
-                                // compile. This is the same call hyprland.lua's ALT+<n>
-                                // binds make.
-                                onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + slot.wsId + " })")
+                            Behavior on color {
+                                ColorAnimation { duration: 160 }
                             }
                         }
                     }
                 }
 
-                // ───────────────────────── Centre: clock / address ─────────────────────────
-                Item {
-                    id: clock
+                Row {
+                    anchors {
+                        right: parent.right
+                        rightMargin: root.sideMargin
+                        verticalCenter: parent.verticalCenter
+                    }
+                    spacing: 10
 
-                    anchors.centerIn: parent
-                    height: root.barHeight
-                    width: root.showIp ? ipLabel.implicitWidth : timeLabel.implicitWidth
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: root.label
+                        color: root.fgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
+                    }
 
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: root.animSlow
-                            easing.type: Easing.OutCubic
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: root.flag === "vpn"
+                        text: "vpn"
+                        color: root.accent
+                        opacity: 0.7
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
+                    }
+
+                    Rectangle {
+                        id: ipButton
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: ipRow.implicitWidth + 12
+                        height: root.barHeight - 6
+                        color: "transparent"
+
+                        Row {
+                            id: ipRow
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            Row {
+                                anchors.verticalCenter: parent.verticalCenter
+                                spacing: 2
+
+                                Repeater {
+                                    model: 4
+
+                                    Rectangle {
+                                        required property int index
+
+                                        width: 3
+                                        height: 3 + index * 3
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.verticalCenterOffset: (12 - height) / 2
+                                        radius: 0
+                                        color: index < root.bars
+                                            ? root.linkColor : root.fgFaint
+
+                                        Behavior on color {
+                                            ColorAnimation { duration: 200 }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: root.ip
+                                color: root.online ? root.white : root.crit
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize
+                            }
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                root.menuScreen = strip.modelData.name;
+                                root.ipMenuOpen = !root.ipMenuOpen;
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1
+                        height: root.fontSize
+                        color: root.fgFaint
+                    }
+
+                    Row {
+                        id: batteryGroup
+
+                        visible: root.batPresent
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 8
+
+                        SequentialAnimation on opacity {
+                            running: batteryGroup.visible && root.batOnAc
+                                && root.batPct < 100
+                            loops: Animation.Infinite
+                            alwaysRunToEnd: true
+
+                            NumberAnimation {
+                                from: 1; to: 0.45
+                                duration: 900
+                                easing.type: Easing.InOutSine
+                            }
+                            NumberAnimation {
+                                from: 0.45; to: 1
+                                duration: 900
+                                easing.type: Easing.InOutSine
+                            }
+                        }
+
+                        Row {
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 2
+
+                            Repeater {
+                                model: 4
+
+                                Rectangle {
+                                    required property int index
+
+                                    readonly property int lit:
+                                        Math.ceil(root.batPct / 25)
+
+                                    width: 3
+                                    height: 9
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    radius: 0
+                                    color: index < lit ? root.batColor : root.fgFaint
+
+                                    Behavior on color {
+                                        ColorAnimation { duration: 200 }
+                                    }
+                                }
+                            }
+                        }
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.batPct + "%"
+                            color: root.batColor
+                            font.family: root.fontFamily
+                            font.pixelSize: root.fontSize
+
+                            Behavior on color {
+                                ColorAnimation { duration: 200 }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        visible: root.batPresent
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1
+                        height: root.fontSize
+                        color: root.fgFaint
                     }
 
                     SystemClock {
@@ -341,274 +705,471 @@ ShellRoot {
                         precision: SystemClock.Minutes
                     }
 
-                    // Clipped so the two labels slide past the brackets instead of
-                    // spilling over the workspaces while the width catches up.
-                    Item {
-                        anchors.fill: parent
-                        clip: true
-
-                        Text {
-                            id: timeLabel
-
-                            anchors.centerIn: parent
-                            text: "[ " + Qt.formatDateTime(sysClock.date, "hh:mm ap") + " ]"
-                            color: root.fg
-                            font.family: root.fontFamily
-                            font.pixelSize: root.fontSize
-                            opacity: root.showIp ? 0 : 1
-
-                            transform: Translate {
-                                y: root.showIp ? -root.barHeight / 2 : 0
-
-                                Behavior on y {
-                                    NumberAnimation {
-                                        duration: root.animSlow
-                                        easing.type: Easing.OutCubic
-                                    }
-                                }
-                            }
-                            Behavior on opacity {
-                                NumberAnimation {
-                                    duration: root.animFast
-                                }
-                            }
-                        }
-
-                        Text {
-                            id: ipLabel
-
-                            anchors.centerIn: parent
-                            text: "[ " + root.ipAddress + " ]"
-                            color: root.accent
-                            font.family: root.fontFamily
-                            font.pixelSize: root.fontSize
-                            opacity: root.showIp ? 1 : 0
-
-                            transform: Translate {
-                                y: root.showIp ? 0 : root.barHeight / 2
-
-                                Behavior on y {
-                                    NumberAnimation {
-                                        duration: root.animSlow
-                                        easing.type: Easing.OutCubic
-                                    }
-                                }
-                            }
-                            Behavior on opacity {
-                                NumberAnimation {
-                                    duration: root.animFast
-                                }
-                            }
-                        }
-                    }
-
-                    // Sibling of the clipper, not a child: Qt Quick hit-tests against
-                    // the clip rect, so a MouseArea inside it would lose the margins.
-                    MouseArea {
-                        anchors.fill: parent
-                        anchors.margins: -8
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: root.showIp = !root.showIp
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: Qt.formatDateTime(sysClock.date, "HH:mm")
+                        color: root.fg
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
                     }
                 }
+            }
 
-                // ───────────────────────── Right: tray, battery ─────────────────────────
-                Row {
-                    spacing: 14
+            Item {
+                id: ipMenuLayer
+                visible: strip.ownsIpMenu
+                anchors {
+                    right: parent.right
+                    rightMargin: root.sideMargin - 6
+                    top: barRect.bottom
+                }
+                width: ipMenuBox.width + 4
+                height: ipMenuBox.height + 4
 
-                    anchors {
-                        right: parent.right
-                        rightMargin: root.sideMargin
-                        verticalCenter: parent.verticalCenter
-                    }
+                Rectangle {
+                    x: 4; y: 4
+                    width: ipMenuBox.width
+                    height: ipMenuBox.height
+                    color: "#000000"
+                    opacity: 0.55
+                }
 
-                    Row {
-                        visible: bar.isMain
-                        spacing: 10
-                        anchors.verticalCenter: parent.verticalCenter
+                Rectangle {
+                    id: ipMenuBox
 
-                        Repeater {
-                            model: SystemTray.items
+                    width: 300
+                    height: ipColumn.implicitHeight + 12
+                    color: root.menuBg
+                    border.width: 0
+                    radius: 0
 
-                            MouseArea {
-                                id: trayEntry
-
-                                required property var modelData
-
-                                width: 18
-                                height: 18
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
-
-                                // nm-applet and mullvad are menu-only items -- activate()
-                                // does nothing for them, so left-click has to open the menu.
-                                onClicked: event => {
-                                    const wantsMenu = event.button === Qt.RightButton || (event.button === Qt.LeftButton && modelData.onlyMenu);
-                                    if (wantsMenu) {
-                                        if (modelData.hasMenu)
-                                            trayMenu.open();
-                                    } else if (event.button === Qt.MiddleButton) {
-                                        modelData.secondaryActivate();
-                                    } else {
-                                        modelData.activate();
-                                    }
-                                }
-
-                                QsMenuAnchor {
-                                    id: trayMenu
-                                    menu: trayEntry.modelData.menu
-                                    anchor.item: trayEntry
-                                    anchor.edges: Edges.Bottom
-                                    anchor.gravity: Edges.Bottom
-                                }
-
-                                IconImage {
-                                    anchors.fill: parent
-                                    source: trayEntry.modelData.icon
-                                    opacity: trayEntry.containsMouse ? 1 : 0.7
-                                    scale: trayEntry.containsMouse ? 1.18 : 1
-
-                                    // Adwaita draws symbolic icons as a near-black
-                                    // glyph (#2e3436) and expects the consumer to
-                                    // recolour them -- GTK does, Qt does not, so on a
-                                    // black bar they arrive invisible. Full-colour
-                                    // icons (steam, qbittorrent) must be left alone,
-                                    // hence the name test rather than a blanket tint.
-                                    readonly property bool symbolic: String(trayEntry.modelData.icon).includes("-symbolic")
-
-                                    layer.enabled: symbolic
-                                    layer.effect: MultiEffect {
-                                        // brightness, not colorization: colorization
-                                        // scales by source luminance, so a #2e3436
-                                        // glyph stays #2e3436. Saturating brightness
-                                        // pushes it to white and leaves alpha intact.
-                                        brightness: 1
-                                    }
-
-                                    Behavior on opacity {
-                                        NumberAnimation {
-                                            duration: root.animFast
-                                        }
-                                    }
-                                    Behavior on scale {
-                                        NumberAnimation {
-                                            duration: root.animFast
-                                            easing.type: Easing.OutBack
-                                        }
-                                    }
-                                }
-                            }
+                    Column {
+                        id: ipColumn
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            top: parent.top
+                            topMargin: 6
                         }
-                    }
-
-                    Row {
-                        id: battery
-
-                        readonly property var dev: UPower.displayDevice
-                        readonly property bool present: dev !== null && dev.isLaptopBattery && dev.isPresent
-                        readonly property int pct: present ? Math.round(dev.percentage * 100) : 0
-                        readonly property bool charging: present && dev.state === UPowerDeviceState.Charging
-                        // waybar shows the bolt for charging, full *and* plugged, so
-                        // key it off AC rather than the charging state alone.
-                        readonly property bool onAc: !UPower.onBattery
-
-                        // The laptop's own bar, wherever that happens to be.
-                        visible: bar.isInternal && present
-                        spacing: 7
-                        anchors.verticalCenter: parent.verticalCenter
 
                         Text {
-                            id: batteryIcon
-
-                            // Font Awesome, the same glyphs waybar's battery module
-                            // uses -- f244..f240 are empty..full and f0e7 is the bolt
-                            // it shows for charging/full/plugged. They live in the
-                            // nerd font the rest of the bar already uses, so there is
-                            // no second family to fall back to.
-                            text: {
-                                if (battery.onAc)
-                                    return "\uf0e7";
-                                const p = battery.pct;
-                                if (p < 20)
-                                    return "\uf244";
-                                if (p < 40)
-                                    return "\uf243";
-                                if (p < 60)
-                                    return "\uf242";
-                                if (p < 80)
-                                    return "\uf241";
-                                return "\uf240";
-                            }
-
-                            color: battery.onAc ? root.accent : battery.pct <= 15 ? root.crit : battery.pct <= 30 ? root.warn : root.fg
+                            x: 12
+                            text: "Addresses"
+                            color: root.linkColor
                             font.family: root.fontFamily
                             font.pixelSize: root.fontSize
-                            anchors.verticalCenter: parent.verticalCenter
+                            font.bold: true
+                            bottomPadding: 5
+                        }
 
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: root.animSlow
-                                }
-                            }
+                        Repeater {
+                            model: root.addrList
 
-                            // A glyph swap is a step change, so give it a small pop to
-                            // land on rather than having it blink to the next shape.
-                            onTextChanged: pop.restart()
+                            Item {
+                                required property var modelData
+                                width: ipColumn.width
+                                height: 22
 
-                            SequentialAnimation {
-                                id: pop
+                                Rectangle {
+                                    anchors.fill: parent
+                                    color: "transparent"
 
-                                NumberAnimation {
-                                    target: batteryIcon
-                                    property: "scale"
-                                    to: 1.25
-                                    duration: root.animFast
-                                    easing.type: Easing.OutBack
-                                }
-                                NumberAnimation {
-                                    target: batteryIcon
-                                    property: "scale"
-                                    to: 1
-                                    duration: root.animFast
-                                    easing.type: Easing.OutCubic
-                                }
-                            }
+                                    Text {
+                                        anchors {
+                                            left: parent.left
+                                            leftMargin: 12
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        text: modelData.dev
+                                        color: addrHover.containsMouse ? root.linkColor : root.fgDim
+                                        font.family: root.fontFamily
+                                        font.pixelSize: root.fontSize - 1
+                                    }
 
-                            // Pulses only while actually filling, so a machine left
-                            // docked at 100% shows a steady bolt. Ends on 1 because the
-                            // cycle runs back to it and alwaysRunToEnd lets the current
-                            // pass finish -- unplugging cannot strand the icon dimmed.
-                            SequentialAnimation on opacity {
-                                running: battery.charging
-                                loops: Animation.Infinite
-                                alwaysRunToEnd: true
+                                    Text {
+                                        anchors {
+                                            left: parent.left
+                                            leftMargin: 118
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        text: modelData.addr
+                                        color: addrHover.containsMouse ? root.linkColor : root.white
+                                        font.family: root.fontFamily
+                                        font.pixelSize: root.fontSize
+                                    }
 
-                                NumberAnimation {
-                                    from: 1
-                                    to: 0.4
-                                    duration: 900
-                                    easing.type: Easing.InOutSine
-                                }
-                                NumberAnimation {
-                                    from: 0.4
-                                    to: 1
-                                    duration: 900
-                                    easing.type: Easing.InOutSine
+                                    Text {
+                                        anchors {
+                                            right: parent.right
+                                            rightMargin: 12
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        text: modelData.tag
+                                        color: modelData.tag === "default" ? root.accent : root.fgFaint
+                                        font.family: root.fontFamily
+                                        font.pixelSize: root.fontSize - 3
+                                    }
+
+                                    MouseArea {
+                                        id: addrHover
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            Quickshell.clipboardText = modelData.addr;
+                                            root.ipMenuOpen = false;
+                                        }
+                                    }
                                 }
                             }
                         }
 
-                        Text {
-                            text: battery.pct + "%"
-                            color: root.fgDim
-                            font.family: root.fontFamily
-                            font.pixelSize: root.fontSize - 2
-                            anchors.verticalCenter: parent.verticalCenter
+                        Item {
+                            width: parent.width
+                            height: 22
+
+                            Text {
+                                anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                                text: "signal"
+                                color: root.fgDim
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize - 1
+                            }
+                            Text {
+                                anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
+                                text: root.bars < 0 ? "wired" : root.rssi + " dBm"
+                                color: root.linkColor
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize
+                            }
+                        }
+
+                        Item {
+                            width: parent.width
+                            height: 22
+
+                            Text {
+                                anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                                text: "latency"
+                                color: root.fgDim
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize - 1
+                            }
+                            Text {
+                                anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
+                                text: root.latency < 0 ? "no reply" : root.latency + " ms"
+                                color: root.latency < 0 ? root.crit
+                                     : (root.latency > root.latBad ? root.crit
+                                     : (root.latency > root.latOk ? root.warn : root.accent))
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item {
+                id: menuLayer
+                visible: strip.ownsMenu
+                anchors {
+                    left: parent.left
+                    leftMargin: root.sideMargin - 6
+                    top: barRect.bottom
+                }
+                width: menuBox.width + 4
+                height: menuBox.height + 4
+
+                Rectangle {
+                    x: 4; y: 4
+                    width: menuBox.width
+                    height: menuBox.height
+                    color: "#000000"
+                    opacity: 0.55
+                }
+
+                Rectangle {
+                    id: menuBox
+
+                    width: root.menuWidth
+                    height: menuColumn.implicitHeight + 12
+                    color: root.menuBg
+                    border.width: 0
+                    radius: 0
+
+                    Column {
+                        id: menuColumn
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            top: parent.top
+                            topMargin: 6
+                        }
+
+                        Column {
+                            width: parent.width
+                            spacing: 1
+                            bottomPadding: 5
+
+                            Text {
+                                x: 12
+                                text: (Quickshell.env("USER") || "user") + "@" + root.host
+                                color: root.accent
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize
+                                font.bold: true
+                            }
+                            Text {
+                                x: 12
+                                text: "linux " + root.kernel + "  \u00b7  up " + root.uptime
+                                color: root.fgDim
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize - 2
+                            }
+                        }
+
+                        Item {
+                            width: parent.width
+                            height: Math.max(railColumn.implicitHeight,
+                                             paneColumn.implicitHeight,
+                                             logoBlock.visible ? root.logoHeight + 10 : 0) + 10
+
+                            Column {
+                                id: railColumn
+                                anchors {
+                                    left: parent.left
+                                    top: parent.top
+                                    topMargin: 5
+                                }
+                                width: root.railWidth
+
+                                Repeater {
+                                    model: root.menuPanes
+
+                                    Rectangle {
+                                        required property var modelData
+
+                                        readonly property bool active:
+                                            modelData.id === root.menuPane
+
+                                        width: railColumn.width
+                                        height: 22
+                                        color: active ? root.fgFaint : "transparent"
+
+                                        Text {
+                                            anchors {
+                                                left: parent.left
+                                                leftMargin: 12
+                                                verticalCenter: parent.verticalCenter
+                                            }
+                                            text: modelData.label
+                                            color: parent.active ? root.white : root.fg
+                                            font.family: root.fontFamily
+                                            font.pixelSize: root.fontSize
+                                        }
+
+                                        MouseArea {
+                                            id: railHover
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            onEntered: root.menuPane = modelData.id
+                                            onClicked: root.menuPane = modelData.id
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text {
+                                id: logoBlock
+
+                                visible: root.menuPane === "system"
+                                anchors {
+                                    right: parent.right
+                                    rightMargin: 12
+                                    top: parent.top
+                                    topMargin: 4
+                                }
+                                text: root.logo
+                                color: root.accent
+                                opacity: 0.5
+                                font.family: root.fontFamily
+                                font.pixelSize: root.logoSize
+                                lineHeight: 1.0
+                                textFormat: Text.PlainText
+                            }
+
+                            Column {
+                                id: paneColumn
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: root.railWidth + 1
+                                    right: parent.right
+                                    rightMargin: logoBlock.visible ? root.logoWidth : 0
+                                    top: parent.top
+                                    topMargin: 5
+                                }
+
+                                Item {
+                                    visible: root.currentRows.length === 0
+                                    width: paneColumn.width
+                                    height: visible ? 20 : 0
+
+                                    Text {
+                                        anchors {
+                                            left: parent.left
+                                            leftMargin: 12
+                                            verticalCenter: parent.verticalCenter
+                                        }
+                                        text: paneProbe.running ? "reading\u2026"
+                                                                : "no readings"
+                                        color: root.fgDim
+                                        font.family: root.fontFamily
+                                        font.pixelSize: root.fontSize - 2
+                                    }
+                                }
+
+                                Repeater {
+                                    model: root.currentRows
+
+                                    Item {
+                                        required property var modelData
+                                        width: paneColumn.width
+                                        height: 20
+
+                                        Text {
+                                            anchors {
+                                                left: parent.left
+                                                leftMargin: 12
+                                                verticalCenter: parent.verticalCenter
+                                            }
+                                            width: root.keyWidth
+                                            elide: Text.ElideRight
+                                            text: modelData.k
+                                            color: root.fgDim
+                                            font.family: root.fontFamily
+                                            font.pixelSize: root.fontSize - 2
+                                        }
+
+                                        Text {
+                                            anchors {
+                                                left: parent.left
+                                                leftMargin: 12 + root.keyWidth
+                                                right: parent.right
+                                                rightMargin: 12
+                                                verticalCenter: parent.verticalCenter
+                                            }
+                                            elide: Text.ElideRight
+                                            text: modelData.v
+                                            color: root.white
+                                            font.family: root.fontFamily
+                                            font.pixelSize: root.fontSize - 1
+                                        }
+                                    }
+                                }
+
+                                Item { width: 1; height: 6 }
+
+                                Item { width: 1; height: 6 }
+
+                                Flow {
+                                    x: 12
+                                    width: parent.width - 24
+                                    spacing: 5
+
+                                    Repeater {
+                                        model: root.currentPane.apps
+
+                                        Rectangle {
+                                            required property var modelData
+
+                                            width: appLabel.implicitWidth + 16
+                                            height: 21
+                                            color: "transparent"
+                                            border.width: 1
+                                            border.color: appHover.containsMouse
+                                                        ? root.accent : root.fgFaint
+                                            radius: 0
+
+                                            Text {
+                                                id: appLabel
+                                                anchors.centerIn: parent
+                                                text: modelData.label
+                                                color: appHover.containsMouse
+                                                     ? root.accent : root.fg
+                                                font.family: root.fontFamily
+                                                font.pixelSize: root.fontSize - 2
+                                            }
+
+                                            MouseArea {
+                                                id: appHover
+                                                anchors.fill: parent
+                                                hoverEnabled: true
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: {
+                                                    if (modelData.act)
+                                                        modelData.act();
+                                                    if (!modelData.stay)
+                                                        root.menuOpen = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Item {
+                            width: parent.width
+                            height: 24
+
+                            Row {
+                                anchors {
+                                    right: parent.right
+                                    rightMargin: 12
+                                    verticalCenter: parent.verticalCenter
+                                }
+                                spacing: 4
+
+                                Repeater {
+                                    model: root.menuActions
+
+                                    Rectangle {
+                                        required property var modelData
+
+                                        width: actLabel.implicitWidth + 16
+                                        height: 20
+                                        color: "transparent"
+
+                                        Text {
+                                            id: actLabel
+                                            anchors.centerIn: parent
+                                            text: modelData.label
+                                            color: actHover.containsMouse
+                                                 ? root.accent : root.fgDim
+                                            font.family: root.fontFamily
+                                            font.pixelSize: root.fontSize - 2
+                                        }
+
+                                        MouseArea {
+                                            id: actHover
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                root.menuOpen = false;
+                                                if (modelData.act)
+                                                    modelData.act();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    property string menuScreen: ""
 }

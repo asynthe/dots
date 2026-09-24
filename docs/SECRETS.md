@@ -19,22 +19,27 @@ hermes:
 ```
 
 Grouping by concern is what keeps one file readable as it grows. A second login
-is a new leaf under `users:` plus one secret declaration — no restructuring.
+is a new leaf under `users:` and an entry in `auth.nix` — no secret to declare
+by hand and nothing to restructure. `~/git/flakes` uses the same tree, so a
+`users:` leaf means the same thing in both repos.
 
 ## Where the tree touches it
 
 | file | what it declares |
 | --- | --- |
 | `.sops.yaml` | creation rule → the age recipient |
-| `nix/nixos/security.nix` | the `sops` aspect: `defaultSopsFile`, `sys.sops.ageKeyFile`, `user-password` |
+| `nix/nixos/security.nix` | the `sops` aspect: `defaultSopsFile`, `sys.sops.ageKeyFile`, and root's optional hash |
+| `nix/nixos/auth.nix` | the `auth` aspect: one `password-<name>` secret per account in `auth.nix`, `neededForUsers` |
 | `nix/nixos/ai.nix` | the `hermes` aspect: one secret per `sys.hermes.env` entry, plus the `hermes-env` template |
 | `nix/nixos/impermanence.nix` | persists `/etc/ssh` host keys, which sops-nix can also use as an identity |
 
-`sops` itself is in the import list of both `nix/hosts/p1` and `nix/hosts/sarten`.
+`sops` and `auth` are both in `nix/hosts/p1`'s import list, and `auth` needs
+`sops`: the account it creates has nowhere to read its hash from otherwise. Who
+those accounts are is [AUTH.md](AUTH.md).
 
 ## Two decrypt paths
 
-`neededForUsers = true` (the user password) decrypts into
+`neededForUsers = true` (every `password-<name>`) decrypts into
 `/run/secrets-for-users` during the `users` activation step, early enough to set
 `hashedPasswordFile`. Everything else lands in `/run/secrets`, and rendered
 templates in `/run/secrets/rendered`. Both are tmpfs — nothing decrypted is
@@ -56,13 +61,17 @@ key added to `.sops.yaml` and the file re-encrypted with
 `sops updatekeys secrets/secrets.yaml` — until then the host can build but not
 decrypt.
 
-`sarten` instead reuses the identity `p1` already has: same private key, copied
-to the path `sys.sops.ageKeyFile` names, no new recipient and no re-encryption.
-That is one key to rotate rather than two, at the cost of one machine's
-compromise being both machines'. For a host installed by nixos-anywhere the copy
-is a `--extra-files` staging directory — the full sequence is in
-[SARTEN.md](SARTEN.md).
+The alternative is to reuse the identity `p1` already has: same private key,
+copied to the path `sys.sops.ageKeyFile` names, no new recipient and no
+re-encryption. That is one key to rotate rather than two, at the cost of one
+machine's compromise being both machines'. For a host installed by
+nixos-anywhere the copy is a `--extra-files` staging directory — the full
+sequence is in [SARTEN.md](SARTEN.md).
 
-Either way the identity has to be in place *before* the first activation:
-`user-password` is `neededForUsers`, and sops-nix fails the activation on a
+Either way the identity has to be in place *before* the first activation: the
+password secrets are `neededForUsers`, and sops-nix fails the activation on a
 secret it cannot decrypt.
+
+`~/git/flakes` is a separate file with its own recipients — `sarten`'s own key
+plus this laptop's, so secrets can be edited from here. Nothing is shared
+between the two `secrets.yaml`; what is shared is their shape.

@@ -19,12 +19,11 @@
 
     flake.modules.nixos.wine = { pkgs, ... }:
     let
-        # Pinned: 11.16 breaks MusicBee. First, so its `wine` wins over waylandFull.
         wine-staging = inputs.nixpkgs-wine.legacyPackages.${pkgs.system}.wineWow64Packages.staging;
     in {
         environment.systemPackages = [ wine-staging ] ++ (with pkgs; [
             winetricks
-            mono # .NET
+            mono
             wineWow64Packages.waylandFull
             wineWow64Packages.fonts
         ]);
@@ -47,7 +46,6 @@
         ];
     };
 
-    # Only useful with `star-citizen`.
     flake.modules.nixos.star-citizen-cache = { ... }: {
         nix.settings = {
             substituters        = [ "https://nix-citizen.cachix.org" ];
@@ -81,25 +79,22 @@
         ];
     };
 
-    # ─────────────── Emulators ───────────────
-
-    flake.modules.nixos.eden = { pkgs, ... }: {          # switch
+    flake.modules.nixos.eden = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [ eden ];
     };
 
-    flake.modules.nixos.ryubing = { pkgs, ... }: {       # switch
+    flake.modules.nixos.ryubing = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [ ryubing ];
     };
 
-    flake.modules.nixos.pcsx2 = { pkgs, ... }: {         # ps2
+    flake.modules.nixos.pcsx2 = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [ pcsx2 ];
     };
 
-    flake.modules.nixos.xenia = { pkgs, ... }: {         # x360
+    flake.modules.nixos.xenia = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [ xenia-canary ];
     };
 
-    # ps3 -- upstream binary, x86_64-linux only
     flake.modules.nixos.rpcs3 = { pkgs, ... }:
     let
         rpcs3-bin = pkgs.appimageTools.wrapType2 {
@@ -118,7 +113,6 @@
         environment.systemPackages = [ rpcs3-bin ];
     };
 
-    # Dropped from nixpkgs 2025-10-23 (freeimage CVEs); packaged from the AppImage.
     flake.modules.nixos.emulation-station = { pkgs, ... }:
     let
         emulation-station-bin = pkgs.appimageTools.wrapType2 {

@@ -1,0 +1,2 @@
+#!/bin/sh
+WINEPREFIX="$HOME/wine/prefix/MusicBee" wine "$HOME/wine/prefix/MusicBee/drive_c/Program Files (x86)/MusicBee/MusicBee.exe"

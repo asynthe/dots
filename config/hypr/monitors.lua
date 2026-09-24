@@ -5,25 +5,11 @@ hl.config({
 	},
 })
 
--- Sticky: set true once the panel is explicitly turned off, so a hotplug
--- (a TV dropping its link on standby) can't resurrect it via apply_monitors().
 local disable_internal = false
--- "left": laptop left | "right": laptop right
 local side = "left"
 local laptop_bare = "AU Optronics 0xB0AE"
 local laptop = "desc:" .. laptop_bare
 local laptop_w = 1920
-
--- @@@ 5655SMART TV 0x00011011
--- HP Inc. HP P24v G4 1CR10315PN
--- Hisense Electric Co. Ltd. HISENSE 0x00000001
--- LG Electronics LG TV 0x01010101
--- Nreal MGMG2710C
--- Panasonic Industry Company Panasonic-TV 0x01010101
--- SANTAK CORP. S2-TEK TV SN-000000001
--- Samsung Electric Company S34CG50 HNBYC00076
--- Samsung Electric Company SAMSUNG 0x01000E00
--- Sony SONY TV 0x01010101
 
 local known_externals = {
 	{
@@ -51,7 +37,7 @@ local known_externals = {
 		match = "LG TV",
 		output = "desc: LG Electronics LG TV 0x01010101",
 		mode = "1920x1080@60",
-		scale = "1.3",
+		scale = "1.2",
 		width = 1920,
 	},
 	{
@@ -82,13 +68,7 @@ local known_externals = {
 		scale = "1",
 		width = 3440,
 	},
-	-- Samsung Electric Company SAMSUNG 0x01000E00
 	-- {
-	--     match  = "0x01000E00",
-	--     output = "desc: Samsung Electric Company SAMSUNG 0x01000E00",
-	--     mode   = "1920x1080@60",
-	--     scale  = "1",
-	--     width  = 1920,
 	-- },
 	{
 		match = "SONY TV",
@@ -108,10 +88,7 @@ local function detect_external()
 	return nil
 end
 
--- Workspace 1 goes to whichever screen is on the left; the laptop keeps one
--- workspace, the external takes the rest. Never torn down on a disconnect: a
--- monitor that drops its DP link in standby needs the rules already in place
--- when it reconnects, since Hyprland relocates workspaces before Lua runs.
+local laptop_ws_count = 2
 local ws_rules = {}
 local ws_pinned = nil
 
@@ -126,12 +103,41 @@ local function pin_workspaces(ext_desc)
 	ws_pinned = ext_desc
 
 	local ext = "desc:" .. ext_desc
-	local laptop_ws = side == "left" and 1 or 2
 	for i = 1, 10 do
 		ws_rules[i] = hl.workspace_rule({
 			workspace = tostring(i),
-			monitor = i == laptop_ws and laptop or ext,
+			monitor = i <= laptop_ws_count and laptop or ext,
 		})
+	end
+end
+
+local function laptop_active()
+	for _, mon in ipairs(hl.get_monitors()) do
+		if mon.description:find(laptop_bare, 1, true) then
+			return true
+		end
+	end
+	return false
+end
+
+local function rehome_workspaces()
+	local ext_desc = detect_external()
+	if not ext_desc or not laptop_active() then
+		return
+	end
+	local ext = "desc:" .. ext_desc
+	for _, ws in ipairs(hl.get_workspaces()) do
+		local id = ws.id
+		if id >= 1 and id <= 10 then
+			local want_laptop = id <= laptop_ws_count
+			local on_laptop = ws.monitor.description:find(laptop_bare, 1, true) ~= nil
+			if want_laptop ~= on_laptop then
+				hl.dispatch(hl.dsp.workspace.move({
+					workspace = id,
+					monitor = want_laptop and laptop or ext,
+				}))
+			end
+		end
 	end
 end
 
@@ -174,19 +180,20 @@ local function apply_monitors(force_disable_internal)
 end
 
 apply_monitors()
--- Delay: a monitor restoring its link while the panel is still dpms-off will
--- otherwise claim the internal's crtc slot before we reconfigure.
+-- Also on a plain `hyprctl reload`: the rules above only bind a workspace as it
+-- is created, so anything already open stays where it is without this.
+rehome_workspaces()
 hl.on("monitor.added", function()
 	hl.timer(function()
 		apply_monitors()
 		hl.exec_cmd("hyprctl dispatch 'hl.dsp.dpms(\"on\")'")
+		rehome_workspaces()
 	end, { timeout = 500, type = "oneshot" })
 end)
 hl.on("monitor.removed", function()
 	apply_monitors()
 end)
 
--- Lid switch
 hl.bind("switch:on:Lid Switch", function()
 	if detect_external() then
 		apply_monitors(true)
@@ -197,19 +204,12 @@ hl.bind("switch:off:Lid Switch", function()
 	hl.timer(function()
 		hl.monitor({ output = laptop, disabled = false })
 		apply_monitors(false)
+		rehome_workspaces()
 	end, { timeout = 500, type = "oneshot" })
 end, { locked = true })
 
--- Toggle laptop screen; checks live state so lid switch can't desync it
 local function toggle_laptop_screen()
-	local active = false
-	for _, mon in ipairs(hl.get_monitors()) do
-		if mon.description:find(laptop_bare, 1, true) then
-			active = true
-			break
-		end
-	end
-	if active then
+	if laptop_active() then
 		hl.monitor({ output = laptop, disabled = true })
 		hl.timer(function()
 			apply_monitors(true)
@@ -217,6 +217,7 @@ local function toggle_laptop_screen()
 	else
 		hl.monitor({ output = laptop, disabled = false })
 		apply_monitors(false)
+		rehome_workspaces()
 	end
 end
 

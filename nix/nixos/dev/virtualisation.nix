@@ -2,7 +2,6 @@
 {
     flake.modules.nixos.virtualisation = { config, lib, pkgs, ... }: {
 
-        # libvirt / QEMU
         networking.firewall.trustedInterfaces = [
             "virbr0"
             "virbr1"
@@ -10,7 +9,7 @@
         programs.dconf.enable = true;
         programs.virt-manager.enable = true;
         services.spice-vdagentd.enable = true;
-        users.users.${config.sys.user}.extraGroups = [ "libvirtd" ];
+        users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "libvirtd" ]; });
         virtualisation.spiceUSBRedirection.enable = true;
         virtualisation.libvirtd = {
             enable = true;
@@ -42,7 +41,6 @@
             ${config.sys.impermanence.folder}.directories = [
                 "/var/lib/libvirt"
 
-                # fix for swtpm permissions
                 {
                     directory = "/var/lib/swtpm";
                     user = "tss";
@@ -72,7 +70,6 @@
         ];
     };
 
-    # WARNING binds the GPU to vfio-pci. Import alongside `virtualisation`.
     flake.modules.nixos.vfio = { ... }: {
         boot.extraModprobeConfig = "options vfio-pci ids=10de:28b8";
         boot.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];

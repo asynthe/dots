@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Usage: wallpaper.sh | wallpaper.sh --set FILE [FADE]   -- see docs/WALLPAPER.md
 set -uo pipefail
 
 STATE="${XDG_CACHE_HOME:-$HOME/.cache}/quickshell/current-wallpaper"
-DEFAULT="$HOME/git/dots/wallpaper/minimal_dark_dots.jpg"
+DEFAULT="$HOME/git/dots/assets/backgrounds/minimal_dark_dots.jpg"
 
 if [[ ${1:-} == --set ]]; then
     f=${2:?--set needs a file}
@@ -14,7 +13,6 @@ if [[ ${1:-} == --set ]]; then
     exit 0
 fi
 
-# No argument: restore the last pick at login, or fall back to the default.
 f=$(cat "$STATE" 2>/dev/null)
 [[ -f ${f:-} ]] || f=$DEFAULT
 [[ -f $f ]] || exit 0

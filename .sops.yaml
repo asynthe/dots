@@ -1,6 +1,10 @@
-# SOPS config for this system's secrets (dots/secrets/secrets.yaml).
-# Same age identity as infra-lach's secrets — one key, multiple repos.
-# See infra-lach/docs/secrets-sops.md for the add/remove-recipient process.
+# Secrets for this repo's hosts, all in secrets/secrets.yaml.
+# Same age identity as ~/git/flakes; each repo encrypts its own file.
+keys:
+  - &p1 age1hp0m7d3rp7faekqftkjfqy600w38h2mtrhele0unwupnzr0yx3gs6xvvy7   # ~/git/auth/age/keys.txt
+
 creation_rules:
   - path_regex: secrets/.*\.(ya?ml|json|env)$
-    age: age1hp0m7d3rp7faekqftkjfqy600w38h2mtrhele0unwupnzr0yx3gs6xvvy7
+    key_groups:
+      - age:
+          - *p1

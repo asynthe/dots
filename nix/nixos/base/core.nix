@@ -1,9 +1,7 @@
-# Imported by every host: nix daemon settings, the primary user, the nixpkgs instance.
 { inputs, ... }:
 {
-    flake.modules.nixos.core = { config, pkgs, ... }: {
+    flake.modules.nixos.core = { config, lib, pkgs, ... }: {
 
-        # Always available, so aspects can declare persistence unconditionally.
         imports = [ inputs.impermanence.nixosModules.impermanence ];
 
         nixpkgs.config = {
@@ -11,7 +9,6 @@
             android_sdk.accept_license = true;
         };
 
-        # flannel 0.28.6 has a wrong hash in nixpkgs; actual hash from upstream
         nixpkgs.overlays = [
             (final: prev: {
                 flannel = prev.flannel.overrideAttrs (old: {
@@ -28,13 +25,10 @@
         i18n.defaultLocale = "en_US.UTF-8";
         services.fstrim.enable = true;
 
-        # Shell
         programs.zsh.enable = true;
-        users.users.${config.sys.user} = {
-            shell = pkgs.zsh;
-            isNormalUser = true;
-            extraGroups = [ "audio" "networkmanager" "input" "wheel" ];
-        };
+        environment.localBinInPath = true;
+        users.users = lib.genAttrs config.sys.admins
+            (_: { extraGroups = [ "audio" "networkmanager" ]; });
 
         security.sudo.extraConfig = ''
             # Ask for password every 2 hours

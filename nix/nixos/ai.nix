@@ -68,7 +68,7 @@
                 backend.waitFor = lib.mkIf config.sys.hermes.waitForHost "hostname";
             };
 
-            users.users.${config.sys.user}.extraGroups = [ "hermes" ];
+            users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "hermes" ]; });
 
             environment.persistence.${config.sys.impermanence.folder}.directories =
                 lib.mkIf config.sys.impermanence.enable [

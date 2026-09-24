@@ -12,13 +12,31 @@ The previous non-dendritic tree has been removed; it lives in history at
 
 ```
 flake.nix                     the only entry point: mkFlake (import-tree ./nix)
+auth.nix                      who may log in, and with which key -- data, not a module
 nix/
   flake/
     registry.nix              turns on flake.modules.<class>.<name>
     hosts.nix                 every `host-*` aspect becomes a nixosConfiguration
-  nixos/                      the aspect library — one domain per file
+    checks.nix                `nix flake check` builds every host
+    devshell.nix              sops, age, ssh-to-age, nom
+  nixos/
+    options.nix               values that differ between machines
+    base/                     what any machine gets: core cli auth security ssh net boot
+    profiles/                 role bundles; a host names one instead of a dozen aspects
+    desktop/ dev/ hardware/ net/   the rest of the aspect library, one domain per file
   hosts/p1/                   the Thinkpad
+assets/                       images the config points at
+secrets/                      sops-encrypted, see .sops.yaml
 ```
+
+Same shape as `~/git/flakes`, so a file is in the same place in both repos.
+`profile-laptop` is the layer that pays off at the second machine: it bundles
+what any of mine would want — core, cli, auth, sops, boot, network, ssh, the
+editor — and `nix/hosts/p1` then lists only what makes it *this* laptop.
+
+`auth.nix` is the one `.nix` file outside `nix/`, and that is deliberate:
+import-tree would otherwise pick it up as a flake-parts module. The aspect that
+reads it is `nix/nixos/base/auth.nix` — see [AUTH.md](AUTH.md).
 
 ## The mental model
 

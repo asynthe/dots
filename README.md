@@ -36,16 +36,25 @@ git clone https://github.com/asynthe/dots.git
 *Docs*
 - [Managing this config](docs/DENDRITIC.md) — the dendritic pattern: every `.nix` under `nix/` is a flake-parts module, auto-imported, no `imports = [ ... ]` lists.
 - [Neovim keybinds](docs/KEYBINDS.md) — the editor layer. Hyprland and Ghostty are in the table below.
+- [Shell functions](docs/ZSH.md) — what each function in `config/zsh/.zsh_functions` does, and the reasoning that used to sit in its header.
+- [Contexts](docs/SESSION.md) — the `ALT + SHIFT + N` picker: four things in flight, one laid out at a time as a tiled workspace with per-window widths.
 - [Wallpapers](docs/WALLPAPER.md) — the `ALT + W` picker: pick a still, awww sets it. No rotation, stills only.
-- [Tide Island](docs/TIDE.md) — the top-edge shell: why it is a CMake build and not a quickshell config, and why mako stays.
-- [Bar surface](docs/SURFACE.md) — tint, blur and the bottom edge, and why the three settings are coupled.
+- [`hyprland.lua`](docs/HYPRLAND.md) — the compositor config: plugins, decoration, window and layer rules.
+- [Monitors](docs/MONITORS.md) — outputs, which workspaces live on which screen, and surviving a hotplug.
+- [bar](docs/BAR.md) — the top-edge strip: signal bars and the address, and why the network code is a shell script and not `Quickshell.Networking`.
+- [Bar surface](docs/SURFACE.md) — why the bar is opaque black, which layer gets blurred and which does not, and what the old translucent balancing act was.
 - [`hyprglass` aspect](docs/HYPRGLASS.md) — liquid-glass decorations: building a Hyprland plugin on NixOS without hyprpm, and why layer glass is off.
+- [Layout](docs/LAYOUT.md) — what `p1` is: disks, subvolumes, the rollback, and the two kernel workarounds.
+- [Aspect notes](docs/ASPECTS.md) — why the non-obvious aspects are written the way they are.
+- [Accounts](docs/AUTH.md) — `auth.nix`: who may log in, with which key, and why no aspect names a user.
 - [Secrets](docs/SECRETS.md) — one sops file, nested keys, and the two decrypt paths.
 - [`sarten` host](docs/SARTEN.md) — the ProLiant: adopted in place, disk layout, and the rebuild runbook.
 - [`hermes` aspect](docs/HERMES.md) — Hermes Agent, shared by `p1` and `sarten`.
 - [SOC lab](docs/LAB.md) — the plan for `sarten` as a lab: what the hardware can carry, the Windows gap, and the roadmap.
 - [Wazuh](docs/WAZUH.md) — the SIEM on `sarten`: why it is a compose file outside the flake, the 4.14.7 pin, and what it can actually see.
 - [The media stack](docs/MEDIA.md) — jellyfin, the arrs and qbittorrent: why downloads live under the media root, and why grouping movies by director cannot come from Radarr.
+- [Databases](docs/DATABASE.md) — the SQL kit: duckdb to start, a loopback Postgres to grow into, and `vim-dadbod` so queries stay in a normal buffer.
+- [Firefox](docs/FIREFOX.md) — two scripts on perpendicular axes: wipe by container sparing history, or forget by host taking it.
 - [Termux](docs/TERMUX.md) — phone-side setup.
 
 ### `sarten`
@@ -108,7 +117,8 @@ direction key also accepts the matching arrow key.
 | `Alt+B`            | Browser (firefox)               |
 | `Alt+V`            | Toggle pavucontrol              |
 | `Alt+W`            | Wallpaper picker                |
-| `Alt+Shift+B`      | Pin the island open / auto-hide |
+| `Alt+Shift+B`      | Show / hide bar                 |
+| `Alt+Shift+N`      | Context picker (session.sh)     |
 | `Alt+Shift+C`      | Close window                    |
 | `Alt+Shift+Z`      | Toggle the laptop screen        |
 | `Alt+Shift+O`      | Shutdown menu                   |

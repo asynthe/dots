@@ -1,15 +1,4 @@
 #! /usr/bin/env bash
-#
-# First thing to run on a new machine. Clones this repo to ~/git/dots, points
-# ~/CLAUDE.md at the $HOME layout doc, then hands off to home_setup.sh.
-#
-#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bootstrap.sh | bash
-#   curl -fsSL https://gitlab.com/asynthe/dots/-/raw/main/scripts/bootstrap.sh | bash -s -- --apply
-#
-# Without --apply, home_setup.sh only prints what it would do. Safe to re-run:
-# an existing clone is pulled instead of re-cloned.
-#
-# No git yet (fresh NixOS)? Prefix with: nix-shell -p git --run '...'
 
 set -euo pipefail
 
@@ -27,9 +16,6 @@ command -v git >/dev/null || {
     exit 1
 }
 
-# ── clone
-# Over https, because a new machine has no ssh key registered anywhere yet.
-# The remotes are switched to ssh afterwards so pushing works once it does.
 echo "── dots"
 mkdir -p "$HOME/git"
 if [ -d "$DOTS/.git" ]; then
@@ -37,7 +23,6 @@ if [ -d "$DOTS/.git" ]; then
 else
     note "clone -> $DOTS"
     git clone "$HTTPS" "$DOTS"
-    # origin fetches from gitlab and pushes to both, gitlab/github for one-offs
     git -C "$DOTS" remote set-url origin "$GITLAB"
     git -C "$DOTS" remote set-url --add --push origin "$GITLAB"
     git -C "$DOTS" remote set-url --add --push origin "$GITHUB"
@@ -45,9 +30,6 @@ else
     git -C "$DOTS" remote add github "$GITHUB"
 fi
 
-# ── CLAUDE.md
-# Done here rather than left to home_setup.sh, so an agent opened on this
-# machine knows the layout even before --apply has been run.
 echo "── CLAUDE.md"
 doc="$DOTS/docs/HOME_STRUCTURE.md"
 if [ -L "$HOME/CLAUDE.md" ] || [ ! -e "$HOME/CLAUDE.md" ]; then
@@ -57,6 +39,5 @@ else
     warn "~/CLAUDE.md is a real file — left alone; merge it into ${doc/#$HOME/\~} and delete it"
 fi
 
-# ── the rest
 echo
 exec "$DOTS/scripts/home_setup.sh" "$@"

@@ -1,7 +1,7 @@
 { ... }:
 {
     flake.modules.nixos.intel-gpu = { pkgs, ... }: {
-        services.xserver.videoDrivers = [ "modesetting" ]; # "intel" -> for older hw
+        services.xserver.videoDrivers = [ "modesetting" ];
         hardware.cpu.intel.updateMicrocode = true;
 
         hardware.cpu.intel.npu.enable = true;
@@ -15,7 +15,7 @@
         };
 
         environment.sessionVariables = {
-            LIBVA_DRIVER_NAME = "iHD"; # Intel VA-API via intel-media-driver
+            LIBVA_DRIVER_NAME = "iHD";
         };
 
         environment.systemPackages = with pkgs; [
@@ -24,7 +24,6 @@
         ];
     };
 
-    # Offload-mode discrete GPU; needs `intel-gpu` and both bus IDs set on the host.
     flake.modules.nixos.nvidia-prime = { config, pkgs, ... }: {
         services.xserver.videoDrivers = [ "nvidia" ];
         hardware.graphics = {

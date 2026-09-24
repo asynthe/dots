@@ -17,13 +17,32 @@
             ungoogled-chromium
             imv
             mpv
+            nemo-with-extensions
             networkmanagerapplet
             pavucontrol
             signal-desktop
-            tidal-hifi
             webcord
             zathura sioyek
             poppler-utils
         ];
+
+        services.gvfs.enable = true;
+        services.tumbler.enable = true;
+
+        xdg.mime.defaultApplications."inode/directory" = "nemo.desktop";
+
+        programs.dconf.profiles.user.databases = [{
+            settings."org/cinnamon/desktop/default-applications/terminal" = {
+                exec = "ghostty";
+                exec-arg = "-e";
+            };
+            settings."org/gnome/desktop/interface" = {
+                color-scheme = "prefer-dark";
+                gtk-theme = "Adwaita-dark";
+                font-name = "JetBrainsMono Nerd Font 10";
+                monospace-font-name = "JetBrainsMono Nerd Font 14";
+                document-font-name = "Noto Sans 14";
+            };
+        }];
     };
 }

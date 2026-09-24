@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# Grow the cursor while it is shaken, so a lost pointer can be found.
-# Hyprland has no native option for this (0.56). Polls cursorpos over the IPC
-# socket (~15us a query) and resizes with setcursor. Started from hyprland.lua.
 import json
 import os
 import signal
@@ -24,7 +21,6 @@ HOLD       = 0.5              # seconds the cursor stays big after the last reve
 SOCK = (f"{os.environ['XDG_RUNTIME_DIR']}/hypr/"
         f"{os.environ['HYPRLAND_INSTANCE_SIGNATURE']}/.socket.sock")
 
-
 def ipc(cmd):
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
         s.connect(SOCK)
@@ -33,7 +29,6 @@ def ipc(cmd):
         while chunk := s.recv(4096):
             out += chunk
     return out.decode()
-
 
 class Axis:
     """Counts direction reversals of strokes long enough to be deliberate."""
@@ -57,13 +52,11 @@ class Axis:
         self.flips = [t for t in self.flips if now - t <= WINDOW]
         return len(self.flips) >= REVERSALS
 
-
 def fullscreen():
     try:
         return json.loads(ipc("j/activewindow") or "{}").get("fullscreen", 0) != 0
     except ValueError:
         return False
-
 
 def main():
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
@@ -91,13 +84,10 @@ def main():
                 ay.feed(y - last[1], now)
             last = (x, y)
 
-            # Fullscreen apps (osu!, games) shake the cursor on purpose.
             if (ax.shaking(now) or ay.shaking(now)) and now >= muted:
                 if fullscreen():
                     muted = now + 1.0
                 else:
-                    # From the last reversal, not now: flips linger in WINDOW
-                    # after the hand stops, which would stretch the hold.
                     shook = max(ax.flips[-1:] + ay.flips[-1:])
                     if not big:
                         ipc(f"setcursor {THEME} {BIG}")
@@ -114,7 +104,6 @@ def main():
                 ipc(f"setcursor {THEME} {BASE}")
             except OSError:
                 pass
-
 
 if __name__ == "__main__":
     main()

@@ -36,7 +36,7 @@ There is **no rotation** — the wallpaper changes only when you pick one. The
 `--set` path writes the file to `~/.cache/quickshell/current-wallpaper`, and the
 bare form reads it back at login so the wallpaper survives a reboot. If that
 file is missing or names something deleted, it falls back to
-`wallpaper/minimal_dark_dots.jpg` — the one wallpaper kept in the repo, so a
+`assets/backgrounds/minimal_dark_dots.jpg` — the one wallpaper kept in the repo, so a
 fresh machine is never blank.
 
 At login `wallpaper.sh` may beat `awww-daemon` to the socket, so the bare form
@@ -81,3 +81,39 @@ Nothing is logged: the scope exits without a journal entry or a coredump.
 Match on the command line. `pgrep -x awww-daemon` never matches: NixOS wraps the
 binary and Linux truncates the process name at 15 characters, so the running
 process is `.awww-daemon-wr` and `-x` silently reports it as absent.
+
+## Notes from the code
+
+`config/quickshell/hyprquickpaper/shell.qml` is a fork of
+[43PR/dotfiles](https://github.com/43PR/dotfiles) (`4b0412f`), itself a rework
+of [iamsurjog/hyprquickpaper](https://github.com/iamsurjog/hyprquickpaper)
+(`d380bee`), where `cache.sh` and the `config.json` keys come from. It needs
+bash, jq, magick, ffmpeg and `~/.config/hypr/wallpaper.sh`, and runs as
+`quickshell -c hyprquickpaper`.
+
+Local changes on top of upstream:
+
+- **Full-width layer anchors.** Upstream sets `implicitWidth: Screen.width`,
+  which picks up the wrong monitor's width on a multi-head setup — a 1920 panel
+  stranded in the middle of the 3440 display. Layer-shell anchors stretch the
+  surface to whichever output it lands on instead.
+- **Opens on the current wallpaper** rather than restarting from the middle of
+  the folder. With no awww daemon running, it falls back to the middle.
+- **Endless scroll.** Rather than a model of `folderModel`, `copies` of the
+  folder are laid end to end starting in the middle one; each tile reads its
+  image from `index % folderModel.count`, so the row repeats seamlessly and the
+  ends sit thousands of tiles away in both directions. ListView only builds the
+  handful of delegates actually on screen.
+- **Selection-centred zoom via `StrictlyEnforceRange`.** Centring is ListView's
+  job: the band is exactly the selected tile's width centred in the viewport, so
+  the selection always sits mid-screen with the row fanning out either side.
+  Doing it by hand meant computing `contentX` from item positions that had not
+  been relaid out for the new tile widths yet — landing half a tile off — and
+  over a strip this long, summing widths in closed form disagrees with
+  ListView's own estimated coordinate space entirely. Dragging is disabled for
+  the same reason: it only fights the centring.
+- **Hover borders.** Hovering moves the border without moving the selection.
+  Sliding the row under a stationary cursor makes Qt deliver both `entered` and
+  `positionChanged` to whatever tile arrives under the pointer, so hover is
+  gated on the cursor actually moving in viewport coordinates.
+- A quick fade, and tile-shaped JPEG thumbnails.

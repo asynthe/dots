@@ -65,9 +65,6 @@ use `Fn` as a modifier at all.
 | `<leader>cd`  | Line diagnostics      |
 | `[d` / `]d`   | Prev / next diagnostic |
 | `[f` / `]f`   | Prev / next function  |
-| `af` / `if`   | Function textobject   |
-| `ac` / `ic`   | Class textobject      |
-| `aa` / `ia`   | Parameter textobject  |
 | `<CR>`        | Expand selection      |
 | `<BS>`        | Shrink selection      |
 
@@ -82,6 +79,18 @@ use `Fn` as a modifier at all.
 | `<leader>gb`  | Blame line          |
 | `<leader>gB`  | Blame buffer        |
 | `<leader>gd`  | Diff this file      |
+
+## Database (`<leader>d`)
+
+| Key           | Action                 |
+| ------------- | ---------------------- |
+| `<leader>du`  | Toggle database drawer |
+| `<leader>df`  | Find query buffer      |
+| `<leader>da`  | Add connection         |
+| `<leader>S`   | Run query (sql buffers)|
+
+`<leader>S` is buffer-local to `sql`; normal mode runs the buffer, visual mode
+runs the selection. See [DATABASE.md](DATABASE.md).
 
 ## Notes (`<leader>n`)
 
@@ -122,6 +131,49 @@ In markdown buffers:
 | `<leader>uc`  | Conceal                |
 | `<leader>ud`  | Diagnostics            |
 | `<leader>uf`  | Format on save         |
+| `<leader>up`  | Motion hints           |
+| `<leader>uP`  | Peek motion hints once |
+
+## Textobjects (mini.ai)
+
+`a` is "around", `i` is "inside". Every one works with any operator: `d`, `c`,
+`y`, `v`, `=`. Available in any parsed buffer, not just LSP ones.
+
+| Key           | Action                 |
+| ------------- | ---------------------- |
+| `af` / `if`   | Function (treesitter)  |
+| `ac` / `ic`   | Class (treesitter)     |
+| `aa` / `ia`   | Parameter (treesitter) |
+| `a(` `a[` `a{` | Bracket pair          |
+| `a"` `a'` `` a` `` | Quoted string     |
+| `at` / `it`   | Tag                    |
+| `aq` / `iq`   | Any quote              |
+| `ab` / `ib`   | Any bracket            |
+| `a?` / `i?`   | Prompt for delimiters  |
+
+`f`, `c` and `a` are routed through treesitter so they mean the same thing they
+did when nvim-treesitter-textobjects owned them. mini.ai maps `a` and `i` as
+operator-pending prefixes, which shadows every other `a*`/`i*` mapping — that
+is why the `select` block is gone from `treesitter.lua` rather than sitting
+there dead.
+
+Counts and directions work: `2if` is the second function inside, `in(` the next
+bracket, `il(` the previous one. `an` / `in` shadow the textobjects Neovim
+0.12 added under the same keys; mini.ai does this on purpose and the version
+here is a superset.
+
+## Surround (mini.surround)
+
+| Key    | Action                                    |
+| ------ | ----------------------------------------- |
+| `sa`   | Add surrounding (visual, or with a motion) |
+| `sd`   | Delete surrounding                        |
+| `sr`   | Replace surrounding                       |
+| `sf` / `sF` | Find surrounding right / left        |
+| `sh`   | Highlight surrounding                     |
+
+`saiw"` quotes a word, `sd"` unquotes it, `sr"'` swaps the quote style. Shadows
+builtin `s`, which was only ever `cl`.
 
 ## Editing
 
@@ -134,6 +186,7 @@ In markdown buffers:
 | `<C-u>`     | Half page up, centred     |
 | `n` / `N`   | Next / prev match, centred |
 | `ga` / `gA` | Align (mini.align)        |
+| `s`         | Surround prefix (mini.surround) |
 
 Press `<leader>?` for buffer-local keys, or `<leader>fm` to search every map.
 

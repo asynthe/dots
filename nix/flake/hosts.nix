@@ -1,4 +1,3 @@
-# A host is an aspect named `host-<name>`; declaring one is the whole registration.
 { config, lib, inputs, ... }:
 let
     prefix = "host-";

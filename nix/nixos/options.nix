@@ -1,11 +1,11 @@
-# The only options this config declares: values that genuinely differ between machines.
 { ... }:
 {
-    flake.modules.nixos.core = { lib, ... }: {
+    flake.modules.nixos.core = { config, lib, ... }: {
         options.sys = {
             user = lib.mkOption {
                 type        = lib.types.str;
-                description = "Primary system user";
+                default     = lib.head config.sys.admins;
+                description = "The seat: which account in auth.nix this machine logs in automatically";
             };
 
             flake = lib.mkOption {

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Taken from:
-# https://stackoverflow.com/questions/9456550/how-can-i-find-the-n-largest-files-in-a-git-repository
-
 git rev-list --objects --all \
 | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
 | sed -n 's/^blob //p' \

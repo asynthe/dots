@@ -24,7 +24,6 @@ https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/
             ];
             files = [
                 "/etc/machine-id"
-                # Stable host identity, and the sops-nix key: must survive or secrets die.
                 "/etc/ssh/ssh_host_ed25519_key"
                 "/etc/ssh/ssh_host_ed25519_key.pub"
                 "/etc/ssh/ssh_host_rsa_key"
@@ -36,7 +35,7 @@ https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/
         boot.initrd.systemd.services.rollback = {
             description = "Rollback BTRFS root subvolume to a blank state";
             wantedBy = [ "initrd.target" ];
-            after = [ "initrd-root-device.target" ]; # https://discourse.nixos.org/t/impermanence-vs-systemd-initrd-w-tpm-unlocking/25167/7
+            after = [ "initrd-root-device.target" ];
             before = [ "sysroot.mount" ];
             unitConfig.DefaultDependencies = false;
             serviceConfig.Type = "oneshot";

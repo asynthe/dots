@@ -13,7 +13,6 @@
             "TS_DEBUG_FIREWALL_MODE=nftables"
         ];
 
-        # Quicker boot
         systemd.network.wait-online.enable = false;
         boot.initrd.systemd.network.wait-online.enable = false;
 
@@ -21,8 +20,6 @@
             lib.mkIf config.sys.impermanence.enable [ "/var/lib/tailscale" ];
     };
 
-    # Mullvad wins the default route and swallows the tailnet; these marks hand tailnet
-    # packets back to tailscale0. https://mullvad.net/en/help/split-tunneling-with-linux-advanced
     flake.modules.nixos.mullvad-tailscale = { ... }: {
         networking.nftables.tables.mullvad-tailscale = {
             family = "inet";
@@ -44,7 +41,6 @@
     };
 
     # TODO Make autostart
-    # End of page https://wiki.nixos.org/wiki/Mullvad_VPN
     flake.modules.nixos.mullvad = { config, lib, ... }: {
         services.mullvad-vpn.enable = true;
         services.mullvad-vpn.gui.enable = true;

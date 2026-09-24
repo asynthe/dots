@@ -1,4 +1,3 @@
-# MDADM RAID0 across both NVMe drives, LUKS2 on top, btrfs inside.
 { inputs, ... }:
 {
     flake.modules.nixos.p1-disko = { ... }:
@@ -26,14 +25,12 @@
 
         boot.loader.efi.efiSysMountPoint = "/efi";
 
-        # Suppress mdadm warning; I don't use this
         boot.swraid.mdadmConf = ''
           MAILADDR=nobody@nowhere
         '';
 
         disko.devices = {
 
-            # First RAID0 Disk
             disk.nvme0 = {
                 type = "disk";
                 device = disk0;
@@ -59,7 +56,6 @@
                 };
             };
 
-            # Second RAID0 Disk
             disk.nvme1 = {
                 type = "disk";
                 device = disk1;
@@ -74,7 +70,6 @@
                 };
             };
 
-            # RAID0 MDADM SETUP
             mdadm.${disk_raid} = {
                 type = "mdadm";
                 level = 0;
@@ -88,7 +83,6 @@
                 content.content.type = "btrfs";
                 content.content.extraArgs = [ "-L" "nixos" "-f" ];
 
-                # Create a blank snapshot when creating system for impermanence.
                 postCreateHook = ''
                     MNTPOINT=$(mktemp -d)
                     mount -t btrfs "/dev/mapper/${disk_encrypted}" "$MNTPOINT"

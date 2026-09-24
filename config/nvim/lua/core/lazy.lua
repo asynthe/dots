@@ -19,7 +19,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  install = { colorscheme = { "gruvbox", "habamax" } },
+  install = { colorscheme = { "github_dark", "habamax" } },
   checker = { enabled = false },
   change_detection = { notify = false },
   ui = { border = "rounded" },

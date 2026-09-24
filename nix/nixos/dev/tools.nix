@@ -13,19 +13,15 @@
         environment.systemPackages = with pkgs; [
             neovim
 
-            # core
             git
             gcc
             nodejs
 
-            # search
             ripgrep
             fd
 
-            # files
             yazi
 
-            # lsp
             nixd
             bash-language-server
             pyright
@@ -37,17 +33,14 @@
             vscode-langservers-extracted
             yaml-language-server
 
-            # formatters
             stylua
             nixfmt
             ruff
             shfmt
             prettierd
 
-            # clipboard
             wl-clipboard
 
-            # images
             imagemagick
         ];
     };
@@ -58,7 +51,6 @@
         ];
     };
 
-    # Drives ~/git/flakes: `deploy .#<host>`, and ssh-to-age for per-host sops keys.
     flake.modules.nixos.deploy-rs = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             deploy-rs

@@ -1,57 +1,46 @@
-# Thinkpad P1 Gen 7, the primary laptop. Declaring `host-p1` is the whole registration.
 { config, ... }:
 {
     flake.modules.nixos.host-p1 = { pkgs, ... }: {
 
         imports = with config.flake.modules.nixos; [
-            core cli
+            profile-laptop
             p1-hardware p1-disko
 
-            # ─────────────── System ───────────────
-            boot boot-silent
             impermanence
             laptop
             audio bluetooth colord controller android
             intel-gpu nvidia-prime
             firmware fingerprint tpm
-            gpg pass sops
 
-            # ─────────────── Network ───────────────
-            network tailscale mullvad mullvad-tailscale
-            ssh syncthing
+            tailscale mullvad mullvad-tailscale
+            syncthing share
             net-tools soc-tools pentest
             wazuh-syslog
 
-            # ─────────────── Desktop ───────────────
             hyprland hyprglass autologin
-            quickshell quickshell-tide-island
-            terminals desktop-apps
+            quickshell
+            terminals desktop-apps firefox-clean
             fonts theme xdg ime
 
-            # ─────────────── Dev ───────────────
-            git neovim
             python javascript
+            database database-gui postgres-local
             terraform vscodium
             web-dev work
             deploy-rs
             virtualisation
 
-            # ─────────────── AI ───────────────
             claude-code opencode hermes
 
-            # ─────────────── Gaming ───────────────
             steam wine lutris
             osu-lazer stepmania
             star-citizen star-citizen-cache
             eden ryubing pcsx2 xenia emulation-station
             uzdoom
 
-            # ─────────────── Apps ───────────────
-            atuin flatpak gimp kiwix monero qbittorrent
-            irc music tectonic typst nh
+            flatpak gimp kiwix monero qbittorrent
+            irc music tectonic typst
         ];
 
-        # ─────────────── Identity ───────────────
         system.nixos.label = "p1";
         system.name = "p1";
         networking.hostName = "p1";
@@ -63,16 +52,27 @@
 
         sys.impermanence.folder = "/persist";
 
+        sys.share.mounts = {
+            "/home/kazu/music"   = "/home/meow/archive/media/music";
+            "/home/kazu/anime"   = "/home/meow/archive/media/anime";
+            "/home/kazu/book"    = "/home/meow/archive/media/book";
+            "/home/kazu/movies"  = "/home/meow/archive/media/movies";
+            "/home/kazu/series"  = "/home/meow/archive/media/series";
+            "/home/kazu/youtube" = "/home/meow/archive/media/youtube";
+            "/home/kazu/arcade"  = "/home/meow/archive/arcade";
+            "/home/kazu/games"   = "/home/meow/archive/games";
+            "/home/kazu/roms"    = "/home/meow/archive/roms";
+            "/home/kazu/windows" = "/home/meow/archive/windows";
+        };
+
         sys.gpu.intelBusId  = "PCI:0:2:0";
         sys.gpu.nvidiaBusId = "PCI:1:0:0";
 
-        sys.ssh.authorizedKeys = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDnUPjUAi2Red+yEOocv3LorVYbA3VHTI6z4QjGX+9T s24"
-        ];
-
-        # ─────────────── Kernel ───────────────
-        boot.kernelPackages = pkgs.linuxPackages_latest; # pkgs.linuxPackages_zen;
+        boot.kernelPackages = pkgs.linuxPackages_latest;
         boot.supportedFilesystems = [ "btrfs" "vfat" ];
-        boot.kernelParams = [ "i915.enable_psr=0" ]; # works around internal panel blanking bug
+        boot.kernelParams = [
+            "i915.enable_psr=0"
+            "video=DP-1:d"
+        ];
     };
 }

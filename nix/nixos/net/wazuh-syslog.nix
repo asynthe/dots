@@ -1,5 +1,3 @@
-# Ships this host's journal to the Wazuh manager's syslog listener. The manager
-# itself lives in the fleet flake (~/git/flakes) on sarten; this is only the client.
 { ... }:
 {
     flake.modules.nixos.wazuh-syslog = { config, lib, ... }: {
@@ -21,10 +19,8 @@
             services.rsyslogd = {
                 enable = true;
 
-                # journald stays the log store; this instance only forwards.
                 defaultConfig = "";
 
-                # UDP because that is the only 514 the compose file publishes.
                 extraConfig = ''
                     module(load="imjournal" StateFile="imjournal.state")
 

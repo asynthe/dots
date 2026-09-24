@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Cover preview for the `book` fzf picker (see $ZDOTDIR/.zsh_functions).
-# Renders page 1 of a PDF to a cached PNG and draws it with whatever image
-# protocol the terminal speaks. Falls back to plain text when it can't draw.
 set -uo pipefail
 
 file=${1:-}
@@ -17,7 +14,6 @@ info() {
     grep -E '^(Title|Author|Pages)' | sed 's/  */ /g'
 }
 
-# Non-PDFs get no cover render; just the text card.
 case "${file,,}" in
   *.pdf) ;;
   *) info; exit 0 ;;
@@ -30,7 +26,6 @@ if ! command -v pdftoppm >/dev/null 2>&1; then
   exit 0
 fi
 
-# Cache key includes mtime and size, so a replaced file re-renders.
 cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/book-covers
 mkdir -p "$cache_dir"
 key=$(printf '%s' "$(stat -c '%n %Y %s' -- "$file")" | sha1sum | cut -d' ' -f1)
@@ -54,9 +49,6 @@ if [ "$backend" = auto ]; then
 fi
 
 draw_kitty() {
-  # --unicode-placeholder keeps the image anchored to the preview window as fzf
-  # redraws it. The trailing sed collapses the bare reset line kitty emits,
-  # which fzf would otherwise read as an extra scrolled line.
   local out
   out=$(kitty +kitten icat --clear --transfer-mode=memory --unicode-placeholder \
           --stdin=no --place="${cols}x${lines}@0x0" -- "$cover" 2>/dev/null |

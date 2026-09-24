@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Builds the picker's tile thumbnails. See ~/git/dots/docs/WALLPAPER.md.
 
 CONFIG="$1/config.json"
 
