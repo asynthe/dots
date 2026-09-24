@@ -2,8 +2,9 @@
 
 `auth.nix` at the repo root is the entire user list. It is plain data rather
 than a module: it sits outside `nix/` precisely so import-tree ignores it, and
-`nix/nixos/auth.nix` is the aspect that reads it and turns it into accounts.
-Nothing else in the repo declares a user.
+`nix/nixos/base/auth.nix` is the aspect that reads it and turns it into
+accounts. Nothing else in the repo declares a user, and the file does not move
+under `nix/` — that is what would make it a module.
 
 Same file and same aspect as [`flakes`](https://gitlab.com/asynthe/flakes),
 which is what makes an account portable between the laptop and `sarten` — copy

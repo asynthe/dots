@@ -8,6 +8,14 @@ Laptop NixOS config (host `p1`). The server lives in `~/git/flakes`.
   `imports = [ ... ]` lists. One module per concern, named by
   `flake.modules.nixos.<name>`; hosts opt in by listing names. See
   [docs/DENDRITIC.md](docs/DENDRITIC.md).
+- **`auth.nix` at the repo root is the one `.nix` outside `nix/`, and it stays
+  there.** It is the entire account list — who may log in, with which ssh key,
+  and which groups each one gets — so it is plain data, not a module, and being
+  outside `nix/` is what stops import-tree loading it as one. Never move it
+  under `nix/` and never declare a user anywhere else;
+  `nix/nixos/base/auth.nix` is the aspect that reads it and the only thing that
+  turns it into accounts. `~/git/flakes` keeps the same file, which is what
+  makes an account portable between hosts. See [docs/AUTH.md](docs/AUTH.md).
 - 4-space indent in `.nix`. Comments are `#` — `//` is the update operator.
   Keep them rare and at most two lines: a comment earns its place by saying
   *why*, never by restating the code. `TODO`s stay.

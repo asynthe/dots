@@ -29,7 +29,7 @@ by hand and nothing to restructure. `~/git/flakes` uses the same tree, so a
 | --- | --- |
 | `.sops.yaml` | creation rule → the age recipient |
 | `nix/nixos/security.nix` | the `sops` aspect: `defaultSopsFile`, `sys.sops.ageKeyFile`, and root's optional hash |
-| `nix/nixos/auth.nix` | the `auth` aspect: one `password-<name>` secret per account in `auth.nix`, `neededForUsers` |
+| `nix/nixos/base/auth.nix` | the `auth` aspect: one `password-<name>` secret per account in `auth.nix`, `neededForUsers` |
 | `nix/nixos/ai.nix` | the `hermes` aspect: one secret per `sys.hermes.env` entry, plus the `hermes-env` template |
 | `nix/nixos/impermanence.nix` | persists `/etc/ssh` host keys, which sops-nix can also use as an identity |
 
