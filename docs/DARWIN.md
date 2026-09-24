@@ -54,20 +54,16 @@ sshd). Add or revoke a device the same way as on `p1`: edit `auth.nix`,
 `darwin-rebuild switch`.
 
 **Every device in `meow.keys` can already log into `m2`** once that switch
-happens — `s24`'s existing entry works with no new key. The other direction
-(`m2` → `p1`, `p1` → `m2`) needs each host to carry its own identity keypair,
-also listed under `meow.keys`. `m2`'s entry (labelled `macbook`) is its
-existing GitHub/GitLab key, reused on request — `docs/AUTH.md` recommends a
-dedicated key instead ("one private key that both pushes to GitHub and opens
-a machine makes a single theft into both"); this was a deliberate exception,
-not the default going forward. `p1` needs the same treatment before it can
-reach `m2`:
-
-```bash
-# on p1
-ssh-keygen -t ed25519 -C p1 -f ~/.ssh/id_ed25519_host
-cat ~/.ssh/id_ed25519_host.pub   # paste into auth.nix's meow.keys here
-```
+happens — `s24`'s existing entry works with no new key. Both directions
+(`m2` → `p1`, `p1` → `m2`) needed each host to carry its own identity keypair,
+also listed under `meow.keys`. Both entries (`macbook`, `p1`) reuse each host's
+existing GitHub/GitLab key (`~/git/auth/ssh/p1` is also what `p1`'s
+`core.sshCommand` pushes with) rather than a dedicated one — `docs/AUTH.md`
+recommends against that ("one private key that both pushes to GitHub and opens
+a machine makes a single theft into both"); this was a deliberate exception on
+both ends, not the default going forward. `nixos-rebuild switch` on `p1` and
+`darwin-rebuild switch --flake .#m2` on `m2` are what actually turn the keys
+into working ssh in each direction.
 
 ## Homebrew
 
