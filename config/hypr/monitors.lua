@@ -7,9 +7,8 @@ hl.config({
 
 local disable_internal = false
 local side = "left"
--- Workspaces 1..laptop_ws_count live on the internal screen, the rest on the
--- external one. Alt+Shift+X flips between the two entries below; the first is
--- what a fresh session starts on.
+-- Workspaces 1..laptop_ws_count are internal, the rest external. Alt+Shift+X
+-- flips between the entries below; the first is what a fresh session starts on.
 local laptop_ws_splits = { 1 }
 local laptop_ws_count = laptop_ws_splits[1]
 local laptop_bare = "AU Optronics 0xB0AE"

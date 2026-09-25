@@ -1,7 +1,3 @@
-/*
-https://github.com/farberbrodsky/nix/blob/fe6757ddc74535473aaa8b123d86b5d565e18863/system/btrfs-impermanence.nix
-https://github.com/ilkecan/config/blob/1ae5c7b74022deb39d1d33995898fb4c6f8e8302/nix/hosts/mephistopheles/impermanence.nix
-*/
 { ... }:
 {
     flake.modules.nixos.impermanence = { config, ... }:

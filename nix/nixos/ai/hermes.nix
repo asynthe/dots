@@ -1,17 +1,5 @@
 { inputs, ... }:
 {
-    flake.modules.nixos.codex = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.codex ];
-    };
-
-    flake.modules.nixos.claude-code = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.claude-code ];
-    };
-
-    flake.modules.nixos.opencode = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.opencode ];
-    };
-
     flake.modules.nixos.hermes = { config, lib, ... }: {
         imports = [ inputs.hermes-agent.nixosModules.default ];
 

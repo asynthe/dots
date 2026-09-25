@@ -1,9 +1,5 @@
 { ... }:
 {
-    # Same list as nix/nixos/base/cli.nix, minus what doesn't apply here:
-    # ntfs3g/pciutils/inxi/ghostty.terminfo (Linux hardware & Wayland-terminal
-    # specific), imagemagick (already in the neovim aspect) and rsync (already
-    # in core, with its own comment on why).
     flake.modules.darwin.cli = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             bat

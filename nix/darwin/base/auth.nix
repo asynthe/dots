@@ -2,10 +2,6 @@
 let
     people = import ../../../auth.nix;
 in {
-    # Same auth.nix as NixOS reads, same field (`keys`) -- everything else
-    # there (admin, passwordKey, groups) is for creating an account, which
-    # nix-darwin does not do. This aspect only authorizes sys.user's keys for
-    # sshd and turns on Remote Login; it never creates or touches accounts.
     flake.modules.darwin.auth = { config, lib, ... }: {
         config = {
             assertions = [{

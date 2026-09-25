@@ -13,9 +13,8 @@
         programs.zsh.enable = true;
 
         environment.systemPackages = [
-            # macOS ships openrsync, which lacks --info=progress2 -- the `cp`
-            # alias in config/zsh/.zsh_aliases needs a real rsync ahead of it
-            # on PATH.
+            # macOS ships openrsync, which lacks --info=progress2 that the `cp`
+            # alias in config/zsh/.zsh_aliases needs.
             pkgs.rsync
         ];
     };

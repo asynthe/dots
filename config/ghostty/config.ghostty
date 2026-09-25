@@ -32,11 +32,8 @@ font-style-bold-italic = Bold Condensed Oblique
 #font-thicken = true
 
 # Colors and opacity
-# At 0 there is no terminal background at all -- text sits straight on
-# hyprglass. The tint and the readability both moved to the glass:
-# `tint_color` and `dark.adaptive_dim` in hypr/hyprland.lua. `background`
-# below is inert while this is 0, kept as the colour to restore to.
-# See docs/HYPRGLASS.md.
+# At 0 the text sits straight on hyprglass, which owns the tint now;
+# `background` is inert while this is 0, kept as the colour to restore to.
 #background-opacity = 0.48
 background-opacity = 0
 unfocused-split-opacity = 0.85

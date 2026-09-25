@@ -5,6 +5,7 @@ set -euo pipefail
 APPLY=0
 [ "${1:-}" = "--apply" ] && APPLY=1
 
+NOTES="$HOME/git/notes/docs-from-claude/docs-dots"
 DATA="$HOME/.local/share"
 STATE="$HOME/.local/state"
 CONF="$HOME/.config"
@@ -16,7 +17,7 @@ warn() { echo -e "  ${y}[!]${nc} $*"; }
 
 echo "── skeleton"
 # macOS only ever gets git/ -- ben/archive/downloads/desktop/vm/wine are p1's
-# lifecycle tiers, not a Mac's; see docs/HOME_STRUCTURE.md.
+# lifecycle tiers, not a Mac's.
 if [ "$(uname)" = "Darwin" ]; then
     dirs=(git)
 else
@@ -65,7 +66,7 @@ DOTS="$HOME/git/dots"
 
 link() {
     local target="$1" name="$2"
-    [ -e "$target" ] || { warn "missing in repo: ${target#$DOTS/}"; return 0; }
+    [ -e "$target" ] || { warn "missing: ${target#$DOTS/}"; return 0; }
     if [ -L "$name" ]; then
         [ "$(readlink -f "$name")" = "$(readlink -f "$target")" ] && return 0
         note "relink $(basename "$name") (was $(readlink "$name"))"
@@ -96,7 +97,7 @@ if [ -d "$CONF/VSCodium/User" ] || [ $APPLY -eq 0 ]; then
 fi
 
 link "$DOTS/config/zsh/.zshenv"            "$HOME/.zshenv"
-link "$DOTS/docs/HOME_STRUCTURE.md"        "$HOME/CLAUDE.md"
+link "$NOTES/HOME_STRUCTURE.md"            "$HOME/CLAUDE.md"
 
 for prof in "$CONF"/mozilla/firefox/*.default* "$HOME"/.mozilla/firefox/*.default*; do
     [ -d "$prof" ] || continue

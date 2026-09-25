@@ -30,13 +30,9 @@ else
     git -C "$DOTS" remote add github "$GITHUB"
 fi
 
-echo "── CLAUDE.md"
-doc="$DOTS/docs/HOME_STRUCTURE.md"
-if [ -L "$HOME/CLAUDE.md" ] || [ ! -e "$HOME/CLAUDE.md" ]; then
-    ln -sfn "$doc" "$HOME/CLAUDE.md"
-    note "~/CLAUDE.md -> ${doc/#$HOME/\~}"
-else
-    warn "~/CLAUDE.md is a real file — left alone; merge it into ${doc/#$HOME/\~} and delete it"
+echo "── notes"
+if [ ! -d "$HOME/git/notes" ]; then
+    warn "~/git/notes not cloned (ssh only) — ~/CLAUDE.md waits for it"
 fi
 
 echo

@@ -18,7 +18,6 @@ alias yt-mp3='yt-dlp -x --audio-format best'
 alias yt-mp4='yt-dlp'
 
 alias c='claude --resume'
-alias cr='claude --resume'
 
 # terminal image viewing, per terminal
 if [[ "$TERM_PROGRAM" == "ghostty" ]]; then

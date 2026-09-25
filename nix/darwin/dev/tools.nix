@@ -4,9 +4,6 @@
         environment.systemPackages = with pkgs; [
             neovim
 
-            # Xcode CLT already provides cc/clang/gcc and git -- nixpkgs gcc and
-            # wl-clipboard (Wayland-only) from the NixOS neovim aspect don't
-            # belong here.
             nodejs
 
             ripgrep
