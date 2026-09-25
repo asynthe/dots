@@ -7,6 +7,11 @@ hl.config({
 
 local disable_internal = false
 local side = "left"
+-- Workspaces 1..laptop_ws_count live on the internal screen, the rest on the
+-- external one. Alt+Shift+X flips between the two entries below; the first is
+-- what a fresh session starts on.
+local laptop_ws_splits = { 1 }
+local laptop_ws_count = laptop_ws_splits[1]
 local laptop_bare = "AU Optronics 0xB0AE"
 local laptop = "desc:" .. laptop_bare
 local laptop_w = 1920
@@ -88,7 +93,6 @@ local function detect_external()
 	return nil
 end
 
-local laptop_ws_count = 2
 local ws_rules = {}
 local ws_pinned = nil
 
@@ -139,6 +143,21 @@ local function rehome_workspaces()
 			end
 		end
 	end
+end
+
+local function set_laptop_ws_count(n)
+	if n == laptop_ws_count then
+		return
+	end
+	laptop_ws_count = n
+	ws_pinned = nil -- pin_workspaces short-circuits on the same external otherwise
+	pin_workspaces(detect_external())
+	rehome_workspaces()
+end
+
+local function toggle_laptop_ws_count()
+	local a, b = laptop_ws_splits[1], laptop_ws_splits[2]
+	set_laptop_ws_count(laptop_ws_count == a and b or a)
 end
 
 local function apply_monitors(force_disable_internal)
@@ -221,4 +240,8 @@ local function toggle_laptop_screen()
 	end
 end
 
-return { toggle_laptop_screen = toggle_laptop_screen }
+return {
+	toggle_laptop_screen = toggle_laptop_screen,
+	toggle_laptop_ws_count = toggle_laptop_ws_count,
+	set_laptop_ws_count = set_laptop_ws_count,
+}

@@ -17,8 +17,7 @@ return {
       dashboard.section.buttons.val = {
         dashboard.button(".", "open note", "<cmd>lua require('core.notes').picker()<CR>"),
         dashboard.button("m", "main.md",   "<cmd>edit ~/git/notes/main.md<CR>"),
-        dashboard.button("f", "find file", "<cmd>FzfLua files<CR>"),
-        dashboard.button("r", "recent",    "<cmd>FzfLua oldfiles<CR>"),
+        dashboard.button("f", "find file", "<cmd>Yazi cwd<CR>"),
         dashboard.button("q", "quit",      "<cmd>qa<CR>"),
       }
 

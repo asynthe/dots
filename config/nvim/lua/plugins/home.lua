@@ -1,7 +1,3 @@
--- Navigation for the $HOME layout in ~/git/dots/docs/HOME_STRUCTURE.md.
--- <leader>h<letter> mirrors the yazi `g<letter>` jumps, same letters.
--- (`<leader>g` is gitsigns; h is for home.)
-
 local function goto_dir(path)
   return function()
     local dir = vim.fn.expand(path)
@@ -10,9 +6,6 @@ local function goto_dir(path)
   end
 end
 
--- Every repo is ~/git/<name> (audioland nests one level), so a flat scan two
--- deep is the whole surface. Picks the repo, tcds into it, opens the file
--- picker there — the tab keeps its own cwd, so two repos can be open at once.
 local function pick_repo()
   local repos = vim.fn.systemlist(
     [[find ~/git -mindepth 1 -maxdepth 2 -name .git -printf '%h\n' | sort]]

@@ -1,5 +1,9 @@
 { inputs, ... }:
 {
+    flake.modules.nixos.codex = { pkgs, ... }: {
+        environment.systemPackages = [ pkgs.codex ];
+    };
+
     flake.modules.nixos.claude-code = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.claude-code ];
     };

@@ -29,7 +29,7 @@
             deploy-rs
             virtualisation
 
-            claude-code opencode hermes
+            codex claude-code opencode hermes
 
             steam wine lutris
             osu-lazer stepmania
