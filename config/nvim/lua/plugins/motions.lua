@@ -7,8 +7,7 @@ return {
       showBlankVirtLine = false,
     },
     keys = {
-      { "<leader>up", "<cmd>Precognition toggle<CR>", desc = "Toggle motion hints" },
-      { "<leader>uP", "<cmd>Precognition peek<CR>", desc = "Peek motion hints" },
+      { "<leader>up", "<cmd>Precognition toggle<CR>", desc = "Motion hints" },
     },
   },
 }

@@ -36,6 +36,9 @@ opt.smartcase = true
 opt.hlsearch = true
 opt.incsearch = true
 
+opt.completeopt = "menu,menuone,noselect,popup"
+opt.pumheight = 10
+
 opt.timeoutlen = 500
 opt.updatetime = 300
 
@@ -45,3 +48,5 @@ opt.undofile = true
 opt.swapfile = false
 opt.backup = false
 opt.writebackup = false
+
+vim.o.winborder = "rounded"

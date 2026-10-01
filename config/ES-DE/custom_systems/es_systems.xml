@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!-- Upstream blocks verbatim, merged by name: default command (first) moved,
+     ps3/xbox360 pointed at the archive's folder names. -->
+<systemList>
+    <system>
+        <name>psx</name>
+        <fullname>Sony PlayStation</fullname>
+        <path>%ROMPATH%/psx</path>
+        <extension>.bin .BIN .cbn .CBN .ccd .CCD .chd .CHD .cue .CUE .ecm .ECM .exe .EXE .img .IMG .iso .ISO .m3u .M3U .mdf .MDF .mds .MDS .minipsf .MINIPSF .pbp .PBP .psexe .PSEXE .psf .PSF .toc .TOC .z .Z .znx .ZNX .7z .7Z .zip .ZIP</extension>
+        <command label="Beetle PSX HW">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_psx_hw_libretro.so %ROM%</command>
+        <command label="Beetle PSX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_psx_libretro.so %ROM%</command>
+        <command label="PCSX ReARMed">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx_rearmed_libretro.so %ROM%</command>
+        <command label="SwanStation">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/swanstation_libretro.so %ROM%</command>
+        <command label="DuckStation (Standalone)">%EMULATOR_DUCKSTATION% -batch %ROM%</command>
+        <command label="ares (Standalone)">%EMULATOR_ARES% --fullscreen --system "PlayStation" %ROM%</command>
+        <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module psx %ROM%</command>
+        <platform>psx</platform>
+        <theme>psx</theme>
+    </system>
+    <system>
+        <name>ps2</name>
+        <fullname>Sony PlayStation 2</fullname>
+        <path>%ROMPATH%/ps2</path>
+        <extension>.bin .BIN .chd .CHD .ciso .CISO .cso .CSO .desktop .dump .DUMP .elf .ELF .gz .GZ .m3u .M3U .mdf .MDF .img .IMG .iso .ISO .isz .ISZ .ngr .NRG .zso .ZSO</extension>
+        <command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
+        <command label="LRPS2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
+        <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
+        <command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% --nogui %ROM%</command>
+        <command label="Play! (Standalone)">%EMULATOR_PLAY!% --fullscreen --disc %ROM%</command>
+        <command label="Shortcut or script">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <platform>ps2</platform>
+        <theme>ps2</theme>
+    </system>
+    <system>
+        <name>gc</name>
+        <fullname>Nintendo GameCube</fullname>
+        <path>%ROMPATH%/gc</path>
+        <extension>.ciso .CISO .dff .DFF .dol .DOL .elf .ELF .gcm .GCM .gcz .GCZ .iso .ISO .json .JSON .m3u .M3U .rvz .RVZ .tgc .TGC .wad .WAD .wbfs .WBFS .wia .WIA .7z .7Z .zip .ZIP</extension>
+        <command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
+        <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
+        <command label="PrimeHack (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_PRIMEHACK% -b -e %ROM%</command>
+        <command label="Triforce (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_TRIFORCE% -b -e %ROM%</command>
+        <platform>gc</platform>
+        <theme>gc</theme>
+    </system>
+    <system>
+        <name>wii</name>
+        <fullname>Nintendo Wii</fullname>
+        <path>%ROMPATH%/wii</path>
+        <extension>.ciso .CISO .dff .DFF .dol .DOL .elf .ELF .gcm .GCM .gcz .GCZ .iso .ISO .json .JSON .m3u .M3U .rvz .RVZ .tgc .TGC .wad .WAD .wbfs .WBFS .wia .WIA .7z .7Z .zip .ZIP</extension>
+        <command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
+        <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
+        <command label="PrimeHack (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_PRIMEHACK% -b -e %ROM%</command>
+        <platform>wii</platform>
+        <theme>wii</theme>
+    </system>
+    <system>
+        <name>n3ds</name>
+        <fullname>Nintendo 3DS</fullname>
+        <path>%ROMPATH%/n3ds</path>
+        <extension>.3ds .3DS .3dsx .3DSX .app .APP .axf .AXF .cci .CCI .cxi .CXI .desktop .elf .ELF .z3dsx .Z3DSX .zcci .ZCCI .zcxi .ZCXI .7z .7Z .zip .ZIP</extension>
+        <command label="Azahar (Standalone)">%EMULATOR_AZAHAR% %ROM%</command>
+        <command label="Azahar">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/azahar_libretro.so %ROM%</command>
+        <command label="Azahar Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="AzaharPlus (Standalone)">%EMULATOR_AZAHARPLUS% %ROM%</command>
+        <command label="Citra">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra_libretro.so %ROM%</command>
+        <command label="Citra 2018">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra2018_libretro.so %ROM%</command>
+        <command label="Citra (Standalone)">%EMULATOR_CITRA% %ROM%</command>
+        <command label="Mandarine (Standalone)">%EMULATOR_MANDARINE% %ROM%</command>
+        <command label="Lime3DS (Standalone)">%EMULATOR_LIME3DS% %ROM%</command>
+        <command label="Panda3DS (Standalone)">%EMULATOR_PANDA3DS% %ROM%</command>
+        <platform>n3ds</platform>
+        <theme>n3ds</theme>
+    </system>
+    <system>
+        <name>switch</name>
+        <fullname>Nintendo Switch</fullname>
+        <path>%ROMPATH%/switch</path>
+        <extension>.nca .NCA .nro .NRO .nso .NSO .nsp .NSP .xci .XCI</extension>
+        <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command>
+        <command label="Eden (Standalone)">%EMULATOR_EDEN% -f -g %ROM%</command>
+        <platform>switch</platform>
+        <theme>switch</theme>
+    </system>
+    <system>
+        <name>ps3</name>
+        <fullname>Sony PlayStation 3</fullname>
+        <path>%ROMPATH%/ps3_isos</path>
+        <extension>.desktop .iso .ISO .ps3 .PS3 .ps3dir .PS3DIR</extension>
+        <command label="RPCS3 ISO (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
+        <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="RPCS3 Game Serial (Standalone)">%EMULATOR_RPCS3% --no-gui %RPCS3_GAMEID%:%INJECT%=%BASENAME%.ps3</command>
+        <command label="RPCS3 Directory (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
+        <platform>ps3</platform>
+        <theme>ps3</theme>
+    </system>
+    <system>
+        <name>xbox360</name>
+        <fullname>Microsoft Xbox 360</fullname>
+        <path>%ROMPATH%/x360</path>
+        <extension>. .desktop .iso .ISO .sh .xex .XEX .zar .ZAR</extension>
+        <command label="xenia (Standalone)">%STARTDIR%=%EMUDIR% %EMULATOR_XENIA% %INJECT%=%BASENAME%.commands %ROM%</command>
+        <command label="Xenia Edge (Standalone)">%EMULATOR_XENIA-EDGE% %INJECT%=%BASENAME%.commands %ROM%</command>
+        <command label="xenia (Wine)">%STARTDIR%=%EMUDIR% %PRECOMMAND_WINE% %EMULATOR_XENIA-WINDOWS% %INJECT%=%BASENAME%.commands %ROM%</command>
+        <command label="xenia (Proton)">%STARTDIR%=%EMUDIR% %PRECOMMAND_PROTON% %EMULATOR_XENIA-WINDOWS% %INJECT%=%BASENAME%.commands %ROM%</command>
+        <command label="Shortcut or script">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <platform>xbox360</platform>
+        <theme>xbox360</theme>
+    </system>
+</systemList>

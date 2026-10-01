@@ -45,16 +45,11 @@
         ];
     };
 
-    flake.modules.nixos.terraform = { pkgs, ... }: {
+    flake.modules.nixos.infra = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
             opentofu
-        ];
-    };
-
-    flake.modules.nixos.deploy-rs = { pkgs, ... }: {
-        environment.systemPackages = with pkgs; [
-            deploy-rs
-            ssh-to-age
+            ansible
+            ansible-lint
         ];
     };
 

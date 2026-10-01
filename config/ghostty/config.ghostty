@@ -1,50 +1,28 @@
-# ───────────────────────── Settings ─────────────────────────
 focus-follows-mouse = false
 window-inherit-font-size = true
-window-inherit-working-directory = true 
+window-inherit-working-directory = true
 working-directory = home
 
-# Padding 
-# (one value is both left/right, two values is left and right)
-#window-padding-balance = true
 window-padding-x = 14
 window-padding-y = 14
+#window-padding-balance = true
 
-# Titlebar
-#gtk-tabs-location = bottom
-#window-decoration = auto
-#gtk-titlebar = true
-#adw-toolbar-style = raised-border # TODO Remove bc old
-#gtk-wide-tabs = true
-#window-theme = dark
-#window-theme = ghostty
-
-# ───────────────────────── Font and Colors ─────────────────────────
-# Font
-font-size = 14
+font-size = 12
 font-family = TX-02
 font-style = Condensed
 font-style-bold = Bold Condensed
 font-style-italic = Condensed Oblique
 font-style-bold-italic = Bold Condensed Oblique
 
-# macOS only
-#font-thicken = true
-
-# Colors and opacity
-# At 0 the text sits straight on hyprglass, which owns the tint now;
-# `background` is inert while this is 0, kept as the colour to restore to.
-#background-opacity = 0.48
 background-opacity = 0
 unfocused-split-opacity = 0.85
 background = #0d0d12
+#background-opacity = 0.48
 #foreground = #dddddd
 #selection-background = #1c2f39
 #selection-foreground = #dddddd
 #cursor-color = #e6eaea
 
-# ───────────────────────── Shaders ─────────────────────────
-# NOTE This requires performance
 #custom-shader-animation = true
 #custom-shader = shaders/animated-gradient-shader.glsl
 #custom-shader = shaders/galaxy.glsl
@@ -52,50 +30,44 @@ background = #0d0d12
 #custom-shader = shaders/starfield-colors.glsl
 #custom-shader = shaders/starfield.glsl
 
-# ───────────────────────── Keybinds ─────────────────────────
-# Ignore default fullscreen keybind
-keybind = ctrl+enter=ignore 
-
-# Main
-keybind = shift+ctrl+r=reload_config
-keybind = ctrl+w=close_surface
+keybind = clear
 confirm-close-surface = false
 
-# Scrollback
-keybind = alt+arrow_up=scroll_page_lines:-3
-keybind = alt+arrow_down=scroll_page_lines:3
+keybind = super+shift+r=reload_config
+keybind = super+w=close_surface
+keybind = super+shift+w=close_tab
+keybind = super+n=new_window
 
-# Split screen
-keybind = ctrl+.=toggle_split_zoom
-keybind = ctrl+\=new_split:right
-keybind = shift+ctrl+\=new_split:down
+keybind = super+backslash=new_split:right
+keybind = super+shift+backslash=new_split:down
+keybind = super+period=toggle_split_zoom
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:down
+keybind = super+k=goto_split:up
+keybind = super+l=goto_split:right
+keybind = super+shift+h=resize_split:left,40
+keybind = super+shift+j=resize_split:down,40
+keybind = super+shift+k=resize_split:up,40
+keybind = super+shift+l=resize_split:right,40
 
-# Focus
-keybind = ctrl+h=goto_split:left
-keybind = ctrl+j=goto_split:down
-keybind = ctrl+k=goto_split:up
-keybind = ctrl+l=goto_split:right
-#keybind = super+h=goto_split:left
-#keybind = super+j=goto_split:down
-#keybind = super+k=goto_split:up
-#keybind = super+l=goto_split:right
-#keybind = super+;=goto_split:right
+keybind = super+t=new_tab
+keybind = super+[=previous_tab
+keybind = super+]=next_tab
+keybind = super+tab=next_tab
+keybind = super+shift+tab=previous_tab
+keybind = super+shift+[=move_tab:-1
+keybind = super+shift+]=move_tab:1
+keybind = super+shift+left=move_tab:-1
+keybind = super+shift+right=move_tab:1
 
-# Resize
-keybind = ctrl+shift+h=resize_split:left,40
-keybind = ctrl+shift+j=resize_split:down,40
-keybind = ctrl+shift+k=resize_split:up,40
-keybind = ctrl+shift+l=resize_split:right,40
+keybind = super+equal=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+zero=reset_font_size
 
-# Tabs
-keybind = ctrl+t=new_tab
-#keybind = ctrl+[=previous_tab # For nvim
-#keybind = ctrl+]=next_tab # For nvim
-keybind = alt+[=previous_tab
-keybind = alt+]=next_tab
-keybind = ctrl+shift+[=move_tab:-1
-keybind = ctrl+shift+]=move_tab:1
-keybind = ctrl+shift+left=move_tab:-1
-keybind = ctrl+shift+right=move_tab:1
-#keybind = super+[=previous_tab
-#keybind = super+]=next_tab
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+keybind = super+u=scroll_page_lines:-3
+keybind = super+d=scroll_page_lines:3
+keybind = super+up=scroll_page_lines:-3
+keybind = super+down=scroll_page_lines:3

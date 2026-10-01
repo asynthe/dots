@@ -3,7 +3,6 @@ return {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
       { "tpope/vim-dadbod", lazy = true },
-      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
     },
     cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection", "DBUIFindBuffer" },
     init = function()
@@ -17,23 +16,9 @@ return {
       vim.g.dbs = {
         play = "postgresql://meow@localhost/play",
       }
-
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "sql", "mysql", "plsql" },
-        callback = function()
-          require("cmp").setup.buffer({
-            sources = {
-              { name = "vim-dadbod-completion" },
-              { name = "buffer" },
-            },
-          })
-        end,
-      })
     end,
     keys = {
-      { "<leader>du", "<cmd>DBUIToggle<CR>", desc = "Toggle database UI" },
-      { "<leader>df", "<cmd>DBUIFindBuffer<CR>", desc = "Find database buffer" },
-      { "<leader>da", "<cmd>DBUIAddConnection<CR>", desc = "Add connection" },
+      { "<leader>d", "<cmd>DBUIToggle<CR>", desc = "Database UI" },
     },
   },
 }

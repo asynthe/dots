@@ -31,8 +31,6 @@ git clone https://github.com/asynthe/dots.git
 | ----------------- | ---------------- |
 | Thinkpad P1 Gen 7 | NixOS (unstable) |
 | Macbook Air M2    | macOS            |
-| Steam Deck        | SteamOS          |
-| Samsung S24 Ultra | Android          |
 
 
 *Resources*
@@ -40,6 +38,5 @@ git clone https://github.com/asynthe/dots.git
 - <https://github.com/43PR/dotfiles>
 
 *Thanks*
-- RedDragon: 1920x1200 NASA Wallpaper Set
 - SCL: TX-02 Font
 

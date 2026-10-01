@@ -7,10 +7,6 @@ hl.config({
 
 local disable_internal = false
 local side = "left"
--- Workspaces 1..laptop_ws_count are internal, the rest external. Alt+Shift+X
--- flips between the entries below; the first is what a fresh session starts on.
-local laptop_ws_splits = { 1 }
-local laptop_ws_count = laptop_ws_splits[1]
 local laptop_bare = "AU Optronics 0xB0AE"
 local laptop = "desc:" .. laptop_bare
 local laptop_w = 1920
@@ -92,28 +88,6 @@ local function detect_external()
 	return nil
 end
 
-local ws_rules = {}
-local ws_pinned = nil
-
-local function pin_workspaces(ext_desc)
-	if not ext_desc or ws_pinned == ext_desc then
-		return
-	end
-	for _, rule in ipairs(ws_rules) do
-		rule:set_enabled(false)
-	end
-	ws_rules = {}
-	ws_pinned = ext_desc
-
-	local ext = "desc:" .. ext_desc
-	for i = 1, 10 do
-		ws_rules[i] = hl.workspace_rule({
-			workspace = tostring(i),
-			monitor = i <= laptop_ws_count and laptop or ext,
-		})
-	end
-end
-
 local function laptop_active()
 	for _, mon in ipairs(hl.get_monitors()) do
 		if mon.description:find(laptop_bare, 1, true) then
@@ -123,41 +97,42 @@ local function laptop_active()
 	return false
 end
 
-local function rehome_workspaces()
-	local ext_desc = detect_external()
-	if not ext_desc or not laptop_active() then
-		return
-	end
-	local ext = "desc:" .. ext_desc
-	for _, ws in ipairs(hl.get_workspaces()) do
-		local id = ws.id
-		if id >= 1 and id <= 10 then
-			local want_laptop = id <= laptop_ws_count
-			local on_laptop = ws.monitor.description:find(laptop_bare, 1, true) ~= nil
-			if want_laptop ~= on_laptop then
-				hl.dispatch(hl.dsp.workspace.move({
-					workspace = id,
-					monitor = want_laptop and laptop or ext,
-				}))
+-- Where each workspace was last seen while no monitor was missing. A disconnect
+-- relocates workspaces before Lua runs, so recording pauses until restore_workspaces.
+local ws_home = {}
+local ws_hold = false
+local ws_gen = 0
+
+local function snapshot_workspaces()
+	ws_gen = ws_gen + 1
+	local gen = ws_gen
+	hl.timer(function()
+		if gen ~= ws_gen or ws_hold then
+			return
+		end
+		for _, ws in ipairs(hl.get_workspaces()) do
+			if ws.id >= 1 and ws.monitor then
+				ws_home[ws.id] = ws.monitor.description
 			end
 		end
-	end
+	end, { timeout = 1000, type = "oneshot" })
 end
 
-local function set_laptop_ws_count(n)
-	if n == laptop_ws_count then
-		return
+local function restore_workspaces()
+	local present = {}
+	for _, mon in ipairs(hl.get_monitors()) do
+		present[mon.description] = true
 	end
-	laptop_ws_count = n
-	ws_pinned = nil -- pin_workspaces short-circuits on the same external otherwise
-	pin_workspaces(detect_external())
-	rehome_workspaces()
+	for _, ws in ipairs(hl.get_workspaces()) do
+		local home = ws_home[ws.id]
+		if home and present[home] and ws.monitor and ws.monitor.description ~= home then
+			hl.dispatch(hl.dsp.workspace.move({ workspace = ws.id, monitor = "desc:" .. home }))
+		end
+	end
+	ws_hold = false
+	snapshot_workspaces()
 end
 
-local function toggle_laptop_ws_count()
-	local a, b = laptop_ws_splits[1], laptop_ws_splits[2]
-	set_laptop_ws_count(laptop_ws_count == a and b or a)
-end
 
 local function apply_monitors(force_disable_internal)
 	if force_disable_internal ~= nil then
@@ -166,9 +141,11 @@ local function apply_monitors(force_disable_internal)
 	local disable = disable_internal
 
 	local ext_desc = detect_external()
-	pin_workspaces(ext_desc)
 	if not ext_desc then
-		disable_internal = false
+		-- A sleeping external drops its link; Alt+Shift+Z brings the panel back after a real unplug.
+		if disable then
+			return
+		end
 		hl.monitor({ output = laptop, mode = "1920x1200@60", position = "0x0", scale = "1" })
 		return
 	end
@@ -198,17 +175,19 @@ local function apply_monitors(force_disable_internal)
 end
 
 apply_monitors()
--- Also on a plain `hyprctl reload`: the rules above only bind a workspace as it
--- is created, so anything already open stays where it is without this.
-rehome_workspaces()
+snapshot_workspaces()
+for _, ev in ipairs({ "workspace.created", "workspace.move_to_monitor", "workspace.active", "window.move_to_workspace" }) do
+	hl.on(ev, snapshot_workspaces)
+end
 hl.on("monitor.added", function()
 	hl.timer(function()
 		apply_monitors()
 		hl.exec_cmd("hyprctl dispatch 'hl.dsp.dpms(\"on\")'")
-		rehome_workspaces()
+		restore_workspaces()
 	end, { timeout = 500, type = "oneshot" })
 end)
 hl.on("monitor.removed", function()
+	ws_hold = true
 	apply_monitors()
 end)
 
@@ -222,7 +201,6 @@ hl.bind("switch:off:Lid Switch", function()
 	hl.timer(function()
 		hl.monitor({ output = laptop, disabled = false })
 		apply_monitors(false)
-		rehome_workspaces()
 	end, { timeout = 500, type = "oneshot" })
 end, { locked = true })
 
@@ -235,12 +213,9 @@ local function toggle_laptop_screen()
 	else
 		hl.monitor({ output = laptop, disabled = false })
 		apply_monitors(false)
-		rehome_workspaces()
 	end
 end
 
 return {
 	toggle_laptop_screen = toggle_laptop_screen,
-	toggle_laptop_ws_count = toggle_laptop_ws_count,
-	set_laptop_ws_count = set_laptop_ws_count,
 }

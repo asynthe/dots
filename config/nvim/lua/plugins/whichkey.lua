@@ -6,18 +6,15 @@ return {
       preset = "helix",
       win = { border = "rounded" },
       spec = {
-        { "<leader>b", group = "buffer" },
-        { "<leader>c", group = "code" },
-        { "<leader>d", group = "database" },
         { "<leader>f", group = "find" },
         { "<leader>g", group = "git" },
         { "<leader>h", group = "home" },
         { "<leader>n", group = "notes" },
-        { "<leader>u", group = "ui toggles" },
+        { "<leader>u", group = "ui" },
+        { "[", group = "prev" },
+        { "]", group = "next" },
+        { "gs", group = "surround" },
       },
-    },
-    keys = {
-      { "<leader>?", function() require("which-key").show({ global = false }) end, desc = "Buffer keymaps" },
     },
   },
 }

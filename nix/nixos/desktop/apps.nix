@@ -12,7 +12,6 @@
 
     flake.modules.nixos.desktop-apps = { pkgs, ... }: {
         environment.systemPackages = with pkgs; [
-            firefox arkenfox-userjs dejsonlz4
             #librewolf #mullvad-browser
             ungoogled-chromium
             imv
@@ -21,7 +20,7 @@
             networkmanagerapplet
             pavucontrol
             signal-desktop
-            webcord
+            vesktop
             zathura sioyek
             poppler-utils
         ];

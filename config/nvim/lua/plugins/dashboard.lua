@@ -16,7 +16,7 @@ return {
 
       dashboard.section.buttons.val = {
         dashboard.button(".", "open note", "<cmd>lua require('core.notes').picker()<CR>"),
-        dashboard.button("m", "main.md",   "<cmd>edit ~/git/notes/main.md<CR>"),
+        dashboard.button("c", "code",      "<cmd>lua require('core.code').picker()<CR>"),
         dashboard.button("f", "find file", "<cmd>Yazi cwd<CR>"),
         dashboard.button("q", "quit",      "<cmd>qa<CR>"),
       }

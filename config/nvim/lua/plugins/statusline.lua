@@ -6,7 +6,7 @@ return {
       {
         "<leader>us",
         function() vim.o.laststatus = vim.o.laststatus == 0 and 3 or 0 end,
-        desc = "Toggle statusline",
+        desc = "Statusline",
       },
     },
     opts = {

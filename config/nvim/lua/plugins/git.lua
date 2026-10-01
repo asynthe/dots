@@ -17,7 +17,6 @@ return {
         map("n", "<leader>gp", gs.preview_hunk, "Preview hunk")
         map("n", "<leader>gb", function() gs.blame_line({ full = true }) end, "Blame line")
         map("n", "<leader>gd", gs.diffthis, "Diff this file")
-        map("n", "<leader>gB", gs.blame, "Blame buffer")
       end,
     },
   },

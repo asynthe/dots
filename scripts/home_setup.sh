@@ -5,7 +5,7 @@ set -euo pipefail
 APPLY=0
 [ "${1:-}" = "--apply" ] && APPLY=1
 
-NOTES="$HOME/git/notes/docs-from-claude/docs-dots"
+NOTES="$HOME/git/notes/structure"
 DATA="$HOME/.local/share"
 STATE="$HOME/.local/state"
 CONF="$HOME/.config"
@@ -40,7 +40,7 @@ migrate() {
     run ln -sfn "$new" "$old"
 }
 
-migrate "$HOME/.gnupg"   "$HOME/git/auth/gpg"
+migrate "$HOME/.gnupg"   "$DATA/gnupg"
 migrate "$HOME/.cargo"   "$DATA/cargo"
 migrate "$HOME/.rustup"  "$DATA/rustup"
 migrate "$HOME/.android" "$DATA/android"
@@ -54,10 +54,10 @@ migrate "$HOME/.hermes"  "$DATA/hermes"
 
 migrate "$HOME/.wine"    "$HOME/wine/prefix/default"
 
-if [ -d "$HOME/git/auth/gpg" ] && [ $APPLY -eq 1 ]; then
-    chmod 700 "$HOME/git/auth/gpg"
-    find "$HOME/git/auth/gpg" -type f -exec chmod 600 {} +
-    find "$HOME/git/auth/gpg" -type d -exec chmod 700 {} +
+if [ -d "$DATA/gnupg" ] && [ $APPLY -eq 1 ]; then
+    chmod 700 "$DATA/gnupg"
+    find "$DATA/gnupg" -type f -exec chmod 600 {} +
+    find "$DATA/gnupg" -type d -exec chmod 700 {} +
 fi
 
 echo "── dots symlinks"
@@ -83,7 +83,7 @@ CONFIGS=(
     alacritty atuin bash btop cava direnv emacs fuzzel ghostty
     gtk-3.0 gtk-4.0 hypr jj kitty mako mpd mpv ncmpcpp nvim opencode
     qBittorrent quickshell sioyek starship tmux uzdoom
-    wezterm yazi zathura zellij zsh
+    wezterm yazi zathura zsh
 )
 for c in "${CONFIGS[@]}"; do
     link "$DOTS/config/$c" "$CONF/$c"
@@ -99,10 +99,7 @@ fi
 link "$DOTS/config/zsh/.zshenv"            "$HOME/.zshenv"
 link "$NOTES/HOME_STRUCTURE.md"            "$HOME/CLAUDE.md"
 
-for prof in "$CONF"/mozilla/firefox/*.default* "$HOME"/.mozilla/firefox/*.default*; do
-    [ -d "$prof" ] || continue
-    link "$DOTS/config/firefox/user-overrides.js" "$prof/user-overrides.js"
-done
+"$DOTS/scripts/firefox/setup.sh" $([ $APPLY -eq 1 ] && echo --apply)
 
 for icon in "$DOTS"/assets/icons/*; do
     [ -d "$icon" ] || continue
@@ -110,11 +107,28 @@ for icon in "$DOTS"/assets/icons/*; do
     link "$icon" "$DATA/icons/$(basename "$icon")"
 done
 
-for wrap in "$DOTS"/scripts/bin/*; do
-    [ -f "$wrap" ] || continue
-    run mkdir -p "$HOME/.local/bin"
-    link "$wrap" "$HOME/.local/bin/$(basename "$wrap")"
-done
+# BIOS is linked file by file into real dirs: emulators write nvram beside it,
+# and that belongs in ~/.config, not archive/. Skipped where there is no archive.
+BIOS="$HOME/archive/roms/bios"
+if [ -d "$BIOS" ]; then
+    echo "── emulation"
+    run mkdir -p "$DATA/ES-DE" "$CONF/retroarch/system" "$CONF/PCSX2/bios"
+    link "$DOTS/config/ES-DE/custom_systems" "$DATA/ES-DE/custom_systems"
+
+    n=0
+    for f in "$BIOS"/* "$BIOS"/pcsx2/bios/*; do
+        [ -f "$f" ] || continue
+        case "$f" in
+            */351ELEC-*.zip) continue ;;  # the source pack; neogeo.zip etc. are real bios
+            */pcsx2/bios/*.[Nn][Vv][Mm]|*/pcsx2/bios/*.[Mm][Ee][Cc]) continue ;;  # pcsx2 writes these
+        esac
+        case "$f" in */pcsx2/*) dst="$CONF/PCSX2/bios" ;; *) dst="$CONF/retroarch/system" ;; esac
+        [ -e "$dst/$(basename "$f")" ] || [ -L "$dst/$(basename "$f")" ] && continue
+        run ln -s "$f" "$dst/$(basename "$f")"
+        n=$((n + 1))
+    done
+    [ $n -eq 0 ] || note "$n bios links"
+fi
 
 echo "── stray zsh dotfiles"
 
@@ -158,7 +172,7 @@ for f in "$HOME"/*; do
     [ -f "$f" ] && [ ! -L "$f" ] && warn "loose file at \$HOME root: $(basename "$f")"
 done
 for l in "$CONF"/* "$CONF"/VSCodium/User/* "$DATA"/icons/* \
-         "$CONF"/mozilla/firefox/*.default*/user-overrides.js; do
+         "$CONF"/mozilla/firefox/*/user-overrides.js "$CONF"/mozilla/firefox/*/user.js; do
     [ -L "$l" ] && [ -e "$l" ] && continue
     [ -L "$l" ] || continue
     case "$(readlink "$l")" in

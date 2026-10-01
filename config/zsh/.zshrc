@@ -4,7 +4,7 @@
 export EDITOR=nvim
 export DOTS_DIR=$HOME/git/dots
 export NOTES_DIR=$HOME/git/notes
-export GNUPGHOME=$HOME/git/auth/gpg
+export GNUPGHOME=$HOME/.local/share/gnupg
 export PASSWORD_STORE_DIR=$HOME/git/auth/pass
 export SOPS_AGE_KEY_FILE=$HOME/git/auth/age/keys.txt
 

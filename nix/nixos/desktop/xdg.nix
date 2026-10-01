@@ -41,7 +41,7 @@
 
             WINEPREFIX             = "$HOME/wine/prefix/default";
 
-            GNUPGHOME              = "$HOME/git/auth/gpg";
+            GNUPGHOME              = "$HOME/.local/share/gnupg";
             PASSWORD_STORE_DIR     = "$HOME/git/auth/pass";
             SOPS_AGE_KEY_FILE      = "$HOME/git/auth/age/keys.txt";
             LESSHISTFILE           = "$HOME/.local/state/less_history";

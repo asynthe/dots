@@ -1,15 +1,30 @@
 local augroup = vim.api.nvim_create_augroup("UserAutocmds", { clear = true })
 
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = augroup,
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
   group = augroup,
-  pattern = { "markdown" },
-  callback = function()
+  pattern = "markdown",
+  callback = function(ev)
     vim.opt_local.foldenable = false
     vim.opt_local.conceallevel = 2
     vim.opt_local.concealcursor = "n"
     vim.opt_local.expandtab = true
     vim.opt_local.tabstop = 2
     vim.opt_local.shiftwidth = 2
+
+    vim.keymap.set("i", "<C-CR>", function()
+      local marker = vim.api.nvim_get_current_line():match("^(%s*[-*+] )")
+      return marker and ("<CR>" .. marker) or "<CR>"
+    end, { buffer = ev.buf, expr = true, desc = "New list item" })
   end,
 })
 

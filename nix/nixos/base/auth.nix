@@ -5,6 +5,7 @@ let
         passwordKey = null;
         groups      = [];
         keys        = [];
+        uid         = null;
     };
 
     people = lib.mapAttrs
@@ -37,6 +38,7 @@ in {
             users.users = lib.mapAttrs (name: person: {
                 isNormalUser = true;
                 shell        = pkgs.zsh;
+                uid          = person.uid;
                 extraGroups  = person.groups ++ lib.optional person.admin "wheel";
 
                 openssh.authorizedKeys.keys = person.keys;

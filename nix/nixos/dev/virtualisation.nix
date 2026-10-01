@@ -69,15 +69,4 @@
             win-spice
         ];
     };
-
-    flake.modules.nixos.vfio = { ... }: {
-        boot.extraModprobeConfig = "options vfio-pci ids=10de:28b8";
-        boot.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];
-        boot.kernelParams = [ "intel_iommu=on" "iommu=pt" ];
-    };
-
-    flake.modules.nixos.vmware-guest = { ... }: {
-        services.xserver.videoDrivers = [ "vmware" ];
-        virtualisation.vmware.guest.enable = true;
-    };
 }

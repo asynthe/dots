@@ -9,6 +9,7 @@ dwindle() { heval "hl.config({ dwindle = { $1 } }) hl.exec_scheduled_prop_refres
 TERMCLASS=sess.ghostty
 
 DRY=0
+CURRENT=0
 FORCEWS=
 PICKED=0
 
@@ -17,7 +18,7 @@ context_sarten() {
     pane 50 "$(term ~/git/flakes nvim)"
     pane 50 "$(term ~/git/flakes ssh sarten)"
     ws
-    pane 100 "$(browse \
+    pane 100 "$(browse infra \
         https://wazuh.tailfdd252.ts.net/ \
         https://grafana.tailfdd252.ts.net/ \
         http://sarten:8082)"
@@ -28,7 +29,7 @@ context_sec() {
     pane 50 "$(term ~/git/notes/study nvim)"
     pane 50 "$(term ~/git/notes/study)"
     ws
-    pane 100 "$(browse \
+    pane 100 "$(browse study \
         https://tryhackme.com/dashboard \
         https://app.hackthebox.com/ \
         https://wazuh.tailfdd252.ts.net/)"
@@ -38,7 +39,7 @@ context_sec() {
 
 context_data() {
     DESC='job hunt'
-    pane 70 "$(browse \
+    pane 70 "$(browse work \
         https://www.linkedin.com/jobs/ \
         https://www.getonbrd.com/jobs/data-science-analytics \
         https://www.computrabajo.cl/)"
@@ -97,11 +98,8 @@ term() {    # term <cwd> [command...]
     printf '%s' "$out"
 }
 
-browse() {  # browse <url> [url...] -- one window, the rest as tabs
-    local out="firefox --new-window $1"; shift
-    local u
-    for u; do out="$out --new-tab $u"; done
-    printf '%s' "$out"
+browse() {  # browse <profile> <url>... -- urls only seed a profile with no saved session
+    printf '%s' "$HOME/git/dots/scripts/firefox/browser.sh $*"
 }
 
 CONTEXTS=(sarten sec data book)
@@ -148,7 +146,7 @@ wait_new() {  # wait_new <ws> <addresses before the launch>
 
 esc() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
 
-usage() { printf 'usage: session.sh [-n] [-w N] [context] [arg]\ncontexts: %s\n' "${CONTEXTS[*]}"; }
+usage() { printf 'usage: session.sh [-n] [-c | -w N] [context] [arg]\ncontexts: %s\n' "${CONTEXTS[*]}"; }
 
 layout_group() {
     local wsid=$1; shift
@@ -182,6 +180,20 @@ layout_group() {
     done
 }
 
+fold_current() {
+    local -a folded=()
+    local entry rest pct total=0 used=0 i n=${#PLAN[@]}
+    for entry in "${PLAN[@]}"; do rest=${entry#*|}; total=$((total + ${rest%%|*})); done
+    for ((i = 0; i < n; i++)); do
+        rest=${PLAN[i]#*|}
+        pct=$((${rest%%|*} * 100 / total))
+        ((i == n - 1)) && pct=$((100 - used))
+        used=$((used + pct))
+        folded+=("0|$pct|${rest#*|}")
+    done
+    PLAN=("${folded[@]}")
+}
+
 restore() { dwindle 'force_split = 0, default_split_ratio = 1.0'; }
 
 main() {
@@ -189,6 +201,7 @@ main() {
         case $1 in
             -n|--dry-run) DRY=1; shift ;;
             -w|--workspace) FORCEWS=${2:-}; shift 2 ;;
+            -c|--current) CURRENT=1; shift ;;
             -h|--help) usage; return 0 ;;
             -*) warn "unknown flag: $1"; usage >&2; return 2 ;;
             *) break ;;
@@ -197,8 +210,9 @@ main() {
 
     local ctx=${1:-}
     if [ -z "$ctx" ]; then
-        ctx=$(printf '%s\n' "${CONTEXTS[@]}" | fuzzel --dmenu --prompt 'session: ') || return 0
+        ctx=$(printf '%s\n' "${CONTEXTS[@]}" "${CONTEXTS[@]/%/ here}" | fuzzel --dmenu --prompt 'session: ') || return 0
         [ -n "$ctx" ] || return 0
+        [ "${ctx% here}" != "$ctx" ] && { ctx=${ctx% here}; CURRENT=1; }
         PICKED=1
     else
         shift
@@ -217,15 +231,21 @@ main() {
         g=${entry%%|*}
         case " ${groups[*]-} " in *" $g "*) ;; *) groups+=("$g") ;; esac
     done
-    if [ -n "$FORCEWS" ]; then
+    if ((CURRENT)); then
+        fold_current
+        groups=(0)
+        targets=("$(hyprctl activeworkspace -j | jq -r .id)")
+    elif [ -n "$FORCEWS" ]; then
         targets=("$FORCEWS")
         ((${#groups[@]} > 1)) && warn "-w sets the first workspace; the rest go to empty ones"
     fi
-    local avail
-    mapfile -t avail < <(empty_workspaces)
     local need=$((${#groups[@]} - ${#targets[@]}))
-    ((${#avail[@]} >= need)) || die "$ctx needs $need free workspace(s), ${#avail[@]} available"
-    targets+=("${avail[@]:0:$need}")
+    if ((need > 0)); then
+        local avail
+        mapfile -t avail < <(empty_workspaces)
+        ((${#avail[@]} >= need)) || die "$ctx needs $need free workspace(s), ${#avail[@]} available"
+        targets+=("${avail[@]:0:$need}")
+    fi
 
     if ((DRY)); then
         local idx=0

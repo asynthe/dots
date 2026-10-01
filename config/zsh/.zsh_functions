@@ -45,9 +45,14 @@ pdf() {
 }
 
 # Run detached: own session, no tty, output dropped.
+# `drop wine <app> [args]` runs ~/wine/<app>/run.sh if there is one (e.g.
+# `drop wine iidx`); anything else after `wine` is passed to real wine.
 drop() {
   emulate -L zsh
   (( $# )) || { print -ru2 "drop: usage: drop <command> [args...]"; return 2 }
+  if [[ $1 == wine && -n ${2:-} && -x $HOME/wine/$2/run.sh ]]; then
+    set -- $HOME/wine/$2/run.sh "${@:3}"
+  fi
   command -v "$1" >/dev/null || { print -ru2 "drop: no such command: $1"; return 127 }
   setsid -f "$@" </dev/null >/dev/null 2>&1
 }
@@ -343,4 +348,24 @@ nix-roots() {
   nix-store --gc --print-roots 2>/dev/null |
     grep -v '^/proc/\|censored\|^{memory\|/var/nix/profiles/\|^{censored' |
     sort -u
+}
+
+# fzf over the pass store. enter: copy line 1   ctrl-s: show whole entry.
+passs() {
+  emulate -L zsh
+  local root=${PASSWORD_STORE_DIR:-$HOME/.password-store}
+  [[ -d $root ]] || { print -ru2 "passs: not a directory: $root"; return 1 }
+
+  local -a out
+  out=("${(@f)$(cd -- "$root" && fd --type f -e gpg . | sed 's/\.gpg$//' | sort |
+    fzf --query="$*" --select-1 --expect=ctrl-s \
+        --prompt='pass > ' \
+        --header='enter: copy password   ctrl-s: show entry')}")
+
+  [[ -n ${out[2]:-} ]] || return 0
+  if [[ ${out[1]} == ctrl-s ]]; then
+    pass show -- "${out[2]}"
+  else
+    pass show -c -- "${out[2]}"
+  fi
 }

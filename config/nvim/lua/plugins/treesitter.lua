@@ -1,3 +1,10 @@
+local moves = {
+  { "]f", "goto_next_start",     "@function.outer", "Next function" },
+  { "[f", "goto_previous_start", "@function.outer", "Prev function" },
+  { "]c", "goto_next_start",     "@class.outer",    "Next class" },
+  { "[c", "goto_previous_start", "@class.outer",    "Prev class" },
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -5,7 +12,6 @@ return {
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     main = "nvim-treesitter.configs",
-    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
     opts = {
       ensure_installed = {
         "bash",
@@ -34,23 +40,21 @@ return {
       auto_install = true,
       highlight = { enable = true },
       indent = { enable = true },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<CR>",
-          node_incremental = "<CR>",
-          node_decremental = "<BS>",
-          scope_incremental = false,
-        },
-      },
-      textobjects = {
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-        },
-      },
     },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        move = { set_jumps = true },
+      })
+      for _, m in ipairs(moves) do
+        vim.keymap.set({ "n", "x", "o" }, m[1], function()
+          require("nvim-treesitter-textobjects.move")[m[2]](m[3], "textobjects")
+        end, { desc = m[4] })
+      end
+    end,
   },
 }

@@ -35,14 +35,11 @@ return {
   {
     "ibhagwan/fzf-lua",
     keys = {
-      { "<leader>fp", pick_repo,                     desc = "Pick repo (~/git)" },
-      { "<leader>hh", goto_dir("~/git"),             desc = "git — all repos" },
-      { "<leader>hd", goto_dir("~/git/dots"),        desc = "dots — laptop nixos" },
-      { "<leader>hf", goto_dir("~/git/flakes"),      desc = "flakes — sarten" },
-      { "<leader>hn", goto_dir("~/git/notes"),       desc = "notes" },
-      { "<leader>hb", goto_dir("~/ben"),             desc = "ben — personal" },
-      { "<leader>ha", goto_dir("~/archive"),         desc = "archive" },
-      { "<leader>hc", goto_dir("~/.config"),         desc = "config" },
+      { "<leader>fp", pick_repo,                desc = "Pick repo (~/git)" },
+      { "<leader>hd", goto_dir("~/git/dots"),   desc = "dots" },
+      { "<leader>hn", goto_dir("~/git/notes"),  desc = "notes" },
+      { "<leader>hb", goto_dir("~/ben"),        desc = "ben" },
+      { "<leader>ha", goto_dir("~/archive"),    desc = "archive" },
     },
   },
 }

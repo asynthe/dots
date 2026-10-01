@@ -33,7 +33,7 @@
             sox
             starship
             superfile
-            tmux tmuxp zellij
+            tmux tmuxp
             tree
             unzip unar rar
             vim helix

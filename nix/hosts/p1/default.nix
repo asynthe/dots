@@ -8,7 +8,7 @@
 
             impermanence
             laptop
-            audio bluetooth colord controller android
+            audio bluetooth colord controller android hhkb
             intel-gpu nvidia-prime
             firmware fingerprint tpm
 
@@ -19,14 +19,13 @@
 
             hyprland hyprglass autologin
             quickshell
-            terminals desktop-apps firefox-clean
+            terminals desktop-apps firefox
             fonts theme xdg ime
 
             python javascript
-            database database-gui postgres-local
-            terraform vscodium
+            database database-gui postgres-local dbt
+            infra vscodium
             web-dev work
-            deploy-rs
             virtualisation
 
             codex claude-code opencode hermes
@@ -34,7 +33,8 @@
             steam wine lutris
             osu-lazer stepmania
             star-citizen star-citizen-cache
-            eden ryubing pcsx2 xenia emulation-station
+            retroarch dolphin cemu azahar ppsspp pcsx2 rpcs3
+            eden ryubing xenia emulation-station
             uzdoom
 
             flatpak gimp kiwix monero qbittorrent
@@ -53,17 +53,18 @@
         sys.impermanence.folder = "/persist";
 
         sys.share.mounts = {
-            "/home/kazu/music"   = "/home/meow/archive/media/music";
-            "/home/kazu/anime"   = "/home/meow/archive/media/anime";
-            "/home/kazu/book"    = "/home/meow/archive/media/book";
-            "/home/kazu/movies"  = "/home/meow/archive/media/movies";
-            "/home/kazu/series"  = "/home/meow/archive/media/series";
-            "/home/kazu/youtube" = "/home/meow/archive/media/youtube";
-            "/home/kazu/arcade"  = "/home/meow/archive/arcade";
-            "/home/kazu/games"   = "/home/meow/archive/games";
-            "/home/kazu/roms"    = "/home/meow/archive/roms";
-            "/home/kazu/windows" = "/home/meow/archive/windows";
+            "/home/shared/anime"   = "/home/meow/archive/media/anime";
+            "/home/shared/arcade"  = "/home/meow/archive/arcade";
+            "/home/shared/book"    = "/home/meow/archive/media/book";
+            "/home/shared/games"   = "/home/meow/archive/games";
+            "/home/shared/movies"  = "/home/meow/archive/media/movies";
+            "/home/shared/music"   = "/home/meow/archive/media/music";
+            "/home/shared/roms"    = "/home/meow/archive/roms";
+            "/home/shared/series"  = "/home/meow/archive/media/series";
+            "/home/shared/youtube" = "/home/meow/archive/media/youtube";
         };
+
+        sys.wazuh.syslogTarget = "192.168.1.142";
 
         sys.gpu.intelBusId  = "PCI:0:2:0";
         sys.gpu.nvidiaBusId = "PCI:1:0:0";

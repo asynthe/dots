@@ -7,23 +7,27 @@ map("n", "<C-j>", "<C-w>j", { desc = "Window down" })
 map("n", "<C-k>", "<C-w>k", { desc = "Window up" })
 map("n", "<C-l>", "<C-w>l", { desc = "Window right" })
 
-map("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
-map("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "[b", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+map("n", "]b", "<cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "[q", "<cmd>cprevious<CR>", { desc = "Previous quickfix" })
+map("n", "]q", "<cmd>cnext<CR>", { desc = "Next quickfix" })
 
-map("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
-map("n", "<leader>q", "<cmd>quit<CR>", { desc = "Quit window" })
-map("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
-map("n", "<leader>bD", "<cmd>bdelete!<CR>", { desc = "Delete buffer, discard changes" })
+map("n", "[e", "<cmd>move -2<CR>==", { desc = "Move line up" })
+map("n", "]e", "<cmd>move +1<CR>==", { desc = "Move line down" })
+map("x", "[e", ":move '<-2<CR>gv=gv", { desc = "Move selection up" })
+map("x", "]e", ":move '>+1<CR>gv=gv", { desc = "Move selection down" })
 
-map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
-map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+map("x", "<", "<gv")
+map("x", ">", ">gv")
 
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
+
+map("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
+map("n", "<leader>.", function() require("core.notes").picker() end, { desc = "Open note" })
+map("n", "<leader>c", function() require("core.code").picker() end, { desc = "Recent code" })
 
 local function toggle(name, on, off)
   return function()
@@ -33,23 +37,22 @@ local function toggle(name, on, off)
   end
 end
 
-map("n", "<leader>uw", toggle("wrap", true, false), { desc = "Toggle wrap" })
-map("n", "<leader>un", toggle("number", true, false), { desc = "Toggle line numbers" })
-map("n", "<leader>ur", toggle("relativenumber", true, false), { desc = "Toggle relative numbers" })
-map("n", "<leader>uc", toggle("conceallevel", 2, 0), { desc = "Toggle conceal" })
+map("n", "<leader>uw", toggle("wrap", true, false), { desc = "Wrap" })
+map("n", "<leader>uc", toggle("conceallevel", 2, 0), { desc = "Conceal" })
+
+map("n", "<leader>un", function()
+  local num, rel = vim.wo.number, vim.wo.relativenumber
+  if not num and not rel then
+    vim.wo.number = true
+  elseif num and not rel then
+    vim.wo.relativenumber = true
+  else
+    vim.wo.number, vim.wo.relativenumber = false, false
+  end
+end, { desc = "Cycle line numbers" })
+
 map("n", "<leader>ud", function()
   local on = not vim.diagnostic.is_enabled()
   vim.diagnostic.enable(on)
   vim.notify("diagnostics = " .. tostring(on))
-end, { desc = "Toggle diagnostics" })
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("UserMarkdownKeys", { clear = true }),
-  pattern = "markdown",
-  callback = function(ev)
-    map("i", "<C-CR>", function()
-      local marker = vim.api.nvim_get_current_line():match("^(%s*[-*+] )")
-      return marker and ("<CR>" .. marker) or "<CR>"
-    end, { buffer = ev.buf, expr = true, desc = "New list item" })
-  end,
-})
+end, { desc = "Diagnostics" })

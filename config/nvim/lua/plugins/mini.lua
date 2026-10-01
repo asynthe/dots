@@ -28,15 +28,24 @@ return {
     "echasnovski/mini.surround",
     version = false,
     keys = {
-      { "sa", mode = { "n", "v" } },
-      { "sd" },
-      { "sr" },
-      { "sf" },
-      { "sF" },
-      { "sh" },
+      { "gsa", mode = { "n", "v" } },
+      { "gsd" },
+      { "gsr" },
     },
     config = function()
-      require("mini.surround").setup()
+      require("mini.surround").setup({
+        mappings = {
+          add = "gsa",
+          delete = "gsd",
+          replace = "gsr",
+          find = "",
+          find_left = "",
+          highlight = "",
+          update_n_lines = "",
+          suffix_last = "",
+          suffix_next = "",
+        },
+      })
     end,
   },
 }

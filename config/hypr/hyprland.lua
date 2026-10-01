@@ -5,7 +5,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("uwsm app -- mullvad-vpn")
     hl.exec_cmd("uwsm app -- nm-applet --indicator")
     --hl.exec_cmd("[workspace 9 silent] musicbee")
-    hl.exec_cmd("[workspace 10 silent] webcord")
+    hl.exec_cmd("[workspace 10 silent] vesktop")
 
     --hl.exec_cmd("elephant")
     --hl.exec_cmd("walker --gapplication-service")
@@ -265,6 +265,28 @@ hl.window_rule({
     match      = { class = "^steam_app_[0-9]+$" },
     fullscreen = true,
 })
+-- beatmania IIDX 33 (~/wine/iidx, `iidx`): TDJ mode opens two windows, main
+-- 1920x1080 and touch sub 1280x720, launched borderless so the surface is
+-- exactly the game's resolution. Pinned to that size (no scaling).
+-- TODO placement: monitor/move rules had no visible effect on these
+-- winewayland windows (tested 2026-09-28), so they open where hyprland puts them.
+local iidxTitle = "^beatmania IIDX [0-9]+ .* "
+hl.window_rule({
+    name  = "iidx-main",
+    match = { class = "^spice64\\.exe$", title = iidxTitle .. "main$" },
+    float = true,
+    size  = "1920 1080",
+    border_size = 0,
+    rounding    = 0,
+})
+hl.window_rule({
+    name  = "iidx-sub",
+    match = { class = "^spice64\\.exe$", title = iidxTitle .. "sub$" },
+    float = true,
+    size  = "1280 720",
+    border_size = 0,
+    rounding    = 0,
+})
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
@@ -364,12 +386,13 @@ local menu        = "fuzzel"
 local barToggle   = "qs -c bar ipc call bar toggle"
 local screenshotsDir = (os.getenv("HOME") or "~") .. "/downloads/screenshots"
 local session    = (os.getenv("HOME") or "~") .. "/.config/hypr/session.sh"
+local browser    = (os.getenv("HOME") or "~") .. "/git/dots/scripts/firefox/browser.sh"
 
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barToggle))
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd(session))
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
@@ -377,7 +400,6 @@ local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close()
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 
 hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
-hl.bind(mainMod .. " + SHIFT + X", monitors.toggle_laptop_ws_count)
 
 hl.bind("Print",       hl.dsp.exec_cmd("hyprshot -m region -o "  .. screenshotsDir))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshotsDir))

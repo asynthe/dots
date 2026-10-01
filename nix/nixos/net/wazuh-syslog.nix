@@ -28,7 +28,7 @@
                                target="${cfg.syslogTarget}"
                                port="${toString cfg.syslogPort}"
                                protocol="udp"
-                               template="RSYSLOG_SyslogProtocol23Format")
+                               template="RSYSLOG_TraditionalForwardFormat")
                 '';
             };
         };

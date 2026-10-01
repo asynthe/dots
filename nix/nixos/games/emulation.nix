@@ -16,24 +16,45 @@
         environment.systemPackages = with pkgs; [ xenia-canary ];
     };
 
-    flake.modules.nixos.rpcs3 = { pkgs, ... }:
-    let
-        rpcs3-bin = pkgs.appimageTools.wrapType2 {
-            pname   = "rpcs3";
-            version = "0.0.41-19515-a7fc31f3";
-            src     = pkgs.fetchurl {
-                url    = "https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-a7fc31f3212c55bf0b70b45875c52dfc94f6641a/rpcs3-v0.0.41-19515-a7fc31f3_linux64.AppImage";
-                sha256 = "1jbldny7k2qx4apbp9nd9m4j79w5pgdzykb47wsc80rzav0xsxaw";
-            };
-        };
-    in {
-        assertions = [{
-            assertion = pkgs.stdenv.hostPlatform.isx86_64 && pkgs.stdenv.hostPlatform.isLinux;
-            message   = "rpcs3: AppImage is only available for x86_64-linux";
-        }];
-        environment.systemPackages = [ rpcs3-bin ];
+    flake.modules.nixos.dolphin = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ dolphin-emu ];
     };
 
+    flake.modules.nixos.cemu = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ cemu ];
+    };
+
+    flake.modules.nixos.azahar ={ pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ azahar ];
+    };
+
+    flake.modules.nixos.ppsspp = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ ppsspp ];
+    };
+
+    flake.modules.nixos.rpcs3 = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [ rpcs3 ];
+    };
+
+    # Cores are exposed at /run/current-system/sw/lib/retroarch/cores, which is
+    # where ES-DE's custom find rules (config/ES-DE/custom_systems) look.
+    flake.modules.nixos.retroarch = { pkgs, ... }: {
+        environment.pathsToLink = [ "/lib/retroarch" ];
+        environment.systemPackages = [
+            (pkgs.retroarch.withCores (c: with c; [
+                mesen           # nes
+                snes9x          # snes
+                mgba            # gb gbc gba
+                mupen64plus     # n64
+                melondsds       # nds
+                beetle-psx-hw   # psx
+                ppsspp          # psp
+            ]))
+        ];
+    };
+
+    # Launched as `es-de`: state goes to XDG_DATA_HOME instead of ~/ES-DE, and
+    # it runs on the dGPU so every emulator it spawns inherits the offload.
     flake.modules.nixos.emulation-station = { pkgs, ... }:
     let
         emulation-station-bin = pkgs.appimageTools.wrapType2 {
@@ -44,11 +65,28 @@
                 sha256 = "109mfa3aag6x4gf08326cbgs09dl403ygvaqm8yicmcdfd6s8q9w";
             };
         };
+        emulation-station = pkgs.writeShellScriptBin "es-de" ''
+            export ESDE_APPDATA_DIR="''${ESDE_APPDATA_DIR:-''${XDG_DATA_HOME:-$HOME/.local/share}/ES-DE}"
+            if command -v nvidia-offload >/dev/null; then
+                exec nvidia-offload ${emulation-station-bin}/bin/es-de "$@"
+            fi
+            exec ${emulation-station-bin}/bin/es-de "$@"
+        '';
     in {
         assertions = [{
             assertion = pkgs.stdenv.hostPlatform.isx86_64 && pkgs.stdenv.hostPlatform.isLinux;
             message   = "emulation-station: AppImage is only available for x86_64-linux";
         }];
-        environment.systemPackages = [ emulation-station-bin ];
+        environment.systemPackages = [
+            emulation-station
+            (pkgs.makeDesktopItem {
+                name        = "es-de";
+                desktopName = "ES-DE";
+                comment     = "Emulator frontend";
+                exec        = "es-de";
+                icon        = "applications-games";
+                categories  = [ "Game" ];
+            })
+        ];
     };
 }
