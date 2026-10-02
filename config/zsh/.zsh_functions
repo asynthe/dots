@@ -357,7 +357,7 @@ passs() {
   [[ -d $root ]] || { print -ru2 "passs: not a directory: $root"; return 1 }
 
   local -a out
-  out=("${(@f)$(cd -- "$root" && fd --type f -e gpg . | sed 's/\.gpg$//' | sort |
+  out=("${(@f)$(cd -- "$root" && find . -type f -name '*.gpg' | sed 's|^\./||; s/\.gpg$//' | sort |
     fzf --query="$*" --select-1 --expect=ctrl-s \
         --prompt='pass > ' \
         --header='enter: copy password   ctrl-s: show entry')}")

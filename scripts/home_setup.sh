@@ -80,7 +80,7 @@ link() {
 }
 
 CONFIGS=(
-    alacritty atuin bash btop cava direnv emacs fuzzel ghostty
+    alacritty atuin bash btop cava direnv emacs fastfetch fuzzel ghostty
     gtk-3.0 gtk-4.0 hypr jj kitty mako mpd mpv ncmpcpp nvim opencode
     qBittorrent quickshell sioyek starship tmux uzdoom
     wezterm yazi zathura zsh

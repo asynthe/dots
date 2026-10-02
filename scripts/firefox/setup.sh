@@ -35,7 +35,7 @@ ff_path() {
 
 if [ -f "$FF/profiles.ini" ]; then
     ff_up=0
-    pgrep -f 'lib/firefox/firefox' >/dev/null 2>&1 && ff_up=1
+    pgrep -f '/firefox/firefox' >/dev/null 2>&1 && ff_up=1
 
     for name in default study work infra; do
         prof=$(ff_path "$name")

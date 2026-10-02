@@ -1,10 +1,11 @@
 # Don't do anything if not running interactively.
 [[ $- != *i* ]] && return
 
-export EDITOR=nvim
 export DOTS_DIR=$HOME/git/dots
-export NOTES_DIR=$HOME/git/notes
+export EDITOR=nvim
 export GNUPGHOME=$HOME/.local/share/gnupg
+export GPG_TTY=$(tty)
+export NOTES_DIR=$HOME/git/notes
 export PASSWORD_STORE_DIR=$HOME/git/auth/pass
 export SOPS_AGE_KEY_FILE=$HOME/git/auth/age/keys.txt
 
@@ -12,11 +13,12 @@ export SOPS_AGE_KEY_FILE=$HOME/git/auth/age/keys.txt
 if [[ -o interactive ]]; then
   TMOUT=180
   TRAPALRM() {
-    case $((RANDOM % 3)) in
-      0) unimatrix -s -n 94 2>/dev/null ;;
-      1) pipes-rs ;;
-      2) asciiquarium -t -s ;;
-    esac
+    # Only what's installed; asciiquarium also needs perl's Term::Animation.
+    local -a s
+    (( $+commands[unimatrix] )) && s+=('unimatrix -s -n 94 2>/dev/null')
+    (( $+commands[pipes-rs] )) && s+=('pipes-rs')
+    (( $+commands[asciiquarium] )) && perl -MTerm::Animation -e1 2>/dev/null && s+=('asciiquarium -t -s')
+    (( $#s )) && eval "${s[RANDOM % $#s + 1]}"
   }
 fi
 
@@ -47,6 +49,9 @@ bindkey -M vicmd '^[OF' end-of-line
 # # Tab / Tab + Shift -> menu-complete / reverse-menu-complete
 # bindkey -M vicmd '^[[Z' reverse-menu-complete
 # bindkey -M viins '^[[Z' reverse-menu-complete
+
+# Prompt: user@host path $ (# as root), terminal's default colour
+PROMPT='%n@%m %~ %(!.#.$) '
 
 # Sources
 source "$ZDOTDIR/.zsh_aliases"

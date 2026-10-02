@@ -32,7 +32,7 @@ done
 [ -n "${PROFILE:-}" ] || die "no firefox profile found"
 echo "── profile ${PROFILE/#$HOME/\~}"
 
-if pgrep -f 'lib/firefox/firefox' >/dev/null 2>&1; then
+if pgrep -f '/firefox/firefox' >/dev/null 2>&1; then
     die "firefox is running — close it first"
 fi
 if [ -L "$PROFILE/lock" ]; then

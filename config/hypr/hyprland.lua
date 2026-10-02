@@ -3,7 +3,6 @@ local monitors = require("monitors")
 hl.on("hyprland.start", function ()
     hl.exec_cmd("mpd")
     hl.exec_cmd("uwsm app -- mullvad-vpn")
-    hl.exec_cmd("uwsm app -- nm-applet --indicator")
     --hl.exec_cmd("[workspace 9 silent] musicbee")
     hl.exec_cmd("[workspace 10 silent] vesktop")
 
@@ -37,7 +36,7 @@ hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
 hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
 -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
 
-local hyprglass = "/run/current-system/sw/lib/libhyprglass.so"
+local hyprglass = "/usr/local/lib/libhyprglass.so"
 hl.permission(hyprglass, "plugin", "allow")
 hl.plugin.load(hyprglass)
 
@@ -443,7 +442,7 @@ end
 
 for i = 1, 10 do
     local key = i % 10
-    hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
+    hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i, on_current_monitor = true }))
     hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i, follow = false }))
 end
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))

@@ -3,11 +3,14 @@ window-inherit-font-size = true
 window-inherit-working-directory = true
 working-directory = home
 
+# ssh: xterm-ghostty, and fallback to xterm-256color.
+shell-integration-features = ssh-terminfo,ssh-env
+
 window-padding-x = 14
 window-padding-y = 14
 #window-padding-balance = true
 
-font-size = 12
+font-size = 14
 font-family = TX-02
 font-style = Condensed
 font-style-bold = Bold Condensed

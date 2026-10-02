@@ -1,3 +1,9 @@
+local parsers = {
+  "bash", "python", "nix", "sql", "rust", "go", "typescript", "tsx",
+  "javascript", "json", "yaml", "toml", "markdown", "markdown_inline",
+  "lua", "luadoc", "vim", "vimdoc", "query", "diff", "git_rebase", "gitcommit",
+}
+
 local moves = {
   { "]f", "goto_next_start",     "@function.outer", "Next function" },
   { "[f", "goto_previous_start", "@function.outer", "Prev function" },
@@ -8,39 +14,22 @@ local moves = {
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
+    branch = "main",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    main = "nvim-treesitter.configs",
-    opts = {
-      ensure_installed = {
-        "bash",
-        "python",
-        "nix",
-        "sql",
-        "rust",
-        "go",
-        "typescript",
-        "tsx",
-        "javascript",
-        "json",
-        "yaml",
-        "toml",
-        "markdown",
-        "markdown_inline",
-        "lua",
-        "luadoc",
-        "vim",
-        "vimdoc",
-        "query",
-        "diff",
-        "git_rebase",
-        "gitcommit",
-      },
-      auto_install = true,
-      highlight = { enable = true },
-      indent = { enable = true },
-    },
+    lazy = false,
+    config = function()
+      require("nvim-treesitter").install(parsers)
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if not lang or not vim.treesitter.language.add(lang) then
+            return
+          end
+          vim.treesitter.start(args.buf, lang)
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",

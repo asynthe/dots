@@ -29,7 +29,7 @@ git clone https://github.com/asynthe/dots.git
 
 | Device            | OS               |
 | ----------------- | ---------------- |
-| Thinkpad P1 Gen 7 | NixOS (unstable) |
+| Thinkpad P1 Gen 7 | Gentoo           |
 | Macbook Air M2    | macOS            |
 
 
