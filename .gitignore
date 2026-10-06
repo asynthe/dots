@@ -37,4 +37,3 @@ config/emacs/transient
 # Emacs backup files
 .#*
 \#*.org\#
-windows/rar/rarreg.key
