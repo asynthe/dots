@@ -24,10 +24,9 @@ end
 
 function M.picker()
   local fzf = require("fzf-lua")
-  local notes_dir = vim.fn.expand("~/git/notes")
-  local files = vim.fn.systemlist(
-    "find " .. vim.fn.shellescape(notes_dir) .. " -name '*.md' -type f 2>/dev/null"
-  )
+  local notes_dir = require("host").git_root .. "/notes"
+  local files = vim.fs.find(function(name) return name:match("%.md$") ~= nil end,
+    { path = notes_dir, type = "file", limit = math.huge })
 
   local entries = {}
   local path_map = {}
@@ -54,6 +53,26 @@ function M.picker()
       end,
     },
   })
+end
+
+local function daily_dir()
+  return require("host").git_root .. "/notes/daily"
+end
+
+function M.daily_folder()
+  local dir = daily_dir()
+  vim.fn.mkdir(dir, "p")
+  require("yazi").yazi(nil, dir)
+end
+
+function M.daily_latest()
+  local files = vim.fn.glob(daily_dir() .. "/*.md", true, true)
+  if #files == 0 then
+    vim.notify("no daily notes yet", vim.log.levels.WARN)
+    return
+  end
+  table.sort(files)
+  vim.cmd("edit " .. vim.fn.fnameescape(files[#files]))
 end
 
 return M

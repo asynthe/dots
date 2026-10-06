@@ -1,10 +1,19 @@
+local function toggle()
+  local file = vim.api.nvim_buf_get_name(0)
+  local path
+  if file ~= "" and vim.bo.buftype == "" then
+    path = vim.fs.dirname(vim.fs.dirname(vim.fs.normalize(file)))
+  end
+  require("nvim-tree.api").tree.toggle({ path = path, find_file = path ~= nil, focus = true })
+end
+
 return {
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     cmd = { "NvimTreeToggle", "NvimTreeFindFile", "NvimTreeOpen" },
     keys = {
-      { "<leader>t", "<cmd>NvimTreeToggle<CR>", desc = "File tree" },
+      { "<leader>t", toggle, desc = "File tree" },
     },
     opts = {
       hijack_netrw = false,

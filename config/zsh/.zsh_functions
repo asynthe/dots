@@ -126,6 +126,7 @@ check_repo() {
     "study   github,gitlab  private"
     "sakuhin github,gitlab  private"
     "auth    github,gitlab  private"
+    "sarten  github,gitlab  public"
   )
   local -a roots=("$HOME/git" "$HOME")
   local cache=${XDG_CACHE_HOME:-$HOME/.cache}/check_repo

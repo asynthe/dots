@@ -31,10 +31,15 @@ return {
       workspaces = {
         {
           name = "main",
-          path = "~/git/notes",
+          path = require("host").git_root .. "/notes",
         },
       },
       picker = { name = "fzf-lua" },
+      ui = { enable = false },
+      daily_notes = {
+        folder = "daily",
+        date_format = "YYYYMMDD_[notes]",
+      },
     },
     config = function(_, opts)
       require("obsidian").setup(opts)

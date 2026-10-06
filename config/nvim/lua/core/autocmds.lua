@@ -28,6 +28,20 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
+  pattern = "typst",
+  callback = function(ev)
+    vim.opt_local.expandtab = true
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+
+    local typst = require("core.typst")
+    vim.keymap.set("n", "<leader>p", typst.preview, { buffer = ev.buf, desc = "Preview book" })
+    vim.keymap.set("n", "<leader>P", typst.stop, { buffer = ev.buf, desc = "Stop preview" })
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = augroup,
   pattern = "*.md",

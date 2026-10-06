@@ -2,6 +2,7 @@ local parsers = {
   "bash", "python", "nix", "sql", "rust", "go", "typescript", "tsx",
   "javascript", "json", "yaml", "toml", "markdown", "markdown_inline",
   "lua", "luadoc", "vim", "vimdoc", "query", "diff", "git_rebase", "gitcommit",
+  "typst",
 }
 
 local moves = {
@@ -18,6 +19,9 @@ return {
     build = ":TSUpdate",
     lazy = false,
     config = function()
+      if require("host").is_windows and not vim.env.CC then
+        vim.env.CC = "gcc"
+      end
       require("nvim-treesitter").install(parsers)
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)

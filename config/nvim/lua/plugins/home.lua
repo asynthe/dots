@@ -6,23 +6,28 @@ local function goto_dir(path)
   end
 end
 
+local git = require("host").git_root
+
 local function pick_repo()
-  local repos = vim.fn.systemlist(
-    [[find ~/git -mindepth 1 -maxdepth 2 -name .git -printf '%h\n' | sort]]
-  )
-  if vim.v.shell_error ~= 0 or #repos == 0 then
-    vim.notify("no repos under ~/git", vim.log.levels.WARN)
+  local repos = {}
+  for _, pat in ipairs({ "/*/.git", "/*/*/.git" }) do
+    for _, g in ipairs(vim.fn.glob(git .. pat, true, true)) do
+      table.insert(repos, vim.fs.dirname(vim.fs.normalize(g)))
+    end
+  end
+  table.sort(repos)
+  if #repos == 0 then
+    vim.notify("no repos under " .. git, vim.log.levels.WARN)
     return
   end
-  local home = vim.fn.expand("~")
   require("fzf-lua").fzf_exec(
-    vim.tbl_map(function(r) return (r:gsub("^" .. vim.pesc(home) .. "/git/", "")) end, repos),
+    vim.tbl_map(function(r) return (r:gsub("^" .. vim.pesc(git) .. "/", "")) end, repos),
     {
       prompt = "repo> ",
       actions = {
         ["default"] = function(selected)
           if not selected or not selected[1] then return end
-          local dir = home .. "/git/" .. selected[1]
+          local dir = git .. "/" .. selected[1]
           vim.cmd.tcd(dir)
           require("fzf-lua").files({ cwd = dir })
         end,
@@ -35,9 +40,9 @@ return {
   {
     "ibhagwan/fzf-lua",
     keys = {
-      { "<leader>fp", pick_repo,                desc = "Pick repo (~/git)" },
-      { "<leader>hd", goto_dir("~/git/dots"),   desc = "dots" },
-      { "<leader>hn", goto_dir("~/git/notes"),  desc = "notes" },
+      { "<leader>fp", pick_repo,                 desc = "Pick repo" },
+      { "<leader>hd", goto_dir(git .. "/dots"),  desc = "dots" },
+      { "<leader>hn", goto_dir(git .. "/notes"), desc = "notes" },
       { "<leader>hb", goto_dir("~/ben"),        desc = "ben" },
       { "<leader>ha", goto_dir("~/archive"),    desc = "archive" },
     },

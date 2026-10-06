@@ -7,6 +7,7 @@
                 "${pkgs.arkenfox-userjs}/user.cfg"
                 "${../../../config/firefox/common.cfg}"
             ];
+            policies.SearchEngines.Default = "DuckDuckGo";
             policies.ExtensionSettings = builtins.mapAttrs (_: slug: {
                 install_url = "https://addons.mozilla.org/firefox/downloads/latest/${slug}/latest.xpi";
                 installation_mode = "force_installed";

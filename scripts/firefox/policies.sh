@@ -39,7 +39,7 @@ json=$(printf '%s\n' "${ADDONS[@]}" | jq -Rn '{policies: {ExtensionSettings: ([i
     | splits(" +") as $f | select($f != "") | $f] | [range(0; length; 2) as $i | {(.[$i]):
     {installation_mode: "force_installed",
      install_url: ("https://addons.mozilla.org/firefox/downloads/latest/" + .[$i+1] + "/latest.xpi")}}]
-    | add)}}')
+    | add), SearchEngines: {Default: "DuckDuckGo"}}}')
 note "${#ADDONS[@]} add-ons"
 
 theme=$(sed -n 's/.*"extensions.activeThemeID", *"\([^"]*\)".*/\1/p' "$DOTS/config/firefox/common.cfg")

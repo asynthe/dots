@@ -15,10 +15,11 @@ return {
       }
 
       dashboard.section.buttons.val = {
-        dashboard.button(".", "open note", "<cmd>lua require('core.notes').picker()<CR>"),
-        dashboard.button("c", "code",      "<cmd>lua require('core.code').picker()<CR>"),
-        dashboard.button("f", "find file", "<cmd>Yazi cwd<CR>"),
-        dashboard.button("q", "quit",      "<cmd>qa<CR>"),
+        dashboard.button(".", "open note",    "<cmd>lua require('core.notes').picker()<CR>"),
+        dashboard.button("n", "today's note", "<cmd>lua require('core.notes').daily_latest()<CR>"),
+        dashboard.button("c", "code",         "<cmd>lua require('core.code').picker()<CR>"),
+        dashboard.button("f", "find file",    "<cmd>Yazi cwd<CR>"),
+        dashboard.button("q", "quit",         "<cmd>qa<CR>"),
       }
 
       local width = 0
