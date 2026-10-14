@@ -686,7 +686,7 @@ go install github.com/projectdiscovery/{nuclei/v3/cmd/nuclei,subfinder/v2/cmd/su
 go install github.com/owasp-amass/amass/v4/...@master
 go install github.com/jpillora/chisel@latest
 cargo install feroxbuster
-uv tool install netexec; uv tool install dnsrecon
+uv tool install netexec; uv tool install dnsrecon; uv tool install mitmproxy
 ```
 
 When needed: burpsuite, metasploit (omnibus), seclists (clone into `~/archive`), exploitdb,
@@ -696,11 +696,11 @@ wpscan, bettercap, responder, smbmap, enum4linux-ng, whatweb, cewl, hashid, ligo
 
 *Aspects: steam, wine, lutris, osu-lazer, stepmania, star-citizen, emulators, uzdoom*
 
-**Packages:** `packages.md` → **games** (its **before** block pins wine-staging 11.14 for MusicBee,
-sets `wow64`, enables steam-overlay).
+**Packages:** `packages.md` → **games** (its **before** block keywords the newest wine-staging,
+sets `wow64`, enables steam-overlay). Then check MusicBee; 11.16 once broke it.
 
 ```bash
-sudo eselect wine set wine-staging-11.14 2>/dev/null || true
+eselect wine list          # the installed wine-staging is marked *
 ```
 
 - **Steam:** native, in the block. Its 32-bit deps need `--autounmask-write`, `dispatch-conf`,

@@ -221,6 +221,12 @@ Not packaged: dualsensectl.
 
 Everything from NixOS's `cli.nix`. `psmisc` provides `killall`.
 
+before:
+```bash
+printf '%s ~amd64\n' app-shells/zoxide games-misc/lolcat app-misc/tty-clock | sudo tee /etc/portage/package.accept_keywords/cli
+printf '%s\n' 'gnustep-base/gnustep-make native-exceptions' 'sys-devel/gcc objc' | sudo tee /etc/portage/package.use/cli   # unar
+```
+
 ```bash
 sudo emerge -av --noreplace \
   sys-apps/bat \
@@ -318,6 +324,8 @@ sudo emerge -av --noreplace \
 before:
 ```bash
 echo 'dev-lang/rust-bin rust-analyzer rust-src' | sudo tee /etc/portage/package.use/rust
+printf '%s ~amd64\n' dev-vcs/jj dev-db/duckdb dev-db/dbeaver-bin | sudo tee /etc/portage/package.accept_keywords/dev
+echo 'dev-cpp/simdutf atomic-base64' | sudo tee /etc/portage/package.use/dev   # nodejs (yarn)
 ```
 
 ```bash
@@ -370,6 +378,7 @@ before:
 ```bash
 echo 'app-emulation/qemu spice usbredir usb virtfs' | sudo tee /etc/portage/package.use/virt
 echo 'app-emulation/libvirt virt-network qemu virtiofsd' | sudo tee -a /etc/portage/package.use/virt
+printf '%s\n' 'net-libs/gnutls pkcs11 tools' 'net-misc/spice-gtk usbredir' 'net-dns/dnsmasq script' | sudo tee -a /etc/portage/package.use/virt   # swtpm, virt-manager, libvirt networks
 ```
 
 ```bash
@@ -387,6 +396,12 @@ sudo emerge -av --noreplace \
 ```
 
 ## apps
+
+before:
+```bash
+echo 'media-sound/spek ~amd64' | sudo tee /etc/portage/package.accept_keywords/apps
+echo 'net-misc/aria2 metalink bittorrent xmlrpc' | sudo tee /etc/portage/package.use/apps   # kiwix-desktop
+```
 
 ```bash
 sudo emerge -av --noreplace \
@@ -412,19 +427,19 @@ Not packaged: monero-gui, cliamp.
 
 ## games
 
-wine-staging is pinned to **11.14**, because 11.16 breaks MusicBee. `wow64` means Wine
-doesn't need 32-bit multilib. Steam needs the steam-overlay repo, and its 32-bit dependencies
-will ask for a long autounmask list (`--autounmask-write`, then `dispatch-conf`, then run it again).
+wine-staging follows the newest `~amd64` release. It used to be pinned to 11.14 (11.16 broke
+MusicBee), but 11.14 left the tree by 2026-10-14; if MusicBee breaks again, run it under a
+Proton/Lutris runner. `wow64` means Wine doesn't need 32-bit multilib. Steam needs the
+steam-overlay repo, and its 32-bit dependencies will ask for a long autounmask list
+(`--autounmask-write`, then `dispatch-conf`, then run it again).
 
-Status 2026-10-01: the three wine lines of **before** are applied and wine-staging + winetricks are
-installed (34 packages, 26 binaries). The rest of the block and steam-overlay are not run yet.
 `wine` is in `/etc/eselect/wine/bin`, which a shell only gets after `. /etc/profile` or a re-login.
 
 before:
 ```bash
-echo '>app-emulation/wine-staging-11.14' | sudo tee /etc/portage/package.mask/wine
-echo '=app-emulation/wine-staging-11.14 ~amd64' | sudo tee /etc/portage/package.accept_keywords/wine
+echo 'app-emulation/wine-staging ~amd64' | sudo tee /etc/portage/package.accept_keywords/wine
 echo 'app-emulation/wine-staging wow64 wayland' | sudo tee /etc/portage/package.use/wine
+printf '%s ~amd64\n' games-util/lutris games-arcade/osu-lazer games-engines/uzdoom | sudo tee /etc/portage/package.accept_keywords/games
 sudo eselect repository enable steam-overlay && sudo emaint sync -r steam-overlay
 ```
 
@@ -462,6 +477,12 @@ Not in Portage:
 
 ## pentest (optional)
 
+before:
+```bash
+printf '%s ~amd64\n' net-analyzer/masscan net-analyzer/rustscan net-analyzer/nikto net-analyzer/termshark app-crypt/hashcat | sudo tee /etc/portage/package.accept_keywords/pentest
+printf '%s\n' 'dev-libs/capstone python' 'dev-util/unicorn python' 'dev-libs/keystone python' 'net-libs/libwebsockets client' 'net-wireless/lorcon python' 'sys-libs/zlib minizip' | sudo tee /etc/portage/package.use/pentest   # pwntools, gef, kismet, aircrack-ng, termshark
+```
+
 ```bash
 sudo emerge -av --noreplace \
   net-analyzer/wireshark \
@@ -472,7 +493,6 @@ sudo emerge -av --noreplace \
   dev-db/sqlmap \
   net-analyzer/sslscan \
   net-analyzer/testssl \
-  net-proxy/mitmproxy \
   net-analyzer/termshark \
   net-wireless/aircrack-ng \
   net-wireless/kismet \
@@ -483,12 +503,12 @@ sudo emerge -av --noreplace \
   app-admin/checksec \
   dev-debug/gef \
   dev-util/pwntools \
-  dev-util/radare2 \
   net-misc/proxychains
 ```
 
 The rest (ffuf, gobuster, nuclei, subfinder, katana, amass, chisel, feroxbuster, netexec,
-dnsrecon) installs with go, cargo or uv: see setup.md §11.
+dnsrecon, mitmproxy) installs with go, cargo or uv: see setup.md §11. radare2 is fetch-restricted in
+::gentoo (2026-10-14); build it from upstream (`git clone https://github.com/radareorg/radare2 && radare2/sys/user.sh`).
 
 ---
 
