@@ -287,7 +287,7 @@ ShellRoot {
                 { label: "iwctl",       act: function() { root.term(["iwctl"]); } },
                 { label: "Mullvad",     act: function() { root.run(["mullvad-vpn"]); } },
                 { label: "qBittorrent", act: function() { root.run(["qbittorrent"]); } },
-                { label: "Firefox",     act: function() { root.run(["firefox"]); } },
+                { label: "Firefox",     act: function() { root.run([Quickshell.env("HOME") + "/git/dots/scripts/firefox/browser.sh"]); } },
                 { label: "Copy IP",     stay: true, act: function() { Quickshell.clipboardText = root.ip; } },
                 { label: "Rescan",      stay: true, act: function() { if (!netProbe.running) netProbe.running = true;
                                                           root.loadPane("network"); } },

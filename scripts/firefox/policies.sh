@@ -26,10 +26,14 @@ ADDONS=(
     "myallychou@gmail.com                    youtube-recommended-videos"
     "{00000f2a-7cde-4f20-83ed-434fcb420d71}  imagus"
     "{6b733b82-9261-47ee-a595-2dda294a4d08}  yomitan"
+    "nazeka@wareya.moe                       nazeka"
     "{6AC85730-7D0F-4de0-B3FA-21142DD85326}  colorzilla"
     "{c3c10168-4186-445c-9c5b-63f12b8e2c87}  cookie-editor"
     "wappalyzer@crunchlabz.com               wappalyzer"
     "foxyproxy@eric.h.jung                   foxyproxy-standard"
+    "@testpilot-containers                   multi-account-containers"
+    "{f069aec0-43c5-4bbf-b6b4-df95c4326b98}  open-url-in-container"
+    "simple-tab-groups@drive4ik              simple-tab-groups"
 )
 
 echo "── firefox policies"

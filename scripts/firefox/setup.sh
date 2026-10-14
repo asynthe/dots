@@ -24,6 +24,7 @@ link() {
 echo "── firefox profiles"
 FF="$CONF/mozilla/firefox"
 KEEP="$DOTS/config/firefox/keep.js"
+FIREFOX=$(command -v firefox || command -v firefox-bin || echo firefox)
 
 ff_path() {
     awk -F= -v d="$FF" -v n="$1" '
@@ -46,7 +47,7 @@ if [ -f "$FF/profiles.ini" ]; then
             fi
             prof="$FF/$name"
             note "create profile $name"
-            run firefox --headless --CreateProfile "$name $prof"
+            run "$FIREFOX" --headless --CreateProfile "$name $prof"
         fi
         if [ -f "$prof/user.js" ] && [ ! -L "$prof/user.js" ]; then
             if [ $ff_up -eq 1 ]; then
@@ -67,6 +68,9 @@ if [ -f "$FF/profiles.ini" ]; then
     done
 
     marked=$(awk -F= '/^\[/ { n = "" } $1 == "Name" { n = $2 } $1 == "Default" && $2 == 1 { print n }' "$FF/profiles.ini")
+    installed=$(awk -F= '/^\[/ { sec = $0 } $1 == "Default" && sec ~ /^\[Install/ { print $2; exit }' "$FF/profiles.ini")
+    [ "$marked" = default ] && [ -n "$installed" ] && [ "$installed" != "$(basename "$(ff_path default)")" ] \
+        && marked="$installed (install)"
     if [ "$marked" != default ]; then
         if [ $ff_up -eq 1 ]; then
             warn "default profile is '$marked': close firefox and re-run"
@@ -78,6 +82,7 @@ if [ -f "$FF/profiles.ini" ]; then
                 { print }
                 /^Name=default$/ && sec ~ /^\[Profile/ { print "Default=1" }' path="$(basename "$(ff_path default)")" "$FF/profiles.ini" > "$FF/profiles.ini.new"
             mv "$FF/profiles.ini.new" "$FF/profiles.ini"
+            [ -f "$FF/installs.ini" ] && sed -i "s|^Default=.*|Default=$(basename "$(ff_path default)")|" "$FF/installs.ini"
             note "default profile: $marked -> default"
         else
             echo -e "  ${b}would:${nc} make default the default profile (was '$marked')"

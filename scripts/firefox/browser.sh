@@ -3,15 +3,15 @@ set -uo pipefail
 
 PROFILES=(default study work infra)
 FF="$HOME/.config/mozilla/firefox"
+FIREFOX=$(command -v firefox || command -v firefox-bin) || { notify-send -u critical firefox "firefox not installed"; exit 1; }
 
-usage() { printf 'usage: browser.sh [profile [seed-url...]]\nprofiles: %s\n' "${PROFILES[*]}"; }
+usage() { printf 'usage: browser.sh [-p | profile [seed-url...]]\n  no profile: default, -p: pick with fuzzel\nprofiles: %s\n' "${PROFILES[*]}"; }
 
-p=${1:-}
-if [ -z "$p" ]; then
+p=${1:-default}
+(($#)) && shift
+if [ "$p" = -p ]; then
     p=$(printf '%s\n' "${PROFILES[@]}" | fuzzel --dmenu --prompt 'firefox: ') || exit 0
     [ -n "$p" ] || exit 0
-else
-    shift
 fi
 case " ${PROFILES[*]} " in
     *" $p "*) ;;
@@ -42,7 +42,7 @@ if [ -n "$addr" ]; then
 fi
 
 if [ -e "$prof/sessionstore.jsonlz4" ] || [ -e "$prof/sessionstore-backups/recovery.jsonlz4" ]; then
-    exec firefox -P "$p" --name "$id"
+    exec "$FIREFOX" -P "$p" --name "$id"
 fi
 
 args=()
@@ -50,4 +50,4 @@ if (($#)); then
     args=(--new-window "$1"); shift
     for u; do args+=(--new-tab "$u"); done
 fi
-exec firefox -P "$p" --name "$id" "${args[@]}"
+exec "$FIREFOX" -P "$p" --name "$id" "${args[@]}"
