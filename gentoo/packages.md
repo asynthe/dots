@@ -494,9 +494,9 @@ dnsrecon) installs with go, cargo or uv: see setup.md §11.
 
 ## not used: remove
 
-These were installed during the install but aren't part of the system. Do this **after**
-setup.md §3 (the switch to iwd) and §1.9 (autologin instead of greetd). `sys-apps/systemd`
-stays installed because it's in @system. Deselecting it only drops a redundant @world entry.
+Things a stage3 or an older install brings that p1 doesn't use. Run after setup.md §3. Atoms that
+aren't installed are skipped. `sys-apps/systemd` stays (it's in @system); this only drops a
+redundant @world entry.
 
 ```bash
 sudo emerge --deselect gui-apps/waybar gui-apps/tuigreet gui-libs/greetd net-misc/networkmanager www-client/firefox app-editors/nano sys-apps/systemd
