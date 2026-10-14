@@ -28,6 +28,7 @@ $Links = [ordered]@{
     # These read ~/.config on Windows too
     "$HOME\.config\fastfetch"                                  = "$Conf\fastfetch"
     "$HOME\.config\opencode"                                   = "$Conf\opencode"
+    "$HOME\.config\atuin"                                      = "$Conf\atuin"
 
     # These use the Windows folders instead
     "$Local\nvim"                                              = "$Conf\nvim"

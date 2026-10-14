@@ -40,6 +40,13 @@ function x {
 Set-Alias l y
 Set-Alias lf y
 
+# --------------- Atuin ---------------
+
+# After the prompt function above: atuin wraps it to record each command.
+if (Get-Command atuin -ErrorAction SilentlyContinue) {
+    atuin init powershell --disable-up-arrow | Out-String | Invoke-Expression
+}
+
 # --------------- Repo status ---------------
 
 # The profile is a symlink into dots (windows/link.ps1); check_repo.ps1 sits

@@ -35,6 +35,16 @@ return {
         },
       })
 
+      -- C/C++: use clangd from PATH, or the one bundled with Visual Studio (Unreal projects).
+      local vs_clangd = "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/Llvm/x64/bin/clangd.exe"
+      local clangd = host.has("clangd") and "clangd" or (host.has(vs_clangd) and vs_clangd or nil)
+      if clangd then
+        vim.lsp.config("clangd", {
+          cmd = { clangd, "--background-index", "--header-insertion=never" },
+        })
+        vim.lsp.enable("clangd")
+      end
+
       for server, exe in pairs(servers) do
         if host.has(exe) then
           vim.lsp.enable(server)

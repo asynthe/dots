@@ -82,7 +82,7 @@ local opts = {
         "JetBrainsMono Nerd Font",
         "Noto Color Emoji",
     }),
-    font_size = 11.0,
+    font_size = 12.0,
     --use_ime = true,
     --treat_east_asian_ambiguous_width_as_wide = true,
 
