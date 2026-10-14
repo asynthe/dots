@@ -9,22 +9,11 @@ The source of truth is `~/git/dots/nix` (the NixOS flake, as of commit ee0d0bf).
 it replaces, so to answer "is X done?", search this file for the aspect name. Written
 2026-10-01, with package names checked against ::gentoo, ::hyproverlay and ::guru that day.
 
-## Status 2026-10-01
+## Status
 
-- **Done:** install, fwupd (BIOS 1.21), TPM+PIN, §0
-- **Done:** §2 SSH. The p1 key is verified on github (asynthe), gitlab (@asynthe) and sarten.
-- **Partly done:** §1 (guru, uwsm, desktop packages were emerging) and §4 (firewall)
-
-> **This install only: firmware fix first.** Install step 13 used to put `linux-firmware` before
-> the kernel. Its postinst failed and stopped the emerge, so `linux-firmware` and `intel-microcode`
-> were never installed. Wi-Fi only works from the firmware copy inside the current UKI, and the
-> next UKI rebuild (§4, §6) would drop it. Fix: paste the **base** block from `packages.md`
-> (this also records gentoo-kernel in @world; nothing gets rebuilt), then check:
->
-> ```bash
-> ls -d /var/db/pkg/sys-kernel/linux-firmware-* /var/db/pkg/sys-firmware/intel-microcode-*
-> sudo lsinitrd $(ls /efi/EFI/Linux/*.efi | tail -1) | grep -E 'GenuineIntel.bin|iwlwifi-gl'
-> ```
+Reinstall over Windows (2026-10-14): nothing here is done yet. The previous install's state
+(BIOS 1.21 via fwupd, SSH keys on github/gitlab/sarten) carries over: the BIOS stays flashed and
+the keys live in `~/git/auth`, so §2 is only the local part.
 
 ## Rules
 
@@ -269,7 +258,6 @@ This is the same flow as NixOS: getty autologins tty1, and `config/zsh/.zprofile
 gate at boot.
 
 ```bash
-sudo systemctl disable greetd
 sudo systemctl edit getty@tty1
 ```
 
@@ -503,8 +491,8 @@ Add them to the end of the existing single line in `/etc/kernel/cmdline`:
 i915.enable_psr=0 video=DP-1:d
 ```
 
-Rebuild the UKI; it takes effect at the next boot. The UKI is measured into PCR11, not PCR7, so the
-TPM PIN keeps working.
+Rebuild the UKI; it takes effect at the next boot. The new UKI carries its own signed PCR11
+policy, and PCR7 doesn't change, so the TPM PIN keeps working.
 
 ```bash
 sudo emerge --config sys-kernel/gentoo-kernel
@@ -737,7 +725,7 @@ Done 2026-10-01: BIOS 0.1.20 → 0.1.21 (N48ET34W), UEFI CA db 2011 → 2023.
 |---|---|
 | Disk unlock | TPM PIN |
 | tty1 | logs in automatically |
-| sudo | NOPASSWD, so fprintd is never asked |
+| sudo | fingerprint, or meow's password |
 | Fingerprint | hyprlock (lock screen) |
 
 NixOS also used it for login and sudo. Enroll as meow, **without** sudo:
@@ -756,10 +744,22 @@ auth {
 }
 ```
 
-Optional, for the other ttys: add `auth sufficient pam_fprintd.so` as the first auth line of
-`/etc/pam.d/login`. If sudo ever asks for a password again, the same line as the first auth line
-of `/etc/pam.d/sudo` makes it accept a finger. Keep a root shell open (`sudo -i` in another tty)
-while editing PAM.
+sudo: a finger, with the password as fallback. Open a root shell on another tty first
+(`sudo -i` on tty2) and keep it open until `sudo true` works again, because a broken PAM file
+locks you out of sudo. Add this as the **first** `auth` line of `/etc/pam.d/sudo`
+(`sudoedit /etc/pam.d/sudo`):
+
+```text
+auth       sufficient   pam_fprintd.so max-tries=2 timeout=10
+```
+
+```bash
+sudo -k; sudo true && echo sudo-ok   # touch the sensor; 2 misses or 10 s, then it asks for the password
+```
+
+Over ssh, pam_fprintd skips itself and sudo asks for the password straight away.
+
+Optional, for the other ttys: the same line as the first auth line of `/etc/pam.d/login`.
 
 ## 7. Rest of the dotfile changes (in `~/git/dots`)
 
@@ -1036,7 +1036,7 @@ for d in media/anime arcade media/book games media/movies media/music roms media
 | nh, cachix, nix-direnv, star-citizen-cache, flannel overlay | Nix only |
 | hermes (NousResearch hermes-agent service) | no package. Later, if wanted: `uv tool install` from its repo, token from `sops -d ~/git/dots/secrets/secrets.yaml` (key `hermes/…`) into an env file, then a user service |
 | `services.getty.autologinOnce` | systemd has no "once"; tty1 autologins every time |
-| sudo timestamp/lecture settings | moot, sudo is NOPASSWD |
+| sudo timestamp/lecture settings | sudo's defaults (5 min timestamp per terminal) |
 
 ## 16. Check
 

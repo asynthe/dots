@@ -8,7 +8,8 @@ encrypted, base system running, Secure Boot on, TPM + PIN unlock, Wi-Fi. Everyth
 top of that (Hyprland, apps, your files, dots) is `setup.md`, and every package is in
 `packages.md`. All three live in `~/git/dots/gentoo/`.
 
-Revised 2026-10-01.
+Revised 2026-10-14, for a reinstall over Windows 11 on Intel RST RAID0 (first install
+2026-10-01, over NixOS).
 
 ## Machine
 
@@ -36,15 +37,36 @@ Revised 2026-10-01.
 | `nvme1n1p1` | 2G spare (unformatted) |
 | `nvme0n1p2` + `nvme1n1p2` | md0 raid0 → LUKS2 aes-xts-512 → btrfs `@ @home @snapshots @log @distfiles @binpkgs` |
 | Kernel | `sys-kernel/gentoo-kernel`, built locally with its own module-signing key, so nvidia works under Secure Boot |
-| Boot | systemd-boot + signed UKI. Unlock: TPM2 (PCR7) + PIN, with passphrase and recovery key as fallback |
+| Boot | systemd-boot + signed UKI. Unlock: TPM2 (PCR7 + signed PCR11 policy) + PIN, with passphrase and recovery key as fallback |
 
 **sudo:** steps 0-8 run as the live user `gentoo`, with `sudo` on each command that needs root.
 Steps 9-16 run **inside the chroot**, where you're already root, so no `sudo` there (it isn't
 even installed yet). From step 16 on, `sudo` again.
 
+## Before: from Windows
+
+Windows runs on an **Intel RST RAID0 volume** ("Intel Raid 0 Volume", `raid-win`): the firmware
+does the striping, through Intel VMD. Linux would see that as IMSM metadata behind the VMD
+controller, not as the two plain NVMe drives this guide uses (md0 is mdadm's own raid, like on
+NixOS). So the firmware RAID goes away first.
+
+1. **Back up** everything you want from `C:`. The array goes away in step 1, and step 2 erases
+   both drives.
+2. **USB:** write `livegui-amd64-<date>.iso` (in `Downloads`, sha256 + gpg checked) with Rufus
+   in **DD mode**: when it asks ISO or DD, pick DD, as Gentoo's docs say.
+3. **Firmware (F1 at the Lenovo logo):**
+   - Config → Storage: switch the controller from RAID / Intel RST (VMD) to plain **NVMe**
+     (AHCI on some BIOS versions). The drives must show up as two separate disks.
+   - Security → Secure Boot: **off**. The live USB isn't signed with keys this machine trusts,
+     and step 17 resets the keys anyway.
+   - Security → Security Chip: **Clear Security Chip** (the TPM). Windows/BitLocker owned it,
+     and nothing on it survives the wipe. Step 18 enrolls a fresh one.
+4. Boot the USB (F12 → USB).
+
 ## 0. Pre-flight
 
 The date must be correct (TLS + gpg). Fix it with `sudo date -s "YYYY-MM-DD HH:MM"`.
+Wi-Fi in the LiveGUI: the network applet in the panel, or `nmtui`.
 
 ```bash
 date
@@ -52,25 +74,44 @@ ping -c2 gentoo.org
 lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL
 ```
 
-## 1. Wipe the old NixOS array
+`lsblk` must show `nvme0n1` and `nvme1n1` as two 3.6T disks. If it shows one ~7.3T `md126`, or
+`isw_raid_member` in FSTYPE, RST/VMD is still on in the firmware: go back and turn it off.
 
-The live USB auto-assembles the old raid0+LUKS (`md127`, "any:nixraid"). Stop it first.
+The guides, on the live system (read-only copy; step 16 puts them on the new disk):
+
+```bash
+git clone --depth 1 https://gitlab.com/asynthe/dots.git ~/dots && less ~/dots/gentoo/install.md
+```
+
+If the live system has no git: `curl -fLO https://gitlab.com/asynthe/dots/-/raw/main/gentoo/install.md`
+(same for `setup.md`, `packages.md`).
+
+## 1. Wipe the old Intel RST array
+
+Even with RST off, the RAID metadata (IMSM) is still at the end of each drive, and the live USB
+may auto-assemble it as `md127` (container) + `md126` (the Windows volume). Stop both, then erase
+the metadata.
 
 ```bash
 cat /proc/mdstat
-sudo mdadm --stop /dev/md127
-sudo wipefs -a /dev/nvme0n1p1 /dev/nvme1n1p1 /dev/nvme1n1p2
+sudo mdadm --stop --scan
+sudo mdadm --examine /dev/nvme0n1 /dev/nvme1n1 | grep -E 'Magic|Container'   # "Intel Raw RAID"
+sudo mdadm --zero-superblock /dev/nvme0n1 /dev/nvme1n1
 sudo wipefs -a /dev/nvme0n1 /dev/nvme1n1
+sudo mdadm --examine /dev/nvme0n1 /dev/nvme1n1   # "No md superblock detected" on both
 ```
 
-## 2. 4K LBA
+## 2. 4K LBA + secure erase
 
-Format index 1 = 4096 bytes, on both drives. This wipes them.
+Format index 1 = 4096 bytes, on both drives. `--ses=1` makes it a User Data Erase: the drive
+really erases every block (Windows' data included) instead of only remapping them. If a drive
+rejects `--ses=1` ("Invalid Field"), run the same line without it.
 
 ```bash
 sudo nvme id-ns -H /dev/nvme0n1 | grep 'LBA Format'      # expect "LBA Format 1 : ... 4096"
-sudo nvme format /dev/nvme0n1 --lbaf=1
-sudo nvme format /dev/nvme1n1 --lbaf=1
+sudo nvme id-ns -H /dev/nvme1n1 | grep 'LBA Format'
+sudo nvme format /dev/nvme0n1 --lbaf=1 --ses=1
+sudo nvme format /dev/nvme1n1 --lbaf=1 --ses=1
 lsblk -o NAME,SIZE,LOG-SEC,PHY-SEC /dev/nvme0n1 /dev/nvme1n1   # LOG-SEC must be 4096
 ```
 
@@ -224,11 +265,27 @@ getuto
 
 CPU flags: tell every package which instructions this CPU has (AVX, AVX2, AES, …). Without
 them packages build for the lowest common denominator, and some (claude-code) refuse to build.
+This must happen before any other emerge.
+
+They go in `make.conf` as `CPU_FLAGS_X86`, and **only** there: no `package.use/00cpu-flags`
+file. The flags add up across files, so a second list would keep any stale flag switched on.
+Write them from the tool's output, never from a list copied from somewhere else:
 
 ```bash
 emerge --oneshot app-portage/cpuid2cpuflags
-echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags
+cpuid2cpuflags | sed 's/^.*CPU_FLAGS_X86: \(.*\)/CPU_FLAGS_X86="\1"/' >> /etc/portage/make.conf
+tail -1 /etc/portage/make.conf       # CPU_FLAGS_X86="aes avx avx2 avx_vnni … vpclmulqdq" (21 flags)
+ls /etc/portage/package.use/         # no 00cpu-flags
+portageq envvar CPU_FLAGS_X86        # same list as the make.conf line
 ```
+
+Expected on p1 (cpuid2cpuflags 17 and 18, run in WSL on this laptop, 2026-10-14):
+`aes avx avx2 avx_vnni bmi1 bmi2 f16c fma3 mmx mmxext pclmul popcnt rdrand sha sse sse2 sse3
+sse4_1 sse4_2 ssse3 vpclmulqdq`. If the chroot shows a different list, trust the chroot, not this.
+Version 18 starts its output with `*/* `, which the `sed` above strips too.
+
+Binhost packages are built with generic CPU flags, so a package whose `CPU_FLAGS_X86` differ
+from these (ffmpeg, x264, some crypto libs) builds from source instead. That's expected.
 
 `/etc/portage/package.use/p1`. fwupd's `uefi` builds the `fwupdx64.efi` helper (this firmware can't take capsules from disk),
 and `USE=secureboot` signs it.
@@ -305,10 +362,16 @@ openssl req -new -nodes -utf8 -sha512 -days 36500 -batch -x509 -config x509.genk
 chmod 600 signing_key.pem; cd /
 ```
 
-PCR signing key. systemd 262 only sets up NvPCRs if the UKI carries a PCR policy signed for the
-initrd phase; without one, three TPM units fail every boot (systemd issue #43848). It lives here
-on purpose, **not** at `/etc/systemd/tpm2-pcr-public-key.pem`: a key there would make every
-future `systemd-cryptenroll` also bind the disk to it.
+PCR signing key. ukify uses it to sign, inside every UKI, the PCR11 value that UKI will produce.
+Step 18 binds the disk to this key, so the TPM releases the disk key only under a UKI you built
+and signed, and only **while the initrd runs**: once boot leaves the initrd, PCR11 moves on and
+the TPM refuses. That blocks the attack where someone swaps in their own root filesystem and asks
+the TPM for the key from there. Kernel updates need no re-enroll, because each new UKI carries its
+own signature. (systemd 262 also needs this initrd-phase signature to set up NvPCRs; without it,
+three TPM units fail every boot, systemd issue #43848.)
+
+It lives here, **not** at `/etc/systemd/tpm2-pcr-public-key.pem`, so `systemd-cryptenroll` only
+binds to it when step 18 passes it explicitly.
 
 ```bash
 openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /etc/kernel/certs/pcr-private-key.pem
@@ -316,8 +379,8 @@ openssl pkey -in /etc/kernel/certs/pcr-private-key.pem -pubout -out /etc/kernel/
 chmod 600 /etc/kernel/certs/pcr-private-key.pem
 ```
 
-`/etc/kernel/uki.conf`. ukify Secure Boot signs every UKI it builds, adds the initrd PCR
-signature, and takes its os-release from the hook below:
+`/etc/kernel/uki.conf`. ukify Secure Boot signs every UKI it builds, adds the PCR11 signature
+for the initrd phase only (`Phases=enter-initrd`), and takes its os-release from the hook below:
 
 ```ini
 [UKI]
@@ -330,6 +393,7 @@ OSRelease=@/run/kernel/os-release-uki
 [PCRSignature:p1]
 PCRPrivateKey=/etc/kernel/certs/pcr-private-key.pem
 PCRPublicKey=/etc/kernel/certs/pcr-public-key.pem
+Phases=enter-initrd
 ```
 
 Boot menu titles: systemd-boot names a UKI after its os-release, which on Gentoo has the
@@ -488,6 +552,7 @@ If one is missing, install its package, then run `emerge --config sys-kernel/gen
 ```bash
 lsinitrd -f etc/mdadm.conf $U        # ARRAY /dev/md0 … UUID=<ARRAY-UUID>
 lsinitrd -f etc/vconsole.conf $U     # KEYMAP=…
+objdump -h $U | grep -E 'pcrsig|pcrpkey'   # both sections: the signed PCR11 policy + its key
 bootctl list --no-pager | grep title   # Gentoo Linux (<kernel version>)
 bootctl status                       # loader + ESP found
 ```
@@ -498,8 +563,8 @@ EFI boot entries (this works in the chroot because `/sys` is rbind-mounted):
 efibootmgr
 ```
 
-- Delete stale entries whose disk no longer exists (here: old NixOS/Windows, 0000-0004) with
-  `efibootmgr -b XXXX -B`.
+- Delete stale entries whose disk no longer exists (here: "Windows Boot Manager", and any
+  old Linux Boot Manager from the first install) with `efibootmgr -b XXXX -B`.
 - Keep the new "Linux Boot Manager" (on the ESP PARTUUID from `blkid`) and all Lenovo
   FvFile/VenMsg entries.
 - "Fallback Linux Boot Manager" points at `systemd-boot-fallbackx64.efi`, which may not exist.
@@ -538,9 +603,9 @@ AutoConnect=true
 FallbackDNS=1.1.1.1 1.0.0.1
 ```
 
-meow is UID 1000 in group `users` (100), the same as on NixOS. In `visudo`,
-uncomment `%wheel ALL=(ALL:ALL) ALL`, and make sure `@includedir /etc/sudoers.d` is there and
-**not** commented out. The next block needs it.
+meow is UID 1000 in group `users` (100), the same as on NixOS. sudo asks for meow's password
+(setup.md §6 adds the fingerprint as an alternative). In `visudo`, uncomment
+`%wheel ALL=(ALL:ALL) ALL`, and nothing else.
 
 ```bash
 useradd -m -u 1000 -g users -G wheel,video,audio,input,render -s /bin/zsh meow
@@ -549,14 +614,8 @@ passwd
 EDITOR=nvim visudo
 ```
 
-Passwordless sudo for meow. The trade-off: anything running as meow gets root without asking.
-`/etc/sudoers.d` doesn't exist on a fresh stage3.
-
 ```bash
-mkdir -p /etc/sudoers.d
-echo 'meow ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/meow
-chmod 440 /etc/sudoers.d/meow
-visudo -c                          # every file: parsed OK
+visudo -c                          # parsed OK
 ```
 
 Do this **last** in the chroot. It breaks DNS there, because the stub only exists once systemd runs.
@@ -610,8 +669,8 @@ sudo cat /sys/kernel/security/lockdown         # informational: kernel lockdown 
 ## 18. TPM2 + PIN unlock
 
 The md device name can change after a reboot, so use the LUKS-UUID from step 12
-(`sudo cryptsetup luksUUID /dev/md0`). Set `L` again in every new shell. On the 2026-10-01
-install it's `19eee7a6-6ab2-4f3a-8a49-100dac48f8bc`.
+(`sudo cryptsetup luksUUID /dev/md0`). Set `L` again in every new shell. It's new on every
+install (the 2026-10-01 one doesn't apply any more).
 
 ```bash
 L=/dev/disk/by-uuid/<LUKS-UUID>
@@ -625,27 +684,34 @@ sudo systemd-cryptenroll $L --recovery-key
 sudo cryptsetup open --test-passphrase $L
 ```
 
-PCR 7 is the Secure Boot state (your keys). Booting anything else changes PCR7, and the TPM
-refuses. Paste the enroll command as **one line** (rule 3). Split in two, it enrolls a token
-**without** a PIN.
+The TPM releases the disk key only when all three hold:
+- **PCR7** is the Secure Boot state (your keys). Booting anything signed by someone else
+  changes it.
+- **PCR11**, through the signed policy from step 11: a UKI you signed is running, and boot is
+  still in the initrd.
+- the **PIN** is right.
+
+Paste the enroll command as **one line** (rule 3). Split up, it enrolls a token without a PIN or
+without the PCR11 policy.
 
 ```bash
-sudo systemd-cryptenroll $L --tpm2-device=auto --tpm2-pcrs=7 --tpm2-with-pin=yes
+sudo systemd-cryptenroll $L --tpm2-device=auto --tpm2-pcrs=7 --tpm2-public-key=/etc/kernel/certs/pcr-public-key.pem --tpm2-public-key-pcrs=11 --tpm2-with-pin=yes
 sudo systemd-cryptenroll $L                     # 0 password, 1 recovery, one tpm2 slot
-sudo cryptsetup luksDump $L | grep -E 'systemd-|tpm2-pin|tpm2-hash-pcrs'   # tpm2-pin: true, pcrs 7
+sudo cryptsetup luksDump $L | grep -E 'systemd-|tpm2-pin|tpm2-hash-pcrs|tpm2-pubkey'   # pin: true, pcrs 7, pubkey-pcrs 11
 ```
 
 Reboot: it asks for the PIN once. The passphrase still works as a fallback.
 
 **Re-enroll whenever PCR7 changes:** a BIOS update, a Secure Boot db/dbx update (fwupd), or a
-change to the sbctl keys. Kernel updates don't affect PCR7.
+change to the sbctl keys. Also if you ever replace the PCR signing key from step 11. Kernel
+updates don't need it: each new UKI carries its own PCR11 signature.
 
 - Symptom: boot asks for "LUKS2 token PIN", then "TPM2 PIN", then the passphrase, and
   `journalctl -b | grep 'TPM policy does not match'` finds the error.
 - Fix: unlock with the passphrase, then run this as one line:
 
 ```bash
-sudo systemd-cryptenroll $L --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 --tpm2-with-pin=yes
+sudo systemd-cryptenroll $L --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 --tpm2-public-key=/etc/kernel/certs/pcr-public-key.pem --tpm2-public-key-pcrs=11 --tpm2-with-pin=yes
 ```
 
 ## 19. Done
@@ -654,7 +720,7 @@ The install is finished when all of this is true:
 
 - [ ] Boot asks for the **PIN** once and unlocks (passphrase as fallback)
 - [ ] `sudo bootctl status` says Secure Boot: enabled (user)
-- [ ] tty login as meow, `sudo true` asks for nothing
+- [ ] tty login as meow, `sudo true` asks for meow's password
 - [ ] `ping -c2 gentoo.org` works over Wi-Fi
 
 ```bash
