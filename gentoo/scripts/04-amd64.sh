@@ -171,13 +171,25 @@ games)
     # Separate, interactive: Steam's 32-bit deps need autounmask + dispatch-conf, and the
     # gpm <-> ncurses loop needs the -gpm rebuild first (packages.md, games).
     grep -q '^ACCEPT_KEYWORDS=' $MC || { echo "stage1 first"; exit 1; }
+    # Autounmask used to land in package.use/wine (the last file), which the before block's tee
+    # then wipes: move anything past its first line to zz-autounmask.
+    PU=/etc/portage/package.use
+    if [ "$(cat $PU/wine 2>/dev/null | wc -l)" -gt 1 ]; then
+        sudo sh -c "tail -n +2 $PU/wine >> $PU/zz-autounmask && sed -i 1q $PU/wine"
+    fi
     bf=$(block games before); bash -ec "$bf"
     mapfile -t GAMES < <(atoms games)
-    step "games (${#GAMES[@]} packages)"
+    G=(--getbinpkg=n --usepkg=n --noreplace --backtrack=50)
+    step "games: autounmask (Steam's abi_x86_32 list), then dispatch-conf: u"
+    long emerge -a "${G[@]}" --autounmask-only --autounmask-write "${GAMES[@]}" || true
+    sudo dispatch-conf
+    # Both loops only break once the 32-bit flags above are set.
+    step "loops: ncurses without gpm (64 + 32-bit), mono minimal"
     long USE=-gpm emerge -av1 sys-libs/ncurses
-    long emerge -av --getbinpkg=n --usepkg=n --noreplace --backtrack=50 --keep-going --autounmask-write "${GAMES[@]}" ||
-        { sudo dispatch-conf; long emerge -av --getbinpkg=n --usepkg=n --noreplace --backtrack=50 --keep-going "${GAMES[@]}"; }
-    step "world again (puts gpm back)"
+    [ -n "$(qlist -IC dev-lang/mono)" ] || long USE=minimal emerge -av1 dev-lang/mono
+    step "games (${#GAMES[@]} packages)"
+    long emerge -av "${G[@]}" --keep-going "${GAMES[@]}"
+    step "world again (puts gpm back, full mono)"
     long emerge -avuDN --getbinpkg=n --usepkg=n --backtrack=50 --keep-going @world
     ;;
 

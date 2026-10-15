@@ -444,11 +444,12 @@ before:
 echo 'app-emulation/wine-staging ~amd64' | sudo tee /etc/portage/package.accept_keywords/wine
 echo 'app-emulation/wine-staging wow64 wayland' | sudo tee /etc/portage/package.use/wine
 printf '%s ~amd64\n' games-util/lutris games-arcade/osu-lazer games-engines/uzdoom | sudo tee /etc/portage/package.accept_keywords/games
+sudo touch /etc/portage/package.use/zz-autounmask   # autounmask writes to the last file; keep it out of 'wine'
 sudo eselect repository enable steam-overlay && sudo emaint sync -r steam-overlay
 ```
 
 ```bash
-sudo emerge -av --noreplace --backtrack=50 --usepkg-exclude net-libs/webkit-gtk \
+sudo emerge -av --noreplace --backtrack=50 \
   app-emulation/wine-staging \
   app-emulation/winetricks \
   dev-lang/mono \
@@ -467,12 +468,15 @@ sudo emerge -av --noreplace --backtrack=50 --usepkg-exclude net-libs/webkit-gtk 
   games-emulation/eden
 ```
 
-Checked 2026-10-02 on `~amd64`. Steam's 32-bit libraries hit two snags, both handled above:
-- **gpm ↔ ncurses loop:** run `sudo USE="-gpm" emerge -av1 sys-libs/ncurses` once before the
-  block, then `sudo emerge -avuDN @world` after it, to put `gpm` back.
-- **libavif slot conflict:** the binhost's webkit-gtk (for Lutris) is built against an older
-  libavif, so `--usepkg-exclude` makes it compile from source (over an hour).
-- Autounmask writes the `abi_x86_32` lines Steam needs into `package.use`; that's expected.
+Checked 2026-10-15 on `~amd64`. Steam's 32-bit libraries need some care, in this order
+(`04-amd64.sh games` does it):
+1. **Autounmask first:** `emerge -a --autounmask-only --autounmask-write <block>`, then
+   `dispatch-conf` (**u**). It adds ~60 `abi_x86_32` lines to `package.use/zz-autounmask`.
+2. **gpm ↔ ncurses loop:** `sudo USE="-gpm" emerge -av1 sys-libs/ncurses`. It has to come
+   *after* step 1, so the 32-bit ncurses is built without gpm too.
+3. **mono ↔ libgdiplus loop:** `sudo USE="minimal" emerge -av1 dev-lang/mono`.
+4. The block itself, then `sudo emerge -avuDN @world`, which puts `gpm` back and rebuilds mono
+   in full.
 
 Not in Portage:
 - **Flatpak:** RetroArch (`org.libretro.RetroArch`), Cemu (`info.cemu.Cemu`), Ryubing, ITGmania
