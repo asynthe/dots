@@ -478,6 +478,11 @@ Checked 2026-10-15 on `~amd64`. Steam's 32-bit libraries need some care, in this
 4. The block itself, then `sudo emerge -avuDN @world`, which puts `gpm` back and rebuilds mono
    in full.
 
+With LTO (stage2), `protonup-rs` fails to link (`undefined reference to aws_lc_0_45_0_...`):
+its bundled aws-lc is built as GCC LTO bytecode, which Rust's linker can't use. It goes in the
+no-LTO list: `echo 'games-util/protonup-rs no-lto.conf' | sudo tee -a /etc/portage/package.env/no-lto`.
+Any Rust package that bundles C this way (aws-lc-sys, ring) can need the same.
+
 Not in Portage:
 - **Flatpak:** RetroArch (`org.libretro.RetroArch`), Cemu (`info.cemu.Cemu`), Ryubing, ITGmania
 - **AppImage:** ES-DE, Xenia-canary
