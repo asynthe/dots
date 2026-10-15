@@ -340,6 +340,15 @@ openssl pkey -in /etc/kernel/certs/pcr-private-key.pem -pubout -out /etc/kernel/
 chmod 600 /etc/kernel/certs/pcr-private-key.pem
 ```
 
+A second key signs every boot phase, for credentials (systemd's NvPCR anchor, `systemd-creds`)
+that must unseal after the initrd too; the disk key above stays initrd-only:
+
+```bash
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /etc/kernel/certs/pcr-creds-private-key.pem
+openssl pkey -in /etc/kernel/certs/pcr-creds-private-key.pem -pubout -out /etc/kernel/certs/pcr-creds-public-key.pem
+chmod 600 /etc/kernel/certs/pcr-creds-private-key.pem
+```
+
 `/etc/kernel/uki.conf`:
 
 ```ini
@@ -349,11 +358,23 @@ SecureBootPrivateKey=/var/lib/sbctl/keys/db/db.key
 SecureBootCertificate=/var/lib/sbctl/keys/db/db.pem
 SignInitrdPCRs=yes
 OSRelease=@/run/kernel/os-release-uki
+# .pcrpkey: what credentials (NvPCR anchor, systemd-creds) get sealed to. Must be the
+# all-phases key, or they can't be unsealed after the initrd.
+PCRPKey=/etc/kernel/certs/pcr-creds-public-key.pem
 
+# Disk unlock (step 18): initrd only.
 [PCRSignature:p1]
 PCRPrivateKey=/etc/kernel/certs/pcr-private-key.pem
 PCRPublicKey=/etc/kernel/certs/pcr-public-key.pem
 Phases=enter-initrd
+
+# Credentials: every phase. Phases= must be spelled out: once one section sets it, ukify needs
+# it in all ("--phases= specifications must match --pcr-private-key="), and the kernel install
+# fails without deploying a UKI. These are systemd-measure's defaults.
+[PCRSignature:creds]
+PCRPrivateKey=/etc/kernel/certs/pcr-creds-private-key.pem
+PCRPublicKey=/etc/kernel/certs/pcr-creds-public-key.pem
+Phases=enter-initrd enter-initrd:leave-initrd enter-initrd:leave-initrd:sysinit enter-initrd:leave-initrd:sysinit:ready
 ```
 
 Boot menu titles per kernel (`Gentoo Linux (7.2.8)`) instead of identical baselayout versions:
