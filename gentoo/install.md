@@ -528,13 +528,18 @@ FallbackDNS=1.1.1.1 1.0.0.1
 ```
 
 meow: UID 1000, group `users` (100). sudo asks for meow's password (setup.md §6 adds the
-fingerprint). In `visudo`, uncomment only `%wheel ALL=(ALL:ALL) ALL`.
+fingerprint). The wheel rule goes in its own file, not in `/etc/sudoers`: a sudo update ships a
+new `/etc/sudoers`, and accepting it in `dispatch-conf` silently drops an edit made there (it
+happened on 2026-10-15: "user NOT in sudoers"; `su -` with the root password got back in).
 
 ```bash
 useradd -m -u 1000 -g users -G wheel,video,audio,input,render -s /bin/zsh meow
 passwd meow
 passwd
-EDITOR=nvim visudo
+mkdir -p /etc/sudoers.d
+echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/wheel
+chmod 440 /etc/sudoers.d/wheel
+grep -n includedir /etc/sudoers     # @includedir /etc/sudoers.d
 visudo -c
 ```
 

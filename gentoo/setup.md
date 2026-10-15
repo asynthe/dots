@@ -838,6 +838,11 @@ sudo dispatch-conf
 find /lib/modules/7.2.*/ -name 'nvidia.ko*'     # one per new kernel
 ```
 
+In `dispatch-conf`, **z** (zap new, keep yours) for any file you edited: `/etc/fstab`,
+`/etc/pam.d/*`, `/etc/sudoers`, `/etc/bluetooth/main.conf`, `/etc/fwupd/fwupd.conf`. **u** (use new)
+only for files you never touched. Before rebooting, check `sudo -v` still works in a second
+terminal.
+
 Reboot, then:
 
 ```bash
