@@ -10,7 +10,7 @@
 #                          Run only after stage1 + a reboot came up clean. Many hours again.
 #   ./04-amd64.sh resume   continue an interrupted emerge (portage's saved queue), same inhibit + log.
 #   ./04-amd64.sh hyprglass  rebuild the hyprglass plugin (after any Hyprland update).
-#   ./04-amd64.sh games    after stage1 + reboot: the games block (interactive: Steam autounmask).
+#   ./04-amd64.sh games    after stage2 + failed: the games block (interactive: Steam autounmask).
 #   ./04-amd64.sh failed   after stage2: packages that failed -> rebuild them without LTO.
 #
 # Watch from another tty: `tail -f ~/.local/state/p1-setup/logs/*.log` (newest one).

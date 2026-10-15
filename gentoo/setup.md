@@ -852,16 +852,19 @@ hyprctl plugin list         # hyprglass
 systemctl --failed
 ```
 
-Then §18 (tuning), and:
+Then §18 (tuning: at least `makeconf scx power`, so stage2 runs at idle priority), and:
 
 ```bash
-./04-amd64.sh games       # interactive: Steam's autounmask + dispatch-conf, the gpm/ncurses fix
 sudo emerge -pvuDN @world # nothing pending
 sudo emerge -a --depclean # also removes the old kernel: only once the new one booted fine
 ./04-amd64.sh stage2      # snapshot, -flto=auto -fno-semantic-interposition, binhost off,
                           # emerge -e @world (many hours again)
 ./04-amd64.sh failed      # rebuilds whatever failed in stage2 without LTO, lists it in no-lto
+./04-amd64.sh games       # interactive: Steam's autounmask + dispatch-conf, the gpm/ncurses fix
 ```
+
+games comes after stage2 on purpose: `-e @world` rebuilds everything installed, so games built
+before it (wine, rpcs3, dolphin, pcsx2, …) would compile twice.
 
 What each part buys:
 
