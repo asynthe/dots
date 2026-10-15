@@ -1,0 +1,180 @@
+
+
+Configuring pkg...
+
+ * Assuming you do not have a separate /boot partition.
+ * Your /efi partition was detected as being mounted.
+ * Files will be installed there for gentoo-kernel to function correctly.
+ * Assuming you do not have a separate /boot/efi partition.
+ * Assuming you do not have a separate /boot/EFI partition.
+ * Installing the kernel via installkernel ...
+layout=uki set via config
+INITRD_GENERATOR (dracut) set via config.
+UKI_GENERATOR (ukify) set via config.
+Loaded config.
+MACHINE_ID=<machine-id> set via /etc/machine-id.
+Found container virtualization none.
+Directory "/boot" is not the root of the file system.
+Couldn't find an XBOOTLDR partition.
+Loaded shared library 'libblkid.so.1' via dlopen().
+Using EFI System Partition at /efi as $BOOT_ROOT.
+Using entry token: <machine-id>
+kernel version (7.2.10-gentoo-dist) set via command line.
+kernel image file (/usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage) set via command line.
+Using ENTRY_DIR=/efi/<machine-id>/7.2.10-gentoo-dist
+Using entry name: <machine-id>-7.2.10-gentoo-dist
+Using plugins: 
+  /usr/lib/kernel/install.d/00-00machineid-directory.install
+  /usr/lib/kernel/install.d/05-check-chroot.install
+  /usr/lib/kernel/install.d/05-check-config.install
+  /usr/lib/kernel/install.d/10-copy-prebuilt.install
+  /usr/lib/kernel/install.d/35-amd-microcode-systemd.install
+  /usr/lib/kernel/install.d/35-intel-microcode-systemd.install
+  /usr/lib/kernel/install.d/50-depmod.install
+  /usr/lib/kernel/install.d/52-dracut.install
+  /etc/kernel/install.d/59-osrel.install
+  /usr/lib/kernel/install.d/60-ukify.install
+  /usr/lib/kernel/install.d/85-check-diskspace.install
+  /usr/lib/kernel/install.d/90-compat.install
+  /usr/lib/kernel/install.d/90-loaderentry.install
+  /usr/lib/kernel/install.d/90-uki-copy.install
+  /usr/lib/kernel/install.d/90-zz-update-static.install
+  /usr/lib/kernel/install.d/91-sbctl.install
+  /usr/lib/kernel/install.d/99-write-log.install
+Plugin environment: 
+  LC_COLLATE=C.UTF-8
+  KERNEL_INSTALL_VERBOSE=1
+  KERNEL_INSTALL_IMAGE_TYPE=pe
+  KERNEL_INSTALL_MACHINE_ID=<machine-id>
+  KERNEL_INSTALL_ENTRY_TOKEN=<machine-id>
+  KERNEL_INSTALL_BOOT_ROOT=/efi
+  KERNEL_INSTALL_LAYOUT=uki
+  KERNEL_INSTALL_INITRD_GENERATOR=dracut
+  KERNEL_INSTALL_UKI_GENERATOR=ukify
+  KERNEL_INSTALL_STAGING_AREA=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD
+  KERNEL_INSTALL_ENTRY_NAME=<machine-id>-7.2.10-gentoo-dist
+Plugin arguments: add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(plugins)' as PID 18498.
+About to execute /usr/lib/kernel/install.d/00-00machineid-directory.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18499.
+'/usr/lib/kernel/install.d/00-00machineid-directory.install' succeeded.
+About to execute /usr/lib/kernel/install.d/05-check-chroot.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18500.
+'/usr/lib/kernel/install.d/05-check-chroot.install' succeeded.
+About to execute /usr/lib/kernel/install.d/05-check-config.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18503.
+'/usr/lib/kernel/install.d/05-check-config.install' succeeded.
+About to execute /usr/lib/kernel/install.d/10-copy-prebuilt.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18504.
+'/usr/lib/kernel/install.d/10-copy-prebuilt.install' succeeded.
+About to execute /usr/lib/kernel/install.d/35-amd-microcode-systemd.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18506.
+initrd_generator=dracut bundles CPU microcode, nothing to do here.
+'/usr/lib/kernel/install.d/35-amd-microcode-systemd.install' succeeded.
+About to execute /usr/lib/kernel/install.d/35-intel-microcode-systemd.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18507.
+initrd_generator=dracut bundles CPU microcode, nothing to do here.
+'/usr/lib/kernel/install.d/35-intel-microcode-systemd.install' succeeded.
+About to execute /usr/lib/kernel/install.d/50-depmod.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18508.
++depmod -a 7.2.10-gentoo-dist
+'/usr/lib/kernel/install.d/50-depmod.install' succeeded.
+About to execute /usr/lib/kernel/install.d/52-dracut.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 18509.
+dracut[I]: Executing: /usr/bin/dracut --kernel-image /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage --force --verbose --no-uefi /var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd 7.2.10-gentoo-dist
+dracut[I]: *** Including module: bash ***
+dracut[I]: *** Including module: systemd ***
+dracut[I]: *** Including module: systemd-ask-password ***
+dracut[I]: *** Including module: systemd-battery-check ***
+dracut[I]: *** Including module: systemd-initrd ***
+dracut[I]: *** Including module: systemd-journald ***
+dracut[I]: *** Including module: systemd-modules-load ***
+dracut[I]: *** Including module: systemd-pcrextend ***
+dracut[I]: *** Including module: systemd-sysctl ***
+dracut[I]: *** Including module: systemd-tmpfiles ***
+dracut[I]: *** Including module: systemd-udevd ***
+dracut[I]: *** Including module: i18n ***
+dracut[I]: *** Including module: btrfs ***
+dracut[I]: *** Including module: crypt ***
+dracut[I]: *** Including module: crypt-lib ***
+dracut[I]: *** Including module: dm ***
+dracut[I]: *** Including module: fs-lib ***
+dracut[I]: *** Including module: kernel-modules ***
+dracut[I]: *** Including module: kernel-modules-extra ***
+dracut[I]: *** Including module: mdraid ***
+dracut[I]: *** Including module: systemd-cryptsetup ***
+dracut[I]: *** Including module: fido2 ***
+dracut[I]: *** Including module: pkcs11 ***
+dracut[I]: *** Including module: tpm2-tss ***
+dracut[I]: *** Including module: resume ***
+dracut[I]: *** Including module: rootfs-block ***
+dracut[I]: *** Including module: terminfo ***
+dracut[I]: *** Including module: udev-rules ***
+dracut[I]: *** Including module: dracut-systemd ***
+dracut[I]: *** Including module: initqueue ***
+dracut[I]: *** Including module: usrmount ***
+dracut[I]: *** Including module: systemd-sysusers ***
+dracut[I]: *** Including module: base ***
+dracut[I]: *** Including module: shell-interpreter ***
+dracut[I]: *** Including module: shutdown ***
+dracut[I]: *** Including modules done ***
+dracut[I]: *** Installing kernel module dependencies ***
+dracut[I]: *** Installing kernel module dependencies done ***
+dracut[I]: *** Resolving dependencies for executables and libraries ***
+dracut[I]: *** Resolving dependencies for executables and libraries done ***
+dracut[I]: *** Generating early-microcode cpio image ***
+dracut[I]: *** Constructing GenuineIntel.bin ***
+dracut[I]: *** Store current command line parameters ***
+dracut[I]: *** Stripping files ***
+dracut[I]: *** Stripping files done ***
+dracut[I]: *** Creating image file '/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd' ***
+dracut[I]: *** Hardlinking files ***
+dracut[I]: *** Hardlinking files done ***
+dracut[I]: *** Creating initramfs image file '/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd' done ***
+'/usr/lib/kernel/install.d/52-dracut.install' succeeded.
+About to execute /etc/kernel/install.d/59-osrel.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23129.
+'/etc/kernel/install.d/59-osrel.install' succeeded.
+About to execute /usr/lib/kernel/install.d/60-ukify.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23132.
+KERNEL_INSTALL_LAYOUT and KERNEL_INSTALL_UKI_GENERATOR are good
+Using config file: /etc/kernel/uki.conf
++ sbverify --list /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
++ /usr/lib/systemd/systemd-measure sign --osrel=/run/kernel/os-release-uki --cmdline=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.cmdline_i9yrf3p --uname=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.uname5t9_pjsn --pcrpkey=/etc/kernel/certs/pcr-creds-public-key.pem --linux=/usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage --initrd=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd --sbat=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.sbatwi70jut0 --private-key=/etc/kernel/certs/pcr-private-key.pem --public-key=/etc/kernel/certs/pcr-public-key.pem --phase=enter-initrd
++ /usr/lib/systemd/systemd-measure sign --osrel=/run/kernel/os-release-uki --cmdline=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.cmdline_i9yrf3p --uname=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.uname5t9_pjsn --pcrpkey=/etc/kernel/certs/pcr-creds-public-key.pem --linux=/usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage --initrd=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd --sbat=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.sbatwi70jut0 --private-key=/etc/kernel/certs/pcr-creds-private-key.pem --public-key=/etc/kernel/certs/pcr-creds-public-key.pem --phase=enter-initrd --phase=enter-initrd:leave-initrd --phase=enter-initrd:leave-initrd:sysinit --phase=enter-initrd:leave-initrd:sysinit:ready
++ /usr/lib/systemd/systemd-measure sign --osrel=/run/kernel/os-release-uki --cmdline=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.cmdline_i9yrf3p --uname=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.uname5t9_pjsn --pcrpkey=/etc/kernel/certs/pcr-creds-public-key.pem --linux=/usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage --initrd=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/initrd --sbat=/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/tmp.sbatwi70jut0 --private-key=/etc/kernel/certs/pcr-private-key.pem --public-key=/etc/kernel/certs/pcr-public-key.pem --phase=enter-initrd --policyref=initrd
++ sbsign --key /var/lib/sbctl/keys/db/db.key --cert /var/lib/sbctl/keys/db/db.pem /var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/ukihzos4phf --output /var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/uki.efi
+Signing Unsigned original image
+Wrote signed /var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/uki.efi
+/var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/uki.efi has been created
+'/usr/lib/kernel/install.d/60-ukify.install' succeeded.
+About to execute /usr/lib/kernel/install.d/85-check-diskspace.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23138.
+Checking available disk space on /efi...
+Disk space okay. Need at least 53263 KiB, found 2037724 KiB.
+'/usr/lib/kernel/install.d/85-check-diskspace.install' succeeded.
+About to execute /usr/lib/kernel/install.d/90-compat.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23145.
+'/usr/lib/kernel/install.d/90-compat.install' succeeded.
+About to execute /usr/lib/kernel/install.d/90-loaderentry.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23146.
+KERNEL_INSTALL_LAYOUT=uki, quitting.
+'/usr/lib/kernel/install.d/90-loaderentry.install' succeeded.
+About to execute /usr/lib/kernel/install.d/90-uki-copy.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23147.
+Installing /var/tmp/portage/sys-kernel/gentoo-kernel-7.2.10/temp/kernel-install.staging.EuAzYD/uki.efi as /efi/EFI/Linux/<machine-id>-7.2.10-gentoo-dist.efi
+'/usr/lib/kernel/install.d/90-uki-copy.install' succeeded.
+About to execute /usr/lib/kernel/install.d/90-zz-update-static.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23151.
+'/usr/lib/kernel/install.d/90-zz-update-static.install' succeeded.
+About to execute /usr/lib/kernel/install.d/91-sbctl.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23152.
+sbctl: Signing kernel /efi/EFI/Linux/<machine-id>-7.2.10-gentoo-dist.efi
+'/usr/lib/kernel/install.d/91-sbctl.install' succeeded.
+About to execute /usr/lib/kernel/install.d/99-write-log.install add 7.2.10-gentoo-dist /efi/<machine-id>/7.2.10-gentoo-dist /usr/src/linux-7.2.10-gentoo-dist/arch/x86/boot/bzImage
+Successfully forked off '(exec-inner)' as PID 23171.
+Appending installed kernel to /var/log/installkernel.log...
+'/usr/lib/kernel/install.d/99-write-log.install' succeeded.
+'(plugins)' succeeded.
+[A[72C [ ok ]
+

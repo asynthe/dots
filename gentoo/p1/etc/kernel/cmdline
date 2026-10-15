@@ -1,0 +1,1 @@
+rd.md.uuid=937edfe7:7be28d98:963dd36b:9d8de3c6 rd.luks.name=b02a7008-01a9-43dd-a4c3-5d953b9412e7=cryptroot rd.luks.options=tpm2-device=auto root=/dev/mapper/cryptroot rootflags=subvol=@ rw nvidia-drm.modeset=1 nvidia-drm.fbdev=1 init_on_free=1 quiet i915.enable_psr=0 video=DP-1:d

@@ -1,0 +1,14 @@
+app-emulation/qemu spice usbredir usb virtfs
+app-emulation/libvirt virt-network qemu virtiofsd
+net-libs/gnutls pkcs11 tools
+net-misc/spice-gtk usbredir
+net-dns/dnsmasq script
+# required by x11-libs/xapp-3.2.3::gentoo
+# required by gnome-extra/nemo-6.6.4::gentoo
+# required by @selected
+# required by @world (argument)
+>=dev-libs/libdbusmenu-16.04.0-r4 gtk3
+# required by gnome-extra/nemo-6.6.4::gentoo
+# required by @selected
+# required by @world (argument)
+>=x11-libs/xapp-3.2.3 introspection

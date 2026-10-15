@@ -1,0 +1,3 @@
+dev-qt/qtwebengine         heavy.conf
+net-libs/webkit-gtk        heavy.conf
+www-client/chromium        heavy.conf

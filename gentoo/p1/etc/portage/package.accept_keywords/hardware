@@ -1,0 +1,7 @@
+media-sound/wiremix ~amd64
+net-wireless/bluez-tools ~amd64
+x11-apps/igt-gpu-tools ~amd64
+app-mobilephone/scrcpy ~amd64
+app-crypt/tpm2-pkcs11 ~amd64
+dev-python/python-pkcs11 ~amd64
+dev-python/tpm2-pytss ~amd64

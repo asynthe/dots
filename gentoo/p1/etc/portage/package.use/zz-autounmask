@@ -1,0 +1,369 @@
+# required by media-libs/libsfml-3.1.0-r1::gentoo
+# required by games-emulation/dolphin-2606a::gentoo
+# required by games-emulation/dolphin (argument)
+>=net-libs/mbedtls-2.28.10:0 threads
+# required by games-arcade/osu-lazer-2025.710.0::gentoo[pipewire]
+# required by games-arcade/osu-lazer (argument)
+>=media-video/pipewire-1.6.9 pipewire-alsa
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by app-emulation/wine-staging-11.19::gentoo[truetype]
+# required by @selected
+# required by @world (argument)
+>=media-libs/fontconfig-2.18.3 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=sys-libs/libudev-compat-186-r1 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libdrm-2.4.134 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/libpulse-17.0 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan]
+# required by games-util/steam-launcher (argument)
+>=media-libs/vulkan-loader-1.4.363.0 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=x11-drivers/nvidia-drivers-615.78.08 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan,video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=media-libs/vulkan-layers-1.4.363.0 abi_x86_32
+# required by dev-util/glslang-1.4.363.0::gentoo
+# required by media-libs/vulkan-layers-1.4.363.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan,video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=dev-util/spirv-tools-1.4.363.0 abi_x86_32
+# required by media-libs/vulkan-layers-1.4.363.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan,video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=dev-util/glslang-1.4.363.0 abi_x86_32
+# required by media-libs/vulkan-layers-1.4.363.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan,video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=dev-util/vulkan-utility-libraries-1.4.363.0 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[wayland]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=dev-libs/wayland-1.26.0 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libX11-1.8.13 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libXrandr-1.5.5 abi_x86_32
+# required by x11-libs/libXrandr-1.5.5::gentoo
+# required by media-libs/vulkan-loader-1.4.363.0::gentoo[X]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan]
+# required by games-util/steam-launcher (argument)
+>=x11-libs/libXext-1.3.7 abi_x86_32
+# required by x11-libs/libXrandr-1.5.5::gentoo
+# required by media-libs/vulkan-loader-1.4.363.0::gentoo[X]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[vulkan]
+# required by games-util/steam-launcher (argument)
+>=x11-libs/libXrender-0.9.12 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libxcb-1.17.0 abi_x86_32
+# required by x11-libs/libxcb-1.17.0::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[X]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=x11-libs/libXau-1.0.12 abi_x86_32
+# required by x11-libs/libxcb-1.17.0::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[X]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=x11-libs/libXdmcp-1.1.5 abi_x86_32
+# required by llvm-core/llvm-22.1.8::gentoo[libffi]
+# required by media-libs/mesa-26.2.4::gentoo[llvm_slot_22,llvm]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=dev-libs/libffi-3.8.0 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=media-libs/libglvnd-1.7.0 abi_x86_32
+# required by media-libs/libpulse-17.0::gentoo[dbus]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=sys-apps/dbus-1.16.2-r2 abi_x86_32
+# required by x11-drivers/nvidia-drivers-615.78.08::gentoo[wayland]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=gui-libs/egl-gbm-1.1.4 abi_x86_32
+# required by x11-drivers/nvidia-drivers-615.78.08::gentoo[wayland]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=gui-libs/egl-wayland-1.1.24 abi_x86_32
+# required by x11-drivers/nvidia-drivers-615.78.08::gentoo[wayland]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=gui-libs/egl-wayland2-1.0.2 abi_x86_32
+# required by x11-drivers/nvidia-drivers-615.78.08::gentoo[X,wayland]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=gui-libs/egl-x11-1.0.6 abi_x86_32
+# required by gui-libs/egl-wayland2-1.0.2::gentoo
+# required by x11-drivers/nvidia-drivers-615.78.08::gentoo[wayland]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[video_cards_nvidia]
+# required by games-util/steam-launcher (argument)
+>=media-libs/mesa-26.2.4 abi_x86_32
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by app-emulation/wine-staging-11.19::gentoo[truetype]
+# required by @selected
+# required by @world (argument)
+>=dev-libs/expat-2.9.0 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[llvm_slot_22,llvm]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=llvm-core/llvm-22.1.8:22 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[vaapi]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=media-libs/libva-2.24.1 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[vulkan]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=media-libs/libdisplay-info-0.4.0 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libxshmfence-1.3.3 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libXxf86vm-1.1.7 abi_x86_32
+# required by media-libs/libva-2.24.1::gentoo[X]
+# required by media-libs/mesa-26.2.4::gentoo[vaapi]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libXfixes-6.0.2 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo[X]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/xcb-util-keysyms-0.4.1 abi_x86_32
+# required by llvm-core/llvm-22.1.8::gentoo[zstd]
+# required by media-libs/mesa-26.2.4::gentoo[llvm_slot_22,llvm]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=app-arch/zstd-1.5.7-r1 abi_x86_32
+# required by llvm-core/llvm-22.1.8::gentoo[xml]
+# required by media-libs/mesa-26.2.4::gentoo[llvm_slot_22,llvm]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=dev-libs/libxml2-2.15.4 abi_x86_32
+# required by dev-libs/libxml2-2.15.4::gentoo[icu]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=dev-libs/icu-78.3 abi_x86_32
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/libsndfile-1.2.2-r2 abi_x86_32
+# required by media-libs/libpulse-17.0::gentoo[asyncns]
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=net-libs/libasyncns-0.8-r5 abi_x86_32
+# required by x11-libs/cairo-1.18.4-r1::gentoo[glib]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=dev-libs/glib-2.88.3 abi_x86_32
+# required by dev-libs/glib-2.88.3::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[glib]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=dev-libs/libpcre2-10.49 abi_x86_32
+# required by dev-libs/glib-2.88.3::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[glib]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=sys-apps/util-linux-2.42.3 abi_x86_32
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/flac-1.5.0 abi_x86_32
+# required by media-libs/libvorbis-1.3.7-r2::gentoo
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/libogg-1.3.6 abi_x86_32
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/libvorbis-1.3.7-r2 abi_x86_32
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-libs/opus-1.6.1 abi_x86_32
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-sound/lame-3.100-r3 abi_x86_32
+# required by media-libs/libsndfile-1.2.2-r2::gentoo[-minimal]
+# required by media-libs/libpulse-17.0::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay[pulseaudio]
+# required by games-util/steam-launcher (argument)
+>=media-sound/mpg123-base-1.33.7 abi_x86_32
+# required by x11-libs/libdrm-2.4.134::gentoo[video_cards_intel]
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=x11-libs/libpciaccess-0.19 abi_x86_32
+# required by media-libs/harfbuzz-12.3.2::gentoo[truetype]
+>=media-libs/freetype-2.14.3 abi_x86_32
+# required by media-libs/freetype-2.14.3::gentoo[bzip2]
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+>=app-arch/bzip2-1.0.8-r5 abi_x86_32
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=media-libs/libpng-1.6.58 abi_x86_32
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by dev-util/bruno-bin-4.2.1::guru
+# required by @selected
+# required by @world (argument)
+>=media-libs/harfbuzz-12.3.2 abi_x86_32
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=x11-libs/cairo-1.18.4-r1 abi_x86_32
+# required by media-libs/harfbuzz-12.3.2::gentoo[graphite]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by dev-util/bruno-bin-4.2.1::guru
+# required by @selected
+# required by @world (argument)
+>=media-gfx/graphite2-1.3.14_p20210810-r5 abi_x86_32
+# required by x11-libs/cairo-1.18.4-r1::gentoo
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=x11-libs/pixman-0.46.4 abi_x86_32
+# required by media-libs/mesa-26.2.4::gentoo
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=virtual/zlib-1.3.1-r1 abi_x86_32
+# required by virtual/zlib-1.3.1-r1::gentoo
+# required by media-libs/mesa-26.2.4::gentoo
+# required by net-libs/webkit-gtk-2.54.1-r400::gentoo
+# required by games-util/lutris-0.5.22-r1::gentoo
+# required by games-util/lutris (argument)
+>=sys-libs/zlib-1.3.2-r1 abi_x86_32
+# required by dev-libs/glib-2.88.3::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[glib]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=virtual/libintl-0-r2 abi_x86_32
+# required by sys-libs/libudev-compat-186-r1::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=virtual/libudev-257 abi_x86_32
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-apps/systemd-262 abi_x86_32
+# required by sys-apps/systemd-262::gentoo[pam]
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-libs/pam-1.7.2 abi_x86_32
+# required by sys-libs/pam-1.7.2::gentoo[-berkdb]
+# required by sys-apps/systemd-262::gentoo[pam]
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-libs/gdbm-1.26 abi_x86_32
+# required by sys-libs/gdbm-1.26::gentoo[readline]
+# required by sys-libs/pam-1.7.2::gentoo[-berkdb]
+# required by sys-apps/systemd-262::gentoo[pam]
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-libs/readline-8.3_p6 abi_x86_32
+# required by sys-libs/readline-8.3_p6::gentoo
+# required by sys-libs/gdbm-1.26::gentoo[readline]
+# required by sys-libs/pam-1.7.2::gentoo[-berkdb]
+# required by sys-apps/systemd-262::gentoo[pam]
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-libs/ncurses-6.5_p20251220 abi_x86_32
+# required by sys-libs/ncurses-6.5_p20251220::gentoo[gpm]
+# required by sys-libs/readline-8.3_p6::gentoo
+# required by sys-libs/gdbm-1.26::gentoo[readline]
+# required by sys-libs/pam-1.7.2::gentoo[-berkdb]
+# required by sys-apps/systemd-262::gentoo[pam]
+# required by virtual/libudev-257::gentoo
+# required by games-emulation/pcsx2-2.8.1::gentoo
+# required by games-emulation/pcsx2 (argument)
+>=sys-libs/gpm-1.20.7-r6 abi_x86_32
+# required by dev-libs/glib-2.88.3::gentoo
+# required by x11-libs/cairo-1.18.4-r1::gentoo[glib]
+# required by media-libs/harfbuzz-12.3.2::gentoo[cairo]
+# required by media-libs/freetype-2.14.3::gentoo[harfbuzz]
+# required by media-libs/fontconfig-2.18.3::gentoo
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=virtual/libiconv-0-r2 abi_x86_32
+# required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
+# required by games-util/steam-launcher (argument)
+>=virtual/opengl-8 abi_x86_32
