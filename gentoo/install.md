@@ -225,6 +225,10 @@ MODULES_SIGN_KEY="/etc/kernel/certs/signing_key.pem"
 MODULES_SIGN_CERT="/etc/kernel/certs/signing_key.pem"
 ```
 
+This is the install-time file: stable, binhost, no LTO. `setup.md` §17–18 adds `~amd64`,
+`lto pgo`, LTO flags and build priorities later; the final file is in `setup.md` §19. Global
+settings always go here, never in a second file.
+
 Binhost (x86-64-v3), `/etc/portage/binrepos.conf/gentoobinhost.conf`:
 
 ```ini
@@ -454,7 +458,7 @@ emerge -av \
   sys-fs/dosfstools sys-apps/nvme-cli sys-apps/zram-generator \
   net-wireless/iwd net-wireless/bluez app-shells/zsh app-admin/sudo \
   dev-vcs/git app-editors/neovim net-misc/rsync app-eselect/eselect-repository \
-  sys-apps/fwupd sys-power/thermald sys-power/power-profiles-daemon sys-boot/efibootmgr
+  sys-apps/fwupd sys-power/power-profiles-daemon sys-boot/efibootmgr
 emerge -av sys-kernel/linux-firmware sys-firmware/intel-microcode
 ls -d /var/db/pkg/sys-kernel/linux-firmware-* /var/db/pkg/sys-firmware/intel-microcode-*   # both exist
 ```
@@ -501,7 +505,7 @@ efibootmgr
 
 ```bash
 systemctl preset-all --preset-mode=enable-only
-systemctl enable iwd systemd-resolved systemd-timesyncd fstrim.timer bluetooth thermald power-profiles-daemon
+systemctl enable iwd systemd-resolved systemd-timesyncd fstrim.timer bluetooth power-profiles-daemon
 ```
 
 iwd on its own (no NetworkManager; the quickshell bar reads iwd over D-Bus).

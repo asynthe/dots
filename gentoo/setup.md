@@ -5,6 +5,16 @@ After `install.md`: from a tty to the full NixOS-equivalent desktop. Packages li
 (the NixOS flake, commit ee0d0bf); each section names the aspects it replaces, so "is X done?" is
 a search for the aspect name.
 
+Scripts in `scripts/` run the long or repetitive parts; each step shows itself and asks first.
+They need the dots clone (§0), and they run as meow, not root.
+
+| Script | Does |
+|---|---|
+| `03-packages.sh [block …]` | `packages.md` blocks, read straight from that file |
+| `05-system.sh [step …]` | §4 kernel params, lid, firewall; §6 hardware, nvidia, fwupd; §2 ssh |
+| `04-amd64.sh <stage>` | §17: `~amd64`, LTO/PGO, the big rebuilds |
+| `06-tune.sh [step …]` | §18: make.conf, sched-ext, power, mold, compile caches |
+
 ## Rules
 
 Same as `install.md`, plus:
@@ -789,59 +799,134 @@ emerge -pv @world | tail -1
 comm -13 <(grep -oE '^  [a-z0-9-]+/[^ ]+' ~/git/dots/gentoo/packages.md | tr -d ' ' | sort -u) <(sort /var/lib/portage/world)
 ```
 
+
 ## 17. Last: `~amd64`, then Graphite / LTO / PGO
 
 Newest versions, built as fast as the hardware allows. Last on purpose: stable + binhost gets a
 usable desktop fast, then this rebuilds most of the system from source while you work.
 
-The cost: much more compiling (the binhost is mostly stable; `-bin` packages stay prebuilt) and
-occasional breakage. The previous kernel stays in the boot menu until `depclean`. Dry run on
-2026-10-01: 265 packages, 258 from source (kernel 7.2, glibc 2.44, systemd 262, Mesa 26.2, nvidia
-615, LLVM 23), many hours. Skim `eselect news list` first.
+The cost: much more compiling (the binhost is mostly stable and ignores your flags; `-bin`
+packages stay prebuilt) and occasional breakage. The previous kernel stays in the boot menu until
+`depclean`. Dry run on 2026-10-01: 265 packages, 258 from source (kernel 7.2, glibc 2.44,
+systemd 262, Mesa 26.2, nvidia 615, LLVM 23), many hours.
 
-1. `/etc/portage/make.conf`: add `ACCEPT_KEYWORDS="~amd64"`.
-2. gcc gets rebuilt anyway, so build it with LTO + PGO (a faster compiler) and Graphite. Deselect
-   source Firefox, or it compiles for hours (firefox-bin is the one in use). The **desktop: apps**
-   before block must have been run (libxmlb for nemo).
-
-```bash
-echo 'sys-devel/gcc graphite lto pgo' | sudo tee -a /etc/portage/package.use/p1
-sudo emerge --deselect www-client/firefox
-```
-
-3. Run it on **tty2 in tmux** (a terminal inside Hyprland dies with the session). CTRL+ALT+F2:
+`scripts/04-amd64.sh` does all of it in stages; read a stage's case block before running it.
+Run every stage except `prep` on **tty2 in tmux**: a terminal inside Hyprland dies with the
+session. CTRL+ALT+F2, log in, `tmux new -s world` (or `tmux attach -t world`); back to Hyprland
+with CTRL+ALT+F1, watch with `tmux attach -t world` (CTRL+B D detaches). Each emerge blocks
+sleep, idle and the lid switch, and its output is kept in `~/.local/state/p1-setup/logs/`.
 
 ```bash
-tmux new -s world
-sudo emerge -avuDN --backtrack=50 --keep-going @world
+cd ~/git/dots/gentoo/scripts
+./04-amd64.sh prep        # tmux; /var/tmp/portage on tmpfs (24G), the biggest builds on disk
+./04-amd64.sh stage1      # tty2 + tmux: snapshot, ~amd64, USE lto pgo, gcc graphite/lto/pgo,
+                          # world update + every remaining packages.md block but games
+./04-amd64.sh resume      # only if stage1 got interrupted: continues portage's saved queue
+./04-amd64.sh hyprglass   # against the new Hyprland (also after any later Hyprland update)
 ```
 
-Back to Hyprland with CTRL+ALT+F1; watch with `tmux attach -t world`. `--backtrack=50` solves
-the glslang/ghostty conflict; `--keep-going` stops one failure from stopping the rest.
-
-4. Then rebuild hyprglass (§1.6), clean up, reboot:
+Before rebooting into the new kernel, its nvidia module must exist, or 7.2 boots without the
+dGPU:
 
 ```bash
-make -C ~/.cache/hyprglass clean
-make -C ~/.cache/hyprglass CXX=g++ INCLUDES="$(pkg-config --cflags hyprland pixman-1 libdrm lua5.4)"
-sudo install -Dm755 ~/.cache/hyprglass/hyprglass.so /usr/local/lib/libhyprglass.so
-sudo emerge -a --depclean
-sudo reboot
-uname -r                      # 7.2.x
-lsmod | grep nvidia           # signed modules load under Secure Boot
+sudo emerge -av @preserved-rebuild
+sudo dispatch-conf
+find /lib/modules/7.2.*/ -name 'nvidia.ko*'     # one per new kernel
 ```
 
-### Later: Graphite, LTO, PGO
+Reboot, then:
 
-Only once `~amd64` has run cleanly for a while, in this order:
+```bash
+uname -r                    # 7.2.x
+lsmod | grep nvidia         # signed modules load under Secure Boot
+hyprctl plugin list         # hyprglass
+systemctl --failed
+```
 
-1. `lto pgo` in global `USE`: packages that offer them (python, llvm, gcc, …) build that way.
-2. `-flto=auto` in `COMMON_FLAGS`, with a `package.env` exception list for packages that break
-   (see the Gentoo wiki's LTO page); `emerge -e @world`.
-3. `-fgraphite-identity -floop-nest-optimize` in `COMMON_FLAGS`. Small, package-dependent gains,
-   more breakage.
+Then §18 (tuning), and:
 
-With custom `CFLAGS`, drop `getbinpkg` from `FEATURES`: binhost packages ignore your flags.
+```bash
+./04-amd64.sh games       # interactive: Steam's autounmask + dispatch-conf, the gpm/ncurses fix
+sudo emerge -pvuDN @world # nothing pending
+sudo emerge -a --depclean # also removes the old kernel: only once the new one booted fine
+./04-amd64.sh stage2      # snapshot, -flto=auto -fno-semantic-interposition, binhost off,
+                          # emerge -e @world (many hours again)
+./04-amd64.sh failed      # rebuilds whatever failed in stage2 without LTO, lists it in no-lto
+```
 
-**Maintenance:** `sudo emerge --depclean` after kernel updates removes old kernels and their UKIs.
-After a BIOS or Secure Boot change, re-enroll the TPM (install step 18).
+What each part buys:
+
+| | Where | Effect |
+|---|---|---|
+| `-march=meteorlake` | make.conf (install) | Every instruction the CPU has. The biggest single gain. |
+| `USE="lto pgo"` | stage1 | Only packages that offer them: python, bash, xz, binutils, svt-av1, rust (`lto`). Python PGO is ~10–20% faster. |
+| gcc `graphite lto pgo` | stage1 | A faster compiler: shorter builds from here on. |
+| `-flto=auto` | stage2 | Whole-program optimisation everywhere: a few percent in places, smaller binaries. |
+| `-fno-semantic-interposition` | stage2 | Calls inside a shared library can be inlined. Only breaks code that `LD_PRELOAD`s a library's own internal symbols. |
+
+Left out on purpose:
+- **Graphite loop flags** (`-fgraphite-identity -floop-nest-optimize`): gcc is built with
+  Graphite so they work, but the gains are tiny and they're the likeliest source of silent
+  miscompiles.
+- **`-O3`, `-fipa-pta`, `-fdevirtualize-at-ltrans`** (what GentooLTO used): small gains for much
+  longer builds, more RAM and more breakage. GentooLTO itself is in maintenance mode and points to
+  upstream LTO, which is what stage2 does; its workaround lists date from 2019.
+- **clang/LLVM as the system compiler:** about the same speed as gcc LTO, more breakage. The
+  clang ebuild has no `lto`/`pgo` flag, and llvm drops `lto` when built with gcc.
+
+Rollback: stage1 and stage2 each take a read-only btrfs snapshot of `/` first
+(`/.snapshots/@-pre-amd64-*`, `@-pre-lto-*`), and keep a copy of `make.conf`
+(`make.conf.stable.bak`, `make.conf.prelto.bak`).
+
+## 18. Tuning
+
+`scripts/06-tune.sh`, after the reboot into the new kernel and with no emerge running. Each step
+shows itself and asks; `./06-tune.sh scx boot` runs only those. Packages: `packages.md` → **tune**.
+
+- **makeconf:** `GOAMD64="v3"` (Go's `-march`), builds at idle CPU and IO priority
+  (`PORTAGE_SCHEDULING_POLICY`, `PORTAGE_IONICE_COMMAND`; a build crawls while you play),
+  `FEATURES` parallel-install.
+- **scx:** sched-ext, `scx_lavd` in Auto mode via `scx_loader`: a scheduler made for interactive
+  and gaming loads, aware of the P/E/LP-E cores. On any error the kernel falls back to the normal
+  scheduler by itself. `scxtop` shows it working; `default_sched = "scx_bpfland"` in
+  `/etc/scx_loader/config.toml` is the alternative; `sudo systemctl disable --now scx_loader` turns
+  it off.
+- **power:** power-profiles-daemon only (`powerprofilesctl set performance|balanced|power-saver`).
+  thermald exits on this ThinkPad ("dytc_lapmode present: can't run on this platform"): the
+  firmware does thermals, driven by power-profiles-daemon. The step disables and deselects it.
+- **mold:** fast linker, opt-in per package (`/etc/portage/package.env/mold`), not global: untested
+  with LTO.
+- **cache:** sccache for every `cargo build` (`~/.cargo/config.toml`), ccache for your own C/C++
+  (20G). Not for portage globally: a cache only hits on the same source with the same flags, and
+  `~amd64` bumps versions while stage2 changes every flag. Opt-in per package instead
+  (`/etc/portage/package.env/ccache`) for a big package rebuilt at the same version.
+- **boot:** `systemd-analyze` blame and critical chain, read-only.
+
+## 19. Final state
+
+Global settings live in `make.conf`; `package.env` only holds per-package exceptions (`notmpfs`,
+`no-lto`, `mold`, `ccache`). After §17 and §18, `/etc/portage/make.conf` is the install one
+(install step 9) plus:
+
+```bash
+COMMON_FLAGS="-march=meteorlake -mabm -mshstk -mno-kl -mno-pconfig -mno-sgx -mno-widekl -O2 -pipe -flto=auto -fno-semantic-interposition"
+GOAMD64="v3"
+FEATURES="parallel-fetch parallel-install"          # getbinpkg + binpkg-request-signature gone
+PORTAGE_SCHEDULING_POLICY="idle"
+PORTAGE_IONICE_COMMAND="ionice -c 3 -p \${PID}"
+USE="wayland pipewire vaapi vulkan dist-kernel systemd bluetooth secureboot modules-sign -gnome -kde lto pgo"
+ACCEPT_KEYWORDS="~amd64"
+```
+
+```bash
+grep -vE '^\s*(#|$)' /etc/portage/make.conf       # compare
+cat /etc/portage/package.env/*                    # the exceptions
+```
+
+**Maintenance:**
+- Updates: `sudo emerge -avuDN @world` in tmux on tty2, then `sudo emerge -av @preserved-rebuild`
+  and `sudo dispatch-conf`. A package that breaks with LTO: `./04-amd64.sh failed`.
+- After a Hyprland update: `./04-amd64.sh hyprglass`.
+- `sudo emerge -a --depclean` after kernel updates removes old kernels and their UKIs, once the
+  new one has booted.
+- After a BIOS or Secure Boot change, re-enroll the TPM (install step 18).

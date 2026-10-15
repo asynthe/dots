@@ -14,8 +14,13 @@ The system is installed and set up on **stable**, so packages that only exist in
 `~amd64` lines in their **before** block. `setup.md` §17 switches everything to `~amd64` at the
 end; after that those lines are redundant but harmless. Live `9999` ebuilds always need `**`.
 
-Status 2026-10-01: base and desktop are installed. desktop was checked with a plain `emerge -p`.
-The other blocks haven't been run yet, so expect a keyword or USE prompt on the first run.
+Status 2026-10-14: base, desktop, hardware and net are installed; cli, dev, virt, apps and pentest
+are going in with `setup.md` §17 stage1 (on `~amd64`). games and tune come after its reboot.
+
+`scripts/03-packages.sh [block …]` runs blocks straight from this file (before lines, then the
+emerge, asking each time). `scripts/04-amd64.sh` reads it too, so keep the block format:
+`## name`, an optional `before:` code block, then one `emerge -av --noreplace` code block with
+one two-space-indented atom per line.
 
 ---
 
@@ -42,7 +47,6 @@ sudo emerge -av --noreplace \
   sys-apps/nvme-cli \
   sys-apps/zram-generator \
   sys-apps/fwupd \
-  sys-power/thermald \
   sys-power/power-profiles-daemon \
   sys-power/upower \
   sys-power/acpi \
@@ -512,14 +516,29 @@ dnsrecon, mitmproxy) installs with go, cargo or uv: see setup.md §11. radare2 i
 
 ---
 
+## tune
+
+`setup.md` §18, installed by `scripts/06-tune.sh` (which also configures them). After §17:
+scx is `~amd64` only. scx builds its BPF schedulers with clang (pulled in as a build dependency).
+
+```bash
+sudo emerge -av --noreplace \
+  sys-kernel/scx \
+  sys-devel/mold \
+  dev-util/ccache \
+  dev-util/sccache
+```
+
+---
+
 ## not used: remove
 
 Things a stage3 or an older install brings that p1 doesn't use. Run after setup.md §3. Atoms that
 aren't installed are skipped. `sys-apps/systemd` stays (it's in @system); this only drops a
-redundant @world entry.
+redundant @world entry. thermald exits on this ThinkPad (DYTC: the firmware does thermals).
 
 ```bash
-sudo emerge --deselect gui-apps/waybar gui-apps/tuigreet gui-libs/greetd net-misc/networkmanager www-client/firefox app-editors/nano sys-apps/systemd
+sudo emerge --deselect gui-apps/waybar gui-apps/tuigreet gui-libs/greetd net-misc/networkmanager www-client/firefox app-editors/nano sys-apps/systemd sys-power/thermald
 sudo emerge -a --depclean
 ```
 
