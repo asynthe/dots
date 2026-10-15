@@ -53,10 +53,13 @@ long() {
     touch "$LOG"   # created as meow, so script(1) running as root only appends to it
     heavy
     echo "+ $*"
-    # Full power, only for these runs (make.conf keeps the everyday -j15 / --jobs=2): all 22
-    # threads, a third package in parallel (the load average still gates it), and the
-    # "performance" power profile held while emerge lives (back to the old one after).
-    local power=(MAKEOPTS="-j22 -l24" EMERGE_DEFAULT_OPTS="--jobs=3 --load-average=24 --with-bdeps=y")
+    # Full power, only for these runs (make.conf keeps the everyday --jobs=2): a third package in
+    # parallel (the load average still gates it), and the "performance" power profile held while
+    # emerge lives (back to the old one after).
+    # No MAKEOPTS here: an environment MAKEOPTS beats package.env, so heavy.conf's -j8 was ignored
+    # and qtwebengine's check-reqs asked for 22 jobs x 2.5G = 55G and refused (2026-10-15).
+    # make.conf's -j15 applies, package.env overrides it per package.
+    local power=(EMERGE_DEFAULT_OPTS="--jobs=3 --load-average=24 --with-bdeps=y")
     # Own system scope with OOMPolicy=continue: inside the login session's scope, one compiler
     # killed by the OOM killer made systemd stop the whole scope (shell, emerge, the lot). Now
     # only that package fails, and --keep-going moves on.
@@ -206,8 +209,16 @@ LDFLAGS="${LDFLAGS} -fno-lto"
 EOF
     sudo touch /etc/portage/package.env/no-lto
 
+    # packages.md atoms (not games, not tune) that never got installed, e.g. ones that failed in
+    # stage1: built here, once, with LTO, instead of separately and then again by -e.
+    MISSING=()
+    for b in base hardware net cli dev virt apps "pentest (optional)"; do
+        while read -r a; do [ -n "$(qlist -IC "$a")" ] || MISSING+=("$a"); done < <(atoms "$b")
+    done
+    [ ${#MISSING[@]} -gt 0 ] && echo "also installing (not in @world yet): ${MISSING[*]}"
+
     step "rebuild everything (-e @world)"
-    long emerge -ave --keep-going @world
+    long emerge -ave --keep-going @world "${MISSING[@]}"
     echo; echo "Anything that failed: ./04-amd64.sh failed"
     hyprglass
     ;;
