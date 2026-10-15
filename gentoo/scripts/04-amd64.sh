@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
-# setup.md §17 + "Later": ~amd64, then Graphite / LTO / PGO. Two big compiles.
+# setup.md §0 + §17: the from-source system on the repo's portage config (~amd64, LTO, lto pgo),
+# then the extras. /etc/portage must match gentoo/portage first (./02-portage.sh apply).
 #
-#   ./04-amd64.sh prep     build-in-RAM (tmpfs). Run the stages from a text console (tty), not a
-#                          terminal inside Hyprland: that one dies with the session. Don't log
-#                          out of the tty while a stage runs (switching VTs is fine).
-#   ./04-amd64.sh stage1   ~amd64 + gcc graphite/lto/pgo + USE="lto pgo" + every remaining
-#                          packages.md block, one world update. Many hours. Then reboot.
-#   ./04-amd64.sh stage2   -flto=auto -fno-semantic-interposition, no binhost, emerge -e @world.
-#                          Run only after stage1 + a reboot came up clean. Many hours again.
+#   ./04-amd64.sh prep     build-in-RAM (tmpfs). Run the rest from a text console (tty2 + tmux),
+#                          not a terminal inside Hyprland: that one dies with the session.
+#   ./04-amd64.sh world    sync, gcc (graphite lto pgo) first, then emerge -e @world: the stage3
+#                          and binhost packages rebuilt on ~amd64 with LTO. Many hours. Reboot.
 #   ./04-amd64.sh resume   continue an interrupted emerge (portage's saved queue), same inhibit + log.
+#   ./04-amd64.sh failed   packages that failed -> no-lto (in the repo), apply, rebuild them.
+#   ./04-amd64.sh games    the games block (interactive: Steam autounmask, two dependency loops).
 #   ./04-amd64.sh hyprglass  rebuild the hyprglass plugin (after any Hyprland update).
-#   ./04-amd64.sh games    after stage2 + failed: the games block (interactive: Steam autounmask).
-#   ./04-amd64.sh failed   after stage2: packages that failed -> rebuild them without LTO.
 #
 # Watch from another tty: `tail -f ~/.local/state/p1-setup/logs/*.log` (newest one).
 set -uo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "run as meow, not root"; exit 1; }
 MD=~/git/dots/gentoo/packages.md
-MC=/etc/portage/make.conf
+S=~/git/dots/gentoo/scripts
+P=~/git/dots/gentoo/portage
+applied() { "$S/02-portage.sh" diff >/dev/null || { echo "/etc/portage differs from the repo: $S/02-portage.sh apply"; exit 1; }; }
 step() { printf '\n\033[1;34m== %s\033[0m\n' "$*"; }
 
 # sudo once, kept alive for the whole run (the emerges outlast sudo's 5 min).
@@ -51,14 +51,15 @@ LOG=~/.local/state/p1-setup/logs/$(date +%F-%H%M)-${1:-none}.log
 long() {
     mkdir -p ~/.local/state/p1-setup/logs
     touch "$LOG"   # created as meow, so script(1) running as root only appends to it
-    heavy
     echo "+ $*"
     # Full power, only for these runs (make.conf keeps the everyday --jobs=2): a third package in
     # parallel (the load average still gates it), and the "performance" power profile held while
     # emerge lives (back to the old one after).
     # No MAKEOPTS here: an environment MAKEOPTS beats package.env, so heavy.conf's -j8 was ignored
     # and qtwebengine's check-reqs asked for 22 jobs x 2.5G = 55G and refused (2026-10-15).
-    # make.conf's -j15 applies, package.env overrides it per package.
+    # make.conf's -j15 applies, package.env overrides it per package (heavy: -j8).
+    local pp=(); command -v powerprofilesctl >/dev/null &&   # not installed yet at setup §0
+        pp=(powerprofilesctl launch -p performance -r "emerge (04-amd64.sh)" --)
     local power=(EMERGE_DEFAULT_OPTS="--jobs=3 --load-average=24 --with-bdeps=y")
     # Own system scope with OOMPolicy=continue: inside the login session's scope, one compiler
     # killed by the OOM killer made systemd stop the whole scope (shell, emerge, the lot). Now
@@ -68,17 +69,8 @@ long() {
         --property=OOMPolicy=continue \
         systemd-inhibit --what=sleep:idle:handle-lid-switch --who=p1-rebuild \
         --why="emerge running (04-amd64.sh)" \
-        powerprofilesctl launch -p performance -r "emerge (04-amd64.sh)" -- \
+        "${pp[@]}" \
         script -qefa "$LOG" -c "$(printf '%q ' env "${power[@]}" "$@")"
-}
-
-heavy() {   # Chromium-sized C++ builds: ~2G per compiler; -j15 next to a second package ran out of RAM.
-            # -j8 assumes Hyprland is closed (its RAM goes to the compilers).
-    sudo mkdir -p /etc/portage/env /etc/portage/package.env
-    echo 'MAKEOPTS="-j8 -l24"' | sudo tee /etc/portage/env/heavy.conf >/dev/null
-    printf '%-26s heavy.conf\n' dev-qt/qtwebengine net-libs/webkit-gtk www-client/chromium \
-        | sudo tee /etc/portage/package.env/heavy >/dev/null
-    echo "heavy: $(awk '{print $1}' /etc/portage/package.env/heavy | tr '\n' ' ')at -j8"
 }
 
 snapshot() {   # read-only btrfs snapshot of / (subvol @) before a big rebuild
@@ -97,71 +89,41 @@ prep)
     grep -q ' /var/tmp/portage ' /etc/fstab || echo 'tmpfs  /var/tmp/portage  tmpfs  size=24G,uid=portage,gid=portage,mode=775,noatime  0 0' | sudo tee -a /etc/fstab
     sudo systemctl daemon-reload
     findmnt /var/tmp/portage >/dev/null || sudo mount /var/tmp/portage
-    sudo mkdir -p /etc/portage/env /etc/portage/package.env
-    echo 'PORTAGE_TMPDIR="/var/tmp/notmpfs"' | sudo tee /etc/portage/env/notmpfs.conf
-    # Builds that need more than ~16G of build dir (or RAM + build dir together).
-    sudo tee /etc/portage/package.env/notmpfs >/dev/null <<'EOF'
-sys-devel/gcc              notmpfs.conf
-llvm-core/llvm             notmpfs.conf
-llvm-core/clang            notmpfs.conf
-dev-lang/rust              notmpfs.conf
-net-libs/webkit-gtk        notmpfs.conf
-dev-qt/qtwebengine         notmpfs.conf
-sys-kernel/gentoo-kernel   notmpfs.conf
-games-emulation/rpcs3      notmpfs.conf
-app-emulation/wine-staging notmpfs.conf
-dev-lang/mono              notmpfs.conf
-net-libs/nodejs            notmpfs.conf
-dev-db/duckdb              notmpfs.conf
-EOF
+    # Builds that need more than ~16G of build dir go to disk: package.env/notmpfs (repo).
     findmnt /var/tmp/portage
 
     # No FEATURES=buildpkg: with binpkg-request-signature, portage rejects its own unsigned
     # binpkgs and every build fails at install. Rollback is the btrfs snapshot instead.
 
-    echo; echo "Now: exit Hyprland (SUPER+SHIFT+O) or CTRL+ALT+F2, log in as meow, '~/git/dots/gentoo/scripts/04-amd64.sh stage1'"
+    echo; echo "Now: CTRL+ALT+F2, log in as meow, tmux new -s world, '$S/04-amd64.sh world'"
     ;;
 
-stage1)
+world)
     findmnt /var/tmp/portage >/dev/null || { echo "run './04-amd64.sh prep' first"; exit 1; }
+    applied
+    step "sync: gentoo + the overlays in repos.conf (guru, hyproverlay, steam-overlay)"
+    sudo emaint sync -a
     step "news (skim; q to quit)"
     eselect news read new | less
-    snapshot pre-amd64
+    snapshot pre-world
 
-    step "make.conf: ~amd64, USE lto pgo"
-    sudo cp -n $MC $MC.stable.bak
-    grep -q '^ACCEPT_KEYWORDS=' $MC || echo 'ACCEPT_KEYWORDS="~amd64"' | sudo tee -a $MC
-    grep -qE '^USE=.* lto pgo' $MC || sudo sed -i -E 's/^(USE=".*)"$/\1 lto pgo"/' $MC
-    grep -E '^(ACCEPT_KEYWORDS|USE)=' $MC
+    # gcc first, so everything after is built by the graphite/lto/pgo one (package.use/p1).
+    step "gcc (graphite lto pgo), then switch to its newest slot"
+    long emerge -av1 --keep-going sys-devel/gcc
+    sudo gcc-config "$(gcc-config -l | wc -l)" && gcc-config -c
 
-    step "gcc: graphite lto pgo; source firefox out of @world"
-    grep -q '^sys-devel/gcc' /etc/portage/package.use/p1 ||
-        echo 'sys-devel/gcc graphite lto pgo' | sudo tee -a /etc/portage/package.use/p1
-    sudo emerge --deselect www-client/firefox
-
-    step "before blocks of the remaining packages.md blocks"
-    BLOCKS=(cli dev virt apps)
-    read -rp "Include 'pentest (optional)' too? [y/N] " a; [ "$a" = y ] && BLOCKS+=("pentest (optional)")
-    for b in "${BLOCKS[@]}"; do
-        bf=$(block "$b" before); [ -n "$bf" ] && { echo "-- $b"; bash -ec "$bf"; }
-    done
-
-    NONGAMES=(); for b in "${BLOCKS[@]}"; do mapfile -t -O ${#NONGAMES[@]} NONGAMES < <(atoms "$b"); done
-
-    step "world update on ~amd64 + ${#NONGAMES[@]} new packages (the long one; games come later)"
-    echo "If it stops on USE/keyword changes: rerun with --autounmask-write, then 'sudo dispatch-conf', then rerun."
+    # USE=-gpm: package.use/zz-autounmask (Steam's 32-bit list) asks for 32-bit gpm and ncurses,
+    # and each needs the other built first. Without gpm there's no loop; the -uDN puts it back.
+    step "rebuild everything (-e @world): ~amd64 versions, LTO, the profile's flags"
     echo "After your 'Yes' it runs unattended. Sleep, idle and the lid switch are blocked meanwhile."
-    # No binhost: its stable binaries next to ~amd64 ebuilds cause the slot conflicts.
-    long emerge -avuDN --backtrack=50 --keep-going --getbinpkg=n --usepkg=n @world "${NONGAMES[@]}"
-
-    hyprglass
-    # No depclean yet: it removes the old kernel, the fallback if the new one doesn't boot.
-    echo; echo "Reboot. Check: uname -r (7.2.x), lsmod | grep nvidia, hyprctl plugin list, systemctl --failed"
-    echo "All good? Then: ./04-amd64.sh games, sudo emerge -a --depclean, and stage2."
+    long USE=-gpm emerge -ave --keep-going --backtrack=50 @world
+    step "gpm back (ncurses, gpm and what links them)"
+    long emerge -avuDN --keep-going --backtrack=50 @world
+    echo; echo "Failed ones: ./04-amd64.sh failed. Then: sudo emerge -av @preserved-rebuild,"
+    echo "sudo dispatch-conf (z for files you edited), check sudo -v, reboot into the new kernel."
     ;;
 
 resume)
-    heavy   # every time: a resume is usually after a crash, so make sure the limits are in
     long emerge --resume --keep-going
     ;;
 
@@ -170,19 +132,15 @@ hyprglass) hyprglass ;;
 games)
     # Separate, interactive: Steam's 32-bit deps need autounmask + dispatch-conf, and the
     # gpm <-> ncurses loop needs the -gpm rebuild first (packages.md, games).
-    grep -q '^ACCEPT_KEYWORDS=' $MC || { echo "stage1 first"; exit 1; }
-    # Autounmask used to land in package.use/wine (the last file), which the before block's tee
-    # then wipes: move anything past its first line to zz-autounmask.
-    PU=/etc/portage/package.use
-    if [ "$(cat $PU/wine 2>/dev/null | wc -l)" -gt 1 ]; then
-        sudo sh -c "tail -n +2 $PU/wine >> $PU/zz-autounmask && sed -i 1q $PU/wine"
-    fi
-    bf=$(block games before); bash -ec "$bf"
+    applied
     mapfile -t GAMES < <(atoms games)
     G=(--getbinpkg=n --usepkg=n --noreplace --backtrack=50)
-    step "games: autounmask (Steam's abi_x86_32 list), then dispatch-conf: u"
+    # Steam's abi_x86_32 list is already in package.use/zz-autounmask (repo); this only catches
+    # what newer versions add. Autounmask writes to the last file in package.use: zz-autounmask.
+    step "games: autounmask (anything new), dispatch-conf: u, then back into the repo"
     long emerge -a "${G[@]}" --autounmask-only --autounmask-write "${GAMES[@]}" || true
     sudo dispatch-conf
+    "$S/02-portage.sh" pull
     # Both loops only break once the 32-bit flags above are set.
     step "loops: ncurses without gpm (64 + 32-bit), mono minimal"
     long USE=-gpm emerge -av1 sys-libs/ncurses
@@ -193,48 +151,6 @@ games)
     long emerge -avuDN --getbinpkg=n --usepkg=n --backtrack=50 --keep-going @world
     ;;
 
-stage2)
-    grep -q '^ACCEPT_KEYWORDS=' $MC || { echo "stage1 first"; exit 1; }
-    snapshot pre-lto
-
-    # LTO only. Graphite loop flags (-fgraphite-identity -floop-nest-optimize) are left out on
-    # purpose: gains are tiny and package-dependent, and they're the likeliest source of silent
-    # miscompiles. gcc itself is still built with graphite, so they can be added later.
-    # -fno-semantic-interposition: lets gcc inline/optimize calls inside shared libs (python
-    # already builds this way); only breaks code that LD_PRELOADs a lib's own internal symbols.
-    step "make.conf: -flto=auto -fno-semantic-interposition, binhost off (it ignores your flags)"
-    sudo cp -n $MC $MC.prelto.bak
-    grep -q -- '-flto' $MC || sudo sed -i -E 's/^(COMMON_FLAGS=".*)"$/\1 -flto=auto -fno-semantic-interposition"/' $MC
-    sudo sed -i -E '/^FEATURES=/s/ ?getbinpkg//; /^FEATURES=/s/ ?binpkg-request-signature//' $MC
-    grep -E '^(COMMON_FLAGS|FEATURES)=' $MC
-
-    step "no-LTO escape hatch: /etc/portage/env/no-lto.conf (+ package.env/no-lto list)"
-    sudo mkdir -p /etc/portage/env /etc/portage/package.env
-    sudo tee /etc/portage/env/no-lto.conf >/dev/null <<'EOF'
-# For packages that break with LTO/graphite: list them in /etc/portage/package.env/no-lto
-COMMON_FLAGS="-march=meteorlake -mabm -mshstk -mno-kl -mno-pconfig -mno-sgx -mno-widekl -O2 -pipe"
-CFLAGS="${COMMON_FLAGS}"
-CXXFLAGS="${COMMON_FLAGS}"
-FCFLAGS="${COMMON_FLAGS}"
-FFLAGS="${COMMON_FLAGS}"
-LDFLAGS="${LDFLAGS} -fno-lto"
-EOF
-    sudo touch /etc/portage/package.env/no-lto
-
-    # packages.md atoms (not games, not tune) that never got installed, e.g. ones that failed in
-    # stage1: built here, once, with LTO, instead of separately and then again by -e.
-    MISSING=()
-    for b in base hardware net cli dev virt apps "pentest (optional)"; do
-        while read -r a; do [ -n "$(qlist -IC "$a")" ] || MISSING+=("$a"); done < <(atoms "$b")
-    done
-    [ ${#MISSING[@]} -gt 0 ] && echo "also installing (not in @world yet): ${MISSING[*]}"
-
-    step "rebuild everything (-e @world)"
-    long emerge -ave --keep-going @world "${MISSING[@]}"
-    echo; echo "Anything that failed: ./04-amd64.sh failed"
-    hyprglass
-    ;;
-
 failed)
     # A failed build leaves /var/tmp/portage/<cat>/<pkg-ver>/temp/build.log behind; successful
     # ones are cleaned. Those are the failures: retry them without LTO, and remember them.
@@ -243,12 +159,13 @@ failed)
     [ ${#F[@]} -gt 0 ] || { echo "no failed builds in /var/tmp/portage"; exit 0; }
     for p in "${F[@]}"; do echo "$p   (log: /var/tmp/portage/$p/temp/build.log)"; done
     echo "Check a log first if unsure: a non-LTO failure (fetch, a real bug) won't be fixed by this."
-    read -rp "Mark these no-lto and rebuild them? [y/N] " a; [ "$a" = y ] || exit 0
-    for p in "${F[@]}"; do echo "$(qatom -F '%{CATEGORY}/%{PN}' "$p") no-lto.conf"; done \
-        | sudo tee -a /etc/portage/package.env/no-lto
+    read -rp "Mark these no-lto (gentoo/portage/package.env/no-lto) and rebuild them? [y/N] " a; [ "$a" = y ] || exit 0
+    for p in "${F[@]}"; do echo "$(qatom -F '%{CATEGORY}/%{PN}' "$p") no-lto.conf"; done | tee -a "$P/package.env/no-lto"
+    "$S/02-portage.sh" apply || exit 1
     sudo rm -rf $(for p in "${F[@]}"; do echo "/var/tmp/portage/$p"; done)
-    sudo emerge -av1 --keep-going $(for p in "${F[@]}"; do echo "=$p"; done)
+    long emerge -av1 --keep-going $(for p in "${F[@]}"; do echo "=$p"; done)
+    echo "Commit it: git -C ~/git/dots commit -m 'gentoo: no-lto ...' gentoo/portage/package.env/no-lto"
     ;;
 
-*) sed -n '2,17p' "$0" ;;
+*) sed -n '2,15p' "$0" ;;
 esac

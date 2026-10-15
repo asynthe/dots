@@ -4,23 +4,21 @@ Every package p1 has on purpose, one code block per group. Copy a block, paste i
 `-a` list, say yes. `--noreplace` means a package that's already there is only recorded in
 @world, never rebuilt, so any block is safe to re-run.
 
-Adding a package: put its line in the right block **here first**, then run the block.
+Adding a package: put its line in the right block **here first**, then run the block. If it
+needs a USE flag, keyword or mask, that goes in the block's file in `gentoo/portage/` (named
+under each block), then `scripts/02-portage.sh apply`, then the block.
 Removing one: delete its line, `sudo emerge --deselect <atom>`, then `sudo emerge -a --depclean`.
 
-Blocks with a **before** block need those lines once (keywords, USE flags, masks). They're
-already in `/etc/portage` if you've run them before; re-running just overwrites the same file.
+Everything runs on `~amd64` with LTO from `setup.md` §0, when `gentoo/portage` is applied. The
+per-package `~amd64` lines in `package.accept_keywords` are redundant since then, but they record
+what's testing-only. Live `9999` ebuilds always need `**`.
 
-The system is installed and set up on **stable**, so packages that only exist in testing need the
-`~amd64` lines in their **before** block. `setup.md` §17 switches everything to `~amd64` at the
-end; after that those lines are redundant but harmless. Live `9999` ebuilds always need `**`.
+Status 2026-10-15: every block is installed, games included, on `~amd64` with LTO.
 
-Status 2026-10-14: base, desktop, hardware and net are installed; cli, dev, virt, apps and pentest
-are going in with `setup.md` §17 stage1 (on `~amd64`). games and tune come after its reboot.
-
-`scripts/03-packages.sh [block …]` runs blocks straight from this file (before lines, then the
-emerge, asking each time). `scripts/04-amd64.sh` reads it too, so keep the block format:
-`## name`, an optional `before:` code block, then one `emerge -av --noreplace` code block with
-one two-space-indented atom per line.
+`scripts/03-packages.sh [block …]` runs blocks straight from this file, asking each time.
+`scripts/04-amd64.sh` reads it too, so keep the block format: `## name`, an optional `before:`
+code block (shell commands that aren't portage config), then one `emerge -av --noreplace` code
+block with one two-space-indented atom per line.
 
 ---
 
@@ -67,13 +65,8 @@ Hyprland and its pieces. The bar and wallpaper picker are **quickshell**, the wa
 is **awww**, and the session starts from tty1 autologin via **uwsm**. Not used: waybar,
 waypaper, greetd, tuigreet.
 
-before:
-```bash
-echo '*/*::hyproverlay ~amd64' | sudo tee /etc/portage/package.accept_keywords/hyproverlay
-echo 'dev-cpp/sdbus-c++ ~amd64' | sudo tee /etc/portage/package.accept_keywords/sdbus-c++
-echo 'gui-apps/uwsm ~amd64' | sudo tee /etc/portage/package.accept_keywords/uwsm
-echo 'gui-apps/quickshell -crash-handler -networkmanager' | sudo tee /etc/portage/package.use/quickshell
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/hyproverlay`,
+`package.accept_keywords/sdbus-c++`, `package.accept_keywords/uwsm`, `package.use/quickshell`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -115,11 +108,8 @@ Apps that don't need Hyprland. **ghostty** is the main terminal, **yazi** the te
 the fallback because Hyprland's default config uses it. Firefox is **firefox-bin**, not the
 source-built `www-client/firefox`.
 
-before (the libxmlb line is for nemo once on ~amd64; harmless before):
-```bash
-echo 'x11-terms/wezterm ~amd64' | sudo tee /etc/portage/package.accept_keywords/wezterm
-echo 'dev-libs/libxmlb introspection' | sudo tee /etc/portage/package.use/nemo
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/wezterm`,
+`package.use/nemo` (libxmlb, for nemo on ~amd64).
 
 ```bash
 sudo emerge -av --noreplace \
@@ -150,12 +140,8 @@ Not in Portage, so install these by hand:
 
 ## fonts
 
-before:
-```bash
-echo 'media-fonts/nerdfonts firacode iosevkaterm iosevkatermslab jetbrainsmono mononoki overpass sourcecodepro ubuntusans zedmono' | sudo tee /etc/portage/package.use/fonts
-echo 'app-i18n/mozc fcitx5' | sudo tee -a /etc/portage/package.use/fonts
-echo 'media-fonts/office-code-pro ~amd64' | sudo tee /etc/portage/package.accept_keywords/fonts
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.use/fonts`,
+`package.accept_keywords/fonts`.
 
 Checked 2026-10-01 on stable with a plain `emerge -p`: resolves, 32 packages, 11 from source
 (mozc is the long one).
@@ -188,10 +174,7 @@ et-book and garamond-libre: download them into `~/.local/share/fonts`.
 
 ## hardware
 
-before:
-```bash
-printf '%s ~amd64\n' media-sound/wiremix net-wireless/bluez-tools x11-apps/igt-gpu-tools app-mobilephone/scrcpy app-crypt/tpm2-pkcs11 dev-python/python-pkcs11 dev-python/tpm2-pytss | sudo tee /etc/portage/package.accept_keywords/hardware
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/hardware`.
 
 Checked 2026-10-01 on stable with a plain `emerge -p`: resolves, 68 packages, 25 from source.
 `python-pkcs11` and `tpm2-pytss` are dependencies of `tpm2-pkcs11`. Mixers: `alsamixer` comes from
@@ -225,11 +208,8 @@ Not packaged: dualsensectl.
 
 Everything from NixOS's `cli.nix`. `psmisc` provides `killall`.
 
-before:
-```bash
-printf '%s ~amd64\n' app-shells/zoxide games-misc/lolcat app-misc/tty-clock | sudo tee /etc/portage/package.accept_keywords/cli
-printf '%s\n' 'gnustep-base/gnustep-make native-exceptions' 'sys-devel/gcc objc' | sudo tee /etc/portage/package.use/cli   # unar
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/cli`,
+`package.use/cli`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -325,12 +305,8 @@ sudo emerge -av --noreplace \
 
 ## dev
 
-before:
-```bash
-echo 'dev-lang/rust-bin rust-analyzer rust-src' | sudo tee /etc/portage/package.use/rust
-printf '%s ~amd64\n' dev-vcs/jj dev-db/duckdb dev-db/dbeaver-bin | sudo tee /etc/portage/package.accept_keywords/dev
-echo 'dev-cpp/simdutf atomic-base64' | sudo tee /etc/portage/package.use/dev   # nodejs (yarn)
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.use/rust`,
+`package.accept_keywords/dev`, `package.use/dev`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -378,12 +354,7 @@ shfmt and usql (go), harlequin, sqlfluff and dbt (uv tool), and the Python data 
 
 ## virt
 
-before:
-```bash
-echo 'app-emulation/qemu spice usbredir usb virtfs' | sudo tee /etc/portage/package.use/virt
-echo 'app-emulation/libvirt virt-network qemu virtiofsd' | sudo tee -a /etc/portage/package.use/virt
-printf '%s\n' 'net-libs/gnutls pkcs11 tools' 'net-misc/spice-gtk usbredir' 'net-dns/dnsmasq script' | sudo tee -a /etc/portage/package.use/virt   # swtpm, virt-manager, libvirt networks
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.use/virt`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -401,11 +372,8 @@ sudo emerge -av --noreplace \
 
 ## apps
 
-before:
-```bash
-echo 'media-sound/spek ~amd64' | sudo tee /etc/portage/package.accept_keywords/apps
-echo 'net-misc/aria2 metalink bittorrent xmlrpc' | sudo tee /etc/portage/package.use/apps   # kiwix-desktop
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/apps`,
+`package.use/apps`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -439,14 +407,9 @@ steam-overlay repo, and its 32-bit dependencies will ask for a long autounmask l
 
 `wine` is in `/etc/eselect/wine/bin`, which a shell only gets after `. /etc/profile` or a re-login.
 
-before:
-```bash
-echo 'app-emulation/wine-staging ~amd64' | sudo tee /etc/portage/package.accept_keywords/wine
-echo 'app-emulation/wine-staging wow64 wayland' | sudo tee /etc/portage/package.use/wine
-printf '%s ~amd64\n' games-util/lutris games-arcade/osu-lazer games-engines/uzdoom | sudo tee /etc/portage/package.accept_keywords/games
-sudo touch /etc/portage/package.use/zz-autounmask   # autounmask writes to the last file; keep it out of 'wine'
-sudo eselect repository enable steam-overlay && sudo emaint sync -r steam-overlay
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/wine`,
+`package.use/wine`, `package.accept_keywords/games` (plus `package.use/zz-autounmask`, Steam's
+32-bit list). steam-overlay is in `repos.conf`.
 
 ```bash
 sudo emerge -av --noreplace --backtrack=50 \
@@ -471,7 +434,8 @@ sudo emerge -av --noreplace --backtrack=50 \
 Checked 2026-10-15 on `~amd64`. Steam's 32-bit libraries need some care, in this order
 (`04-amd64.sh games` does it):
 1. **Autounmask first:** `emerge -a --autounmask-only --autounmask-write <block>`, then
-   `dispatch-conf` (**u**). It adds ~60 `abi_x86_32` lines to `package.use/zz-autounmask`.
+   `dispatch-conf` (**u**), then `02-portage.sh pull`. Steam's ~60 `abi_x86_32` lines are
+   already in `package.use/zz-autounmask`; this only catches what newer versions add.
 2. **gpm ↔ ncurses loop:** `sudo USE="-gpm" emerge -av1 sys-libs/ncurses`. It has to come
    *after* step 1, so the 32-bit ncurses is built without gpm too.
 3. **mono ↔ libgdiplus loop:** `sudo USE="minimal" emerge -av1 dev-lang/mono`.
@@ -480,7 +444,7 @@ Checked 2026-10-15 on `~amd64`. Steam's 32-bit libraries need some care, in this
 
 With LTO (stage2), `protonup-rs` fails to link (`undefined reference to aws_lc_0_45_0_...`):
 its bundled aws-lc is built as GCC LTO bytecode, which Rust's linker can't use. It goes in the
-no-LTO list: `echo 'games-util/protonup-rs no-lto.conf' | sudo tee -a /etc/portage/package.env/no-lto`.
+no-LTO list, `gentoo/portage/package.env/no-lto`.
 Any Rust package that bundles C this way (aws-lc-sys, ring) can need the same.
 
 Not in Portage:
@@ -490,11 +454,8 @@ Not in Portage:
 
 ## pentest (optional)
 
-before:
-```bash
-printf '%s ~amd64\n' net-analyzer/masscan net-analyzer/rustscan net-analyzer/nikto net-analyzer/termshark app-crypt/hashcat | sudo tee /etc/portage/package.accept_keywords/pentest
-printf '%s\n' 'dev-libs/capstone python' 'dev-util/unicorn python' 'dev-libs/keystone python' 'net-libs/libwebsockets client' 'net-wireless/lorcon python' 'sys-libs/zlib minizip' | sudo tee /etc/portage/package.use/pentest   # pwntools, gef, kismet, aircrack-ng, termshark
-```
+Its USE flags and keywords are in `gentoo/portage/`: `package.accept_keywords/pentest`,
+`package.use/pentest`.
 
 ```bash
 sudo emerge -av --noreplace \
@@ -527,7 +488,7 @@ dnsrecon, mitmproxy) installs with go, cargo or uv: see setup.md §11. radare2 i
 
 ## tune
 
-`setup.md` §18, installed by `scripts/06-tune.sh` (which also configures them). After §17:
+`setup.md` §18, installed by `scripts/06-tune.sh` (which also configures them).
 scx is `~amd64` only. scx builds its BPF schedulers with clang (pulled in as a build dependency).
 
 ```bash

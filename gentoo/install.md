@@ -225,9 +225,10 @@ MODULES_SIGN_KEY="/etc/kernel/certs/signing_key.pem"
 MODULES_SIGN_CERT="/etc/kernel/certs/signing_key.pem"
 ```
 
-This is the install-time file: stable, binhost, no LTO. `setup.md` §17–18 adds `~amd64`,
-`lto pgo`, LTO flags and build priorities later; the final file is in `setup.md` §19. Global
-settings always go here, never in a second file.
+This is the install-time file: stable, binhost, no LTO, so the install is fast. The real one is
+`gentoo/portage/make.conf` in the dots (`~amd64`, LTO, `lto pgo`, build priorities): `setup.md`
+§0 copies all of `gentoo/portage` over `/etc/portage` and rebuilds the system on it. Global
+settings always go in `make.conf`, never in a second file.
 
 Binhost (x86-64-v3), `/etc/portage/binrepos.conf/gentoobinhost.conf`:
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Install the remaining packages.md blocks, read straight from packages.md (its source of truth).
-# For each block: shows the "before" lines and the emerge, asks, then runs them. emerge is -av, so
-# you still confirm every list. Usage: ./03-packages.sh [block ...]   (default: all, in order)
+# For each block: shows the emerge (and "before" lines, if a block has any), asks, then runs it.
+# Its USE flags and keywords are already in /etc/portage (gentoo/portage, via 02-portage.sh).
+# emerge is -av, so you still confirm every list. Usage: ./03-packages.sh [block ...]   (default: all)
 set -uo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "run as meow, not root"; exit 1; }
 MD=~/git/dots/gentoo/packages.md
@@ -22,6 +23,8 @@ block() {   # $1 section, $2 before|emerge
 
 run_block() {
     local sec="$1" before emerge
+    # games has two dependency loops to break first (packages.md, games).
+    [ "$sec" = games ] && { echo "games: run ./04-amd64.sh games instead"; return 0; }
     before=$(block "$sec" before); emerge=$(block "$sec" emerge)
     [ -n "$emerge" ] || { echo "no emerge block for '$sec'"; return 1; }
     printf '\n\033[1;34m== %s\033[0m\n' "$sec"
@@ -30,15 +33,10 @@ run_block() {
     read -rp "Run '$sec'? [y/N/q] " a
     case $a in q) exit 0 ;; y) ;; *) echo skipped; return 0 ;; esac
     [ -n "$before" ] && bash -ec "$before"
-    if [ "$sec" = games ]; then
-        # packages.md: gpm <-> ncurses loop for Steam's 32-bit libs
-        sudo USE="-gpm" emerge -av1 sys-libs/ncurses
-    fi
     bash -c "$emerge" || echo "!! '$sec' emerge failed or was declined; rerun: $0 '$sec'"
-    [ "$sec" = games ] && echo "games: now run 'sudo emerge -avuDN @world' to put gpm back"
 }
 
-BLOCKS=("base" "hardware" "cli" "net" "dev" "virt" "apps" "games" "pentest (optional)")
+BLOCKS=("base" "hardware" "cli" "net" "dev" "virt" "apps" "pentest (optional)")
 [ $# -gt 0 ] && BLOCKS=("$@")
 for b in "${BLOCKS[@]}"; do run_block "$b"; done
 
