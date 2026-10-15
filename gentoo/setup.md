@@ -15,6 +15,9 @@ They need the dots clone (§0), and they run as meow, not root.
 | `04-amd64.sh <stage>` | §17: `~amd64`, LTO/PGO, the big rebuilds |
 | `06-tune.sh [step …]` | §18: make.conf, sched-ext, power, mold, compile caches |
 
+The result as built on p1 (final `/etc/portage`, `/etc/kernel`, world, all build logs) is in
+`p1/`; see `p1/README.md`.
+
 ## Rules
 
 Same as `install.md`, plus:
@@ -818,7 +821,7 @@ sleep, idle and the lid switch, and its output is kept in `~/.local/state/p1-set
 Each runs in its own systemd scope with `OOMPolicy=continue`: run straight inside tmux, one
 compiler killed for memory makes systemd stop tmux's whole scope, emerge included (2026-10-15,
 qtwebengine and qtmultimedia at `-j15` each). Chromium-sized builds (qtwebengine, webkit-gtk)
-get `-j6` from `/etc/portage/package.env/heavy`. Start emerges through the script, not by hand.
+get `-j8` from `/etc/portage/package.env/heavy`. Start emerges through the script, not by hand.
 
 ```bash
 cd ~/git/dots/gentoo/scripts
