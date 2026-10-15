@@ -815,6 +815,10 @@ Run every stage except `prep` on **tty2 in tmux**: a terminal inside Hyprland di
 session. CTRL+ALT+F2, log in, `tmux new -s world` (or `tmux attach -t world`); back to Hyprland
 with CTRL+ALT+F1, watch with `tmux attach -t world` (CTRL+B D detaches). Each emerge blocks
 sleep, idle and the lid switch, and its output is kept in `~/.local/state/p1-setup/logs/`.
+Each runs in its own systemd scope with `OOMPolicy=continue`: run straight inside tmux, one
+compiler killed for memory makes systemd stop tmux's whole scope, emerge included (2026-10-15,
+qtwebengine and qtmultimedia at `-j15` each). Chromium-sized builds (qtwebengine, webkit-gtk)
+get `-j6` from `/etc/portage/package.env/heavy`. Start emerges through the script, not by hand.
 
 ```bash
 cd ~/git/dots/gentoo/scripts

@@ -54,9 +54,23 @@ long() {
     # tmux copies the pane to the log; piping emerge itself would buffer its Yes/No prompt.
     # No -o: it toggles, so a pipe left open by an earlier run would be switched off.
     [ -n "${TMUX:-}" ] && tmux pipe-pane "cat >> '$LOG'" 2>/dev/null
+    [ -f /etc/portage/package.env/heavy ] || heavy
     echo "+ $*"
-    sudo systemd-inhibit --what=sleep:idle:handle-lid-switch --who=p1-rebuild \
+    # Own system scope with OOMPolicy=continue: inside tmux's user scope, one compiler killed by
+    # the OOM killer made systemd stop the whole scope (tmux, emerge, the lot). Now only that
+    # package fails, and --keep-going moves on.
+    sudo systemd-run --scope --quiet --collect --unit="p1-emerge-$(date +%s)" \
+        --property=OOMPolicy=continue \
+        systemd-inhibit --what=sleep:idle:handle-lid-switch --who=p1-rebuild \
         --why="emerge running (04-amd64.sh)" env "$@"
+}
+
+heavy() {   # Chromium-sized C++ builds: ~2G per compiler; -j15 next to a second package ran out of RAM
+    sudo mkdir -p /etc/portage/env /etc/portage/package.env
+    echo 'MAKEOPTS="-j6 -l22"' | sudo tee /etc/portage/env/heavy.conf >/dev/null
+    printf '%-26s heavy.conf\n' dev-qt/qtwebengine net-libs/webkit-gtk www-client/chromium \
+        | sudo tee /etc/portage/package.env/heavy >/dev/null
+    echo "heavy: $(awk '{print $1}' /etc/portage/package.env/heavy | tr '\n' ' ')at -j6"
 }
 
 snapshot() {   # read-only btrfs snapshot of / (subvol @) before a big rebuild
@@ -144,6 +158,7 @@ stage1)
 
 resume)
     need_tmux
+    heavy   # every time: a resume is usually after a crash, so make sure the limits are in
     long emerge --resume --keep-going
     ;;
 
