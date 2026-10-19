@@ -2,15 +2,18 @@ local monitors = require("monitors")
 
 hl.on("hyprland.start", function ()
     hl.exec_cmd("mpd")
-    hl.exec_cmd("uwsm app -- mullvad-vpn")
-    --hl.exec_cmd("[workspace 9 silent] musicbee")
-    hl.exec_cmd("[workspace 10 silent] vesktop")
+    hl.exec_cmd("[workspace 1 silent] uwsm app -- mullvad-vpn")
+    hl.exec_cmd("[workspace 1 silent] ghostty --class=com.mitchellh.ghostty.hermes -e hermes")
+    hl.exec_cmd("monerod --data-dir /home/meow/archive/monero --detach")
+    hl.exec_cmd("[workspace 10 silent] vesktop-bin")
+    hl.exec_cmd("[workspace 1 silent] steam -silent")   -- -silent: starts minimized to tray, no main window
 
     --hl.exec_cmd("elephant")
     --hl.exec_cmd("walker --gapplication-service")
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
     hl.exec_cmd("uwsm app -- awww-daemon")
     hl.exec_cmd("uwsm app -- qs -c bar")
+    hl.exec_cmd("uwsm app -- qs -c desktop")   -- desktop icons
     hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh")
     hl.exec_cmd("uwsm app -- " .. os.getenv("HOME") .. "/.config/hypr/cursor_shake.py")
 end)
@@ -88,23 +91,30 @@ if hl.plugin.hyprglass then
         fresnel_strength     = 0.25,
         specular_strength    = 0.15,
 
-        dark = { brightness = 1.0, adaptive_dim = 0.55, contrast = 1.0, saturation = 0.9 },
+        dark = { brightness = 1.08, adaptive_dim = 0.35, contrast = 1.0, saturation = 0.9 },
     })
 
-    hg.layer("quickshell", { exclude = true })
+    -- Quickshell desktop icons stay opaque/un-glassed (dense grid, no benefit
+    -- from refraction); the bar itself is deliberately NOT excluded anymore —
+    -- see bg alpha in bar/shell.qml and the quickshell:bar layer_rule below.
+    hg.layer("quickshell:desktop", { exclude = true })
 
     hg.config({
         default_theme  = "dark",
         default_preset = "apple_strong",
 
-        tint_color = tint("#0d0d12", 0.25),
+        tint_color = tint("#0d0d12", 0.15),
 
-        layers = { enabled = false },
+        layers = { enabled = true },
     })
 
     hl.window_rule({ match = { class = "^(mpv|imv|steam_app_[0-9]+)$" }, tag = "+hyprglass_disabled" })
 
     hl.window_rule({ match = { xwayland = true }, tag = "+hyprglass_disabled" })
+
+    -- heavy redrawers that don't need glass: Steam (XWayland, already covered
+    -- above) and Mullvad, which is Electron on native Wayland
+    hl.window_rule({ match = { class = "(?i)^(steam|mullvad.*)$" }, tag = "+hyprglass_disabled" })
 end
 
 hl.config({
@@ -122,7 +132,9 @@ hl.config({
             --},
             --inactive_border = "rgba(595959aa)",
         },
-        resize_on_border = false,
+        resize_on_border        = true,   -- drag any edge; with no border it uses the grab area below
+        extend_border_grab_area = 12,     -- px outside the window that still counts as its edge
+        hover_icon_on_border    = true,   -- resize cursor when you're on it
         allow_tearing = false, -- TODO Enable when gaming, with a window_rule with `immediate` set to true
     },
     dwindle = {
@@ -202,6 +214,26 @@ hl.device({
 
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
+-- Floating first: every window opens floating and centered at its own size;
+-- ALT+SHIFT+F tiles it (and floats it back). Rules further down override this.
+-- musicbee.exe is excluded here (see rules below): its main window should
+-- stay tiled as before, and its dialogs/menus get their own float-without-
+-- center rule instead of blanket screen-centering.
+hl.window_rule({ name = "float-by-default", match = { class = "^(?!musicbee\\.exe$).*$" }, float = true, center = true })
+
+-- MusicBee dialogs/popups (Scan Folders, Preferences, Edit Tags, context
+-- menus that ARE real toplevels, etc.): float, but don't force-center —
+-- Wine positions these relative to their owner window already, and
+-- screen-centering was overriding that. The main player window's title is
+-- always "<artist> - <track> - MusicBee"; everything else matching
+-- musicbee.exe is a dialog, so excluding that suffix catches just those
+-- and leaves the main window alone (stays tiled, same as before).
+hl.window_rule({
+    name  = "musicbee-dialogs-float-no-center",
+    match = { class = "^musicbee\\.exe$", title = "^(?!.* - MusicBee$).*$" },
+    float = true,
+})
+
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
 hl.window_rule({ match = { float = false, workspace = "f[1]" }, border_size = 0 })
@@ -241,15 +273,25 @@ hl.curve("winOut",   { type = "bezier", points = { { 0.3,  1     }, { 0,     1 }
 hl.curve("linear",   { type = "bezier", points = { { 1,    1     }, { 1,     1 } } })
 hl.curve("ease",     { type = "bezier", points = { { 0,    1     }, { 0.618, 1 } } })
 
-hl.animation({ leaf = "windowsIn",        enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
-hl.animation({ leaf = "windowsOut",       enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
+-- windows just fade in and out where they land; moving tiles still slides
+hl.animation({ leaf = "windowsIn",        enabled = false })
+hl.animation({ leaf = "windowsOut",       enabled = false })
+hl.animation({ leaf = "fadeIn",           enabled = true, speed = 2.427, bezier = "ease"                      })
+hl.animation({ leaf = "fadeOut",          enabled = true, speed = 2.427, bezier = "ease"                      })
 hl.animation({ leaf = "windowsMove",      enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
-hl.animation({ leaf = "workspaces",       enabled = true, speed = 2.427, bezier = "ease", style = "slide"     })
+hl.animation({ leaf = "workspaces",       enabled = true, speed = 2.427, bezier = "ease", style = "slide"     }) -- the desktop peek bind swaps this to a fade while it runs
 hl.animation({ leaf = "layers",           enabled = true, speed = 2.427, bezier = "ease", style = "fade"      })
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.427, bezier = "ease", style = "fade"      })
 hl.animation({ leaf = "fadePopups",       enabled = true, speed = 2.427, bezier = "ease"                      })
 
 hl.window_rule({ match = { xwayland = true }, rounding = 0 }) -- xwayland
+
+hl.window_rule({   -- Discord: tiled on its own workspace, overriding float-by-default
+    name     = "discord-tiled",
+    match    = { class = "^vesktop$" },
+    workspace = "10 silent",
+    float    = false,
+})
 local noDimClasses = {
     "^(mpv|steam_app)(.*)$",
     "(?i)^.*\\.exe$",    -- wine: the window class is the exe name (MusicBee.exe, ...)
@@ -263,6 +305,29 @@ hl.window_rule({
     name       = "steam-games-fullscreen",
     match      = { class = "^steam_app_[0-9]+$" },
     fullscreen = true,
+})
+hl.window_rule({   -- games just appear: Steam games and Wine (class is the exe name)
+    name    = "no-anim-games",
+    match   = { class = "(?i)^(steam_app_[0-9]+|.*\\.exe)$" },
+    no_anim = true,
+})
+hl.window_rule({   -- Steam and Mullvad just appear, no fade
+    name    = "no-anim-steam-mullvad",
+    match   = { class = "(?i)^(steam|mullvad.*)$" },
+    no_anim = true,
+})
+hl.window_rule({   -- the Steam client (library, friends, dialogs) floats at its own sizes; games above stay fullscreen
+    name   = "steam-client-float",
+    match  = { class = "^[Ss]team$" },
+    float  = true,
+    center = true,
+})
+hl.window_rule({   -- File Explorer opens as a window, not a tile
+    name   = "nemo-windowed",
+    match  = { class = "^nemo$" },
+    float  = true,
+    size   = "1100 680",
+    center = true,
 })
 -- beatmania IIDX 33 (~/wine/iidx, `iidx`): TDJ mode opens two windows, main
 -- 1920x1080 and touch sub 1280x720, launched borderless so the surface is
@@ -287,12 +352,19 @@ hl.window_rule({
     rounding    = 0,
 })
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
+hl.window_rule({   -- Mullvad VPN: snap to the bottom-right corner of its monitor
+    name   = "mullvad-bottom-right",
+    match  = { class = "(?i)^mullvad.*$" },
+    float  = true,
+    size   = "320 568",
+    move   = "monitor_w-340 monitor_h-588",
+})
 hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, border_size = 0 })
 hl.window_rule({ match = { title = "^(Media viewer)$" }, float = true })
 
 hl.window_rule({ 
     match = { 
-        class = "^("
+        class = "^(" 
             .. "com.mitchellh.ghostty|" 
             .. "org.wezfurlong.wezterm" 
             .. ")(.*)$"
@@ -301,6 +373,14 @@ hl.window_rule({
     float = true, 
     size = "1360 825" 
 })
+-- Startup: hermes (ghostty, launched on workspace 1) opens floating at the
+-- same margin from its monitor's top-left corner used in this very session
+-- (90,50 on the 3440x1440 external panel) — move values are monitor-local,
+-- so the same offset lands similarly on the 1920x1200 laptop panel too.
+-- Matched by class, not title: an on_session_start shell hook rewrites this
+-- window's title to the live Hermes session name, so title can no longer be
+-- a stable anchor (see --class=com.mitchellh.ghostty.hermes on the exec line).
+hl.window_rule({ match = { class = "^com.mitchellh.ghostty\\.hermes$" }, move = "90 50" })
 
 hl.window_rule({
     match = {
@@ -352,6 +432,17 @@ hl.layer_rule({
     ignore_alpha = 0.5,
 })
 
+-- The bar (bar/shell.qml) is deliberately NOT excluded from hyprglass (see
+-- hg.layer("quickshell:desktop", ...) above) and its own background is now
+-- ~15% opaque black, not solid — this native blur-behind makes that
+-- transparency actually show a blurred backdrop instead of just dimming to
+-- whatever's rendered immediately below with no blur.
+hl.layer_rule({
+    match = { namespace = "^quickshell:bar$" },
+    blur = true,
+    ignore_alpha = 0.3,
+})
+
 hl.layer_rule({
     match = { namespace = "logout_dialog" },
     blur = true,
@@ -365,6 +456,28 @@ local suppressMaximizeRule = hl.window_rule({
     suppress_event = "maximize",
 })
 -- suppressMaximizeRule:set_enabled(false)
+
+-- Off except while the desktop icons (qs -c desktop) launch something: they
+-- switch it on right before, so that window is born floating and centered
+-- instead of popping out of the tiling after it appears. Global, so
+-- `hyprctl eval` can reach it.
+DesktopLaunchFloat = hl.window_rule({
+    name   = "desktop-launch-float",
+    match  = { class = ".*" },
+    float  = true,
+    size   = "1100 680",
+    center = true,
+})
+DesktopLaunchFloat:set_enabled(false)
+
+-- Same idea for games started from a desktop shortcut: whatever class the game
+-- turns out to have, it appears without the fade (and isn't floated).
+DesktopLaunchGame = hl.window_rule({
+    name    = "desktop-launch-game",
+    match   = { class = ".*" },
+    no_anim = true,
+})
+DesktopLaunchGame:set_enabled(false)
 
 -- local overlayLayerRule = hl.layer_rule({
 -- })
@@ -380,12 +493,14 @@ hl.window_rule({
 
 local mainMod = "ALT"
 local terminal    = "ghostty"
-local fileManager = "thunar"
+local fileManager = (os.getenv("HOME") or "~") .. "/.config/quickshell/desktop/explorer.sh"
 local menu        = "fuzzel"
 local barToggle   = "qs -c bar ipc call bar toggle"
+local iconsToggle = "qs -c desktop ipc call desktop toggle"
 local screenshotsDir = (os.getenv("HOME") or "~") .. "/downloads/screenshots"
 local session    = (os.getenv("HOME") or "~") .. "/.config/hypr/session.sh"
 local browser    = (os.getenv("HOME") or "~") .. "/git/dots/scripts/firefox/browser.sh"
+local fcitxToggle = (os.getenv("HOME") or "~") .. "/git/dots/scripts/fcitx/toggle.sh"
 
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
@@ -393,7 +508,10 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucon
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser .. " -p"))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barToggle))
+hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(iconsToggle))
+hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd(session))
+hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd(fcitxToggle))   -- toggle fcitx5 (off by default, see scripts/fcitx/toggle.sh)
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
@@ -442,9 +560,41 @@ end
 
 for i = 1, 10 do
     local key = i % 10
-    hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i, on_current_monitor = true }))
+    hl.bind(mainMod .. " + " .. key, function()
+        hl.dispatch(hl.dsp.focus({ workspace = i }))
+        -- always flash the bar's workspace dots, even when i is already the
+        -- active workspace (focus() alone is a no-op then, so the bar's own
+        -- activeWorkspace-change watch never fires)
+        hl.exec_cmd("qs -c bar ipc call bar flashDots")
+    end)
     hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i, follow = false }))
 end
+-- Peek at the desktop while SUPER + comma is held (like Windows' Win+,)
+-- the switch quickly fades instead of sliding, then the slide comes back for normal workspace changes
+local peekFrom = nil
+local function peekAnimation(style, speed)
+    hl.animation({ leaf = "workspaces", enabled = true, speed = speed, bezier = "ease", style = style })
+end
+local function peekRestore()
+    if peekFrom == nil then return end
+    hl.dispatch(hl.dsp.focus({ workspace = peekFrom }))
+    peekFrom = nil
+    hl.timer(function()
+        if peekFrom == nil then peekAnimation("slide", 2.427) end
+    end, { timeout = 400, type = "oneshot" })
+end
+hl.bind("SUPER + comma", function()
+    if peekFrom ~= nil then return end
+    local ws = hl.get_active_workspace()
+    if ws == nil or ws.special then return end
+    peekFrom = ws.id
+    peekAnimation("fade", 1.5)
+    hl.dispatch(hl.dsp.focus({ workspace = "name:desktop" }))
+end)
+-- either key let go ends the peek, in whatever order they're released
+hl.bind("comma",   peekRestore, { release = true, ignore_mods = true, non_consuming = true })
+hl.bind("Super_L", peekRestore, { release = true, ignore_mods = true, non_consuming = true })
+
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ monitor = "l" }))

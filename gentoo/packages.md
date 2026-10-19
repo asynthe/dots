@@ -120,6 +120,7 @@ sudo emerge -av --noreplace \
   www-client/firefox-bin \
   media-gfx/imv \
   media-video/mpv \
+  media-video/celluloid \
   app-misc/yazi \
   gnome-extra/nemo \
   gnome-base/gvfs \

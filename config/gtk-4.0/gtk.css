@@ -35,8 +35,11 @@ headerbar, headerbar:backdrop {
     color: #ffffff;
 }
 
-/* Popovers and dropdowns */
-popover, popover.background,
+/* Popovers and dropdowns
+   Paint popover's contents and arrow, not `popover` itself: in GTK4 that node
+   spans the transparent shadow margin too, so coloring it draws a gray box
+   around every small menu (Celluloid's volume slider). */
+popover > contents, popover > arrow,
 combobox window.popup,
 .combo window.popup,
 menu, menuitem {

@@ -5,16 +5,19 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
+import Quickshell.Services.SystemTray
+import Quickshell.Widgets
 
 ShellRoot {
     id: root
 
     property int    barHeight  : 26
+    property bool   atBottom   : true    // false: top edge, menus drop down
     property string fontFamily : "JetBrainsMono Nerd Font"
     property int    fontSize   : 13
     property int    sideMargin : 14
 
-    property color bg     : "#000000"
+    property color bg     : "#26000000"   // 15% black tint — bar sits on hyprglass (see hyprland.lua), this darkens it enough to keep icons/text legible
     property color fg     : "#c8c8c8"
     property color fgDim  : "#5a5a5a"
     property color fgFaint: "#2c2c2c"
@@ -41,6 +44,10 @@ ShellRoot {
     property int   dotsMs   : 2000
     property int   dotsFade : 450
     property int   wsCount  : 10
+
+    // Also bumped by the IPC flashDots() call so dots flash even when you're
+    // already on that workspace (activeWorkspace.id wouldn't change).
+    property int   dotsFlashGen: 0
 
     property bool  hideOnFullscreen: true
 
@@ -144,6 +151,30 @@ ShellRoot {
         repeat: true
         triggeredOnStart: true
         onTriggered: if (!netProbe.running) netProbe.running = true
+    }
+
+    // cava.conf streams N semicolon-separated 0..cavaRange integers per line.
+    property int cavaBars  : 40   // matches `bars` in bar/cava.conf
+    property int cavaRange : 100
+    property var cavaLevels: []
+
+    // Stays inside the thin bar strip — never rises above it. Bars peak at
+    // 92% of cavaCeiling; the clip container below is sized to cavaCeiling
+    // exactly, so overflow past it is architecturally impossible.
+    property int cavaCeiling: Math.max(8, root.barHeight - 6)
+    readonly property int cavaMaxBarHeight: Math.round(cavaCeiling * 0.92)
+
+    Process {
+        id: cavaProc
+        command: ["cava", "-p", Qt.resolvedUrl("cava.conf").toString().replace("file://", "")]
+        running: true
+        stdout: SplitParser {
+            onRead: line => {
+                const parts = line.split(";").filter(s => s.length > 0).map(Number);
+                if (parts.length > 0)
+                    root.cavaLevels = parts;
+            }
+        }
     }
 
     Process {
@@ -347,6 +378,7 @@ ShellRoot {
         function unhide(): void { root.hidden = false; }
         function hide(): void   { root.hidden = true; root.menuOpen = false; root.ipMenuOpen = false; }
         function poll(): void   { if (!netProbe.running) netProbe.running = true; }
+        function flashDots(): void { root.dotsFlashGen++; }
         function menu(): void {
             if (!root.menuOpen)
                 root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
@@ -416,6 +448,16 @@ ShellRoot {
                 dotsHold.restart();
             }
 
+            Connections {
+                target: root
+                function onDotsFlashGenChanged() {
+                    if (Hyprland.focusedMonitor?.name !== strip.modelData.name)
+                        return;
+                    strip.dotsShown = true;
+                    dotsHold.restart();
+                }
+            }
+
             Timer {
                 id: dotsHold
                 interval: root.dotsMs
@@ -428,7 +470,7 @@ ShellRoot {
 
             implicitHeight: root.barHeight + 420
 
-            anchors { left: true; right: true; top: true }
+            anchors { left: true; right: true; top: !root.atBottom; bottom: root.atBottom }
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "quickshell:bar"
@@ -439,6 +481,7 @@ ShellRoot {
             exclusiveZone: shown ? root.barHeight : 0
 
             mask: Region {
+                y: strip.anyMenu || !root.atBottom ? 0 : strip.implicitHeight - root.barHeight
                 width: strip.width
                 height: strip.anyMenu ? strip.implicitHeight : root.barHeight
             }
@@ -449,11 +492,69 @@ ShellRoot {
                 onClicked: { root.menuOpen = false; root.ipMenuOpen = false; }
             }
 
+            // Catches outside-panel clicks while a menu is open (another
+            // window, the desktop) — same pattern as ContextMenu.qml.
+            HyprlandFocusGrab {
+                active: strip.anyMenu
+                windows: [strip]
+                onCleared: { root.menuOpen = false; root.ipMenuOpen = false; }
+            }
+
             Rectangle {
                 id: barRect
-                anchors { left: parent.left; right: parent.right; top: parent.top }
+                anchors {
+                    left: parent.left; right: parent.right
+                    top: root.atBottom ? undefined : parent.top
+                    bottom: root.atBottom ? parent.bottom : undefined
+                }
                 height: root.barHeight
                 color: root.bg
+
+                // Hard clip backstop, independent of the height math above.
+                Item {
+                    id: cavaClip
+                    anchors {
+                        right: rightInfoRow.left
+                        rightMargin: 14
+                        bottom: parent.bottom
+                    }
+                    width: cavaRow.implicitWidth
+                    height: root.cavaCeiling
+                    clip: true
+
+                    Row {
+                        id: cavaRow
+                        // External-only when there's more than one monitor.
+                        visible: Quickshell.screens.length === 1 || !root.isInternal(strip.modelData)
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            bottom: parent.bottom
+                            bottomMargin: 2
+                        }
+                        spacing: 2
+
+                        Repeater {
+                            model: root.cavaBars
+
+                            Rectangle {
+                                required property int index
+                                readonly property int level: root.cavaLevels[index] ?? 0
+
+                                width: 3
+                                height: Math.max(2, Math.min(root.cavaMaxBarHeight, Math.round(
+                                    (Math.min(level, root.cavaRange) / root.cavaRange)
+                                    * root.cavaMaxBarHeight)))
+                                anchors.bottom: parent.bottom
+                                radius: 0
+                                color: root.white
+
+                                Behavior on height {
+                                    NumberAnimation { duration: 60; easing.type: Easing.OutQuad }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Rectangle {
                     id: nameButton
@@ -471,7 +572,7 @@ ShellRoot {
                         id: nameText
                         anchors.centerIn: parent
                         text: (Quickshell.env("USER") || "user") + "@" + root.host
-                        color: strip.ownsMenu ? root.white : root.fgDim
+                        color: root.white
                         font.family: root.fontFamily
                         font.pixelSize: root.fontSize
                     }
@@ -539,6 +640,7 @@ ShellRoot {
                 }
 
                 Row {
+                    id: rightInfoRow
                     anchors {
                         right: parent.right
                         rightMargin: root.sideMargin
@@ -616,12 +718,72 @@ ShellRoot {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 root.menuScreen = strip.modelData.name;
-                                root.ipMenuOpen = !root.ipMenuOpen;
+                                if (root.menuOpen && root.menuPane === "network") {
+                                    root.menuOpen = false;
+                                } else {
+                                    root.menuOpen = true;
+                                    root.menuPane = "network";
+                                }
                             }
                         }
                     }
 
                     Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1
+                        height: root.fontSize
+                        color: root.fgFaint
+                    }
+
+                    Row {
+                        id: trayRow
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
+                        visible: trayRepeater.count > 0
+
+                        Repeater {
+                            id: trayRepeater
+                            model: SystemTray.items
+
+                            Item {
+                                id: trayItem
+                                required property var modelData
+
+                                width: 15
+                                height: 15
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                IconImage {
+                                    anchors.fill: parent
+                                    source: trayItem.modelData.icon
+                                    smooth: true
+                                    asynchronous: true
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                                    onClicked: mouse => {
+                                        if (mouse.button === Qt.LeftButton) {
+                                            trayItem.modelData.activate();
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            if (trayItem.modelData.hasMenu)
+                                                trayItem.modelData.display(trayItem, 0, trayItem.height);
+                                            else
+                                                trayItem.modelData.secondaryActivate();
+                                        } else {
+                                            trayItem.modelData.secondaryActivate();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        visible: trayRow.visible
                         anchors.verticalCenter: parent.verticalCenter
                         width: 1
                         height: root.fontSize
@@ -721,7 +883,8 @@ ShellRoot {
                 anchors {
                     right: parent.right
                     rightMargin: root.sideMargin - 6
-                    top: barRect.bottom
+                    top: root.atBottom ? undefined : barRect.bottom
+                    bottom: root.atBottom ? barRect.top : undefined
                 }
                 width: ipMenuBox.width + 4
                 height: ipMenuBox.height + 4
@@ -875,7 +1038,8 @@ ShellRoot {
                 anchors {
                     left: parent.left
                     leftMargin: root.sideMargin - 6
-                    top: barRect.bottom
+                    top: root.atBottom ? undefined : barRect.bottom
+                    bottom: root.atBottom ? barRect.top : undefined
                 }
                 width: menuBox.width + 4
                 height: menuBox.height + 4
