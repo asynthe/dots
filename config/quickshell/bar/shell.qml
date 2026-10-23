@@ -17,7 +17,7 @@ ShellRoot {
     property int    fontSize   : 13
     property int    sideMargin : 14
 
-    property color bg     : "#26000000"   // 15% black tint — bar sits on hyprglass (see hyprland.lua), this darkens it enough to keep icons/text legible
+    property color bg     : "#ff000000"   // true OLED black, fully opaque
     property color fg     : "#c8c8c8"
     property color fgDim  : "#5a5a5a"
     property color fgFaint: "#2c2c2c"
@@ -151,30 +151,6 @@ ShellRoot {
         repeat: true
         triggeredOnStart: true
         onTriggered: if (!netProbe.running) netProbe.running = true
-    }
-
-    // cava.conf streams N semicolon-separated 0..cavaRange integers per line.
-    property int cavaBars  : 40   // matches `bars` in bar/cava.conf
-    property int cavaRange : 100
-    property var cavaLevels: []
-
-    // Stays inside the thin bar strip — never rises above it. Bars peak at
-    // 92% of cavaCeiling; the clip container below is sized to cavaCeiling
-    // exactly, so overflow past it is architecturally impossible.
-    property int cavaCeiling: Math.max(8, root.barHeight - 6)
-    readonly property int cavaMaxBarHeight: Math.round(cavaCeiling * 0.92)
-
-    Process {
-        id: cavaProc
-        command: ["cava", "-p", Qt.resolvedUrl("cava.conf").toString().replace("file://", "")]
-        running: true
-        stdout: SplitParser {
-            onRead: line => {
-                const parts = line.split(";").filter(s => s.length > 0).map(Number);
-                if (parts.length > 0)
-                    root.cavaLevels = parts;
-            }
-        }
     }
 
     Process {
@@ -468,7 +444,7 @@ ShellRoot {
             visible: shown
             color: "transparent"
 
-            implicitHeight: root.barHeight + 420
+            implicitHeight: anyMenu ? (root.barHeight + 420) : root.barHeight
 
             anchors { left: true; right: true; top: !root.atBottom; bottom: root.atBottom }
 
@@ -509,52 +485,6 @@ ShellRoot {
                 }
                 height: root.barHeight
                 color: root.bg
-
-                // Hard clip backstop, independent of the height math above.
-                Item {
-                    id: cavaClip
-                    anchors {
-                        right: rightInfoRow.left
-                        rightMargin: 14
-                        bottom: parent.bottom
-                    }
-                    width: cavaRow.implicitWidth
-                    height: root.cavaCeiling
-                    clip: true
-
-                    Row {
-                        id: cavaRow
-                        // External-only when there's more than one monitor.
-                        visible: Quickshell.screens.length === 1 || !root.isInternal(strip.modelData)
-                        anchors {
-                            horizontalCenter: parent.horizontalCenter
-                            bottom: parent.bottom
-                            bottomMargin: 2
-                        }
-                        spacing: 2
-
-                        Repeater {
-                            model: root.cavaBars
-
-                            Rectangle {
-                                required property int index
-                                readonly property int level: root.cavaLevels[index] ?? 0
-
-                                width: 3
-                                height: Math.max(2, Math.min(root.cavaMaxBarHeight, Math.round(
-                                    (Math.min(level, root.cavaRange) / root.cavaRange)
-                                    * root.cavaMaxBarHeight)))
-                                anchors.bottom: parent.bottom
-                                radius: 0
-                                color: root.white
-
-                                Behavior on height {
-                                    NumberAnimation { duration: 60; easing.type: Easing.OutQuad }
-                                }
-                            }
-                        }
-                    }
-                }
 
                 Rectangle {
                     id: nameButton
@@ -640,7 +570,6 @@ ShellRoot {
                 }
 
                 Row {
-                    id: rightInfoRow
                     anchors {
                         right: parent.right
                         rightMargin: root.sideMargin

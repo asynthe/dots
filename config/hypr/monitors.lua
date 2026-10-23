@@ -43,7 +43,7 @@ local known_externals = {
 	{
 		match = "MGMG2710C",
 		output = "desc: Nreal MGMG2710C",
-		mode = "1920x1080@60",
+		mode = "1920x1080@165",
 		scale = "1",
 		width = 1920,
 	},
@@ -132,7 +132,6 @@ local function restore_workspaces()
 	ws_hold = false
 	snapshot_workspaces()
 end
-
 
 local function apply_monitors(force_disable_internal)
 	if force_disable_internal ~= nil then

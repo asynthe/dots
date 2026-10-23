@@ -372,11 +372,33 @@ Append to the line in `/etc/kernel/cmdline` (`notes/structure/p1.md`):
 | Param | Why |
 |---|---|
 | `i915.enable_psr=0` | panel self-refresh blanks the internal display |
-| `video=DP-1:d` | DP-1 is a phantom (stale EDID) that Hyprland would focus |
+| ~~`video=DP-1:d`~~ | removed 2026-10-19: DP-1 turned out to be the real HDMI-routed external monitor on the NVIDIA dGPU, not a phantom — this param was force-disabling it at the kernel level |
 
 ```bash
 sudo emerge --config sys-kernel/gentoo-kernel    # new UKI; its own PCR11 signature, PIN still works
 ```
+
+### keyd: Copilot key -> toggle a scratchpad Hermes terminal
+
+`/etc/keyd/default.conf` (copy tracked at `gentoo/p1/etc/keyd/default.conf`,
+not symlinked — keyd needs root to read it so it's applied by hand):
+
+```
+f23 = command(/home/meow/git/dots/scripts/hypr/copilot-toggle.sh)
+```
+
+Then `sudo systemctl restart keyd`. Why `f23` and not a Hyprland keybind:
+the ThinkPad Copilot key fires as a simultaneous `LEFTMETA+F23` USB HID
+chord (confirmed via `libinput debug-events`, independent of keyd being in
+the path or not) — the raw event always arrives fine, but no Hyprland bind
+syntax tried (keysym, `code:201`, `code:193`, with/without Super) ever
+fired, most likely a race in Hyprland's modifier-then-key bind matching
+against a true single-report chord rather than two sequential presses.
+keyd intercepts the scancode before Hyprland ever sees it and runs
+`scripts/hypr/copilot-toggle.sh` as root, which drops to `meow` via
+`runuser` to reach the live Hyprland/Wayland session and toggle the
+`special:copilot` workspace (see `hyprland.lua`'s `hl.on("hyprland.start", ...)`
+block for the terminal's autostart line).
 
 `/etc/systemd/logind.conf.d/lid.conf`:
 

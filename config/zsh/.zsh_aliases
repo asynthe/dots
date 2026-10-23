@@ -14,6 +14,7 @@ alias v='alsamixer'
 alias vis='projectM-pulseaudio &>/dev/null & disown'
 alias vv='wiremix'
 alias wm='uwsm start -e -D Hyprland hyprland.desktop'
+alias write='~/git/sakuhin/write.sh'
 alias yt-mp3='yt-dlp -x --audio-format best'
 alias yt-mp4='yt-dlp'
 
