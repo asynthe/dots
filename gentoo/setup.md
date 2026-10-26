@@ -1,3 +1,5 @@
+NOTE: When installing zathura, make it always 'app-text/zathura app-text/zathura-meta'
+
 # Gentoo on p1: setup
 
 After `install.md`: from a tty to the full NixOS-equivalent desktop. Packages live in
@@ -969,3 +971,4 @@ cat ~/git/dots/gentoo/portage/package.env/*      # the exceptions
 - `sudo emerge -a --depclean` after kernel updates removes old kernels and their UKIs, once the
   new one has booted.
 - After a BIOS or Secure Boot change, re-enroll the TPM (install step 18).
+

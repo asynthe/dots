@@ -19,4 +19,4 @@ sig=$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -1)
 runuser -u meow -- env \
   XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
   HYPRLAND_INSTANCE_SIGNATURE="$sig" \
-  hyprctl dispatch "hl.dsp.workspace.toggle_special('copilot')"
+  "$(dirname "$0")/copilot-toggle-user.sh"

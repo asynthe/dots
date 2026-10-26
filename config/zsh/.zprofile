@@ -10,6 +10,9 @@ fi
 #
 # Pass hyprland.desktop, not hyprland-uwsm.desktop -- the latter's Exec is
 # itself `uwsm start ... hyprland.desktop`, so uwsm would end up wrapping uwsm.
-if uwsm check may-start &>/dev/null; then
+#
+# Skip inside tmux: a new tmux session/window starts a login shell too,
+# and re-sourcing this would re-trigger uwsm start on every new window.
+if [[ -z "$TMUX" ]] && uwsm check may-start &>/dev/null; then
     uwsm start -e -D Hyprland hyprland.desktop
 fi

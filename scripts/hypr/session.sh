@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#   ./session.sh [-n] [-c | -w N] [book-name-substring]
+#
+# Opens a writing layout for a book under ~/git/sakuhin: a typst-watch pane,
+# an nvim pane on the text, and a zathura pane on the rendered pdf, tiled
+# across a workspace. With no argument, fuzzel lists the available books.
 set -uo pipefail
 
 hdisp() { hyprctl dispatch "$1" >/dev/null 2>&1; }
@@ -12,53 +17,36 @@ DRY=0
 CURRENT=0
 FORCEWS=
 PICKED=0
+BOOKLANG=es
 
-context_sarten() {
-    DESC='server config'
-    pane 50 "$(term ~/git/flakes nvim)"
-    pane 50 "$(term ~/git/flakes ssh sarten)"
-    ws
-    pane 100 "$(browse infra \
-        https://wazuh.tailfdd252.ts.net/ \
-        https://grafana.tailfdd252.ts.net/ \
-        http://sarten:8082)"
+PLAN=()
+GROUP=0
+DESC=
+
+say()  { printf 'session: %s\n' "$*"; }
+warn() { printf 'session: %s\n' "$*" >&2; }
+
+die() {
+    warn "$*"
+    command -v notify-send >/dev/null && notify-send -u critical 'session' "$*"
+    exit 1
 }
 
-context_sec() {
-    DESC='pentest + SOC'
-    pane 50 "$(term ~/git/notes/study nvim)"
-    pane 50 "$(term ~/git/notes/study)"
-    ws
-    pane 100 "$(browse study \
-        https://tryhackme.com/dashboard \
-        https://app.hackthebox.com/ \
-        https://wazuh.tailfdd252.ts.net/)"
-    ws
-    pane 100 burpsuite
+ws()   { GROUP=$((GROUP + 1)); }
+pane() { PLAN+=("$GROUP|$1|$2"); }
+
+term() {    # term <cwd> [command...]
+    local cwd=$1; shift
+    local out="ghostty --class=$TERMCLASS --working-directory=$cwd"
+    (($#)) && out="$out -e $*"
+    printf '%s' "$out"
 }
 
-context_data() {
-    DESC='job hunt'
-    pane 70 "$(browse work \
-        https://www.linkedin.com/jobs/ \
-        https://www.getonbrd.com/jobs/data-science-analytics \
-        https://www.computrabajo.cl/)"
-    pane 30 "$(term ~/git/notes nvim work.md)"
-}
-
-context_book() {
-    local dir
-    dir=$(book_dir "${1:-}") || return 1
-    DESC=${dir##*/}; DESC=${DESC#[0-9][0-9][0-9][0-9]_}; DESC=${DESC//_/ }
-
-    if [ ! -f "$dir/book.pdf" ] && ((!DRY)); then
-        say "building $dir/book.pdf for the first time"
-        ( cd "$dir" && typst compile book.typ ) || warn "first build failed; zathura may open empty"
-    fi
-
-    pane 10 "$(term "$dir" typst watch book.typ)"
-    pane 40 "$(term "$dir" nvim book.typ)"
-    pane 50 "zathura $dir/book.pdf"
+term_quiet() {    # term_quiet <cwd> [command...]  (no cursor, output-only)
+    local cwd=$1; shift
+    local out="ghostty --cursor-opacity=0 --class=$TERMCLASS --working-directory=$cwd"
+    (($#)) && out="$out -e $*"
+    printf '%s' "$out"
 }
 
 book_dir() {
@@ -82,42 +70,34 @@ book_dir() {
         return 1
     fi
 
-    if ((PICKED)); then
-        name=$(printf '%s\n' "${books[@]}" | fuzzel --dmenu --prompt 'book: ') || return 1
-        [ -n "$name" ] || return 1
-    else
-        name=${books[0]}
-    fi
+    name=$(printf '%s\n' "${books[@]}" | fuzzel --dmenu --prompt 'book: ') || return 1
+    [ -n "$name" ] || return 1
+    PICKED=1
     printf '%s/%s' "$sakuhin" "$name"
 }
 
-term() {    # term <cwd> [command...]
-    local cwd=$1; shift
-    local out="ghostty --class=$TERMCLASS --working-directory=$cwd"
-    (($#)) && out="$out -e $*"
-    printf '%s' "$out"
+context_book() {
+    local dir
+    dir=$(book_dir "${1:-}") || return 1
+    DESC=${dir##*/}; DESC=${DESC#[0-9][0-9][0-9][0-9]_}; DESC=${DESC//_/ }
+
+    local editfile=book.typ pdf=book.pdf
+    local -a watchargs=()
+    if [ -f "$dir/assets/text_$BOOKLANG.typ" ]; then
+        editfile="assets/text_$BOOKLANG.typ"
+        pdf="book_$BOOKLANG.pdf"
+        watchargs=(--input "lang=$BOOKLANG")
+    fi
+
+    if [ ! -f "$dir/$pdf" ] && ((!DRY)); then
+        say "building $dir/$pdf for the first time"
+        ( cd "$dir" && typst compile book.typ "$pdf" "${watchargs[@]}" ) || warn "first build failed; zathura may open empty"
+    fi
+
+    pane 50 "zathura $dir/$pdf"
+    pane 46 "$(term "$dir" nvim "$editfile")"
+    pane 4  "$(term_quiet "$dir" typst watch book.typ "$pdf" "${watchargs[@]}")"
 }
-
-browse() {  # browse <profile> <url>... -- urls only seed a profile with no saved session
-    printf '%s' "$HOME/git/dots/scripts/firefox/browser.sh $*"
-}
-
-CONTEXTS=(sarten sec data book)
-PLAN=()
-GROUP=0
-DESC=
-
-say()  { printf 'session: %s\n' "$*"; }
-warn() { printf 'session: %s\n' "$*" >&2; }
-
-die() {
-    warn "$*"
-    command -v notify-send >/dev/null && notify-send -u critical 'session' "$*"
-    exit 1
-}
-
-ws()   { GROUP=$((GROUP + 1)); }
-pane() { PLAN+=("$GROUP|$1|$2"); }
 
 empty_workspaces() {
     local used ws
@@ -146,7 +126,7 @@ wait_new() {  # wait_new <ws> <addresses before the launch>
 
 esc() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
 
-usage() { printf 'usage: session.sh [-n] [-c | -w N] [context] [arg]\ncontexts: %s\n' "${CONTEXTS[*]}"; }
+usage() { printf 'usage: session.sh [-n] [-c | -w N] [-l LANG] [book-name-substring]\n'; }
 
 layout_group() {
     local wsid=$1; shift
@@ -167,13 +147,14 @@ layout_group() {
     for ((i = 0; i < n; i++)); do
         if ((i > 0)); then
             ratio=$(awk -v p="${pcts[i-1]}" -v r="$rem" 'BEGIN{v=2*p/r; if(v<0.1)v=0.1; if(v>1.9)v=1.9; printf "%.4f", v}')
-            dwindle "force_split = 2, default_split_ratio = $ratio"
+            local fs=2; ((i == 1)) && fs=1
+            dwindle "force_split = $fs, default_split_ratio = $ratio"
             rem=$((rem - pcts[i-1]))
         fi
         say "ws $wsid  ${pcts[i]}%  ${cmds[i]}"
         local before=
         ((n > 1)) && before=$(addrs_on "$wsid")
-        hdisp "hl.dsp.exec_cmd(\"[workspace $wsid] $(esc "${cmds[i]}")\")"
+        hdisp "hl.dsp.exec_cmd(\"[workspace $wsid; noanim] $(esc "${cmds[i]}")\")"
         if ((n > 1)); then
             wait_new "$wsid" "$before" || warn "ws $wsid: pane $((i + 1)) never took focus; layout may be off"
         fi
@@ -202,28 +183,15 @@ main() {
             -n|--dry-run) DRY=1; shift ;;
             -w|--workspace) FORCEWS=${2:-}; shift 2 ;;
             -c|--current) CURRENT=1; shift ;;
+            -l|--lang) BOOKLANG=${2:-es}; shift 2 ;;
             -h|--help) usage; return 0 ;;
             -*) warn "unknown flag: $1"; usage >&2; return 2 ;;
             *) break ;;
         esac
     done
 
-    local ctx=${1:-}
-    if [ -z "$ctx" ]; then
-        ctx=$(printf '%s\n' "${CONTEXTS[@]}" "${CONTEXTS[@]/%/ here}" | fuzzel --dmenu --prompt 'session: ') || return 0
-        [ -n "$ctx" ] || return 0
-        [ "${ctx% here}" != "$ctx" ] && { ctx=${ctx% here}; CURRENT=1; }
-        PICKED=1
-    else
-        shift
-    fi
-    case " ${CONTEXTS[*]} " in
-        *" $ctx "*) ;;
-        *) warn "no such context: $ctx"; usage >&2; return 2 ;;
-    esac
-
-    "context_$ctx" "$@" || return 1
-    ((${#PLAN[@]})) || die "$ctx: nothing to launch"
+    context_book "${1:-}" || return 1
+    ((${#PLAN[@]})) || die "nothing to launch"
 
     local -a groups=() targets=()
     local entry g
@@ -243,7 +211,7 @@ main() {
     if ((need > 0)); then
         local avail
         mapfile -t avail < <(empty_workspaces)
-        ((${#avail[@]} >= need)) || die "$ctx needs $need free workspace(s), ${#avail[@]} available"
+        ((${#avail[@]} >= need)) || die "need $need free workspace(s), ${#avail[@]} available"
         targets+=("${avail[@]:0:$need}")
     fi
 
@@ -273,7 +241,7 @@ main() {
     restore
 
     hdisp "hl.dsp.focus({ workspace = ${targets[0]} })"
-    command -v notify-send >/dev/null && notify-send "$ctx session - $DESC"
+    command -v notify-send >/dev/null && notify-send "book session - $DESC"
 }
 
 main "$@"

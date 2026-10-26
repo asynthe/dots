@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-exec "$HOME/.config/hypr/wallpaper.sh" --set "$1"
+exec "$HOME/git/dots/scripts/hypr/wallpaper.sh" --set "$1"

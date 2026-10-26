@@ -65,14 +65,4 @@ function M.daily_folder()
   require("yazi").yazi(nil, dir)
 end
 
-function M.daily_latest()
-  local files = vim.fn.glob(daily_dir() .. "/*.md", true, true)
-  if #files == 0 then
-    vim.notify("no daily notes yet", vim.log.levels.WARN)
-    return
-  end
-  table.sort(files)
-  vim.cmd("edit " .. vim.fn.fnameescape(files[#files]))
-end
-
 return M

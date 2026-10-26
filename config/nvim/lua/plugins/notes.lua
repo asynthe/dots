@@ -21,6 +21,7 @@ return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
     ft = "markdown",
+    cmd = "Obsidian",
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
       { "<leader>nn", "<cmd>Obsidian new<CR>",   desc = "New note" },

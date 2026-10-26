@@ -12,9 +12,9 @@ ShellRoot {
     id: root
 
     property int    barHeight  : 26
-    property bool   atBottom   : true    // false: top edge, menus drop down
+    property bool   atBottom   : false    // false: top edge, menus drop down
     property string fontFamily : "JetBrainsMono Nerd Font"
-    property int    fontSize   : 13
+    property int    fontSize   : 14   // 13 + 5%, rounded
     property int    sideMargin : 14
 
     property color bg     : "#ff000000"   // true OLED black, fully opaque
@@ -32,13 +32,6 @@ ShellRoot {
 
     property color menuBg : "#0a0a0e"
 
-    property int menuWidth : 704
-    property int railWidth : 132
-    property int keyWidth  : 140
-
-    property int logoWidth : 214
-    property int logoSize  : 8
-
     property int   pollMs : 5000
 
     property int   dotsMs   : 2000
@@ -50,6 +43,24 @@ ShellRoot {
     property int   dotsFlashGen: 0
 
     property bool  hideOnFullscreen: true
+    property bool  hideOnGame: true
+    property bool  gameRunning: false
+
+    Process {
+        id: gameProbe
+        command: [Qt.resolvedUrl("game-running.sh").toString().replace("file://", "")]
+        stdout: StdioCollector {
+            onStreamFinished: root.gameRunning = text.trim() === "1"
+        }
+    }
+
+    Timer {
+        interval: 3000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: if (!gameProbe.running) gameProbe.running = true
+    }
 
     property bool hidden    : false
     property bool menuOpen  : false   // the name menu, left
@@ -89,20 +100,18 @@ ShellRoot {
     }
     readonly property string kernel: kernelFile.text().trim() || "?"
 
-    FileView {
-        id: logoFile
-        path: Qt.resolvedUrl("logo.txt").toString().replace("file://", "")
-        blockLoading: true
-    }
-    readonly property string logo: logoFile.text()
+    // Dropdown content: raw `fastfetch --pipe` output (ascii logo + system
+    // info in one block), fetched lazily when the menu opens.
+    property string fastfetchOutput: "loading\u2026"
 
-    readonly property int logoLines: {
-        const t = logo.replace(/\n+$/, "");
-        return t === "" ? 0 : t.split("\n").length;
+    Process {
+        id: fastfetchProbe
+        command: ["fastfetch", "--logo", "gentoo", "--pipe"]
+        stdout: StdioCollector {
+            onStreamFinished: root.fastfetchOutput = text.replace(/\n+$/, "")
+        }
     }
-    readonly property int logoHeight: logoLines * Math.round(logoSize * 1.25)
 
-    property string uptime: ""
     property int    latency: -1
 
     readonly property color linkColor: {
@@ -193,21 +202,12 @@ ShellRoot {
         }
     }
 
-    Process {
-        id: uptimeProbe
-        command: ["sh", "-c", "uptime -p 2>/dev/null || uptime"]
-        stdout: StdioCollector {
-            onStreamFinished: root.uptime = text.trim().replace(/^up /, "")
-        }
-    }
-
     onMenuOpenChanged: {
         if (!menuOpen)
             return;
         ipMenuOpen = false;
-        if (!uptimeProbe.running)
-            uptimeProbe.running = true;
-        loadPane(menuPane);
+        if (!fastfetchProbe.running)
+            fastfetchProbe.running = true;
     }
 
     onIpMenuOpenChanged: {
@@ -216,130 +216,6 @@ ShellRoot {
         menuOpen = false;
         if (!addrProbe.running) addrProbe.running = true;
         if (!latProbe.running)  latProbe.running  = true;
-    }
-
-    property string menuPane: "system"
-
-    property var paneRows: ({})
-    readonly property var currentRows: paneRows[menuPane] ?? []
-
-    Process {
-        id: paneProbe
-
-        property string pane   : ""
-        property string pending: ""
-
-        command: [Qt.resolvedUrl("sysinfo.sh").toString().replace("file://", ""), pane]
-
-        onRunningChanged: {
-            if (running || pending === "")
-                return;
-            const next = pending;
-            pending = "";
-            root.loadPane(next);
-        }
-
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const rows  = [];
-                const lines = text.trim().split("\n");
-                for (let i = 0; i < lines.length; i++) {
-                    if (!lines[i])
-                        continue;
-                    const f = lines[i].split("\t");
-                    if (f.length >= 2)
-                        rows.push({ k: f[0], v: f[1] });
-                }
-                const next = {};
-                for (const key in root.paneRows)
-                    next[key] = root.paneRows[key];
-                next[paneProbe.pane] = rows;
-                root.paneRows = next;
-            }
-        }
-    }
-
-    function loadPane(p) {
-        if (paneProbe.running) {
-            paneProbe.pending = p;
-            return;
-        }
-        paneProbe.pane = p;
-        paneProbe.running = true;
-    }
-
-    onMenuPaneChanged: if (menuOpen) loadPane(menuPane)
-
-    Component.onCompleted: if (menuOpen) loadPane(menuPane)
-
-    function run(cmd) { Quickshell.execDetached(cmd); }
-    function term(cmd) { Quickshell.execDetached(["ghostty", "-e"].concat(cmd)); }
-
-    readonly property var menuPanes: [
-        {
-            id: "system", label: "System",
-            apps: [
-                { label: "btop",     act: function() { root.term(["btop"]); } },
-                { label: "htop",     act: function() { root.term(["htop"]); } },
-                { label: "Files",    act: function() { root.term(["yazi"]); } },
-                { label: "Terminal", act: function() { root.run(["ghostty"]); } },
-                { label: "Editor",   act: function() { root.run(["codium"]); } },
-                { label: "Launcher", act: function() { root.run(["fuzzel"]); } },
-            ]
-        },
-        {
-            id: "network", label: "Network",
-            apps: [
-                { label: "impala",      act: function() { root.term(["impala"]); } },
-                { label: "iwctl",       act: function() { root.term(["iwctl"]); } },
-                { label: "Mullvad",     act: function() { root.run(["mullvad-vpn"]); } },
-                { label: "qBittorrent", act: function() { root.run(["qbittorrent"]); } },
-                { label: "Firefox",     act: function() { root.run([Quickshell.env("HOME") + "/git/dots/scripts/firefox/browser.sh"]); } },
-                { label: "Copy IP",     stay: true, act: function() { Quickshell.clipboardText = root.ip; } },
-                { label: "Rescan",      stay: true, act: function() { if (!netProbe.running) netProbe.running = true;
-                                                          root.loadPane("network"); } },
-            ]
-        },
-        {
-            id: "audio", label: "Audio",
-            apps: [
-                { label: "pavucontrol", act: function() { root.run(["pavucontrol"]); } },
-                { label: "wiremix",     act: function() { root.term(["wiremix"]); } },
-                { label: "cava",        act: function() { root.term(["cava"]); } },
-                { label: "ncmpcpp",     act: function() { root.term(["ncmpcpp"]); } },
-                { label: "Mixxx",       act: function() { root.run(["mixxx"]); } },
-                { label: "mpv",         act: function() { root.run(["mpv"]); } },
-            ]
-        },
-        {
-            id: "display", label: "Display",
-            apps: [
-                { label: "Reload WM",   act: function() { root.run(["hyprctl", "reload"]); } },
-                { label: "Wallpaper",   act: function() { root.run(["awww", "restore"]); } },
-                { label: "Bright +",    stay: true, act: function() { root.run(["brightnessctl", "set", "+10%"]);
-                                                          root.loadPane("display"); } },
-                { label: "Bright -",    stay: true, act: function() { root.run(["brightnessctl", "set", "10%-"]);
-                                                          root.loadPane("display"); } },
-                { label: "Steam",       act: function() { root.run(["steam"]); } },
-            ]
-        },
-        {
-            id: "storage", label: "Storage",
-            apps: [
-                { label: "Files",       act: function() { root.term(["yazi"]); } },
-                { label: "archive",     act: function() { root.term(["yazi", Quickshell.env("HOME") + "/archive"]); } },
-                { label: "git",         act: function() { root.term(["yazi", Quickshell.env("HOME") + "/git"]); } },
-                { label: "ncdu",        act: function() { root.term(["ncdu", Quickshell.env("HOME")]); } },
-                { label: "qBittorrent", act: function() { root.run(["qbittorrent"]); } },
-            ]
-        },
-    ]
-
-    readonly property var currentPane: {
-        for (let i = 0; i < menuPanes.length; i++)
-            if (menuPanes[i].id === menuPane)
-                return menuPanes[i];
-        return menuPanes[0];
     }
 
     readonly property var menuActions: [
@@ -365,20 +241,6 @@ ShellRoot {
                 root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
             root.ipMenuOpen = !root.ipMenuOpen;
         }
-        function pane(which: string): string {
-            let known = [];
-            for (let i = 0; i < root.menuPanes.length; i++)
-                known.push(root.menuPanes[i].id);
-            if (known.indexOf(which) < 0)
-                return "no such pane: " + which + " (have: " + known.join(" ") + ")";
-
-            if (!root.menuOpen) {
-                root.menuScreen = Hyprland.focusedMonitor?.name ?? "";
-                root.menuOpen = true;
-            }
-            root.menuPane = which;
-            return which;
-        }
         function state(): string {
             return root.bars + " bars  " + root.rssi + " dBm  "
                  + root.ip + "  " + root.flag + "  " + root.label
@@ -390,8 +252,6 @@ ShellRoot {
                         : "none")
                  + "  ws=" + (Hyprland.focusedMonitor?.activeWorkspace?.id ?? "?")
                  + " occupied=" + Object.keys(root.wsOccupied).join(",")
-                 + "  pane=" + root.menuPane
-                 + " rows=" + root.currentRows.length
                  + "  addrs=" + root.addrList.length;
         }
     }
@@ -405,13 +265,10 @@ ShellRoot {
             required property var modelData
 
             readonly property var  hlMonitor: Hyprland.monitorFor(modelData)
-            readonly property bool covered  : root.hideOnFullscreen
-                && (hlMonitor?.activeWorkspace?.hasFullscreen ?? false)
+            readonly property bool covered  : (root.hideOnFullscreen
+                && (hlMonitor?.activeWorkspace?.hasFullscreen ?? false))
+                || (root.hideOnGame && root.gameRunning)
             readonly property bool shown    : !root.hidden && !covered
-
-            readonly property bool ownsMenu  : root.menuOpen   && root.menuScreen === modelData.name
-            readonly property bool ownsIpMenu: root.ipMenuOpen && root.menuScreen === modelData.name
-            readonly property bool anyMenu   : ownsMenu || ownsIpMenu
 
             readonly property int activeWs: hlMonitor?.activeWorkspace?.id ?? -1
 
@@ -444,37 +301,19 @@ ShellRoot {
             visible: shown
             color: "transparent"
 
-            implicitHeight: anyMenu ? (root.barHeight + 420) : root.barHeight
+            // Fixed height always — the bar surface itself never resizes.
+            // Dropdowns are separate popup windows (see menuPopup/ipMenuPopup
+            // below) so opening one never triggers a resize/repaint flash on
+            // this always-visible strip.
+            implicitHeight: root.barHeight
 
             anchors { left: true; right: true; top: !root.atBottom; bottom: root.atBottom }
 
             WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "quickshell:bar"
-            WlrLayershell.keyboardFocus: anyMenu
-                ? WlrKeyboardFocus.OnDemand
-                : WlrKeyboardFocus.None
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
             exclusiveZone: shown ? root.barHeight : 0
-
-            mask: Region {
-                y: strip.anyMenu || !root.atBottom ? 0 : strip.implicitHeight - root.barHeight
-                width: strip.width
-                height: strip.anyMenu ? strip.implicitHeight : root.barHeight
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                visible: strip.anyMenu
-                onClicked: { root.menuOpen = false; root.ipMenuOpen = false; }
-            }
-
-            // Catches outside-panel clicks while a menu is open (another
-            // window, the desktop) — same pattern as ContextMenu.qml.
-            HyprlandFocusGrab {
-                active: strip.anyMenu
-                windows: [strip]
-                onCleared: { root.menuOpen = false; root.ipMenuOpen = false; }
-            }
 
             Rectangle {
                 id: barRect
@@ -647,12 +486,7 @@ ShellRoot {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 root.menuScreen = strip.modelData.name;
-                                if (root.menuOpen && root.menuPane === "network") {
-                                    root.menuOpen = false;
-                                } else {
-                                    root.menuOpen = true;
-                                    root.menuPane = "network";
-                                }
+                                root.menuOpen = !root.menuOpen;
                             }
                         }
                     }
@@ -805,459 +639,304 @@ ShellRoot {
                     }
                 }
             }
+        }
+    }
 
-            Item {
-                id: ipMenuLayer
-                visible: strip.ownsIpMenu
+    // Dropdown popups live in their own top-level windows, not inside the
+    // always-visible bar strip above. This means opening one never resizes
+    // the bar's own surface — no resize/repaint flash on the bar itself.
+    // Outside-click-to-close relies on HyprlandFocusGrab noticing focus
+    // move to a different window (clicking the toggle button again, which
+    // lives on the bar's own window, closes it via its own onClicked).
+
+    PanelWindow {
+        id: menuPopup
+
+        readonly property var targetScreen:
+            Quickshell.screens.find(s => s.name === root.menuScreen) ?? null
+
+        screen: targetScreen
+        visible: root.menuOpen && targetScreen !== null
+        color: "transparent"
+
+        implicitWidth: menuBox.width + 4
+        implicitHeight: menuBox.height + 4
+
+        anchors { left: true; top: !root.atBottom; bottom: root.atBottom }
+        margins {
+            left: root.sideMargin - 6
+            // top/bottom margin is 0: the bar's own exclusiveZone already
+            // reserves barHeight px on its edge, and Hyprland auto-offsets
+            // anchored-top/bottom layers past that reserved zone. Adding
+            // barHeight here again double-counts it.
+        }
+
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.namespace: "quickshell:bar"
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+        exclusiveZone: 0
+
+        HyprlandFocusGrab {
+            active: menuPopup.visible
+            windows: [menuPopup]
+            onCleared: root.menuOpen = false
+        }
+
+        Rectangle {
+            x: 4; y: 4
+            width: menuBox.width
+            height: menuBox.height
+            color: "#000000"
+            opacity: 0.55
+        }
+
+        Rectangle {
+            id: menuBox
+
+            width: Math.max(fastfetchText.implicitWidth + 24, 260)
+            height: menuColumn.implicitHeight + 12
+            color: root.menuBg
+            border.width: 0
+            radius: 0
+
+            Column {
+                id: menuColumn
                 anchors {
+                    left: parent.left
                     right: parent.right
-                    rightMargin: root.sideMargin - 6
-                    top: root.atBottom ? undefined : barRect.bottom
-                    bottom: root.atBottom ? barRect.top : undefined
-                }
-                width: ipMenuBox.width + 4
-                height: ipMenuBox.height + 4
-
-                Rectangle {
-                    x: 4; y: 4
-                    width: ipMenuBox.width
-                    height: ipMenuBox.height
-                    color: "#000000"
-                    opacity: 0.55
+                    top: parent.top
+                    topMargin: 6
                 }
 
-                Rectangle {
-                    id: ipMenuBox
+                Text {
+                    id: fastfetchText
+                    x: 12
+                    text: root.fastfetchOutput
+                    color: root.fg
+                    font.family: "monospace"
+                    font.pixelSize: root.fontSize - 2
+                    lineHeight: 1.1
+                    textFormat: Text.PlainText
+                    wrapMode: Text.NoWrap
+                }
 
-                    width: 300
-                    height: ipColumn.implicitHeight + 12
-                    color: root.menuBg
-                    border.width: 0
-                    radius: 0
+                Item {
+                    width: parent.width
+                    height: 24
 
-                    Column {
-                        id: ipColumn
+                    Row {
                         anchors {
-                            left: parent.left
                             right: parent.right
-                            top: parent.top
-                            topMargin: 6
+                            rightMargin: 12
+                            verticalCenter: parent.verticalCenter
                         }
-
-                        Text {
-                            x: 12
-                            text: "Addresses"
-                            color: root.linkColor
-                            font.family: root.fontFamily
-                            font.pixelSize: root.fontSize
-                            font.bold: true
-                            bottomPadding: 5
-                        }
+                        spacing: 4
 
                         Repeater {
-                            model: root.addrList
+                            model: root.menuActions
 
-                            Item {
+                            Rectangle {
                                 required property var modelData
-                                width: ipColumn.width
-                                height: 22
 
-                                Rectangle {
+                                width: actLabel.implicitWidth + 16
+                                height: 20
+                                color: "transparent"
+
+                                Text {
+                                    id: actLabel
+                                    anchors.centerIn: parent
+                                    text: modelData.label
+                                    color: actHover.containsMouse
+                                         ? root.accent : root.fgDim
+                                    font.family: root.fontFamily
+                                    font.pixelSize: root.fontSize - 2
+                                }
+
+                                MouseArea {
+                                    id: actHover
                                     anchors.fill: parent
-                                    color: "transparent"
-
-                                    Text {
-                                        anchors {
-                                            left: parent.left
-                                            leftMargin: 12
-                                            verticalCenter: parent.verticalCenter
-                                        }
-                                        text: modelData.dev
-                                        color: addrHover.containsMouse ? root.linkColor : root.fgDim
-                                        font.family: root.fontFamily
-                                        font.pixelSize: root.fontSize - 1
-                                    }
-
-                                    Text {
-                                        anchors {
-                                            left: parent.left
-                                            leftMargin: 118
-                                            verticalCenter: parent.verticalCenter
-                                        }
-                                        text: modelData.addr
-                                        color: addrHover.containsMouse ? root.linkColor : root.white
-                                        font.family: root.fontFamily
-                                        font.pixelSize: root.fontSize
-                                    }
-
-                                    Text {
-                                        anchors {
-                                            right: parent.right
-                                            rightMargin: 12
-                                            verticalCenter: parent.verticalCenter
-                                        }
-                                        text: modelData.tag
-                                        color: modelData.tag === "default" ? root.accent : root.fgFaint
-                                        font.family: root.fontFamily
-                                        font.pixelSize: root.fontSize - 3
-                                    }
-
-                                    MouseArea {
-                                        id: addrHover
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: {
-                                            Quickshell.clipboardText = modelData.addr;
-                                            root.ipMenuOpen = false;
-                                        }
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        root.menuOpen = false;
+                                        if (modelData.act)
+                                            modelData.act();
                                     }
                                 }
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: 22
-
-                            Text {
-                                anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
-                                text: "signal"
-                                color: root.fgDim
-                                font.family: root.fontFamily
-                                font.pixelSize: root.fontSize - 1
-                            }
-                            Text {
-                                anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
-                                text: root.bars < 0 ? "wired" : root.rssi + " dBm"
-                                color: root.linkColor
-                                font.family: root.fontFamily
-                                font.pixelSize: root.fontSize
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: 22
-
-                            Text {
-                                anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
-                                text: "latency"
-                                color: root.fgDim
-                                font.family: root.fontFamily
-                                font.pixelSize: root.fontSize - 1
-                            }
-                            Text {
-                                anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
-                                text: root.latency < 0 ? "no reply" : root.latency + " ms"
-                                color: root.latency < 0 ? root.crit
-                                     : (root.latency > root.latBad ? root.crit
-                                     : (root.latency > root.latOk ? root.warn : root.accent))
-                                font.family: root.fontFamily
-                                font.pixelSize: root.fontSize
                             }
                         }
                     }
                 }
             }
+        }
+    }
 
-            Item {
-                id: menuLayer
-                visible: strip.ownsMenu
+    PanelWindow {
+        id: ipMenuPopup
+
+        readonly property var targetScreen:
+            Quickshell.screens.find(s => s.name === root.menuScreen) ?? null
+
+        screen: targetScreen
+        visible: root.ipMenuOpen && targetScreen !== null
+        color: "transparent"
+
+        implicitWidth: ipMenuBox.width + 4
+        implicitHeight: ipMenuBox.height + 4
+
+        anchors { right: true; top: !root.atBottom; bottom: root.atBottom }
+        margins {
+            right: root.sideMargin - 6
+        }
+
+        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.namespace: "quickshell:bar"
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+        exclusiveZone: 0
+
+        HyprlandFocusGrab {
+            active: ipMenuPopup.visible
+            windows: [ipMenuPopup]
+            onCleared: root.ipMenuOpen = false
+        }
+
+        Rectangle {
+            x: 4; y: 4
+            width: ipMenuBox.width
+            height: ipMenuBox.height
+            color: "#000000"
+            opacity: 0.55
+        }
+
+        Rectangle {
+            id: ipMenuBox
+
+            width: 300
+            height: ipColumn.implicitHeight + 12
+            color: root.menuBg
+            border.width: 0
+            radius: 0
+
+            Column {
+                id: ipColumn
                 anchors {
                     left: parent.left
-                    leftMargin: root.sideMargin - 6
-                    top: root.atBottom ? undefined : barRect.bottom
-                    bottom: root.atBottom ? barRect.top : undefined
-                }
-                width: menuBox.width + 4
-                height: menuBox.height + 4
-
-                Rectangle {
-                    x: 4; y: 4
-                    width: menuBox.width
-                    height: menuBox.height
-                    color: "#000000"
-                    opacity: 0.55
+                    right: parent.right
+                    top: parent.top
+                    topMargin: 6
                 }
 
-                Rectangle {
-                    id: menuBox
+                Text {
+                    x: 12
+                    text: "Addresses"
+                    color: root.linkColor
+                    font.family: root.fontFamily
+                    font.pixelSize: root.fontSize
+                    font.bold: true
+                    bottomPadding: 5
+                }
 
-                    width: root.menuWidth
-                    height: menuColumn.implicitHeight + 12
-                    color: root.menuBg
-                    border.width: 0
-                    radius: 0
+                Repeater {
+                    model: root.addrList
 
-                    Column {
-                        id: menuColumn
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                            top: parent.top
-                            topMargin: 6
-                        }
+                    Item {
+                        required property var modelData
+                        width: ipColumn.width
+                        height: 22
 
-                        Column {
-                            width: parent.width
-                            spacing: 1
-                            bottomPadding: 5
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "transparent"
 
                             Text {
-                                x: 12
-                                text: (Quickshell.env("USER") || "user") + "@" + root.host
-                                color: root.accent
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: 12
+                                    verticalCenter: parent.verticalCenter
+                                }
+                                text: modelData.dev
+                                color: addrHover.containsMouse ? root.linkColor : root.fgDim
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize - 1
+                            }
+
+                            Text {
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: 118
+                                    verticalCenter: parent.verticalCenter
+                                }
+                                text: modelData.addr
+                                color: addrHover.containsMouse ? root.linkColor : root.white
                                 font.family: root.fontFamily
                                 font.pixelSize: root.fontSize
-                                font.bold: true
-                            }
-                            Text {
-                                x: 12
-                                text: "linux " + root.kernel + "  \u00b7  up " + root.uptime
-                                color: root.fgDim
-                                font.family: root.fontFamily
-                                font.pixelSize: root.fontSize - 2
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: Math.max(railColumn.implicitHeight,
-                                             paneColumn.implicitHeight,
-                                             logoBlock.visible ? root.logoHeight + 10 : 0) + 10
-
-                            Column {
-                                id: railColumn
-                                anchors {
-                                    left: parent.left
-                                    top: parent.top
-                                    topMargin: 5
-                                }
-                                width: root.railWidth
-
-                                Repeater {
-                                    model: root.menuPanes
-
-                                    Rectangle {
-                                        required property var modelData
-
-                                        readonly property bool active:
-                                            modelData.id === root.menuPane
-
-                                        width: railColumn.width
-                                        height: 22
-                                        color: active ? root.fgFaint : "transparent"
-
-                                        Text {
-                                            anchors {
-                                                left: parent.left
-                                                leftMargin: 12
-                                                verticalCenter: parent.verticalCenter
-                                            }
-                                            text: modelData.label
-                                            color: parent.active ? root.white : root.fg
-                                            font.family: root.fontFamily
-                                            font.pixelSize: root.fontSize
-                                        }
-
-                                        MouseArea {
-                                            id: railHover
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            onEntered: root.menuPane = modelData.id
-                                            onClicked: root.menuPane = modelData.id
-                                        }
-                                    }
-                                }
                             }
 
                             Text {
-                                id: logoBlock
-
-                                visible: root.menuPane === "system"
-                                anchors {
-                                    right: parent.right
-                                    rightMargin: 12
-                                    top: parent.top
-                                    topMargin: 4
-                                }
-                                text: root.logo
-                                color: root.accent
-                                opacity: 0.5
-                                font.family: root.fontFamily
-                                font.pixelSize: root.logoSize
-                                lineHeight: 1.0
-                                textFormat: Text.PlainText
-                            }
-
-                            Column {
-                                id: paneColumn
-                                anchors {
-                                    left: parent.left
-                                    leftMargin: root.railWidth + 1
-                                    right: parent.right
-                                    rightMargin: logoBlock.visible ? root.logoWidth : 0
-                                    top: parent.top
-                                    topMargin: 5
-                                }
-
-                                Item {
-                                    visible: root.currentRows.length === 0
-                                    width: paneColumn.width
-                                    height: visible ? 20 : 0
-
-                                    Text {
-                                        anchors {
-                                            left: parent.left
-                                            leftMargin: 12
-                                            verticalCenter: parent.verticalCenter
-                                        }
-                                        text: paneProbe.running ? "reading\u2026"
-                                                                : "no readings"
-                                        color: root.fgDim
-                                        font.family: root.fontFamily
-                                        font.pixelSize: root.fontSize - 2
-                                    }
-                                }
-
-                                Repeater {
-                                    model: root.currentRows
-
-                                    Item {
-                                        required property var modelData
-                                        width: paneColumn.width
-                                        height: 20
-
-                                        Text {
-                                            anchors {
-                                                left: parent.left
-                                                leftMargin: 12
-                                                verticalCenter: parent.verticalCenter
-                                            }
-                                            width: root.keyWidth
-                                            elide: Text.ElideRight
-                                            text: modelData.k
-                                            color: root.fgDim
-                                            font.family: root.fontFamily
-                                            font.pixelSize: root.fontSize - 2
-                                        }
-
-                                        Text {
-                                            anchors {
-                                                left: parent.left
-                                                leftMargin: 12 + root.keyWidth
-                                                right: parent.right
-                                                rightMargin: 12
-                                                verticalCenter: parent.verticalCenter
-                                            }
-                                            elide: Text.ElideRight
-                                            text: modelData.v
-                                            color: root.white
-                                            font.family: root.fontFamily
-                                            font.pixelSize: root.fontSize - 1
-                                        }
-                                    }
-                                }
-
-                                Item { width: 1; height: 6 }
-
-                                Item { width: 1; height: 6 }
-
-                                Flow {
-                                    x: 12
-                                    width: parent.width - 24
-                                    spacing: 5
-
-                                    Repeater {
-                                        model: root.currentPane.apps
-
-                                        Rectangle {
-                                            required property var modelData
-
-                                            width: appLabel.implicitWidth + 16
-                                            height: 21
-                                            color: "transparent"
-                                            border.width: 1
-                                            border.color: appHover.containsMouse
-                                                        ? root.accent : root.fgFaint
-                                            radius: 0
-
-                                            Text {
-                                                id: appLabel
-                                                anchors.centerIn: parent
-                                                text: modelData.label
-                                                color: appHover.containsMouse
-                                                     ? root.accent : root.fg
-                                                font.family: root.fontFamily
-                                                font.pixelSize: root.fontSize - 2
-                                            }
-
-                                            MouseArea {
-                                                id: appHover
-                                                anchors.fill: parent
-                                                hoverEnabled: true
-                                                cursorShape: Qt.PointingHandCursor
-                                                onClicked: {
-                                                    if (modelData.act)
-                                                        modelData.act();
-                                                    if (!modelData.stay)
-                                                        root.menuOpen = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: 24
-
-                            Row {
                                 anchors {
                                     right: parent.right
                                     rightMargin: 12
                                     verticalCenter: parent.verticalCenter
                                 }
-                                spacing: 4
+                                text: modelData.tag
+                                color: modelData.tag === "default" ? root.accent : root.fgFaint
+                                font.family: root.fontFamily
+                                font.pixelSize: root.fontSize - 3
+                            }
 
-                                Repeater {
-                                    model: root.menuActions
-
-                                    Rectangle {
-                                        required property var modelData
-
-                                        width: actLabel.implicitWidth + 16
-                                        height: 20
-                                        color: "transparent"
-
-                                        Text {
-                                            id: actLabel
-                                            anchors.centerIn: parent
-                                            text: modelData.label
-                                            color: actHover.containsMouse
-                                                 ? root.accent : root.fgDim
-                                            font.family: root.fontFamily
-                                            font.pixelSize: root.fontSize - 2
-                                        }
-
-                                        MouseArea {
-                                            id: actHover
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            cursorShape: Qt.PointingHandCursor
-                                            onClicked: {
-                                                root.menuOpen = false;
-                                                if (modelData.act)
-                                                    modelData.act();
-                                            }
-                                        }
-                                    }
+                            MouseArea {
+                                id: addrHover
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    Quickshell.clipboardText = modelData.addr;
+                                    root.ipMenuOpen = false;
                                 }
                             }
                         }
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: 22
+
+                    Text {
+                        anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                        text: "signal"
+                        color: root.fgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize - 1
+                    }
+                    Text {
+                        anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
+                        text: root.bars < 0 ? "wired" : root.rssi + " dBm"
+                        color: root.linkColor
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: 22
+
+                    Text {
+                        anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
+                        text: "latency"
+                        color: root.fgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize - 1
+                    }
+                    Text {
+                        anchors { left: parent.left; leftMargin: 118; verticalCenter: parent.verticalCenter }
+                        text: root.latency < 0 ? "no reply" : root.latency + " ms"
+                        color: root.latency < 0 ? root.crit
+                             : (root.latency > root.latBad ? root.crit
+                             : (root.latency > root.latOk ? root.warn : root.accent))
+                        font.family: root.fontFamily
+                        font.pixelSize: root.fontSize
                     }
                 }
             }

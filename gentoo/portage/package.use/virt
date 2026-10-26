@@ -3,6 +3,10 @@ app-emulation/libvirt virt-network qemu virtiofsd
 net-libs/gnutls pkcs11 tools
 net-misc/spice-gtk usbredir
 net-dns/dnsmasq script
+# gns3-server needs busybox[static], but static and pam are mutually
+# exclusive (REQUIRED_USE); busybox's pam support isn't used for anything
+# here, so drop it rather than the static build gns3 needs.
+sys-apps/busybox -pam
 # required by x11-libs/xapp-3.2.3::gentoo
 # required by gnome-extra/nemo-6.6.4::gentoo
 # required by @selected

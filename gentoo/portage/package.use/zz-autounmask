@@ -367,3 +367,6 @@
 # required by games-util/steam-launcher-1.0.0.87-r1::steam-overlay
 # required by games-util/steam-launcher (argument)
 >=virtual/opengl-8 abi_x86_32
+# required by net-misc/gns3-server-2.2.59::gentoo
+# required by net-misc/gns3-server (argument)
+>=sys-apps/busybox-1.36.1-r4 static

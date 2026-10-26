@@ -16,8 +16,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("uwsm app -- awww-daemon")
 	hl.exec_cmd("uwsm app -- qs -c bar")
 	hl.exec_cmd("uwsm app -- qs -c desktop") -- desktop icons
-	hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/wallpaper.sh")
-	hl.exec_cmd("uwsm app -- " .. os.getenv("HOME") .. "/.config/hypr/cursor_shake.py")
+	hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/wallpaper.sh")
+	hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/mpvpaper.sh") -- restores a video wallpaper if one was ever --set
+	hl.exec_cmd("uwsm app -- " .. os.getenv("HOME") .. "/git/dots/scripts/hypr/cursor_shake.py")
 	hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/focus-fix-daemon.py")
 	end)
 
@@ -219,7 +220,11 @@ hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
 -- musicbee.exe is excluded here (see rules below): its main window should
 -- stay tiled as before, and its dialogs/menus get their own float-without-
 -- center rule instead of blanket screen-centering.
-hl.window_rule({ name = "float-by-default", match = { class = "^(?!musicbee\\.exe$).*$" }, float = true, center = true })
+-- Disabled 2026-10-26: every window-open ran through setFloating(), which
+-- hits a dwindle-layout assert (movedTarget) and segfaults Hyprland while
+-- hyprglass is loaded. Windows now open tiled; ALT+SHIFT+F still floats
+-- manually. See hyprlandCrashReport486048.txt.
+-- hl.window_rule({ name = "float-by-default", match = { class = "^(?!musicbee\\.exe$).*$" }, float = true, center = true })
 
 -- MusicBee dialogs/popups (Scan Folders, Preferences, Edit Tags, context
 -- menus that ARE real toplevels, etc.): float, but don't force-center —
@@ -311,6 +316,13 @@ hl.window_rule({ -- games just appear: Steam games and Wine (class is the exe na
 	match = { class = "(?i)^(steam_app_[0-9]+|.*\\.exe)$" },
 	no_anim = true,
 })
+hl.window_rule({ -- Nucleus Co-op: override steam-games-fullscreen, its UI breaks fullscreen
+	name = "nucleus-coop-float",
+	match = { class = "^steam_app_2365297715$" },
+	fullscreen = false,
+	float = true,
+	center = true,
+})
 hl.window_rule({ -- Steam and Mullvad just appear, no fade
 	name = "no-anim-steam-mullvad",
 	match = { class = "(?i)^(steam|mullvad.*)$" },
@@ -379,6 +391,11 @@ hl.window_rule({
 -- a stable anchor (see --class=com.mitchellh.ghostty.hermes on the exec line).
 hl.window_rule({ match = { class = "^com.mitchellh.ghostty\\.hermes$" }, move = "90 50" })
 
+-- Copilot-key scratchpad terminal: real fullscreen (not a floating size
+-- fit to the monitor, which still leaves a gap margin) so it fills exactly
+-- whichever monitor it's shown on, laptop or external, same proportions.
+hl.window_rule({ match = { class = "^com.mitchellh.ghostty\\.copilot$" }, fullscreen = true })
+
 hl.window_rule({
 	match = {
 		title = "^("
@@ -444,6 +461,8 @@ hl.layer_rule({
 	match = { namespace = "^quickshell:bar$" },
 	blur = true,
 	ignore_alpha = 0.3,
+	no_anim = true, -- surface geometry jumps 26px->446px on menu open; animating
+	                -- that jump visibly "carries" the whole bar for ~0.5s
 })
 
 hl.layer_rule({
@@ -501,7 +520,7 @@ local menu = "fuzzel"
 local barToggle = "qs -c bar ipc call bar toggle"
 local iconsToggle = "qs -c desktop ipc call desktop toggle"
 local screenshotsDir = (os.getenv("HOME") or "~") .. "/downloads/screenshots"
-local session = (os.getenv("HOME") or "~") .. "/.config/hypr/session.sh"
+local session = (os.getenv("HOME") or "~") .. "/git/dots/scripts/hypr/session.sh"
 local browser = (os.getenv("HOME") or "~") .. "/git/dots/scripts/firefox/browser.sh"
 local fcitxToggle = (os.getenv("HOME") or "~") .. "/git/dots/scripts/fcitx/toggle.sh"
 local spawnTerminal = (os.getenv("HOME") or "~") .. "/git/dots/scripts/hypr/spawn-terminal.sh"
@@ -515,7 +534,7 @@ hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser .. " -p"))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barToggle))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(iconsToggle))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd(session))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(session .. " -c"))
 hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd(fcitxToggle)) -- toggle fcitx5 (off by default, see scripts/fcitx/toggle.sh)
 --hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
@@ -635,6 +654,8 @@ hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ monitor = "r" }))
 hl.bind(mainMod .. " + period", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + comma", hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + Right", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + Left", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + SHIFT + comma", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mainMod .. " + SHIFT + period", hl.dsp.focus({ monitor = "r" }))
 

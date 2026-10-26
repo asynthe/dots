@@ -1,5 +1,5 @@
 alias aliases='nvim $ZDOTDIR/.zsh_aliases'
-alias bt='bluetoothctl'
+alias bt='bluetoothctl' #'bluetuith'
 alias chat='weechat'
 alias cp='rsync -ah --info=progress2'
 alias hist='h'
@@ -14,11 +14,13 @@ alias v='alsamixer'
 alias vis='projectM-pulseaudio &>/dev/null & disown'
 alias vv='wiremix'
 alias wm='uwsm start -e -D Hyprland hyprland.desktop'
-alias write='~/git/sakuhin/write.sh'
 alias yt-mp3='yt-dlp -x --audio-format best'
 alias yt-mp4='yt-dlp'
 
-alias c='claude --resume'
+# agents
+alias c='opencode'
+alias cl='claude'
+alias cx='codex'
 
 # terminal image viewing, per terminal
 if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
@@ -35,11 +37,8 @@ fi
 #alias time='peaclock --config-dir ~/.config/peaclock'
 
 # Directories
-#alias ls='eza --icons --group-directories-first'
-#alias la='eza --icons -a --group-directories-first'
-#alias ll='eza --long --group-directories-first'
-#alias lla='eza --long -a --group-directories-first'
-#alias lg='eza --long --git --group-directories-first'
+alias ls='eza --icons --group-directories-first'
+alias lg='eza --long --git --group-directories-first'
 
 # Git
 #alias ga='git add -A'
@@ -61,8 +60,6 @@ fi
 #alias -g cat='bat'
 #alias -g n='nvim'
 #alias -g nvv='sudo nvim'
-#alias bt='bluetuith'
-#alias c='clear'
 #alias cls='clear' # Look ma i'm Powershell
 #alias dsize='ncdu ${pwd}'
 #alias h='history | sk'
