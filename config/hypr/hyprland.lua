@@ -580,7 +580,7 @@ hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
 -- a simultaneous two-key USB HID chord (LEFTMETA+F23 fire ~0ms apart in
 -- one hardware report, not as two sequential presses).
 -- NixOS: keyd remaps the F23 scancode to F13 (copilot-key module in
--- nix/nixos/hardware/peripherals.nix) but does NOT drop the LEFTMETA+
+-- nix/nixos/hardware/copilot-key.nix) but does NOT drop the LEFTMETA+
 -- LEFTSHIFT held at the same time (confirmed via raw evdev capture on
 -- keyd's virtual output: code=125 LEFTMETA, code=42 LEFTSHIFT, code=183
 -- F13, all down together). A bare "code:191" bind has modmask 0 (no

@@ -1,16 +1,5 @@
 { inputs, ... }:
 {
-    flake.modules.nixos.gpg = { pkgs, ... }: {
-        programs.gnupg.agent = {
-            enable = true;
-            pinentryPackage = pkgs.pinentry-curses;
-        };
-    };
-
-    flake.modules.nixos.pass = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.pass-wayland ];
-    };
-
     flake.modules.nixos.sops = { config, lib, pkgs, ... }: {
         imports = [ inputs.sops-nix.nixosModules.sops ];
 
@@ -45,12 +34,5 @@
                 lib.mkIf config.sys.sops.rootPassword
                     config.sops.secrets."password-${lib.head config.sys.admins}".path;
         };
-    };
-
-    flake.modules.nixos.tpm = { config, lib, ... }: {
-        security.tpm2.enable = true;
-        security.tpm2.pkcs11.enable = true;
-        security.tpm2.tctiEnvironment.enable = true;
-        users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "tss" ]; });
     };
 }
