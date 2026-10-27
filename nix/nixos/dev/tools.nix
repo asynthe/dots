@@ -16,6 +16,7 @@
             git
             gcc
             nodejs
+            tree-sitter
 
             ripgrep
             fd
@@ -86,6 +87,7 @@
         environment.systemPackages = with pkgs; [
             code-cursor
             postman
+            teams-for-linux
         ];
     };
 }

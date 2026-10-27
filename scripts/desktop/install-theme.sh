@@ -21,7 +21,7 @@ fetch() {   # repo dest
 
 # both repos build their variants with their own install.sh (GTK one needs sassc)
 fetch vinceliuice/Fluent-icon-theme "$cache/fluent-icon-theme"
-(cd "$cache/fluent-icon-theme" && ./install.sh -d "$icons" >/dev/null)
+(cd "$cache/fluent-icon-theme" && bash ./install.sh -d "$icons" >/dev/null)
 
 # OLED: Fluent's dark greys -> real black (menus/popovers a hair lighter so they
 # still read as raised). A tweak makes install.sh compile the patched sass
@@ -34,7 +34,7 @@ sed -i -e 's/#333333/#000000/g' -e 's/#2B2B2B/#000000/g' -e 's/#303030/#0A0A0A/g
        -e "/variant == 'dark'/ s/return #202020;/return #000000;/" \
        -e "/variant == 'dark'/ s/return #2C2C2C;/return #000000;/" \
        "$gtk/src/_sass/_colors.scss"
-(cd "$gtk" && ./install.sh -d "$themes" -c dark --tweaks solid >/dev/null)
+(cd "$gtk" && bash ./install.sh -d "$themes" -c dark --tweaks solid >/dev/null)
 
 gsettings set org.gnome.desktop.interface icon-theme Fluent-dark   # config/gtk-*/settings.ini agree
 
@@ -65,12 +65,13 @@ DESKTOP
 
 # Codium as the opener for files: each file gets its own window instead of a
 # tab in whatever window is already open. Hidden from menus.
-cat >"$apps/codium-window.desktop" <<'DESKTOP'
+codium=$(command -v vscodium || command -v codium || echo /usr/bin/vscodium)   # Gentoo: vscodium, NixOS: codium
+cat >"$apps/codium-window.desktop" <<DESKTOP
 [Desktop Entry]
 Type=Application
 Name=VSCodium (new window)
 Icon=vscodium
-Exec=/usr/bin/vscodium --ozone-platform-hint=auto --new-window %F
+Exec=$codium --ozone-platform-hint=auto --new-window %F
 StartupWMClass=VSCodium
 NoDisplay=true
 DESKTOP
