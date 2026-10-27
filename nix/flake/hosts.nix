@@ -10,7 +10,7 @@ let
         (lib.removePrefix prefix name)
         (inputs.nixpkgs.lib.nixosSystem {
             specialArgs = { inherit inputs; };
-            modules = [ module ];
+            modules     = [ module ];
         });
 in {
     flake.nixosConfigurations = lib.mapAttrs' mkHost hostAspects;

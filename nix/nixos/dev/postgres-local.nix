@@ -2,11 +2,11 @@
 {
     flake.modules.nixos.postgres-local = { config, lib, pkgs, ... }: {
         services.postgresql = {
-            enable = true;
-            package = pkgs.postgresql_17;
+            enable          = true;
+            package         = pkgs.postgresql_17;
             ensureDatabases = [ "play" ];
             ensureUsers = [{
-                name = config.sys.user;
+                name                    = config.sys.user;
                 ensureClauses.superuser = true;
             }];
             authentication = lib.mkForce ''

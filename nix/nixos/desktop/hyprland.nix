@@ -11,8 +11,8 @@
 
         systemd.user.services."hyprland-dpms-resume" = {
             description = "Re-enable Hyprland displays after resume";
-            after    = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
-            wantedBy = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
+            after       = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
+            wantedBy    = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
             serviceConfig = {
                 Type         = "oneshot";
                 ExecStartPre = "${pkgs.coreutils}/bin/sleep 1";

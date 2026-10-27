@@ -1,7 +1,6 @@
 { config, ... }:
 {
     flake.modules.nixos.host-p1 = { pkgs, ... }: {
-
         imports = with config.flake.modules.nixos; [
             profile-laptop
             p1-hardware p1-disko
@@ -41,13 +40,13 @@
             irc music tectonic typst
         ];
 
-        system.nixos.label = "p1";
-        system.name = "p1";
+        system.nixos.label  = "p1";
+        system.name         = "p1";
         networking.hostName = "p1";
         system.stateVersion = "25.05";
-        time.timeZone = "America/Santiago";
+        time.timeZone       = "America/Santiago";
 
-        sys.user = "meow";
+        sys.user  = "meow";
         sys.flake = "/home/meow/git/dots";
 
         sys.impermanence.folder = "/persist";
@@ -69,7 +68,7 @@
         sys.gpu.intelBusId  = "PCI:0:2:0";
         sys.gpu.nvidiaBusId = "PCI:1:0:0";
 
-        boot.kernelPackages = pkgs.linuxPackages_latest;
+        boot.kernelPackages       = pkgs.linuxPackages_latest;
         boot.supportedFilesystems = [ "btrfs" "vfat" ];
         boot.kernelParams = [
             "i915.enable_psr=0"

@@ -3,24 +3,24 @@
     flake.modules.nixos.nvidia-prime = { config, pkgs, ... }: {
         services.xserver.videoDrivers = [ "nvidia" ];
         hardware.graphics = {
-            enable = true;
+            enable      = true;
             enable32Bit = true;
         };
 
         hardware.nvidia = {
-            modesetting.enable = true;
-            nvidiaSettings = true;
-            open = true;
-            package = config.boot.kernelPackages.nvidiaPackages.latest;
-            powerManagement.enable = true;
+            modesetting.enable          = true;
+            nvidiaSettings              = true;
+            open                        = true;
+            package                     = config.boot.kernelPackages.nvidiaPackages.latest;
+            powerManagement.enable      = true;
             powerManagement.finegrained = true;
         };
 
         hardware.nvidia.prime = {
-            offload.enable = true;
+            offload.enable           = true;
             offload.enableOffloadCmd = true;
-            intelBusId  = config.sys.gpu.intelBusId;
-            nvidiaBusId = config.sys.gpu.nvidiaBusId;
+            intelBusId               = config.sys.gpu.intelBusId;
+            nvidiaBusId              = config.sys.gpu.nvidiaBusId;
         };
 
         assertions = [{

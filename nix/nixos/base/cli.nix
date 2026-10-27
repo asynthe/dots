@@ -4,8 +4,8 @@
         # nix-direnv via /etc/direnv/direnvrc: cached `use flake` + GC roots.
         # The zsh hook stays in config/zsh/.zshrc, so don't add a second one.
         programs.direnv = {
-            enable = true;
-            nix-direnv.enable = true;
+            enable               = true;
+            nix-direnv.enable    = true;
             enableZshIntegration = false;
         };
 

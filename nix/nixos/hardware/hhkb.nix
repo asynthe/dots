@@ -7,7 +7,7 @@
                 ids = [ "04fe:0021" ];
                 settings.main = {
                     muhenkan = "leftmeta";
-                    henkan = "rightmeta";
+                    henkan   = "rightmeta";
                 };
             };
         };

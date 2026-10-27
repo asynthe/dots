@@ -1,12 +1,12 @@
 { ... }:
 {
     flake.modules.nixos.intel-gpu = { pkgs, ... }: {
-        services.xserver.videoDrivers = [ "modesetting" ];
+        services.xserver.videoDrivers      = [ "modesetting" ];
         hardware.cpu.intel.updateMicrocode = true;
 
         hardware.cpu.intel.npu.enable = true;
         hardware.graphics = {
-            enable = true;
+            enable      = true;
             enable32Bit = true;
             extraPackages = with pkgs; [
                 intel-compute-runtime

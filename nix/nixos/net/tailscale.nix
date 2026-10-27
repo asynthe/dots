@@ -3,9 +3,9 @@
     flake.modules.nixos.tailscale = { config, lib, ... }: {
         services.tailscale.enable = true;
         networking.firewall = {
-            enable = true;
+            enable            = true;
             trustedInterfaces = [ config.services.tailscale.interfaceName ];
-            allowedUDPPorts = [ config.services.tailscale.port ];
+            allowedUDPPorts   = [ config.services.tailscale.port ];
         };
 
         networking.nftables.enable = true;
