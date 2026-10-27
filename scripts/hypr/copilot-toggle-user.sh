@@ -10,12 +10,12 @@ class="com.mitchellh.ghostty.copilot"
 addr=$(hyprctl clients -j | jq -r --arg c "$class" '.[] | select(.class==$c) | .address' | head -1)
 
 if [ -z "$addr" ]; then
-  hyprctl dispatch "hl.dsp.exec_cmd('[workspace special:copilot silent] ghostty --class=$class -e hermes')"
-  for _ in $(seq 1 50); do
-    addr=$(hyprctl clients -j | jq -r --arg c "$class" '.[] | select(.class==$c) | .address' | head -1)
-    [ -n "$addr" ] && break
-    sleep 0.1
-  done
+    hyprctl dispatch "hl.dsp.exec_cmd('[workspace special:copilot silent] ghostty --class=$class -e hermes')"
+    for _ in $(seq 1 50); do
+        addr=$(hyprctl clients -j | jq -r --arg c "$class" '.[] | select(.class==$c) | .address' | head -1)
+        [ -n "$addr" ] && break
+        sleep 0.1
+    done
 fi
 
 hyprctl dispatch "hl.dsp.workspace.toggle_special('copilot')"

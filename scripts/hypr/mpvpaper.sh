@@ -21,7 +21,7 @@ if [[ ${1:-} == --set ]]; then
     sleep 0.2
     mpvpaper -f -p -o "$MPV_OPTS" ALL "$f" || exit 1
     mkdir -p "${STATE%/*}"
-    printf '%s\n' "$f" > "$STATE"
+    printf '%s\n' "$f" >"$STATE"
     exit 0
 fi
 

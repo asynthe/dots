@@ -10,7 +10,7 @@ icons=${XDG_DATA_HOME:-$HOME/.local/share}/icons
 cache=${XDG_CACHE_HOME:-$HOME/.cache}
 mkdir -p "$themes" "$icons"
 
-fetch() {   # repo dest
+fetch() { # repo dest
     if [ -d "$2/.git" ]; then
         git -C "$2" pull --ff-only -q
     else
@@ -27,23 +27,23 @@ fetch vinceliuice/Fluent-icon-theme "$cache/fluent-icon-theme"
 # still read as raised). A tweak makes install.sh compile the patched sass
 # instead of copying its prebuilt css; solid also drops the translucency.
 gtk=$cache/fluent-gtk-theme
-[ -d "$gtk/.git" ] && git -C "$gtk" checkout -q -- .    # undo the last patch so pull works
+[ -d "$gtk/.git" ] && git -C "$gtk" checkout -q -- . # undo the last patch so pull works
 fetch vinceliuice/Fluent-gtk-theme "$gtk"
 sed -i -e 's/#333333/#000000/g' -e 's/#2B2B2B/#000000/g' -e 's/#303030/#0A0A0A/g' \
-       -e 's/#3C3C3C/#141414/g' -e 's/#1F1F1F/#000000/g' \
-       -e "/variant == 'dark'/ s/return #202020;/return #000000;/" \
-       -e "/variant == 'dark'/ s/return #2C2C2C;/return #000000;/" \
-       "$gtk/src/_sass/_colors.scss"
+    -e 's/#3C3C3C/#141414/g' -e 's/#1F1F1F/#000000/g' \
+    -e "/variant == 'dark'/ s/return #202020;/return #000000;/" \
+    -e "/variant == 'dark'/ s/return #2C2C2C;/return #000000;/" \
+    "$gtk/src/_sass/_colors.scss"
 (cd "$gtk" && bash ./install.sh -d "$themes" -c dark --tweaks solid >/dev/null)
 
-gsettings set org.gnome.desktop.interface icon-theme Fluent-dark   # config/gtk-*/settings.ini agree
+gsettings set org.gnome.desktop.interface icon-theme Fluent-dark # config/gtk-*/settings.ini agree
 
 # Nemo: icon view everywhere (per-folder views ignored), thumbnails for big files
 # too (the default 1 MB limit skips nearly every video), no desktop drawing
 # since quickshell owns the desktop.
 gsettings set org.nemo.preferences default-folder-viewer 'icon-view'
 gsettings set org.nemo.preferences ignore-view-metadata true
-gsettings set org.nemo.preferences thumbnail-limit 34359738368   # 32 GiB
+gsettings set org.nemo.preferences thumbnail-limit 34359738368 # 32 GiB
 gsettings set org.nemo.preferences show-location-entry true
 gsettings set org.nemo.desktop show-desktop-icons false 2>/dev/null || true
 gsettings set org.nemo.window-state start-with-sidebar true
@@ -65,7 +65,7 @@ DESKTOP
 
 # Codium as the opener for files: each file gets its own window instead of a
 # tab in whatever window is already open. Hidden from menus.
-codium=$(command -v vscodium || command -v codium || echo /usr/bin/vscodium)   # Gentoo: vscodium, NixOS: codium
+codium=$(command -v vscodium || command -v codium || echo /usr/bin/vscodium) # Gentoo: vscodium, NixOS: codium
 cat >"$apps/codium-window.desktop" <<DESKTOP
 [Desktop Entry]
 Type=Application
@@ -84,7 +84,7 @@ for m in audio/mpeg audio/flac audio/ogg audio/x-opus+ogg audio/x-wav audio/mp4 
     xdg-mime default io.github.celluloid_player.Celluloid.desktop "$m"
 done
 for m in text/plain text/markdown text/x-shellscript text/x-python application/x-shellscript \
-         application/json application/xml text/x-csrc text/x-c++src text/css application/toml; do
+    application/json application/xml text/x-csrc text/x-c++src text/css application/toml; do
     xdg-mime default codium-window.desktop "$m"
 done
 xdg-mime default file-explorer.desktop inode/directory

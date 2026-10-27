@@ -8,15 +8,21 @@ APPLY=0
 DOTS="$(cd "$(dirname "$0")/../.." && pwd)"
 CONF="$HOME/.config"
 
-y='\033[1;33m'; g='\033[0;32m'; b='\033[0;34m'; nc='\033[0m'
-run()  { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
+y='\033[1;33m'
+g='\033[0;32m'
+b='\033[0;34m'
+nc='\033[0m'
+run() { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 
 link() {
     local target="$1" name="$2"
     [ "$(readlink "$name" 2>/dev/null)" = "$target" ] && return 0
-    [ -e "$name" ] && [ ! -L "$name" ] && { warn "$name is a real file — left alone"; return 0; }
+    [ -e "$name" ] && [ ! -L "$name" ] && {
+        warn "$name is a real file — left alone"
+        return 0
+    }
     note "$(basename "$(dirname "$name")")/$(basename "$name") -> ${target#$DOTS/}"
     run ln -sfn "$target" "$name"
 }
@@ -56,21 +62,24 @@ if [ -f "$FF/profiles.ini" ]; then
             fi
             note "rm $name user.js (generated; arkenfox is system-wide now), strip its prefs from prefs.js"
             if [ $APPLY -eq 1 ] && [ -f "$prof/prefs.js" ]; then
-                sed -nE 's/^user_pref\("([^"]+)".*/user_pref("\1",/p' "$prof/user.js" | sort -u > "$prof/.managed"
-                grep -vF -f "$prof/.managed" "$prof/prefs.js" > "$prof/prefs.js.new" || true
+                sed -nE 's/^user_pref\("([^"]+)".*/user_pref("\1",/p' "$prof/user.js" | sort -u >"$prof/.managed"
+                grep -vF -f "$prof/.managed" "$prof/prefs.js" >"$prof/prefs.js.new" || true
                 mv "$prof/prefs.js.new" "$prof/prefs.js"
                 rm "$prof/.managed"
             fi
             run rm "$prof/user.js"
-            [ $APPLY -eq 1 ] || { echo -e "  ${b}would:${nc} ln -sfn $KEEP $prof/user.js"; continue; }
+            [ $APPLY -eq 1 ] || {
+                echo -e "  ${b}would:${nc} ln -sfn $KEEP $prof/user.js"
+                continue
+            }
         fi
         link "$KEEP" "$prof/user.js"
     done
 
     marked=$(awk -F= '/^\[/ { n = "" } $1 == "Name" { n = $2 } $1 == "Default" && $2 == 1 { print n }' "$FF/profiles.ini")
     installed=$(awk -F= '/^\[/ { sec = $0 } $1 == "Default" && sec ~ /^\[Install/ { print $2; exit }' "$FF/profiles.ini")
-    [ "$marked" = default ] && [ -n "$installed" ] && [ "$installed" != "$(basename "$(ff_path default)")" ] \
-        && marked="$installed (install)"
+    [ "$marked" = default ] && [ -n "$installed" ] && [ "$installed" != "$(basename "$(ff_path default)")" ] &&
+        marked="$installed (install)"
     if [ "$marked" != default ]; then
         if [ $ff_up -eq 1 ]; then
             warn "default profile is '$marked': close firefox and re-run"
@@ -80,7 +89,7 @@ if [ -f "$FF/profiles.ini" ]; then
                 /^Default=/ && sec ~ /^\[Profile/ { next }
                 /^Default=/ && sec ~ /^\[Install/ { print "Default=" path; next }
                 { print }
-                /^Name=default$/ && sec ~ /^\[Profile/ { print "Default=1" }' path="$(basename "$(ff_path default)")" "$FF/profiles.ini" > "$FF/profiles.ini.new"
+                /^Name=default$/ && sec ~ /^\[Profile/ { print "Default=1" }' path="$(basename "$(ff_path default)")" "$FF/profiles.ini" >"$FF/profiles.ini.new"
             mv "$FF/profiles.ini.new" "$FF/profiles.ini"
             [ -f "$FF/installs.ini" ] && sed -i "s|^Default=.*|Default=$(basename "$(ff_path default)")|" "$FF/installs.ini"
             note "default profile: $marked -> default"

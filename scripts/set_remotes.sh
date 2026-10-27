@@ -11,8 +11,8 @@ APPLY=0
 [ "${1:-}" = "--apply" ] && APPLY=1
 
 case "$(uname -s)" in
-    MINGW*|MSYS*|CYGWIN*) GIT_ROOT="$HOME/Desktop/git" ;;  # Windows, Git Bash
-    *)                    GIT_ROOT="$HOME/git" ;;
+    MINGW* | MSYS* | CYGWIN*) GIT_ROOT="$HOME/Desktop/git" ;; # Windows, Git Bash
+    *) GIT_ROOT="$HOME/git" ;;
 esac
 HOSTS=(gitlab github)
 
@@ -20,8 +20,11 @@ export GIT_TERMINAL_PROMPT=0
 # Extend, don't replace: ~/.gitconfig's sshCommand is what picks the key.
 export GIT_SSH_COMMAND="$(git config core.sshCommand || echo ssh) -o BatchMode=yes -o ConnectTimeout=10"
 
-y='\033[1;33m'; g='\033[0;32m'; b='\033[0;34m'; nc='\033[0m'
-run()  { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
+y='\033[1;33m'
+g='\033[0;32m'
+b='\033[0;34m'
+nc='\033[0m'
+run() { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 

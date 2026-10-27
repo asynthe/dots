@@ -10,8 +10,11 @@ DATA="$HOME/.local/share"
 STATE="$HOME/.local/state"
 CONF="$HOME/.config"
 
-y='\033[1;33m'; g='\033[0;32m'; b='\033[0;34m'; nc='\033[0m'
-run()  { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
+y='\033[1;33m'
+g='\033[0;32m'
+b='\033[0;34m'
+nc='\033[0m'
+run() { if [ $APPLY -eq 1 ]; then "$@"; else echo -e "  ${b}would:${nc} $*"; fi; }
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 
@@ -25,34 +28,40 @@ else
 fi
 for d in "${dirs[@]}" "$DATA" "$STATE" "$CONF" "$HOME/.cache"; do
     case "$d" in /*) p="$d" ;; *) p="$HOME/$d" ;; esac
-    [ -d "$p" ] || { note "mkdir $p"; run mkdir -p "$p"; }
+    [ -d "$p" ] || {
+        note "mkdir $p"
+        run mkdir -p "$p"
+    }
 done
 
 echo "── xdg migrations"
 migrate() {
     local old="$1" new="$2"
     [ -e "$old" ] || return 0
-    [ -L "$old" ] && return 0            # already migrated
-    if [ -e "$new" ]; then warn "$new exists, skipping $old"; return 0; fi
+    [ -L "$old" ] && return 0 # already migrated
+    if [ -e "$new" ]; then
+        warn "$new exists, skipping $old"
+        return 0
+    fi
     note "$old -> $new"
     run mkdir -p "$(dirname "$new")"
     run mv "$old" "$new"
     run ln -sfn "$new" "$old"
 }
 
-migrate "$HOME/.gnupg"   "$DATA/gnupg"
-migrate "$HOME/.cargo"   "$DATA/cargo"
-migrate "$HOME/.rustup"  "$DATA/rustup"
+migrate "$HOME/.gnupg" "$DATA/gnupg"
+migrate "$HOME/.cargo" "$DATA/cargo"
+migrate "$HOME/.rustup" "$DATA/rustup"
 migrate "$HOME/.android" "$DATA/android"
-migrate "$HOME/.java"    "$CONF/java"
-migrate "$HOME/.kube"    "$CONF/kube"
-migrate "$HOME/.npm"     "$HOME/.cache/npm"
-migrate "$HOME/.yarn"    "$DATA/yarn"
-migrate "$HOME/.nv"      "$HOME/.cache/nv"
-migrate "$HOME/.expo"    "$DATA/expo"
-migrate "$HOME/.hermes"  "$DATA/hermes"
+migrate "$HOME/.java" "$CONF/java"
+migrate "$HOME/.kube" "$CONF/kube"
+migrate "$HOME/.npm" "$HOME/.cache/npm"
+migrate "$HOME/.yarn" "$DATA/yarn"
+migrate "$HOME/.nv" "$HOME/.cache/nv"
+migrate "$HOME/.expo" "$DATA/expo"
+migrate "$HOME/.hermes" "$DATA/hermes"
 
-migrate "$HOME/.wine"    "$HOME/wine/prefix/default"
+migrate "$HOME/.wine" "$HOME/wine/prefix/default"
 
 if [ -d "$DATA/gnupg" ] && [ $APPLY -eq 1 ]; then
     chmod 700 "$DATA/gnupg"
@@ -66,7 +75,10 @@ DOTS="$HOME/git/dots"
 
 link() {
     local target="$1" name="$2"
-    [ -e "$target" ] || { warn "missing: ${target#$DOTS/}"; return 0; }
+    [ -e "$target" ] || {
+        warn "missing: ${target#$DOTS/}"
+        return 0
+    }
     if [ -L "$name" ]; then
         [ "$(readlink -f "$name")" = "$(readlink -f "$target")" ] && return 0
         note "relink $(basename "$name") (was $(readlink "$name"))"
@@ -96,8 +108,8 @@ if [ -d "$CONF/VSCodium/User" ] || [ $APPLY -eq 0 ]; then
     done
 fi
 
-link "$DOTS/config/zsh/.zshenv"            "$HOME/.zshenv"
-link "$NOTES/HOME_STRUCTURE.md"            "$HOME/CLAUDE.md"
+link "$DOTS/config/zsh/.zshenv" "$HOME/.zshenv"
+link "$NOTES/HOME_STRUCTURE.md" "$HOME/CLAUDE.md"
 
 "$DOTS/scripts/firefox/setup.sh" $([ $APPLY -eq 1 ] && echo --apply)
 
@@ -119,8 +131,8 @@ if [ -d "$BIOS" ]; then
     for f in "$BIOS"/* "$BIOS"/pcsx2/bios/*; do
         [ -f "$f" ] || continue
         case "$f" in
-            */351ELEC-*.zip) continue ;;  # the source pack; neogeo.zip etc. are real bios
-            */pcsx2/bios/*.[Nn][Vv][Mm]|*/pcsx2/bios/*.[Mm][Ee][Cc]) continue ;;  # pcsx2 writes these
+            */351ELEC-*.zip) continue ;;                                           # the source pack; neogeo.zip etc. are real bios
+            */pcsx2/bios/*.[Nn][Vv][Mm] | */pcsx2/bios/*.[Mm][Ee][Cc]) continue ;; # pcsx2 writes these
         esac
         case "$f" in */pcsx2/*) dst="$CONF/PCSX2/bios" ;; *) dst="$CONF/retroarch/system" ;; esac
         [ -e "$dst/$(basename "$f")" ] || [ -L "$dst/$(basename "$f")" ] && continue
@@ -166,19 +178,21 @@ echo "── check"
 # Linux, they're not just a folder you can rename away, so don't nag about them.
 if [ "$(uname)" != "Darwin" ]; then
     [ -d "$HOME/Downloads" ] && warn "~/Downloads still exists (should be ~/downloads)"
-    [ -d "$HOME/Desktop" ]   && warn "~/Desktop still exists (should be ~/desktop)"
+    [ -d "$HOME/Desktop" ] && warn "~/Desktop still exists (should be ~/desktop)"
 fi
 for f in "$HOME"/*; do
     [ -f "$f" ] && [ ! -L "$f" ] && warn "loose file at \$HOME root: $(basename "$f")"
 done
 for l in "$CONF"/* "$CONF"/VSCodium/User/* "$DATA"/icons/* \
-         "$CONF"/mozilla/firefox/*/user-overrides.js "$CONF"/mozilla/firefox/*/user.js; do
+    "$CONF"/mozilla/firefox/*/user-overrides.js "$CONF"/mozilla/firefox/*/user.js; do
     [ -L "$l" ] && [ -e "$l" ] && continue
     [ -L "$l" ] || continue
     case "$(readlink "$l")" in
-        "$DOTS"/*) note "prune dead link $(basename "$l") -> $(readlink "$l")"
-                   run rm "$l" ;;
-        *)         warn "broken symlink: ${l/#$HOME/\~} -> $(readlink "$l")" ;;
+        "$DOTS"/*)
+            note "prune dead link $(basename "$l") -> $(readlink "$l")"
+            run rm "$l"
+            ;;
+        *) warn "broken symlink: ${l/#$HOME/\~} -> $(readlink "$l")" ;;
     esac
 done
 n=$(find "$HOME/git" -maxdepth 2 -name .git -o -maxdepth 2 -name .jj 2>/dev/null | wc -l)

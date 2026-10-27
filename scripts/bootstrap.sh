@@ -7,7 +7,10 @@ HTTPS="https://gitlab.com/asynthe/dots.git"
 GITLAB="git@gitlab.com:asynthe/dots.git"
 GITHUB="git@github.com:asynthe/dots.git"
 
-y='\033[1;33m'; g='\033[0;32m'; r='\033[0;31m'; nc='\033[0m'
+y='\033[1;33m'
+g='\033[0;32m'
+r='\033[0;31m'
+nc='\033[0m'
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 

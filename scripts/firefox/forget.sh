@@ -8,26 +8,42 @@ CONTAINERS=0
 DOMAINS=()
 for a in "$@"; do
     case "$a" in
-        --apply)      APPLY=1 ;;
-        --cookies)    COOKIES=1 ;;
+        --apply) APPLY=1 ;;
+        --cookies) COOKIES=1 ;;
         --containers) CONTAINERS=1 ;;
-        -*) echo "unknown flag: $a" >&2; exit 2 ;;
-        *)  DOMAINS+=("$a") ;;
+        -*)
+            echo "unknown flag: $a" >&2
+            exit 2
+            ;;
+        *) DOMAINS+=("$a") ;;
     esac
 done
-[ ${#DOMAINS[@]} -gt 0 ] || { echo "usage: $0 [--apply] [--cookies] [--containers] <domain>..." >&2; exit 2; }
+[ ${#DOMAINS[@]} -gt 0 ] || {
+    echo "usage: $0 [--apply] [--cookies] [--containers] <domain>..." >&2
+    exit 2
+}
 
-y='\033[1;33m'; g='\033[0;32m'; b='\033[0;34m'; r='\033[0;31m'; nc='\033[0m'
+y='\033[1;33m'
+g='\033[0;32m'
+b='\033[0;34m'
+r='\033[0;31m'
+nc='\033[0m'
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
-die()  { echo -e "  ${r}[x]${nc} $*" >&2; exit 1; }
+die() {
+    echo -e "  ${r}[x]${nc} $*" >&2
+    exit 1
+}
 
 command -v sqlite3 >/dev/null || die "sqlite3 not on PATH (pkgs.sqlite)"
 
 for root in "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox"; do
     [ -f "$root/profiles.ini" ] || continue
     rel=$(awk -F= '/^\[/ { n = "" } $1 == "Name" { n = $2 } $1 == "Path" && n == "default" { print $2; exit }' "$root/profiles.ini")
-    [ -n "$rel" ] && [ -d "$root/$rel" ] && { PROFILE="$root/$rel"; break; }
+    [ -n "$rel" ] && [ -d "$root/$rel" ] && {
+        PROFILE="$root/$rel"
+        break
+    }
 done
 [ -n "${PROFILE:-}" ] || die "no firefox profile found"
 echo "── profile ${PROFILE/#$HOME/\~}"
@@ -43,7 +59,8 @@ fi
 
 revstr() { echo "$1" | awk '{ for (i=length(); i>0; i--) printf substr($0,i,1); print "" }'; }
 
-place_where=""; cookie_where=""
+place_where=""
+cookie_where=""
 for d in "${DOMAINS[@]}"; do
     rh=$(revstr "$d")
     place_where+="${place_where:+ OR }rev_host LIKE '${rh}.%'"
@@ -61,7 +78,7 @@ keep=${keep:-0}
 visits=$(sqlite3 "$pdb" \
     "SELECT count(*) FROM moz_historyvisits WHERE place_id IN (SELECT id FROM moz_places WHERE $place_where);")
 note "${DOMAINS[*]}: $hits pages, $visits visits"
-note "$(( hits - keep )) pages deleted, $keep kept as bookmarks (visits stripped)"
+note "$((hits - keep)) pages deleted, $keep kept as bookmarks (visits stripped)"
 
 if [ "$hits" -eq 0 ]; then
     warn "nothing to forget"
@@ -98,7 +115,7 @@ COMMIT;
 VACUUM;
 SQL
 else
-    echo -e "  ${b}would:${nc} DELETE $(( hits - keep )) rows from moz_places, $visits from moz_historyvisits"
+    echo -e "  ${b}would:${nc} DELETE $((hits - keep)) rows from moz_places, $visits from moz_historyvisits"
 fi
 
 if [ $COOKIES -eq 1 ]; then
@@ -127,8 +144,8 @@ if [ $COOKIES -eq 1 ]; then
         if [ $CONTAINERS -eq 1 ]; then
             mapfile -t drop < <(ls -1 "$sd" | grep -E "${own}(\^|$)|$part" || true)
         else
-            mapfile -t drop < <(ls -1 "$sd" | grep -v 'userContextId=' \
-                              | grep -E "${own}$|$part" || true)
+            mapfile -t drop < <(ls -1 "$sd" | grep -v 'userContextId=' |
+                grep -E "${own}$|$part" || true)
         fi
         note "${#drop[@]} storage origins to drop"
         if [ $APPLY -eq 1 ]; then
@@ -136,7 +153,7 @@ if [ $COOKIES -eq 1 ]; then
             rm -f "$PROFILE"/storage.sqlite "$PROFILE"/storage.sqlite-wal "$PROFILE"/storage.sqlite-shm
         else
             for d in "${drop[@]:0:8}"; do echo -e "  ${b}would:${nc} rm $d"; done
-            [ "${#drop[@]}" -gt 8 ] && echo -e "  ${b}would:${nc} ... and $(( ${#drop[@]} - 8 )) more"
+            [ "${#drop[@]}" -gt 8 ] && echo -e "  ${b}would:${nc} ... and $((${#drop[@]} - 8)) more"
         fi
     fi
 fi

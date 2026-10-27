@@ -19,7 +19,7 @@ export PASSWORD_STORE_DIR=$HOME/git/auth/pass
 bind '"\C-x":"lfcd\C-m"'
 set -o ignoreeof # unbind C-d
 
-lfcd () {
+lfcd() {
     tmp="$(mktemp)"
     # `command` is needed in case `lfcd` is aliased to `lf`
     command lf -last-dir-path="$tmp" "$@"
@@ -80,7 +80,6 @@ alias histzsh='nvim ~/.bash_history'
 alias nixconf='doas nvim /etc/nixos/configuration.nix'
 alias rebuild='doas nixos-rebuild switch'
 
-
 ##### X11 ######
 alias xinit='nvim ~/.xinitrc'
 #alias xwall='fd . /home/asynthe/sync/system/wallpaper -e jpg -e png | fzf | xargs feh' # INSTALL FEH AND FIX
@@ -101,8 +100,8 @@ alias pdf='zathura'
 alias yt='yt-dlp -f "bv[ext=mp4]+ba[ext=m4a]" --merge-output-format mp4'
 alias yt-mp3='yt-dlp -f "ba" -x --audio-format mp3'
 
-# Nvim 
-alias nv='nvim' 
+# Nvim
+alias nv='nvim'
 alias nvv='doas nvim'
 
 alias clock='peaclock --config-dir ~/.config/peaclock'

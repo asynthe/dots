@@ -9,7 +9,7 @@ if [[ ${1:-} == --set ]]; then
     [[ -f $f ]] || exit 1
     awww img "$f" --transition-type fade --transition-duration "${3:-1}" || exit 1
     mkdir -p "${STATE%/*}"
-    printf '%s\n' "$f" > "$STATE"
+    printf '%s\n' "$f" >"$STATE"
     exit 0
 fi
 

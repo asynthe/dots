@@ -17,6 +17,6 @@ export XDG_RUNTIME_DIR="/run/user/1000"
 sig=$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -1)
 
 runuser -u meow -- env \
-  XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-  HYPRLAND_INSTANCE_SIGNATURE="$sig" \
-  "$(dirname "$0")/copilot-toggle-user.sh"
+    XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+    HYPRLAND_INSTANCE_SIGNATURE="$sig" \
+    "$(dirname "$0")/copilot-toggle-user.sh"

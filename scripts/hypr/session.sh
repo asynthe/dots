@@ -7,7 +7,7 @@
 set -uo pipefail
 
 hdisp() { hyprctl dispatch "$1" >/dev/null 2>&1; }
-heval() { hyprctl eval     "$1" >/dev/null 2>&1; }
+heval() { hyprctl eval "$1" >/dev/null 2>&1; }
 
 dwindle() { heval "hl.config({ dwindle = { $1 } }) hl.exec_scheduled_prop_refresh_immediately()"; }
 
@@ -23,7 +23,7 @@ PLAN=()
 GROUP=0
 DESC=
 
-say()  { printf 'session: %s\n' "$*"; }
+say() { printf 'session: %s\n' "$*"; }
 warn() { printf 'session: %s\n' "$*" >&2; }
 
 die() {
@@ -32,18 +32,20 @@ die() {
     exit 1
 }
 
-ws()   { GROUP=$((GROUP + 1)); }
+ws() { GROUP=$((GROUP + 1)); }
 pane() { PLAN+=("$GROUP|$1|$2"); }
 
-term() {    # term <cwd> [command...]
-    local cwd=$1; shift
+term() { # term <cwd> [command...]
+    local cwd=$1
+    shift
     local out="ghostty --class=$TERMCLASS --working-directory=$cwd"
     (($#)) && out="$out -e $*"
     printf '%s' "$out"
 }
 
-term_quiet() {    # term_quiet <cwd> [command...]  (no cursor, output-only)
-    local cwd=$1; shift
+term_quiet() { # term_quiet <cwd> [command...]  (no cursor, output-only)
+    local cwd=$1
+    shift
     local out="ghostty --cursor-opacity=0 --class=$TERMCLASS --working-directory=$cwd"
     (($#)) && out="$out -e $*"
     printf '%s' "$out"
@@ -55,16 +57,24 @@ book_dir() {
     mapfile -t books < <(
         for d in "$sakuhin"/[0-9][0-9][0-9][0-9]_*/; do
             [ -d "$d" ] || continue
-            name=${d%/}; name=${name##*/}
+            name=${d%/}
+            name=${name##*/}
             [ "$name" = 0000_examples ] && continue
             printf '%s\t%s\n' "$(stat -c %Y "$d")" "$name"
         done | sort -rn | cut -f2
     )
-    ((${#books[@]})) || { warn "no books under $sakuhin"; return 1; }
+    ((${#books[@]})) || {
+        warn "no books under $sakuhin"
+        return 1
+    }
 
     if [ -n "${1:-}" ]; then
         for name in "${books[@]}"; do
-            case $name in *"$1"*) printf '%s/%s' "$sakuhin" "$name"; return 0 ;; esac
+            case $name in *"$1"*)
+                printf '%s/%s' "$sakuhin" "$name"
+                return 0
+                ;;
+            esac
         done
         warn "no book matching '$1' under $sakuhin"
         return 1
@@ -79,7 +89,9 @@ book_dir() {
 context_book() {
     local dir
     dir=$(book_dir "${1:-}") || return 1
-    DESC=${dir##*/}; DESC=${DESC#[0-9][0-9][0-9][0-9]_}; DESC=${DESC//_/ }
+    DESC=${dir##*/}
+    DESC=${DESC#[0-9][0-9][0-9][0-9]_}
+    DESC=${DESC//_/ }
 
     local editfile=book.typ pdf=book.pdf
     local -a watchargs=()
@@ -89,14 +101,14 @@ context_book() {
         watchargs=(--input "lang=$BOOKLANG")
     fi
 
-    if [ ! -f "$dir/$pdf" ] && ((!DRY)); then
+    if [ ! -f "$dir/$pdf" ] && ((! DRY)); then
         say "building $dir/$pdf for the first time"
-        ( cd "$dir" && typst compile book.typ "$pdf" "${watchargs[@]}" ) || warn "first build failed; zathura may open empty"
+        (cd "$dir" && typst compile book.typ "$pdf" "${watchargs[@]}") || warn "first build failed; zathura may open empty"
     fi
 
     pane 50 "zathura $dir/$pdf"
     pane 46 "$(term "$dir" nvim "$editfile")"
-    pane 4  "$(term_quiet "$dir" typst watch book.typ "$pdf" "${watchargs[@]}")"
+    pane 4 "$(term_quiet "$dir" typst watch book.typ "$pdf" "${watchargs[@]}")"
 }
 
 empty_workspaces() {
@@ -107,11 +119,11 @@ empty_workspaces() {
     done
 }
 
-addrs_on() {  # addresses of the windows on workspace $1
+addrs_on() { # addresses of the windows on workspace $1
     hyprctl clients -j | jq -r --argjson w "$1" '.[]|select(.workspace.id==$w)|.address'
 }
 
-wait_new() {  # wait_new <ws> <addresses before the launch>
+wait_new() { # wait_new <ws> <addresses before the launch>
     local wsid=$1 before=$2 i active
     for ((i = 0; i < 100; i++)); do
         active=$(hyprctl activewindow -j 2>/dev/null | jq -r 'select(.workspace.id == '"$wsid"') | .address // empty')
@@ -129,7 +141,8 @@ esc() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
 usage() { printf 'usage: session.sh [-n] [-c | -w N] [-l LANG] [book-name-substring]\n'; }
 
 layout_group() {
-    local wsid=$1; shift
+    local wsid=$1
+    shift
     local -a pcts=() cmds=()
     local entry
     for entry in "$@"; do
@@ -146,10 +159,11 @@ layout_group() {
 
     for ((i = 0; i < n; i++)); do
         if ((i > 0)); then
-            ratio=$(awk -v p="${pcts[i-1]}" -v r="$rem" 'BEGIN{v=2*p/r; if(v<0.1)v=0.1; if(v>1.9)v=1.9; printf "%.4f", v}')
-            local fs=2; ((i == 1)) && fs=1
+            ratio=$(awk -v p="${pcts[i - 1]}" -v r="$rem" 'BEGIN{v=2*p/r; if(v<0.1)v=0.1; if(v>1.9)v=1.9; printf "%.4f", v}')
+            local fs=2
+            ((i == 1)) && fs=1
             dwindle "force_split = $fs, default_split_ratio = $ratio"
-            rem=$((rem - pcts[i-1]))
+            rem=$((rem - pcts[i - 1]))
         fi
         say "ws $wsid  ${pcts[i]}%  ${cmds[i]}"
         local before=
@@ -164,7 +178,10 @@ layout_group() {
 fold_current() {
     local -a folded=()
     local entry rest pct total=0 used=0 i n=${#PLAN[@]}
-    for entry in "${PLAN[@]}"; do rest=${entry#*|}; total=$((total + ${rest%%|*})); done
+    for entry in "${PLAN[@]}"; do
+        rest=${entry#*|}
+        total=$((total + ${rest%%|*}))
+    done
     for ((i = 0; i < n; i++)); do
         rest=${PLAN[i]#*|}
         pct=$((${rest%%|*} * 100 / total))
@@ -180,12 +197,31 @@ restore() { dwindle 'force_split = 0, default_split_ratio = 1.0'; }
 main() {
     while (($#)); do
         case $1 in
-            -n|--dry-run) DRY=1; shift ;;
-            -w|--workspace) FORCEWS=${2:-}; shift 2 ;;
-            -c|--current) CURRENT=1; shift ;;
-            -l|--lang) BOOKLANG=${2:-es}; shift 2 ;;
-            -h|--help) usage; return 0 ;;
-            -*) warn "unknown flag: $1"; usage >&2; return 2 ;;
+            -n | --dry-run)
+                DRY=1
+                shift
+                ;;
+            -w | --workspace)
+                FORCEWS=${2:-}
+                shift 2
+                ;;
+            -c | --current)
+                CURRENT=1
+                shift
+                ;;
+            -l | --lang)
+                BOOKLANG=${2:-es}
+                shift 2
+                ;;
+            -h | --help)
+                usage
+                return 0
+                ;;
+            -*)
+                warn "unknown flag: $1"
+                usage >&2
+                return 2
+                ;;
             *) break ;;
         esac
     done

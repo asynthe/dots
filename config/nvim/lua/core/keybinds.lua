@@ -26,33 +26,37 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
 map("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
-map("n", "<leader>.", function() require("core.notes").picker() end, { desc = "Open note" })
-map("n", "<leader>c", function() require("core.code").picker() end, { desc = "Recent code" })
+map("n", "<leader>.", function()
+    require("core.notes").picker()
+end, { desc = "Open note" })
+map("n", "<leader>c", function()
+    require("core.code").picker()
+end, { desc = "Recent code" })
 
 local function toggle(name, on, off)
-  return function()
-    local cur = vim.opt_local[name]:get()
-    vim.opt_local[name] = cur == on and off or on
-    vim.notify(name .. " = " .. tostring(vim.opt_local[name]:get()))
-  end
+    return function()
+        local cur = vim.opt_local[name]:get()
+        vim.opt_local[name] = cur == on and off or on
+        vim.notify(name .. " = " .. tostring(vim.opt_local[name]:get()))
+    end
 end
 
 map("n", "<leader>uw", toggle("wrap", true, false), { desc = "Wrap" })
 map("n", "<leader>uc", toggle("conceallevel", 2, 0), { desc = "Conceal" })
 
 map("n", "<leader>un", function()
-  local num, rel = vim.wo.number, vim.wo.relativenumber
-  if not num and not rel then
-    vim.wo.number = true
-  elseif num and not rel then
-    vim.wo.relativenumber = true
-  else
-    vim.wo.number, vim.wo.relativenumber = false, false
-  end
+    local num, rel = vim.wo.number, vim.wo.relativenumber
+    if not num and not rel then
+        vim.wo.number = true
+    elseif num and not rel then
+        vim.wo.relativenumber = true
+    else
+        vim.wo.number, vim.wo.relativenumber = false, false
+    end
 end, { desc = "Cycle line numbers" })
 
 map("n", "<leader>ud", function()
-  local on = not vim.diagnostic.is_enabled()
-  vim.diagnostic.enable(on)
-  vim.notify("diagnostics = " .. tostring(on))
+    local on = not vim.diagnostic.is_enabled()
+    vim.diagnostic.enable(on)
+    vim.notify("diagnostics = " .. tostring(on))
 end, { desc = "Diagnostics" })

@@ -1,0 +1,25 @@
+root = true
+
+[*]
+charset                  = utf-8
+end_of_line              = lf
+insert_final_newline     = true
+trim_trailing_whitespace = true
+indent_style             = space
+indent_size              = 4
+
+[*.{yaml,yml,json,jsonc}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[{*.sh,*.bash,bashrc}]
+shell_variant      = bash
+switch_case_indent = true
+
+[{Makefile,*.mk}]
+indent_style = tab
+
+[{config/mpv/scripts/osc.lua,config/mpv/scripts/thumbfast.lua,config/mpv/scripts/autoload.lua,scripts/backup/calendar/google_api.py,scripts/backup/calendar/_hermes_home.py,gentoo/**}]
+ignore = true

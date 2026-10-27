@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import contextlib
 import json
 import os
 import signal
@@ -7,19 +8,21 @@ import sys
 import time
 
 THEME = os.environ.get("HYPRCURSOR_THEME", "rose-pine-hyprcursor")
-BASE  = int(os.environ.get("HYPRCURSOR_SIZE", "26"))
-BIG   = BASE * 5 // 2
+BASE = int(os.environ.get("HYPRCURSOR_SIZE", "26"))
+BIG = BASE * 5 // 2
 
-FAST, SLOW = 1 / 60, 1 / 10   # poll rate while moving / while still
-IDLE       = 2.0              # seconds without motion before dropping to SLOW
-JITTER     = 2                # px per sample below which motion is ignored
-MIN_SEG    = 60               # px a stroke must travel before its reversal counts
-REVERSALS  = 4                # reversals inside WINDOW that make a shake
-WINDOW     = 0.6
-HOLD       = 0.5              # seconds the cursor stays big after the last reversal
+FAST, SLOW = 1 / 60, 1 / 10  # poll rate while moving / while still
+IDLE = 2.0  # seconds without motion before dropping to SLOW
+JITTER = 2  # px per sample below which motion is ignored
+MIN_SEG = 60  # px a stroke must travel before its reversal counts
+REVERSALS = 4  # reversals inside WINDOW that make a shake
+WINDOW = 0.6
+HOLD = 0.5  # seconds the cursor stays big after the last reversal
 
-SOCK = (f"{os.environ['XDG_RUNTIME_DIR']}/hypr/"
-        f"{os.environ['HYPRLAND_INSTANCE_SIGNATURE']}/.socket.sock")
+SOCK = (
+    f"{os.environ['XDG_RUNTIME_DIR']}/hypr/{os.environ['HYPRLAND_INSTANCE_SIGNATURE']}/.socket.sock"
+)
+
 
 def ipc(cmd):
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
@@ -29,6 +32,7 @@ def ipc(cmd):
         while chunk := s.recv(4096):
             out += chunk
     return out.decode()
+
 
 class Axis:
     """Counts direction reversals of strokes long enough to be deliberate."""
@@ -52,11 +56,13 @@ class Axis:
         self.flips = [t for t in self.flips if now - t <= WINDOW]
         return len(self.flips) >= REVERSALS
 
+
 def fullscreen():
     try:
         return json.loads(ipc("j/activewindow") or "{}").get("fullscreen", 0) != 0
     except ValueError:
         return False
+
 
 def main():
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
@@ -73,7 +79,7 @@ def main():
                 failures = 0
             except (OSError, ValueError):
                 failures += 1
-                if failures > 20:   # socket gone: Hyprland exited
+                if failures > 20:  # socket gone: Hyprland exited
                     return
                 time.sleep(0.5)
                 continue
@@ -100,10 +106,9 @@ def main():
             time.sleep(FAST if now - moved < IDLE else SLOW)
     finally:
         if big:
-            try:
+            with contextlib.suppress(OSError):
                 ipc(f"setcursor {THEME} {BASE}")
-            except OSError:
-                pass
+
 
 if __name__ == "__main__":
     main()
