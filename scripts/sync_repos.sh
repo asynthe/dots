@@ -27,7 +27,11 @@ read -r -d '' ATTRS <<'EOF'
 *.zip   binary
 EOF
 
-r='\033[0;31m'; y='\033[1;33m'; g='\033[0;32m'; b='\033[0;34m'; nc='\033[0m'
+r='\033[0;31m'
+y='\033[1;33m'
+g='\033[0;32m'
+b='\033[0;34m'
+nc='\033[0m'
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 fail() { echo -e "  ${r}[x]${nc} $*"; }
@@ -65,7 +69,6 @@ for repo in "${repos[@]}"; do
         \( -name .git -o -name node_modules -o -name .direnv -o -name target \) -prune \
         -o -name .claude -print 2>/dev/null)
 
-
     while IFS= read -r tracked; do
         warn "tracked, needs git rm -r --cached: $tracked"
     done < <(git -C "$repo" ls-files | grep -E '(^|/)(\.claude|\.DS_Store)(/|$)')
@@ -85,7 +88,13 @@ for repo in "${repos[@]}"; do
 
     ga="$repo/.gitattributes"
     if [ ! -f "$ga" ] || [ "$(cat "$ga")" != "$ATTRS" ] || [ -n "$(tail -c1 "$ga")" ]; then
-        if [ -f "$ga" ]; then now=rewrite; did=rewrote; else now=create; did=created; fi
+        if [ -f "$ga" ]; then
+            now=rewrite
+            did=rewrote
+        else
+            now=create
+            did=created
+        fi
         if [ $APPLY -eq 0 ]; then
             would "$now .gitattributes"
         else

@@ -3,7 +3,10 @@ set -uo pipefail
 
 PROFILES=(default study work infra)
 FF="$HOME/.config/mozilla/firefox"
-FIREFOX=$(command -v firefox || command -v firefox-bin) || { notify-send -u critical firefox "firefox not installed"; exit 1; }
+FIREFOX=$(command -v firefox || command -v firefox-bin) || {
+    notify-send -u critical firefox "firefox not installed"
+    exit 1
+}
 
 usage() { printf 'usage: browser.sh [-p | profile [seed-url...]]\n  no profile: default, -p: pick with fuzzel\nprofiles: %s\n' "${PROFILES[*]}"; }
 
@@ -15,7 +18,10 @@ if [ "$p" = -p ]; then
 fi
 case " ${PROFILES[*]} " in
     *" $p "*) ;;
-    *) usage >&2; exit 2 ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
 esac
 
 prof=$(awk -F= -v d="$FF" -v n="$p" '
@@ -47,7 +53,8 @@ fi
 
 args=()
 if (($#)); then
-    args=(--new-window "$1"); shift
+    args=(--new-window "$1")
+    shift
     for u; do args+=(--new-tab "$u"); done
 fi
 exec "$FIREFOX" -P "$p" --name "$id" "${args[@]}"

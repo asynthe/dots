@@ -1,0 +1,3 @@
+config/mpv/scripts/osc.lua
+config/mpv/scripts/thumbfast.lua
+config/mpv/scripts/autoload.lua

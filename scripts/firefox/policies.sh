@@ -8,7 +8,9 @@ APPLY=0
 DOTS="$(cd "$(dirname "$0")/../.." && pwd)"
 OUT=/etc/firefox/policies/policies.json
 
-y='\033[1;33m'; g='\033[0;32m'; nc='\033[0m'
+y='\033[1;33m'
+g='\033[0;32m'
+nc='\033[0m'
 note() { echo -e "  ${g}[+]${nc} $*"; }
 warn() { echo -e "  ${y}[!]${nc} $*"; }
 
@@ -37,7 +39,10 @@ ADDONS=(
 )
 
 echo "── firefox policies"
-command -v jq >/dev/null || { warn "jq not found"; exit 1; }
+command -v jq >/dev/null || {
+    warn "jq not found"
+    exit 1
+}
 
 json=$(printf '%s\n' "${ADDONS[@]}" | jq -Rn '{policies: {ExtensionSettings: ([inputs
     | splits(" +") as $f | select($f != "") | $f] | [range(0; length; 2) as $i | {(.[$i]):
@@ -51,16 +56,16 @@ if [ -n "$theme" ] && ! printf '%s\n' "${ADDONS[@]}" | grep -qF "$theme"; then
     warn "common.cfg's theme $theme is not in ADDONS — it would never be installed"
 fi
 
-if [ -f "$OUT" ] && [ "$(jq -S . "$OUT")" = "$(jq -S . <<< "$json")" ]; then
+if [ -f "$OUT" ] && [ "$(jq -S . "$OUT")" = "$(jq -S . <<<"$json")" ]; then
     note "$OUT is up to date"
     exit 0
 fi
 
 if [ $APPLY -eq 1 ]; then
     sudo mkdir -p "$(dirname "$OUT")"
-    sudo tee "$OUT" <<< "$json" >/dev/null
+    sudo tee "$OUT" <<<"$json" >/dev/null
     note "wrote $OUT — restart Firefox to pick it up"
 else
-    [ -f "$OUT" ] && diff <(jq -S . "$OUT") <(jq -S . <<< "$json") | sed 's/^/    /' || true
+    [ -f "$OUT" ] && diff <(jq -S . "$OUT") <(jq -S . <<<"$json") | sed 's/^/    /' || true
     echo -e "\n${y}dry run — re-run with --apply${nc}"
 fi

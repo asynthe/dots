@@ -17,7 +17,7 @@ find "$wallpaper_path" -type f \( \
     -iname "*.jpg" -o \
     -iname "*.jpeg" -o \
     -iname "*.png" \
-\) | while read -r src; do
+    \) | while read -r src; do
 
     filename=$(basename "$src")
     out="$cache_path/$filename.jpg"
@@ -29,8 +29,8 @@ find "$wallpaper_path" -type f \( \
     echo "Generating thumbnail for $filename"
     magick "$src" "${TILE[@]}" "$out" &
 
-    if (( cache_batch_size > 0 )); then
-        while (( $(jobs -rp | wc -l) >= cache_batch_size )); do
+    if ((cache_batch_size > 0)); then
+        while (($(jobs -rp | wc -l) >= cache_batch_size)); do
             wait -n
         done
     fi

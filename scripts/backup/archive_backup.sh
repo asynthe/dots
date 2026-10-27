@@ -46,7 +46,7 @@ warnings=0
 while IFS= read -r -d '' f; do
     size=$(stat -c%s "$f")
     rel="${f#"$BACKUP_ROOT"/}"
-    printf '%s\t%s\n' "$rel" "$size" >> "$new_sizes"
+    printf '%s\t%s\n' "$rel" "$size" >>"$new_sizes"
     if [ "$size" -eq 0 ]; then
         echo "WARNING: ${rel} is 0 bytes" >&2
         warnings=$((warnings + 1))
@@ -64,7 +64,7 @@ if [ -f "$SIZES_FILE" ]; then
                 warnings=$((warnings + 1))
             fi
         fi
-    done < "$SIZES_FILE"
+    done <"$SIZES_FILE"
 fi
 
 mv "$new_sizes" "$SIZES_FILE"

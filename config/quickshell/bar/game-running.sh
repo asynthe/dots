@@ -6,8 +6,8 @@
 # steamapps/common means a game is active. Excludes the kernel's own
 # [oom_reaper] kthread (bracketed, false-matched "reaper" otherwise) and
 # steamwebhelper (part of the client itself, not a game).
-if pgrep -af "SteamLaunch|proton|steamapps/common" 2>/dev/null \
-    | grep -v "grep\|steamwebhelper" -q; then
+if pgrep -af "SteamLaunch|proton|steamapps/common" 2>/dev/null |
+    grep -v "grep\|steamwebhelper" -q; then
     echo 1
 else
     echo 0
