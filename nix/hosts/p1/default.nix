@@ -7,8 +7,8 @@
             p1-hardware p1-disko
 
             impermanence
-            laptop
-            audio bluetooth colord controller android hhkb
+            laptop zram
+            audio bluetooth colord controller android hhkb copilot-key
             intel-gpu nvidia-prime
             firmware fingerprint tpm
 

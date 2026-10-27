@@ -1,19 +1,32 @@
 { inputs, ... }:
 {
-    flake.modules.nixos.hermes = { config, lib, ... }: {
+    flake.modules.nixos.hermes = { config, lib, pkgs, ... }: {
         imports = [ inputs.hermes-agent.nixosModules.default ];
 
         options.sys.hermes = {
             model = lib.mkOption {
                 type        = lib.types.str;
-                default     = "anthropic/claude-opus-4.6";
-                description = "Default model id, `<provider>/<model>`";
+                default     = "claude-sonnet-5";
+                description = "Default model id (provider comes from config.yaml's model.provider)";
             };
 
             env = lib.mkOption {
                 type        = lib.types.attrsOf lib.types.str;
-                default     = { CLAUDE_CODE_OAUTH_TOKEN = "hermes/CLAUDE_CODE_OAUTH_TOKEN"; };
-                description = "Provider env vars mapped to their sops key paths; `{}` defers auth to `hermes auth`";
+                default     = {
+                    CLAUDE_CODE_OAUTH_TOKEN = "hermes/CLAUDE_CODE_OAUTH_TOKEN";
+                    # phone numbers, so sops rather than plain environment.
+                    # Unset SIGNAL_ALLOWED_USERS means "*": anyone can DM the bot.
+                    SIGNAL_ACCOUNT          = "hermes/SIGNAL_ACCOUNT";
+                    SIGNAL_ALLOWED_USERS    = "hermes/SIGNAL_ALLOWED_USERS";
+                    SIGNAL_HOME_CHANNEL     = "hermes/SIGNAL_HOME_CHANNEL";
+                };
+                description = "Env vars mapped to their sops key paths; `{}` defers auth to `hermes auth`";
+            };
+
+            signal = lib.mkOption {
+                type        = lib.types.bool;
+                default     = true;
+                description = "Run a signal-cli HTTP daemon on 127.0.0.1:8080 for the Signal gateway";
             };
 
             dashboard = lib.mkEnableOption "the browser admin panel and /api sockets";
@@ -55,10 +68,33 @@
 
                 settings.model.default = config.sys.hermes.model;
 
+                environment = lib.mkIf config.sys.hermes.signal {
+                    SIGNAL_HTTP_URL = "http://127.0.0.1:8080";
+                };
+
                 backend.mode    = if config.sys.hermes.dashboard then "dashboard" else "none";
                 backend.host    = config.sys.hermes.bind;
                 backend.waitFor = lib.mkIf config.sys.hermes.waitForHost "hostname";
             };
+
+            # Account data lives under /var/lib/hermes so it's already persisted.
+            # First run needs linking to the phone, as the hermes user:
+            #   sudo -u hermes signal-cli --config /var/lib/hermes/signal-cli link -n hermes
+            systemd.services.signal-cli = lib.mkIf config.sys.hermes.signal {
+                description = "signal-cli HTTP daemon for Hermes";
+                wantedBy    = [ "multi-user.target" ];
+                before      = [ "hermes-agent.service" ];
+                after       = [ "network-online.target" ];
+                wants       = [ "network-online.target" ];
+                serviceConfig = {
+                    User       = "hermes";
+                    Group      = "hermes";
+                    ExecStart  = "${pkgs.signal-cli}/bin/signal-cli --config /var/lib/hermes/signal-cli daemon --http 127.0.0.1:8080 --receive-mode on-connection";
+                    Restart    = "on-failure";
+                    RestartSec = 10;
+                };
+            };
+            environment.systemPackages = lib.mkIf config.sys.hermes.signal [ pkgs.signal-cli ];
 
             users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "hermes" ]; });
 

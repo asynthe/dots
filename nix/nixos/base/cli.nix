@@ -1,6 +1,14 @@
 { ... }:
 {
     flake.modules.nixos.cli = { pkgs, ... }: {
+        # nix-direnv via /etc/direnv/direnvrc: cached `use flake` + GC roots.
+        # The zsh hook stays in config/zsh/.zshrc, so don't add a second one.
+        programs.direnv = {
+            enable = true;
+            nix-direnv.enable = true;
+            enableZshIntegration = false;
+        };
+
         environment.systemPackages = with pkgs; [
             bat
             bc
@@ -43,7 +51,6 @@
             zoxide
 
             cachix
-            direnv nix-direnv
             python3
 
             asciiquarium-transparent

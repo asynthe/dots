@@ -14,6 +14,7 @@
         environment.systemPackages = with pkgs; [
             #librewolf #mullvad-browser
             ungoogled-chromium
+            libreoffice-qt6-fresh
             imv
             mpv
             nemo-with-extensions

@@ -1,3 +1,4 @@
+//@ pragma IconTheme Fluent-dark
 
 import QtQuick
 import Quickshell
@@ -106,7 +107,9 @@ ShellRoot {
 
     Process {
         id: fastfetchProbe
-        command: ["fastfetch", "--logo", "gentoo", "--pipe"]
+        // No --logo flag: fastfetch auto-detects the running distro (NixOS,
+        // Gentoo, whatever) instead of hardcoding one.
+        command: ["fastfetch", "--pipe"]
         stdout: StdioCollector {
             onStreamFinished: root.fastfetchOutput = text.replace(/\n+$/, "")
         }
@@ -356,27 +359,39 @@ ShellRoot {
                     }
                 }
 
-                Row {
-                    id: wsDots
+                Item {
+                    id: wsDotsHitbox
 
                     anchors {
                         left: nameButton.right
                         leftMargin: 12
                         verticalCenter: parent.verticalCenter
                     }
-                    spacing: 5
+                    width: wsDots.implicitWidth
+                    height: root.barHeight
 
-                    opacity: strip.dotsShown ? 1 : 0
-                    visible: opacity > 0.01
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: root.dotsFade
-                            easing.type: Easing.OutCubic
-                        }
+                    MouseArea {
+                        id: wsDotsHover
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
                     }
 
-                    Repeater {
+                    Row {
+                        id: wsDots
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 5
+
+                        opacity: (strip.dotsShown || wsDotsHover.containsMouse) ? 1 : 0
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: root.dotsFade
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+
+                        Repeater {
                         model: root.wsCount
 
                         Rectangle {
@@ -404,6 +419,19 @@ ShellRoot {
                             Behavior on color {
                                 ColorAnimation { duration: 160 }
                             }
+
+                            MouseArea {
+                                anchors {
+                                    fill: parent
+                                    margins: -4 // small dots get a slightly
+                                                // bigger hit target
+                                }
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: Hyprland.dispatch(
+                                    "hl.dsp.focus({ workspace = " + wsId + " })"
+                                )
+                            }
+                        }
                         }
                     }
                 }

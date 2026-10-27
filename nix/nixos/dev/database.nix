@@ -50,6 +50,13 @@
                 dbt-common = super.dbt-common.overridePythonAttrs (o: {
                     pythonRelaxDeps = (o.pythonRelaxDeps or []) ++ [ "pathspec" ];
                 });
+                # pins click<8.4; nixpkgs ships 8.4.x
+                dbt-semantic-interfaces = super.dbt-semantic-interfaces.overridePythonAttrs (o: {
+                    pythonRelaxDeps = (o.pythonRelaxDeps or []) ++ [ "click" ];
+                });
+                dbt-core = super.dbt-core.overridePythonAttrs (o: {
+                    pythonRelaxDeps = (o.pythonRelaxDeps or []) ++ [ "click" ];
+                });
             };
         };
 

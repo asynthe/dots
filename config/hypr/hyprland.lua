@@ -4,7 +4,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("mpd")
 	hl.exec_cmd("[workspace 1 silent] uwsm app -- mullvad-vpn")
 	hl.exec_cmd("monerod --data-dir /home/meow/archive/monero --detach")
-	hl.exec_cmd("[workspace 10 silent] vesktop-bin")
+	hl.exec_cmd("[workspace 10 silent] vesktop")
 	hl.exec_cmd("[workspace 1 silent] steam -silent") -- -silent: starts minimized to tray, no main window
 	-- Copilot key (reports as Super+F23, confirmed via libinput debug-events)
 	-- toggles this dedicated Hermes terminal in/out of view.
@@ -40,10 +40,22 @@ hl.config({
 	},
 })
 hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
+-- hyprctl/hyprpm plugin loads; Nix store hash changes every update, so match it loosely.
+hl.permission("(/nix/store/[a-z0-9]+-hyprland-[^/]+/bin|/usr/bin|/usr/local/bin)/(hyprctl|hyprpm)", "plugin", "allow")
 hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
 -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
 
-local hyprglass = "/usr/local/lib/libhyprglass.so"
+-- NixOS installs into the system profile, Gentoo into /usr/local/lib.
+local hyprglass
+for _, p in ipairs({ "/run/current-system/sw/lib/libhyprglass.so", "/usr/local/lib/libhyprglass.so" }) do
+	local f = io.open(p, "r")
+	if f then
+		f:close()
+		hyprglass = p
+		break
+	end
+end
+hyprglass = hyprglass or "/usr/local/lib/libhyprglass.so"
 hl.permission(hyprglass, "plugin", "allow")
 hl.plugin.load(hyprglass)
 
@@ -238,6 +250,17 @@ hl.window_rule({
 	match = { class = "^musicbee\\.exe$", title = "^(?!.* - MusicBee$).*$" },
 	float = true,
 })
+
+-- Wine's fake virtual-desktop shell tray (Shell_TrayWnd), spawned alongside
+-- MusicBee each launch as a tiny untitled explorer.exe stub. Not useful,
+-- auto-close it so it doesn't linger as a floating bar. "close" is not a
+-- valid static window_rule effect (only a dispatcher action) — use an
+-- open-event listener instead.
+hl.on("window.open", function(w)
+	if w ~= nil and w.class == "explorer.exe" then
+		hl.dispatch(hl.dsp.window.close({ window = "address:" .. w.address }))
+	end
+end)
 
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding = 0 })
@@ -517,7 +540,6 @@ local mainMod = "ALT"
 local terminal = "ghostty"
 local fileManager = (os.getenv("HOME") or "~") .. "/.config/quickshell/desktop/explorer.sh"
 local menu = "fuzzel"
-local barToggle = "qs -c bar ipc call bar toggle"
 local iconsToggle = "qs -c desktop ipc call desktop toggle"
 local screenshotsDir = (os.getenv("HOME") or "~") .. "/downloads/screenshots"
 local session = (os.getenv("HOME") or "~") .. "/git/dots/scripts/hypr/session.sh"
@@ -531,7 +553,11 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser .. " -p"))
-hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barToggle))
+-- ALT+SHIFT+B: toggles the bar's visibility; relaunches it first if it
+-- ever crashed/got killed (plain IPC toggle would otherwise be a no-op
+-- then, since there's nothing running to IPC into).
+local barRecover = (os.getenv("HOME") or "~") .. "/git/dots/scripts/hypr/bar-recover.sh"
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barRecover))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(iconsToggle))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(session .. " -c"))
@@ -553,6 +579,14 @@ hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
 -- level the whole time. Likely a race in Hyprland's bind matching against
 -- a simultaneous two-key USB HID chord (LEFTMETA+F23 fire ~0ms apart in
 -- one hardware report, not as two sequential presses).
+-- NixOS: keyd remaps the F23 scancode to F13 (copilot-key module in
+-- nix/nixos/hardware/peripherals.nix) but does NOT drop the LEFTMETA+
+-- LEFTSHIFT held at the same time (confirmed via raw evdev capture on
+-- keyd's virtual output: code=125 LEFTMETA, code=42 LEFTSHIFT, code=183
+-- F13, all down together). A bare "code:191" bind has modmask 0 (no
+-- modifiers), which Hyprland never fires while those are actually held —
+-- ignore_mods makes the bind fire regardless of what's held alongside it.
+hl.bind("code:191", hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/copilot-toggle-user.sh"), { ignore_mods = true })
 
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region -o " .. screenshotsDir))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshotsDir))
