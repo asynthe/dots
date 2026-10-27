@@ -2,9 +2,9 @@
 {
     flake.modules.nixos.p1-disko = { ... }:
     let
-        disk0 = "/dev/nvme0n1";
-        disk1 = "/dev/nvme1n1";
-        disk_raid = "nixraid";
+        disk0          = "/dev/nvme0n1";
+        disk1          = "/dev/nvme1n1";
+        disk_raid      = "nixraid";
         disk_encrypted = "nixcrypt";
 
         btrfsMountOpts = [ "compress=zstd:3" "noatime" "discard=async" ];
@@ -26,30 +26,30 @@
         boot.loader.efi.efiSysMountPoint = "/efi";
 
         boot.swraid.mdadmConf = ''
-          MAILADDR=nobody@nowhere
+            MAILADDR=nobody@nowhere
         '';
 
         disko.devices = {
 
             disk.nvme0 = {
-                type = "disk";
-                device = disk0;
+                type         = "disk";
+                device       = disk0;
                 content.type = "gpt";
                 content.partitions = {
 
                     efi = {
-                        priority = 1;
-                        name = "efi";
-                        size = "2G";
-                        type = "EF00";
-                        content.type = "filesystem";
-                        content.format = "vfat";
-                        content.mountpoint = "/efi";
+                        priority             = 1;
+                        name                 = "efi";
+                        size                 = "2G";
+                        type                 = "EF00";
+                        content.type         = "filesystem";
+                        content.format       = "vfat";
+                        content.mountpoint   = "/efi";
                         content.mountOptions = [ "umask=0077" "defaults" "noatime" ];
                     };
 
                     mdadm = {
-                        size = "100%";
+                        size         = "100%";
                         content.type = "mdraid";
                         content.name = disk_raid;
                     };
@@ -57,13 +57,13 @@
             };
 
             disk.nvme1 = {
-                type = "disk";
-                device = disk1;
+                type         = "disk";
+                device       = disk1;
                 content.type = "gpt";
                 content.partitions = {
 
                     mdadm = {
-                        size = "100%";
+                        size         = "100%";
                         content.type = "mdraid";
                         content.name = disk_raid;
                     };
@@ -71,16 +71,16 @@
             };
 
             mdadm.${disk_raid} = {
-                type = "mdadm";
+                type  = "mdadm";
                 level = 0;
 
-                content.type = "luks";
-                content.name = disk_encrypted;
-                content.settings = luksSettings;
+                content.type            = "luks";
+                content.name            = disk_encrypted;
+                content.settings        = luksSettings;
                 content.extraFormatArgs = luksFormatArgs;
-                content.extraOpenArgs = [ "--timeout" "10" ];
+                content.extraOpenArgs   = [ "--timeout" "10" ];
                 #content.askPassword = true; # TODO ?
-                content.content.type = "btrfs";
+                content.content.type      = "btrfs";
                 content.content.extraArgs = [ "-L" "nixos" "-f" ];
 
                 postCreateHook = ''

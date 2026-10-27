@@ -1,11 +1,10 @@
 { inputs, ... }:
 {
     flake.modules.nixos.core = { config, lib, pkgs, ... }: {
-
         imports = [ inputs.impermanence.nixosModules.impermanence ];
 
         nixpkgs.config = {
-            allowUnfree = true;
+            allowUnfree                = true;
             android_sdk.accept_license = true;
         };
 
@@ -20,12 +19,12 @@
         ];
 
         nix.settings.experimental-features = [ "nix-command" "flakes" ];
-        nix.settings.warn-dirty = false;
+        nix.settings.warn-dirty            = false;
 
-        i18n.defaultLocale = "en_US.UTF-8";
+        i18n.defaultLocale     = "en_US.UTF-8";
         services.fstrim.enable = true;
 
-        programs.zsh.enable = true;
+        programs.zsh.enable        = true;
         environment.localBinInPath = true;
         users.users = lib.genAttrs config.sys.admins
             (_: { extraGroups = [ "audio" "networkmanager" ]; });

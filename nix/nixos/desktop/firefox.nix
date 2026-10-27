@@ -9,7 +9,7 @@
             ];
             policies.SearchEngines.Default = "DuckDuckGo";
             policies.ExtensionSettings = builtins.mapAttrs (_: slug: {
-                install_url = "https://addons.mozilla.org/firefox/downloads/latest/${slug}/latest.xpi";
+                install_url       = "https://addons.mozilla.org/firefox/downloads/latest/${slug}/latest.xpi";
                 installation_mode = "force_installed";
             }) {
                 "{a7589411-c5f6-41cf-8bdc-f66527d9d930}" = "matte-black-red";

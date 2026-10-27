@@ -2,7 +2,7 @@
 {
     flake.modules.nixos.gpg = { pkgs, ... }: {
         programs.gnupg.agent = {
-            enable = true;
+            enable          = true;
             pinentryPackage = pkgs.pinentry-curses;
         };
     };

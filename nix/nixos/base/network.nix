@@ -20,7 +20,7 @@
 
         # TODO Is this setup because of Tailscale (?)
         services.resolved = {
-            enable = true;
+            enable                       = true;
             settings.Resolve.FallbackDNS = [ "1.1.1.1" "1.0.0.1" ];
         };
         networking.interfaces.tailscale0.useDHCP = false;

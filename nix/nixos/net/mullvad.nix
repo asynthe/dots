@@ -2,7 +2,7 @@
 {
     # TODO Make autostart
     flake.modules.nixos.mullvad = { config, lib, ... }: {
-        services.mullvad-vpn.enable = true;
+        services.mullvad-vpn.enable     = true;
         services.mullvad-vpn.gui.enable = true;
         #services.mullvad-vpn.enableEarlyBootBlocking = true;
 

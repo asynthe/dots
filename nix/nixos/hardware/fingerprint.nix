@@ -4,7 +4,7 @@
         services.fprintd.enable = true;
         security.pam.services = {
             login.fprintAuth = true;
-            sudo.fprintAuth = true;
+            sudo.fprintAuth  = true;
         };
 
         environment.persistence.${config.sys.impermanence.folder}.directories =

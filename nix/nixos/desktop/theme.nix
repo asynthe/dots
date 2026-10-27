@@ -6,7 +6,7 @@
         ];
 
         environment.sessionVariables = {
-            GTK_THEME = "adw-gtk3-dark";
+            GTK_THEME            = "adw-gtk3-dark";
             QT_QPA_PLATFORMTHEME = "gtk3";
         };
     };

@@ -6,8 +6,8 @@
             bluez-tools
         ];
 
-        services.blueman.enable = true;
-        hardware.bluetooth.enable = true;
+        services.blueman.enable        = true;
+        hardware.bluetooth.enable      = true;
         hardware.bluetooth.powerOnBoot = true;
 
         environment.persistence.${config.sys.impermanence.folder}.directories =

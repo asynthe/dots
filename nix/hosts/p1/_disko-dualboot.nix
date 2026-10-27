@@ -9,7 +9,7 @@
 {
     flake.modules.nixos.p1-disko = { ... }:
     let
-        disk0 = "/dev/nvme0n1";
+        disk0          = "/dev/nvme0n1";
         disk_encrypted = "nixcrypt";
 
         btrfsMountOpts = [ "compress=zstd:3" "noatime" "discard=async" ];
@@ -41,30 +41,30 @@
         #};
 
         disko.devices.disk.nvme0 = {
-            type = "disk";
-            device = disk0;
+            type         = "disk";
+            device       = disk0;
             content.type = "gpt";
             content.partitions = {
 
                 efi = {
-                    priority = 1;
-                    name = "efi";
-                    size = "2G";
-                    type = "EF00";
-                    content.type = "filesystem";
-                    content.format = "vfat";
-                    content.mountpoint = "/efi";
+                    priority             = 1;
+                    name                 = "efi";
+                    size                 = "2G";
+                    type                 = "EF00";
+                    content.type         = "filesystem";
+                    content.format       = "vfat";
+                    content.mountpoint   = "/efi";
                     content.mountOptions = [ "umask=0077" "defaults" "noatime" ];
                 };
 
                 luks = {
-                    size = "100%";
-                    content.type = "luks";
-                    content.name = disk_encrypted;
-                    content.settings = luksSettings;
+                    size                    = "100%";
+                    content.type            = "luks";
+                    content.name            = disk_encrypted;
+                    content.settings        = luksSettings;
                     content.extraFormatArgs = luksFormatArgs;
-                    content.extraOpenArgs = [ "--timeout" "10" ];
-                    content.content.type = "btrfs";
+                    content.extraOpenArgs   = [ "--timeout" "10" ];
+                    content.content.type    = "btrfs";
                     # label is load-bearing: the rollback in base/impermanence.nix
                     # mounts /dev/disk/by-label/nixos
                     content.content.extraArgs = [ "-L" "nixos" "-f" ];

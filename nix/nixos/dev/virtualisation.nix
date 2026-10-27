@@ -1,7 +1,6 @@
 { ... }:
 {
     flake.modules.nixos.virtualisation = { config, lib, pkgs, ... }: {
-
         networking.firewall.trustedInterfaces = [
             "virbr0"
             "virbr1"
@@ -12,19 +11,19 @@
         users.users = lib.genAttrs config.sys.admins (_: { extraGroups = [ "libvirtd" ]; });
         virtualisation.spiceUSBRedirection.enable = true;
         virtualisation.libvirtd = {
-            enable = true;
-            qemu.package = pkgs.qemu_kvm;
+            enable            = true;
+            qemu.package      = pkgs.qemu_kvm;
             qemu.swtpm.enable = true;
         };
         boot.extraModprobeConfig = "options kvm_intel nested=1";
 
         systemd.services.libvirt-networks-no-autostart = {
             description = "Disable autostart on libvirt networks";
-            after = [ "libvirtd.service" ];
-            requires = [ "libvirtd.service" ];
-            wantedBy = [ "multi-user.target" ];
+            after       = [ "libvirtd.service" ];
+            requires    = [ "libvirtd.service" ];
+            wantedBy    = [ "multi-user.target" ];
             serviceConfig = {
-                Type = "oneshot";
+                Type            = "oneshot";
                 RemainAfterExit = true;
             };
             script = let
@@ -43,15 +42,15 @@
 
                 {
                     directory = "/var/lib/swtpm";
-                    user = "tss";
-                    group = "tss";
-                    mode = "0750";
+                    user      = "tss";
+                    group     = "tss";
+                    mode      = "0750";
                 }
                 {
                     directory = "/var/lib/swtpm-localca";
-                    user = "tss";
-                    group = "tss";
-                    mode = "0750";
+                    user      = "tss";
+                    group     = "tss";
+                    mode      = "0750";
                 }
             ];
         };
