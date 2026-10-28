@@ -386,7 +386,7 @@ sudo emerge --config sys-kernel/gentoo-kernel    # new UKI; its own PCR11 signat
 not symlinked — keyd needs root to read it so it's applied by hand):
 
 ```
-f23 = command(/home/meow/git/dots/scripts/hypr/copilot-toggle.sh)
+f23 = command(/home/meow/git/dots/scripts/hypr/key-copilot-hermes.sh)
 ```
 
 Then `sudo systemctl restart keyd`. Why `f23` and not a Hyprland keybind:
@@ -397,7 +397,7 @@ syntax tried (keysym, `code:201`, `code:193`, with/without Super) ever
 fired, most likely a race in Hyprland's modifier-then-key bind matching
 against a true single-report chord rather than two sequential presses.
 keyd intercepts the scancode before Hyprland ever sees it and runs
-`scripts/hypr/copilot-toggle.sh` as root, which drops to `meow` via
+`scripts/hypr/key-copilot-hermes.sh` as root, which drops to `meow` via
 `runuser` to reach the live Hyprland/Wayland session and toggle the
 `special:copilot` workspace (see `hyprland.lua`'s `hl.on("hyprland.start", ...)`
 block for the terminal's autostart line).
