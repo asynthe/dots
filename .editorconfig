@@ -23,3 +23,6 @@ indent_style = tab
 
 [{config/mpv/scripts/osc.lua,config/mpv/scripts/thumbfast.lua,config/mpv/scripts/autoload.lua,scripts/backup/calendar/google_api.py,scripts/backup/calendar/_hermes_home.py,gentoo/**}]
 ignore = true
+
+[*.nix]
+indent_size = 2
