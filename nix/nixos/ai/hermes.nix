@@ -14,8 +14,7 @@
                 type        = lib.types.attrsOf lib.types.str;
                 default     = {
                     CLAUDE_CODE_OAUTH_TOKEN = "hermes/CLAUDE_CODE_OAUTH_TOKEN";
-                    # phone numbers, so sops rather than plain environment.
-                    # Unset SIGNAL_ALLOWED_USERS means "*": anyone can DM the bot.
+                    # Unset SIGNAL_ALLOWED_USERS lets anyone DM the bot.
                     SIGNAL_ACCOUNT          = "hermes/SIGNAL_ACCOUNT";
                     SIGNAL_ALLOWED_USERS    = "hermes/SIGNAL_ALLOWED_USERS";
                     SIGNAL_HOME_CHANNEL     = "hermes/SIGNAL_HOME_CHANNEL";
@@ -77,9 +76,7 @@
                 backend.waitFor = lib.mkIf config.sys.hermes.waitForHost "hostname";
             };
 
-            # Account data lives under /var/lib/hermes so it's already persisted.
-            # First run needs linking to the phone, as the hermes user:
-            #   sudo -u hermes signal-cli --config /var/lib/hermes/signal-cli link -n hermes
+            # First run needs linking to the phone (docs/ai.md).
             systemd.services.signal-cli = lib.mkIf config.sys.hermes.signal {
                 description = "signal-cli HTTP daemon for Hermes";
                 wantedBy    = [ "multi-user.target" ];

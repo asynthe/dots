@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Exports Ben's primary Google Calendar to a .ics backup file.
-# Run manually, or via the calendar-backup.timer systemd user unit.
+# Export the primary Google Calendar to a dated .ics.
 set -euo pipefail
 
 HERMES_AGENT_DIR="/home/meow/.local/share/hermes/hermes-agent"

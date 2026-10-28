@@ -1,9 +1,6 @@
 { ... }:
 {
-    # Copilot key arrives as a one-report LEFTMETA+F23 chord that Hyprland's
-    # bind matcher never catches. keyd turns it into a lone F13 (the [meta]
-    # layer drops meta for the remapped key), which hyprland.lua binds.
-    # keyd's NixOS unit is too sandboxed for command() into ~ like on Gentoo.
+    # Copilot key -> F13, which hyprland.lua binds (docs/hyprland.md).
     flake.modules.nixos.copilot-key = { ... }: {
         services.keyd = {
             enable = true;

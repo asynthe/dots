@@ -5,19 +5,15 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("[workspace 1 silent] uwsm app -- mullvad-vpn")
     hl.exec_cmd("monerod --data-dir /home/meow/archive/monero --detach")
     hl.exec_cmd("[workspace 10 silent] vesktop")
-    hl.exec_cmd("[workspace 1 silent] steam -silent") -- -silent: starts minimized to tray, no main window
-    -- Copilot key (reports as Super+F23, confirmed via libinput debug-events)
-    -- toggles this dedicated Hermes terminal in/out of view.
+    hl.exec_cmd("[workspace 1 silent] steam -silent")
     hl.exec_cmd("[workspace special:copilot silent] ghostty --class=com.mitchellh.ghostty.copilot -e hermes")
 
-    --hl.exec_cmd("elephant")
-    --hl.exec_cmd("walker --gapplication-service")
     hl.exec_cmd("systemctl --user enable --now hypridle.service")
     hl.exec_cmd("uwsm app -- awww-daemon")
     hl.exec_cmd("uwsm app -- qs -c bar")
-    hl.exec_cmd("uwsm app -- qs -c desktop") -- desktop icons
+    hl.exec_cmd("uwsm app -- qs -c desktop")
     hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/wallpaper.sh")
-    hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/mpvpaper.sh") -- restores a video wallpaper if one was ever --set
+    hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/mpvpaper.sh")
     hl.exec_cmd("uwsm app -- " .. os.getenv("HOME") .. "/git/dots/scripts/hypr/cursor_shake.py")
     hl.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/focus-fix-daemon.py")
 end)
@@ -40,10 +36,9 @@ hl.config({
     },
 })
 hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
--- hyprctl/hyprpm plugin loads; Nix store hash changes every update, so match it loosely.
+-- Store hash changes every update, so match the hyprland path loosely.
 hl.permission("(/nix/store/[a-z0-9]+-hyprland-[^/]+/bin|/usr/bin|/usr/local/bin)/(hyprctl|hyprpm)", "plugin", "allow")
 hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
--- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
 
 -- NixOS installs into the system profile, Gentoo into /usr/local/lib.
 local hyprglass
@@ -109,9 +104,6 @@ if hl.plugin.hyprglass then
         dark = { brightness = 1.08, adaptive_dim = 0.35, contrast = 1.0, saturation = 0.9 },
     })
 
-    -- Quickshell desktop icons stay opaque/un-glassed (dense grid, no benefit
-    -- from refraction); the bar itself is deliberately NOT excluded anymore —
-    -- see bg alpha in bar/shell.qml and the quickshell:bar layer_rule below.
     hg.layer("quickshell:desktop", { exclude = true })
 
     hg.config({
@@ -127,8 +119,6 @@ if hl.plugin.hyprglass then
 
     hl.window_rule({ match = { xwayland = true }, tag = "+hyprglass_disabled" })
 
-    -- heavy redrawers that don't need glass: Steam (XWayland, already covered
-    -- above) and Mullvad, which is Electron on native Wayland
     hl.window_rule({ match = { class = "(?i)^(steam|mullvad.*)$" }, tag = "+hyprglass_disabled" })
 end
 
@@ -141,16 +131,11 @@ hl.config({
         col = {
             active_border = { colors = { "rgb(451F67)" } },
             inactive_border = "rgb(000000)",
-            --active_border = {
-            --colors = { "rgba(33ccffee)", "rgba(00ff99ee)" },
-            --angle = 45
-            --},
-            --inactive_border = "rgba(595959aa)",
         },
-        resize_on_border = true, -- drag any edge; with no border it uses the grab area below
-        extend_border_grab_area = 12, -- px outside the window that still counts as its edge
-        hover_icon_on_border = true, -- resize cursor when you're on it
-        allow_tearing = false, -- TODO Enable when gaming, with a window_rule with `immediate` set to true
+        resize_on_border = true,
+        extend_border_grab_area = 12,
+        hover_icon_on_border = true,
+        allow_tearing = false,
     },
     dwindle = {
         preserve_split = true,
@@ -168,8 +153,6 @@ hl.config({
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         initial_workspace_tracking = 0,
-        --enable_swallow = true,
-        --swallow_regex = "(Alacritty|com.mitchellh.ghostty|kitty|org.wezfurlong.wezterm)",
     },
 
     decoration = {
@@ -193,9 +176,6 @@ hl.config({
             passes = 3,
             vibrancy = 0.1696,
         },
-
-        --motion_blur = {
-        --},
     },
 })
 
@@ -227,35 +207,16 @@ hl.device({
 
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
--- Floating first: every window opens floating and centered at its own size;
--- ALT+SHIFT+F tiles it (and floats it back). Rules further down override this.
--- musicbee.exe is excluded here (see rules below): its main window should
--- stay tiled as before, and its dialogs/menus get their own float-without-
--- center rule instead of blanket screen-centering.
--- Disabled 2026-10-26: every window-open ran through setFloating(), which
--- hits a dwindle-layout assert (movedTarget) and segfaults Hyprland while
--- hyprglass is loaded. Windows now open tiled; ALT+SHIFT+F still floats
--- manually. See hyprlandCrashReport486048.txt.
--- hl.window_rule({ name = "float-by-default", match = { class = "^(?!musicbee\\.exe$).*$" }, float = true, center = true })
+-- No float-by-default rule: it segfaults Hyprland with hyprglass loaded (docs/hyprland.md).
 
--- MusicBee dialogs/popups (Scan Folders, Preferences, Edit Tags, context
--- menus that ARE real toplevels, etc.): float, but don't force-center —
--- Wine positions these relative to their owner window already, and
--- screen-centering was overriding that. The main player window's title is
--- always "<artist> - <track> - MusicBee"; everything else matching
--- musicbee.exe is a dialog, so excluding that suffix catches just those
--- and leaves the main window alone (stays tiled, same as before).
+-- MusicBee dialogs float uncentered; Wine already places them on their owner.
 hl.window_rule({
     name = "musicbee-dialogs-float-no-center",
     match = { class = "^musicbee\\.exe$", title = "^(?!.* - MusicBee$).*$" },
     float = true,
 })
 
--- Wine's fake virtual-desktop shell tray (Shell_TrayWnd), spawned alongside
--- MusicBee each launch as a tiny untitled explorer.exe stub. Not useful,
--- auto-close it so it doesn't linger as a floating bar. "close" is not a
--- valid static window_rule effect (only a dispatcher action) — use an
--- open-event listener instead.
+-- Wine's stray Shell_TrayWnd stub; "close" isn't a static rule effect.
 hl.on("window.open", function(w)
     if w ~= nil and w.class == "explorer.exe" then
         hl.dispatch(hl.dsp.window.close({ window = "address:" .. w.address }))
@@ -364,11 +325,7 @@ hl.window_rule({ -- File Explorer opens as a window, not a tile
     size = "1100 680",
     center = true,
 })
--- beatmania IIDX 33 (~/wine/iidx, `iidx`): TDJ mode opens two windows, main
--- 1920x1080 and touch sub 1280x720, launched borderless so the surface is
--- exactly the game's resolution. Pinned to that size (no scaling).
--- TODO placement: monitor/move rules had no visible effect on these
--- winewayland windows (tested 2026-09-28), so they open where hyprland puts them.
+-- beatmania IIDX TDJ: main and touch sub windows pinned to native size.
 local iidxTitle = "^beatmania IIDX [0-9]+ .* "
 hl.window_rule({
     name = "iidx-main",
@@ -387,7 +344,7 @@ hl.window_rule({
     rounding = 0,
 })
 hl.window_rule({ match = { class = "org.pulseaudio.pavucontrol" }, center = true, float = true, size = "1360 825" })
-hl.window_rule({ -- Mullvad VPN: snap to the bottom-right corner of its monitor
+hl.window_rule({
     name = "mullvad-bottom-right",
     match = { class = "(?i)^mullvad.*$" },
     float = true,
@@ -401,30 +358,18 @@ hl.window_rule({
     match = {
         class = "^(" .. "com.mitchellh.ghostty|" .. "org.wezfurlong.wezterm" .. ")(.*)$",
     },
-    --border_size = 0,
     float = true,
     size = "1360 825",
 })
--- Startup: hermes (ghostty, launched on workspace 1) opens floating at the
--- same margin from its monitor's top-left corner used in this very session
--- (90,50 on the 3440x1440 external panel) — move values are monitor-local,
--- so the same offset lands similarly on the 1920x1200 laptop panel too.
--- Matched by class, not title: an on_session_start shell hook rewrites this
--- window's title to the live Hermes session name, so title can no longer be
--- a stable anchor (see --class=com.mitchellh.ghostty.hermes on the exec line).
+-- By class: Hermes rewrites its window title to the session name.
 hl.window_rule({ match = { class = "^com.mitchellh.ghostty\\.hermes$" }, move = "90 50" })
 
--- Copilot-key scratchpad terminal: real fullscreen (not a floating size
--- fit to the monitor, which still leaves a gap margin) so it fills exactly
--- whichever monitor it's shown on, laptop or external, same proportions.
 hl.window_rule({ match = { class = "^com.mitchellh.ghostty\\.copilot$" }, fullscreen = true })
 
 hl.window_rule({
     match = {
         title = "^("
             .. "Input Error|"
-            -- TODO Fix
-            --.. "<vm> on QEMU/KVM|"
             .. "Add New Virtual Hardware|"
             .. "Locate ISO media volume|"
             .. "New VM"
@@ -463,7 +408,6 @@ hl.layer_rule({
     animation = "slide",
 })
 
--- fuzzel: no fade, snappy/CLI-like feel (overrides the global "layers" fade)
 hl.layer_rule({
     match = { namespace = "launcher" },
     no_anim = true,
@@ -475,17 +419,11 @@ hl.layer_rule({
     ignore_alpha = 0.5,
 })
 
--- The bar (bar/shell.qml) is deliberately NOT excluded from hyprglass (see
--- hg.layer("quickshell:desktop", ...) above) and its own background is now
--- ~15% opaque black, not solid — this native blur-behind makes that
--- transparency actually show a blurred backdrop instead of just dimming to
--- whatever's rendered immediately below with no blur.
 hl.layer_rule({
     match = { namespace = "^quickshell:bar$" },
     blur = true,
     ignore_alpha = 0.3,
-    no_anim = true, -- surface geometry jumps 26px->446px on menu open; animating
-    -- that jump visibly "carries" the whole bar for ~0.5s
+    no_anim = true, -- the surface grows 26px -> 446px when a menu opens
 })
 
 hl.layer_rule({
@@ -500,12 +438,8 @@ local suppressMaximizeRule = hl.window_rule({
     match = { class = ".*" },
     suppress_event = "maximize",
 })
--- suppressMaximizeRule:set_enabled(false)
 
--- Off except while the desktop icons (qs -c desktop) launch something: they
--- switch it on right before, so that window is born floating and centered
--- instead of popping out of the tiling after it appears. Global, so
--- `hyprctl eval` can reach it.
+-- Toggled by qs -c desktop around launches; global so `hyprctl eval` reaches it.
 DesktopLaunchFloat = hl.window_rule({
     name = "desktop-launch-float",
     match = { class = ".*" },
@@ -515,18 +449,12 @@ DesktopLaunchFloat = hl.window_rule({
 })
 DesktopLaunchFloat:set_enabled(false)
 
--- Same idea for games started from a desktop shortcut: whatever class the game
--- turns out to have, it appears without the fade (and isn't floated).
 DesktopLaunchGame = hl.window_rule({
     name = "desktop-launch-game",
     match = { class = ".*" },
     no_anim = true,
 })
 DesktopLaunchGame:set_enabled(false)
-
--- local overlayLayerRule = hl.layer_rule({
--- })
--- overlayLayerRule:set_enabled(false)
 
 hl.window_rule({
     name = "move-hyprland-run",
@@ -553,16 +481,12 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("pkill pavucontrol || pavucontrol"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("quickshell kill -c hyprquickpaper || quickshell -c hyprquickpaper"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser .. " -p"))
--- ALT+SHIFT+B: toggles the bar's visibility; relaunches it first if it
--- ever crashed/got killed (plain IPC toggle would otherwise be a no-op
--- then, since there's nothing running to IPC into).
 local barRecover = (os.getenv("HOME") or "~") .. "/git/dots/scripts/hypr/bar-recover.sh"
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(barRecover))
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(iconsToggle))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(session .. " -c"))
-hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd(fcitxToggle)) -- toggle fcitx5 (off by default, see scripts/fcitx/toggle.sh)
---hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("kanri"))
+hl.bind(mainMod .. " + SHIFT + I", hl.dsp.exec_cmd(fcitxToggle))
 local closeWindowBind = hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.close())
 hl.bind(
     mainMod .. " + SHIFT + O",
@@ -571,32 +495,15 @@ hl.bind(
 
 hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
 
--- Copilot key: this is now handled entirely by keyd (see
--- /etc/keyd/default.conf and scripts/hypr/copilot-toggle.sh), not a
--- Hyprland bind — Hyprland's own bind matcher never fired for this key no
--- matter the syntax tried (keysym, code:201, code:193, with/without Super),
--- while the raw hardware event itself was confirmed solid at the evdev
--- level the whole time. Likely a race in Hyprland's bind matching against
--- a simultaneous two-key USB HID chord (LEFTMETA+F23 fire ~0ms apart in
--- one hardware report, not as two sequential presses).
--- NixOS: keyd remaps the F23 scancode to F13 (copilot-key module in
--- nix/nixos/hardware/copilot-key.nix) but does NOT drop the LEFTMETA+
--- LEFTSHIFT held at the same time (confirmed via raw evdev capture on
--- keyd's virtual output: code=125 LEFTMETA, code=42 LEFTSHIFT, code=183
--- F13, all down together). A bare "code:191" bind has modmask 0 (no
--- modifiers), which Hyprland never fires while those are actually held —
--- ignore_mods makes the bind fire regardless of what's held alongside it.
+-- Copilot key: keyd turns it into F13 with Meta+Shift still held (docs/hyprland.md).
 hl.bind(
     "code:191",
-    hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/copilot-toggle-user.sh"),
+    hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/key-copilot-hermes.sh"),
     { ignore_mods = true }
 )
 
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region -o " .. screenshotsDir))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshotsDir))
--- TODO gromit-mpx is cool
--- bind = $mainMod, d, submap, Draw mode (gromit-mpx)
--- submap = Draw mode (gromit-mpx)
 
 hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next({ repeating = true }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
@@ -645,15 +552,13 @@ for i = 1, 10 do
     local key = i % 10
     hl.bind(mainMod .. " + " .. key, function()
         hl.dispatch(hl.dsp.focus({ workspace = i }))
-        -- always flash the bar's workspace dots, even when i is already the
-        -- active workspace (focus() alone is a no-op then, so the bar's own
-        -- activeWorkspace-change watch never fires)
+        -- focus() on the active workspace emits nothing, so flash explicitly
         hl.exec_cmd("qs -c bar ipc call bar flashDots")
     end)
     hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = false }))
 end
--- Peek at the desktop while SUPER + comma is held (like Windows' Win+,)
--- the switch quickly fades instead of sliding, then the slide comes back for normal workspace changes
+
+-- Hold SUPER + comma to peek at the desktop.
 local peekFrom = nil
 local function peekAnimation(style, speed)
     hl.animation({ leaf = "workspaces", enabled = true, speed = speed, bezier = "ease", style = style })
@@ -682,7 +587,6 @@ hl.bind("SUPER + comma", function()
     peekAnimation("fade", 1.5)
     hl.dispatch(hl.dsp.focus({ workspace = "name:desktop" }))
 end)
--- either key let go ends the peek, in whatever order they're released
 hl.bind("comma", peekRestore, { release = true, ignore_mods = true, non_consuming = true })
 hl.bind("Super_L", peekRestore, { release = true, ignore_mods = true, non_consuming = true })
 
@@ -743,12 +647,3 @@ hl.bind(
 
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
-
---hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
---hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
---hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
---hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
-
--- TODO Laptop-specific (from old file)
--- TODO Looking for the `hyprctl getoption enabled` for the touchpad, then put in just one keybind
--- bind = $mainMod SHIFT, RETURN, exec, hyprctl getoption "device:synps/2-synaptics-touchpad:enabled" | grep 'int: 1' && (hyprctl keyword "device:synps/2-synaptics-touchpad:enabled" false && notify-send "Trackpad disabled") || (hyprctl keyword "device:synps/2-synaptics-touchpad:enabled" true)

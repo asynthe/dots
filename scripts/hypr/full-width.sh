@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Resizes the currently focused (floating) window to span the full width of
-# its monitor, keeping its current height and vertical position in place.
+# Stretch the focused window to its monitor width.
 set -euo pipefail
 
 win=$(hyprctl activewindow -j)

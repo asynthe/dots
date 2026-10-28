@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-# Workaround for a known Hyprland quirk: a newly mapped window doesn't
-# receive keyboard input until the mouse physically moves (no pointer
-# motion event = no focus re-evaluation). spawn-terminal.sh already does
-# this nudge for the alt+shift+enter bind; this daemon does it for EVERY
-# window open (fuzzel, autostart, anything) by watching the event socket.
+# Cursor nudge on every openwindow event; see spawn-terminal.sh.
 import os
 import socket
 import subprocess
