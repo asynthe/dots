@@ -1,8 +1,6 @@
 //@ pragma UseQApplication
 //@ pragma IconTheme Fluent-dark
 
-// Windows 11-style desktop icons for ~/desktop, under Hyprland's windows.
-
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -11,7 +9,7 @@ ShellRoot {
     id: root
     property bool hidden: false
 
-    // Icons go on one screen, like Windows' main display: the external monitor
+    // Icons go on one screen: the external monitor
     // when one is plugged in, the laptop panel otherwise. Follows hotplug.
     readonly property var main: {
         const s = Quickshell.screens;

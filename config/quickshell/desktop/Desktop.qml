@@ -39,7 +39,7 @@ PanelWindow {
         onLoadFailed: error => { if (error === FileViewError.FileNotFound) writeAdapter(); }
         JsonAdapter { id: layout; property var screens: ({}) }   // screen -> { file name -> [col, row] }
     }
-    // each screen keeps its own arrangement, like Windows does per display
+    // each screen keeps its own arrangement
     readonly property var slots: layout.screens?.[modelData.name] ?? ({})
     function saveSlots(s) {
         const all = Object.assign({}, layout.screens);

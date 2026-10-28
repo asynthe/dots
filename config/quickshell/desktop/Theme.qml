@@ -3,7 +3,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 
-// Windows 11 look, OLED black, for the desktop icons and their menus.
 Singleton {
     readonly property string font: {
         const have = Qt.fontFamilies();

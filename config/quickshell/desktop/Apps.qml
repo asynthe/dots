@@ -16,7 +16,7 @@ Singleton {
 
     function run(cmd) { Quickshell.execDetached(cmd); }
 
-    // Whatever opens from the desktop starts floating, like on Windows. gio
+    // Whatever opens from the desktop starts floating. gio
     // hands files to the app and exits, so Hyprland can't tie the window to
     // the launch; instead hyprland.lua's DesktopLaunchFloat rule (float, sized,
     // centered) is on from just before a launch until the next window opens,

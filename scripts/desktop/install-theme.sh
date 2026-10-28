@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Windows 11 look for the desktop icons (qs -c desktop) and Nemo as File Explorer.
+# Fluent theme for the desktop icons (qs -c desktop) and Nemo.
 #   GTK:   vinceliuice/Fluent-gtk-theme  -> ~/.local/share/themes (Fluent-Dark, patched to OLED black)
 #   icons: vinceliuice/Fluent-icon-theme -> ~/.local/share/icons  (Fluent-dark)
 set -euo pipefail
