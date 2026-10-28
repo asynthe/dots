@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-# Runs as the real user (invoked by copilot-toggle.sh via runuser). If the
-# copilot scratchpad terminal was closed (window gone), relaunch it onto the
-# hidden special:copilot workspace first, then (in both cases) toggle it
-# visible/hidden — a fresh launch is hidden on the special workspace same as
-# at session startup, so it still needs the toggle to actually show up.
+# Toggles the hermes scratchpad terminal, relaunching it if closed.
 set -euo pipefail
+
+if [ "$(id -u)" -eq 0 ]; then
+    export XDG_RUNTIME_DIR="/run/user/1000"
+    sig=$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -1)
+    exec runuser -u meow -- env \
+        XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+        HYPRLAND_INSTANCE_SIGNATURE="$sig" \
+        "$0"
+fi
+
+lock="${XDG_RUNTIME_DIR:-/tmp}/copilot-toggle.lock"
+exec 9>"$lock"
+flock -w 5 9 || exit 1
 
 class="com.mitchellh.ghostty.copilot"
 addr=$(hyprctl clients -j | jq -r --arg c "$class" '.[] | select(.class==$c) | .address' | head -1)
@@ -17,5 +26,7 @@ if [ -z "$addr" ]; then
         sleep 0.1
     done
 fi
+
+flock -u 9
 
 hyprctl dispatch "hl.dsp.workspace.toggle_special('copilot')"
