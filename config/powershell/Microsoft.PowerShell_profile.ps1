@@ -35,7 +35,7 @@ if (Get-Command atuin -ErrorAction SilentlyContinue) {
     atuin init powershell --disable-up-arrow | Out-String | Invoke-Expression
 }
 
-# The profile is a symlink into dots (windows/link.ps1); check_repo.ps1 sits
+# The profile is a symlink into dots (link.ps1, notes: windows/windows.md); check_repo.ps1 sits
 # beside the real file, not beside the link.
 $_profile = Get-Item -LiteralPath $PSCommandPath -Force
 $_dir = if ($_profile.LinkType -eq 'SymbolicLink') { Split-Path -Parent @($_profile.Target)[0] } else { $PSScriptRoot }

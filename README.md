@@ -32,8 +32,7 @@ git clone https://github.com/asynthe/dots.git
 | `flake.nix`, `nix/` | NixOS system, dendritic flake-parts |
 | `config/` | dotfiles, symlinked into `~/.config` by `scripts/home_setup.sh` |
 | `scripts/` | bootstrap, Hyprland helpers, backups, repo maintenance |
-| `gentoo/` | Gentoo `/etc` and `/var` configuration, laid out like the root filesystem |
-| `windows/` | Windows setup scripts |
+| `gentoo/` | Gentoo `make.conf` (the rest is in tag `gentoo-p1-2026-10`) |
 | `secrets/` | sops-encrypted, age key from `~/git/auth` |
 
 ## Install
