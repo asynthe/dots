@@ -205,6 +205,11 @@ hl.device({
     sensitivity = -0.5,
 })
 
+hl.device({
+    name = "2.4g-wireless-mouse",
+    scroll_factor = 2.85,
+})
+
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
 -- No float-by-default rule: it segfaults Hyprland with hyprglass loaded (notes: hyprland.md).
@@ -497,6 +502,8 @@ hl.bind(
     hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/key-copilot-hermes.sh"),
     { ignore_mods = true }
 )
+hl.bind("SUPER + Grave", hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/key-copilot-hermes.sh"))
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
 
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m region -o " .. screenshotsDir))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshotsDir))
@@ -585,8 +592,20 @@ end)
 hl.bind("comma", peekRestore, { release = true, ignore_mods = true, non_consuming = true })
 hl.bind("Super_L", peekRestore, { release = true, ignore_mods = true, non_consuming = true })
 
-hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+local function inCopilot()
+    local special = hl.get_active_special_workspace()
+    return special ~= nil and special.name == "special:copilot"
+end
+hl.bind(mainMod .. " + S", function()
+    if not inCopilot() then
+        hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
+    end
+end)
+hl.bind(mainMod .. " + SHIFT + S", function()
+    if not inCopilot() then
+        hl.dispatch(hl.dsp.window.move({ workspace = "special:magic" }))
+    end
+end)
 hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ monitor = "l" }))
 hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ monitor = "r" }))
 hl.bind(mainMod .. " + period", hl.dsp.focus({ workspace = "e+1" }))
