@@ -1,4 +1,4 @@
-# Firefox on Windows, the way scripts/firefox/ + gentoo/setup.md §5 set it up on Linux:
+# Firefox on Windows, the way scripts/firefox/ + notes/gentoo.md (Setup §5) set it up on Linux:
 # arkenfox + config/firefox/common.cfg as system-wide autoconfig, the add-ons from
 # scripts/firefox/policies.sh force-installed by policy, and the default/study/work/infra
 # profiles with config/firefox/keep.js linked in as user.js.

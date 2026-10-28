@@ -89,7 +89,7 @@ foreach ($target in $Links.Keys) {
 }
 
 # Fonts that aren't packaged anywhere, installed per-user (no admin) the way
-# gentoo/setup.md unzips them into ~/.local/share/fonts on Linux.
+# notes/gentoo.md (Setup §1.4) unzips them into ~/.local/share/fonts on Linux.
 Write-Host '-- fonts'
 $FontDir = "$Local\Microsoft\Windows\Fonts"
 $FontReg = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'

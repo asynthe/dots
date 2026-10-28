@@ -1,5 +1,0 @@
-#!/bin/sh
-[ "$1" = add ] || exit 0
-v=${2%%-*}
-mkdir -p /run/kernel
-{ grep -vE '^(VERSION_ID|IMAGE_VERSION)=' /etc/os-release; printf "VERSION_ID='%s'\nIMAGE_VERSION='%s'\n" "$v" "$v"; } > /run/kernel/os-release-uki
