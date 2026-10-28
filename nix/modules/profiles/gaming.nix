@@ -8,8 +8,6 @@
       lutris
       osu-lazer
       stepmania
-      star-citizen
-      star-citizen-cache
       uzdoom
     ];
   };
