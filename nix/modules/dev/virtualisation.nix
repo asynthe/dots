@@ -63,8 +63,6 @@ _: {
       environment.systemPackages = with pkgs; [
         adwaita-icon-theme
         dnsmasq
-        guestfs-tools
-        libguestfs
         spice
         spice-gtk
         spice-protocol
