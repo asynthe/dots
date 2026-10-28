@@ -8,7 +8,6 @@ shell-integration-features = ssh-terminfo,ssh-env
 
 window-padding-x = 14
 window-padding-y = 14
-#window-padding-balance = true
 
 font-size = 13
 font-family = TX-02
@@ -20,18 +19,6 @@ font-style-bold-italic = Bold Condensed Oblique
 background-opacity = 0
 unfocused-split-opacity = 0.85
 background = #0d0d12
-#background-opacity = 0.48
-#foreground = #dddddd
-#selection-background = #1c2f39
-#selection-foreground = #dddddd
-#cursor-color = #e6eaea
-
-#custom-shader-animation = true
-#custom-shader = shaders/animated-gradient-shader.glsl
-#custom-shader = shaders/galaxy.glsl
-#custom-shader = shaders/just-snow.glsl
-#custom-shader = shaders/starfield-colors.glsl
-#custom-shader = shaders/starfield.glsl
 
 keybind = clear
 confirm-close-surface = false

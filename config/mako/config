@@ -1,6 +1,5 @@
 # vim:fileencoding=utf-8:ft=dosini:fdm=marker foldlevel=0
 
-# Appearance {{{
 font=JetBrainsMono Nerd Font 14
 width=350
 padding=10
@@ -11,7 +10,6 @@ border-radius=0
 background-color=#24283b
 border-color=#bb9af7
 text-color=#a9b1d6
-# }}}
 
 default-timeout=5000
 on-button-middle=exec makoctl menu -n "$id" wofi --dmenu -p 'Select action: '

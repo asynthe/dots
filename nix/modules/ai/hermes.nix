@@ -80,7 +80,7 @@
             backend.waitFor = lib.mkIf config.sys.hermes.waitForHost "hostname";
           };
 
-          # First run needs linking to the phone (docs/ai.md).
+          # First run needs linking to the phone (notes: hermes.md).
           systemd.services.signal-cli = lib.mkIf config.sys.hermes.signal {
             description = "signal-cli HTTP daemon for Hermes";
             wantedBy = [ "multi-user.target" ];

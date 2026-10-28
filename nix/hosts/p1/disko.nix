@@ -98,7 +98,6 @@
             "--timeout"
             "10"
           ];
-          #content.askPassword = true; # TODO ?
           content.content.type = "btrfs";
           content.content.extraArgs = [
             "-L"

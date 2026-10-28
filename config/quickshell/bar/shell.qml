@@ -15,7 +15,7 @@ ShellRoot {
     property int    barHeight  : 26
     property bool   atBottom   : false    // false: top edge, menus drop down
     property string fontFamily : "JetBrainsMono Nerd Font"
-    property int    fontSize   : 14   // 13 + 5%, rounded
+    property int    fontSize   : 14
     property int    sideMargin : 14
 
     property color bg     : "#ff000000"   // true OLED black, fully opaque
@@ -118,7 +118,7 @@ ShellRoot {
     property int    latency: -1
 
     readonly property color linkColor: {
-        if (bars < 0)                       return fgDim;   // no radio: wired
+        if (bars < 0)                       return fgDim;
         if (bars <= 1 || latency < 0
             || latency > latBad)            return crit;
         if (bars === 2 || latency > latOk)  return warn;
@@ -304,10 +304,7 @@ ShellRoot {
             visible: shown
             color: "transparent"
 
-            // Fixed height always — the bar surface itself never resizes.
-            // Dropdowns are separate popup windows (see menuPopup/ipMenuPopup
-            // below) so opening one never triggers a resize/repaint flash on
-            // this always-visible strip.
+            // Fixed height: dropdowns are separate popups, so the bar never resizes.
             implicitHeight: root.barHeight
 
             anchors { left: true; right: true; top: !root.atBottom; bottom: root.atBottom }
@@ -424,7 +421,6 @@ ShellRoot {
                                 anchors {
                                     fill: parent
                                     margins: -4 // small dots get a slightly
-                                                // bigger hit target
                                 }
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: Hyprland.dispatch(

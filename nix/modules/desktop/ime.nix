@@ -1,7 +1,6 @@
 _: {
   flake.modules.nixos.ime = { pkgs, ... }: {
     environment.sessionVariables = {
-      #GTK_IM_MODULE = "fcitx";
       QT_IM_MODULE = "fcitx";
       INPUT_METHOD = "fcitx";
       XMODIFIERS = "@im=fcitx";

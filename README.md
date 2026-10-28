@@ -29,12 +29,11 @@ git clone https://github.com/asynthe/dots.git
 
 | path | what |
 | --- | --- |
-| `flake.nix`, `nix/` | NixOS system, dendritic flake-parts ([docs/nix.md](docs/nix.md)) |
+| `flake.nix`, `nix/` | NixOS system, dendritic flake-parts |
 | `config/` | dotfiles, symlinked into `~/.config` by `scripts/home_setup.sh` |
 | `scripts/` | bootstrap, Hyprland helpers, backups, repo maintenance |
-| `gentoo/` | Gentoo install notes and `/etc/portage`, kept for future installs |
+| `gentoo/` | Gentoo `/etc` and `/var` configuration, laid out like the root filesystem |
 | `windows/` | Windows setup scripts |
-| `docs/` | why things are the way they are ([nix](docs/nix.md), [hyprland](docs/hyprland.md), [ai](docs/ai.md)) |
 | `secrets/` | sops-encrypted, age key from `~/git/auth` |
 
 ## Install

@@ -1,6 +1,0 @@
-pcr-creds-private-key.pem
-pcr-creds-public-key.pem
-pcr-private-key.pem
-pcr-public-key.pem
-signing_key.pem
-x509.genkey

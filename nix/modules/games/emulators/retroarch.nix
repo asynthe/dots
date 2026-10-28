@@ -6,13 +6,13 @@ _: {
     environment.systemPackages = [
       (pkgs.retroarch.withCores (
         c: with c; [
-          mesen # nes
-          snes9x # snes
-          mgba # gb gbc gba
-          mupen64plus # n64
-          melondsds # nds
-          beetle-psx-hw # psx
-          ppsspp # psp
+          mesen
+          snes9x
+          mgba
+          mupen64plus
+          melondsds
+          beetle-psx-hw
+          ppsspp
         ]
       ))
     ];

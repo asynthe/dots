@@ -72,7 +72,7 @@ if hl.plugin.hyprglass then
         inherits = "high_contrast",
         contrast = 1.2,
         adaptive_dim = 1.0,
-        dark = { tint_color = 0x02142aa9 }, -- tint("#02142a", 0.663)
+        dark = { tint_color = 0x02142aa9 },
     })
 
     hg.preset("apple", {
@@ -207,16 +207,14 @@ hl.device({
 
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
--- No float-by-default rule: it segfaults Hyprland with hyprglass loaded (docs/hyprland.md).
+-- No float-by-default rule: it segfaults Hyprland with hyprglass loaded (notes: hyprland.md).
 
--- MusicBee dialogs float uncentered; Wine already places them on their owner.
 hl.window_rule({
     name = "musicbee-dialogs-float-no-center",
     match = { class = "^musicbee\\.exe$", title = "^(?!.* - MusicBee$).*$" },
     float = true,
 })
 
--- Wine's stray Shell_TrayWnd stub; "close" isn't a static rule effect.
 hl.on("window.open", function(w)
     if w ~= nil and w.class == "explorer.exe" then
         hl.dispatch(hl.dsp.window.close({ window = "address:" .. w.address }))
@@ -262,7 +260,6 @@ hl.curve("winOut", { type = "bezier", points = { { 0.3, 1 }, { 0, 1 } } })
 hl.curve("linear", { type = "bezier", points = { { 1, 1 }, { 1, 1 } } })
 hl.curve("ease", { type = "bezier", points = { { 0, 1 }, { 0.618, 1 } } })
 
--- windows just fade in and out where they land; moving tiles still slides
 hl.animation({ leaf = "windowsIn", enabled = false })
 hl.animation({ leaf = "windowsOut", enabled = false })
 hl.animation({ leaf = "fadeIn", enabled = true, speed = 2.427, bezier = "ease" })
@@ -273,7 +270,7 @@ hl.animation({ leaf = "layers", enabled = true, speed = 2.427, bezier = "ease", 
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2.427, bezier = "ease", style = "fade" })
 hl.animation({ leaf = "fadePopups", enabled = true, speed = 2.427, bezier = "ease" })
 
-hl.window_rule({ match = { xwayland = true }, rounding = 0 }) -- xwayland
+hl.window_rule({ match = { xwayland = true }, rounding = 0 })
 
 hl.window_rule({ -- Discord: tiled on its own workspace, overriding float-by-default
     name = "discord-tiled",
@@ -439,7 +436,6 @@ local suppressMaximizeRule = hl.window_rule({
     suppress_event = "maximize",
 })
 
--- Toggled by qs -c desktop around launches; global so `hyprctl eval` reaches it.
 DesktopLaunchFloat = hl.window_rule({
     name = "desktop-launch-float",
     match = { class = ".*" },
@@ -495,7 +491,7 @@ hl.bind(
 
 hl.bind(mainMod .. " + SHIFT + Z", monitors.toggle_laptop_screen)
 
--- Copilot key: keyd turns it into F13 with Meta+Shift still held (docs/hyprland.md).
+-- Copilot key: keyd turns it into F13 with Meta+Shift still held (notes: hyprland.md).
 hl.bind(
     "code:191",
     hl.dsp.exec_cmd(os.getenv("HOME") .. "/git/dots/scripts/hypr/key-copilot-hermes.sh"),
@@ -507,12 +503,12 @@ hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m output -o " .. screenshots
 
 hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next({ repeating = true }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }), { repeating = true })
-hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit")) -- dwindle only
+hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 1, client = 2, action = "toggle" }))
 hl.bind(mainMod .. " + O", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(fullWidth))
-hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pin()) -- dwindle only
+hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pin())
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
@@ -552,7 +548,6 @@ for i = 1, 10 do
     local key = i % 10
     hl.bind(mainMod .. " + " .. key, function()
         hl.dispatch(hl.dsp.focus({ workspace = i }))
-        -- focus() on the active workspace emits nothing, so flash explicitly
         hl.exec_cmd("qs -c bar ipc call bar flashDots")
     end)
     hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = false }))

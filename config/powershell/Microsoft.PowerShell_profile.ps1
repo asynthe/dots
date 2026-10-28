@@ -1,11 +1,5 @@
-#Clear-Host
 #figlet -f "Merlin1" Powershellhell"
-#$host.ui.RawUI.BackgroundColor = "Black"
-#$host.ui.RawUI.ForegroundColor = "Green"
 
-# --------------- Configuration ---------------
-
-# Yazi
 function y {
     $tmp = [System.IO.Path]::GetTempFileName()
     yazi $args --cwd-file="$tmp"
@@ -16,7 +10,6 @@ function y {
     Remove-Item -Path $tmp
 }
 
-# Wezterm required
 function prompt {
     $p = $executionContext.SessionState.Path.CurrentLocation
     $osc7 = ""
@@ -28,26 +21,19 @@ function prompt {
     "${osc7}PS $p$('>' * ($nestedPromptLevel + 1)) ";
 }
 
-# Quick zip extract
 function x {
     param([Parameter(Mandatory)][string]$Zip, [string]$Dest = ".")
     $f = Get-Item -LiteralPath $Zip
     Expand-Archive -LiteralPath $f.FullName -DestinationPath (Join-Path $Dest $f.BaseName)
 }
 
-# --------------- Aliases ---------------
-
 Set-Alias l y
 Set-Alias lf y
-
-# --------------- Atuin ---------------
 
 # After the prompt function above: atuin wraps it to record each command.
 if (Get-Command atuin -ErrorAction SilentlyContinue) {
     atuin init powershell --disable-up-arrow | Out-String | Invoke-Expression
 }
-
-# --------------- Repo status ---------------
 
 # The profile is a symlink into dots (windows/link.ps1); check_repo.ps1 sits
 # beside the real file, not beside the link.

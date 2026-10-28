@@ -1,0 +1,16 @@
+app-emulation/wine-staging
+app-emulation/winetricks
+dev-lang/mono
+games-util/lutris
+games-util/gamemode
+app-emulation/protontricks
+games-util/protonup-rs
+games-util/steam-launcher
+games-arcade/osu-lazer
+games-engines/uzdoom
+games-emulation/dolphin
+games-emulation/pcsx2
+games-emulation/ppsspp
+games-emulation/azahar
+games-emulation/rpcs3
+games-emulation/eden

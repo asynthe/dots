@@ -9,11 +9,9 @@ export NOTES_DIR=$HOME/git/notes
 export PASSWORD_STORE_DIR=$HOME/git/auth/pass
 export SOPS_AGE_KEY_FILE=$HOME/git/auth/age/keys.txt
 
-# Inactivity auto-command
 if [[ -o interactive ]]; then
   TMOUT=180
   TRAPALRM() {
-    # Only what's installed; asciiquarium also needs perl's Term::Animation.
     local -a s
     (( $+commands[unimatrix] )) && s+=('unimatrix -s -n 94 2>/dev/null')
     (( $+commands[pipes-rs] )) && s+=('pipes-rs')
@@ -22,15 +20,9 @@ if [[ -o interactive ]]; then
   }
 fi
 
-# Configuration
-#HISTSIZE=10000
-#SAVEHIST=10000
-#HISTFILE=$ZDOTDIR/history
-#HISTORY_IGNORE="(ls|ls *|cd|cd *|bat *|cat *|pwd|clear|history)"
 unset HISTFILE # Disable history -> using atuin
 
-# Keybinds
-bindkey -v # vi mode
+bindkey -v
 setopt extended_glob
 setopt no_flowcontrol
 bindkey -M viins '^[[H' beginning-of-line
@@ -53,15 +45,12 @@ bindkey -M vicmd '^[OF' end-of-line
 # Prompt: user@host path $ (# as root), terminal's default colour
 PROMPT='%n@%m %~ %(!.#.$) '
 
-# Sources
 source "$ZDOTDIR/.zsh_aliases"
 source "$ZDOTDIR/.zsh_functions"
 
-# Eval
 eval "$(atuin init zsh --disable-up-arrow)"
 eval "$(direnv hook zsh)"
 
-# Repo status (defined in .zsh_functions)
 check_repo
 
 # pnpm

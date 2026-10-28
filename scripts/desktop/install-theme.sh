@@ -2,7 +2,6 @@
 # Windows 11 look for the desktop icons (qs -c desktop) and Nemo as File Explorer.
 #   GTK:   vinceliuice/Fluent-gtk-theme  -> ~/.local/share/themes (Fluent-Dark, patched to OLED black)
 #   icons: vinceliuice/Fluent-icon-theme -> ~/.local/share/icons  (Fluent-dark)
-# Re-run to update.
 set -euo pipefail
 
 themes=${XDG_DATA_HOME:-$HOME/.local/share}/themes
@@ -10,7 +9,7 @@ icons=${XDG_DATA_HOME:-$HOME/.local/share}/icons
 cache=${XDG_CACHE_HOME:-$HOME/.cache}
 mkdir -p "$themes" "$icons"
 
-fetch() { # repo dest
+fetch() {
     if [ -d "$2/.git" ]; then
         git -C "$2" pull --ff-only -q
     else
@@ -19,7 +18,6 @@ fetch() { # repo dest
     fi
 }
 
-# both repos build their variants with their own install.sh (GTK one needs sassc)
 fetch vinceliuice/Fluent-icon-theme "$cache/fluent-icon-theme"
 (cd "$cache/fluent-icon-theme" && bash ./install.sh -d "$icons" >/dev/null)
 
@@ -36,14 +34,14 @@ sed -i -e 's/#333333/#000000/g' -e 's/#2B2B2B/#000000/g' -e 's/#303030/#0A0A0A/g
     "$gtk/src/_sass/_colors.scss"
 (cd "$gtk" && bash ./install.sh -d "$themes" -c dark --tweaks solid >/dev/null)
 
-gsettings set org.gnome.desktop.interface icon-theme Fluent-dark # config/gtk-*/settings.ini agree
+gsettings set org.gnome.desktop.interface icon-theme Fluent-dark
 
 # Nemo: icon view everywhere (per-folder views ignored), thumbnails for big files
 # too (the default 1 MB limit skips nearly every video), no desktop drawing
 # since quickshell owns the desktop.
 gsettings set org.nemo.preferences default-folder-viewer 'icon-view'
 gsettings set org.nemo.preferences ignore-view-metadata true
-gsettings set org.nemo.preferences thumbnail-limit 34359738368 # 32 GiB
+gsettings set org.nemo.preferences thumbnail-limit 34359738368
 gsettings set org.nemo.preferences show-location-entry true
 gsettings set org.nemo.desktop show-desktop-icons false 2>/dev/null || true
 gsettings set org.nemo.window-state start-with-sidebar true

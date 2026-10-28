@@ -1,4 +1,3 @@
-
 import Quickshell
 import Quickshell.Io
 import QtQuick
@@ -111,7 +110,7 @@ PanelWindow {
 
         function scaleAt(i) {
             const d = Math.min(1, Math.abs(i - selectedIndex) / spread)
-            const t = 1 - d * d * (3 - 2 * d)      // smoothstep falloff
+            const t = 1 - d * d * (3 - 2 * d)
             return main.edgeScale + (main.zoomScale - main.edgeScale) * t
         }
 

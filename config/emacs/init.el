@@ -8,6 +8,5 @@
  ((eq system-type 'windows-nt)
   (progn
 
-    ;; Windows configuration
     (load (expand-file-name "config.el" user-emacs-directory))))
 )

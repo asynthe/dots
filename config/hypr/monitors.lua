@@ -68,8 +68,6 @@ local known_externals = {
         scale = "1",
         width = 3440,
     },
-    -- {
-    -- },
     {
         match = "SONY TV",
         output = "desc: Sony SONY TV 0x01010101",
@@ -141,7 +139,6 @@ local function apply_monitors(force_disable_internal)
 
     local ext_desc = detect_external()
     if not ext_desc then
-        -- A sleeping external drops its link; Alt+Shift+Z brings the panel back after a real unplug.
         if disable then
             return
         end

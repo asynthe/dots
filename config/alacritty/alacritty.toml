@@ -1,16 +1,12 @@
 [env]
 TERM = "xterm-256color"
 
-# configuration
 [window]
 padding.x = 16
 padding.y = 16
 opacity = 0.7
 blur = true
 decorations = "None"
-#decorations = "Buttonless"
-#dynamic_title = true
-#option_as_alt = "Both"
 
 [cursor]
 style = {
@@ -18,7 +14,6 @@ style = {
     blinking = "Off"
 }
 
-# font
 # TX-02 covers Powerline itself; the rest of the Nerd Font icons come from
 # the fontconfig fallback behind it (nix/nixos/desktop/look.nix).
 [font]
@@ -28,7 +23,6 @@ bold = { family = "TX-02", style = "Bold Condensed" }
 italic = { family = "TX-02", style = "Condensed Oblique" }
 bold_italic = { family = "TX-02", style = "Bold Condensed Oblique" }
 
-# keybindings
 [keyboard]
 bindings = [
     { key = "C", mods = "Control|Shift", action = "Copy" },
@@ -36,10 +30,8 @@ bindings = [
     { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
     { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
     { key = "0", mods = "Control", action = "ResetFontSize" },
-    #{ key = "W", mods = "Control", action = "Quit" }, # tmux
 ]
 
-# colors
 [colors]
 [colors.primary]
 background = "#000000"

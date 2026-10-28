@@ -3,7 +3,6 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Hyprland
 
-// Win10 dark context menu. items: [{ label, act, icon?, enabled?, sep? }]
 PopupWindow {
     id: m
 

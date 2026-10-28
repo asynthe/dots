@@ -11,7 +11,7 @@ APPLY=0
 [ "${1:-}" = "--apply" ] && APPLY=1
 
 case "$(uname -s)" in
-    MINGW* | MSYS* | CYGWIN*) GIT_ROOT="$HOME/Desktop/git" ;; # Windows, Git Bash
+    MINGW* | MSYS* | CYGWIN*) GIT_ROOT="$HOME/Desktop/git" ;;
     *) GIT_ROOT="$HOME/git" ;;
 esac
 HOSTS=(gitlab github)

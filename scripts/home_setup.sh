@@ -38,7 +38,7 @@ echo "── xdg migrations"
 migrate() {
     local old="$1" new="$2"
     [ -e "$old" ] || return 0
-    [ -L "$old" ] && return 0 # already migrated
+    [ -L "$old" ] && return 0
     if [ -e "$new" ]; then
         warn "$new exists, skipping $old"
         return 0
@@ -132,7 +132,7 @@ if [ -d "$BIOS" ]; then
         [ -f "$f" ] || continue
         case "$f" in
             */351ELEC-*.zip) continue ;;                                           # the source pack; neogeo.zip etc. are real bios
-            */pcsx2/bios/*.[Nn][Vv][Mm] | */pcsx2/bios/*.[Mm][Ee][Cc]) continue ;; # pcsx2 writes these
+            */pcsx2/bios/*.[Nn][Vv][Mm] | */pcsx2/bios/*.[Mm][Ee][Cc]) continue ;;
         esac
         case "$f" in */pcsx2/*) dst="$CONF/PCSX2/bios" ;; *) dst="$CONF/retroarch/system" ;; esac
         [ -e "$dst/$(basename "$f")" ] || [ -L "$dst/$(basename "$f")" ] && continue

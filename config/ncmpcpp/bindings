@@ -1,6 +1,5 @@
 # ncmpcpp works by having a main playlist being played and a list of playlists.
 
-# ───────────────────────── Main keybinds ─────────────────────────
 def_key "<"
   seek_backward
 def_key ">"
@@ -24,7 +23,6 @@ def_key "tab"
 def_key "u"
   update_database
 
-# Vi keys
 def_key "J"
   move_selected_items_down
 def_key "K"
@@ -33,7 +31,6 @@ def_key "G"
   move_end
 def_key "g"
   move_home
-# Movement
 def_key "h"
   jump_to_parent_directory
   previous_column
@@ -44,7 +41,6 @@ def_key "k"
 def_key "l"
   enter_directory
 
-# Arrow keys
 def_key "left"
   previous_column
   jump_to_parent_directory
@@ -55,18 +51,6 @@ def_key "up"
 def_key "right"
   enter_directory
 
-# ───────────────────────── Playlist ─────────────────────────
-# FIX - IN PROGRESS
-#def_key "e"
-#  edit_playlist_name
-#def_key "space"
-#  add_item_to_playlist
-#def_key "delete"
-#  delete_playlist_items
-#def_key "delete"
-#  delete_stored_playlist
-
-# ───────────────────────── Toggle ─────────────────────────
 def_key "z"
   toggle_random
 def_key "Z"
@@ -84,7 +68,6 @@ def_key "b"
 def_key "B"
   toggle_bitrate_visibility
 
-# ───────────────────────── Views ─────────────────────────
 def_key "1"
   show_playlist
 def_key "2"

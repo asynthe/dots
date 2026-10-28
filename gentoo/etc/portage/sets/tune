@@ -1,0 +1,4 @@
+sys-kernel/scx
+sys-devel/mold
+dev-util/ccache
+dev-util/sccache

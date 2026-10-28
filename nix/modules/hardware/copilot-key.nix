@@ -1,5 +1,5 @@
 _: {
-  # Copilot key -> F13, which hyprland.lua binds (docs/hyprland.md).
+  # Copilot key -> F13, which hyprland.lua binds (notes: hyprland.md).
   flake.modules.nixos.copilot-key = _: {
     services.keyd = {
       enable = true;

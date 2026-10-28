@@ -71,7 +71,7 @@ foreach ($target in $Links.Keys) {
 
     $item = Get-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
     if ($item -and $item.LinkType -eq 'SymbolicLink') {
-        if ($item.Target -eq $source) { continue }           # already linked
+        if ($item.Target -eq $source) { continue }
         note "relink $target (was -> $($item.Target))"
         run "remove link $target" { $item.Delete() }
     } elseif ($item) {
@@ -82,7 +82,6 @@ foreach ($target in $Links.Keys) {
     note "$target -> $source"
     run "mklink $target $source" {
         New-Item -ItemType Directory -Force (Split-Path -Parent $target) | Out-Null
-        # mklink (not New-Item) so Developer Mode works without admin on Windows PowerShell 5.1
         $dirFlag = if ((Get-Item -LiteralPath $source).PSIsContainer) { '/D ' } else { '' }
         cmd /c "mklink $dirFlag`"$target`" `"$source`"" | Out-Null
         if ($LASTEXITCODE -ne 0) { throw "mklink failed for $target" }
@@ -103,7 +102,7 @@ if (Test-Path "$Dots\assets\fonts\TX-02.zip") {
 }
 $fonts += Get-Item "$Dots\assets\fonts\Smash-Regular.ttf" -ErrorAction SilentlyContinue
 foreach ($f in $fonts) {
-    if (Test-Path -LiteralPath "$FontDir\$($f.Name)") { continue }   # already installed
+    if (Test-Path -LiteralPath "$FontDir\$($f.Name)") { continue }
     note "font $($f.Name)"
     run "install $($f.Name) -> $FontDir" {
         New-Item -ItemType Directory -Force $FontDir | Out-Null

@@ -12,7 +12,7 @@ ask()  { read -rp "$1 [y/N] " a; [ "$a" = y ]; }
 sudo -v || exit 1
 pgrep -x emerge >/dev/null && echo "!! emerge is running: scx, mold and cache would wait on (or race) it"
 
-P=~/git/dots/gentoo/portage
+P=~/git/dots/gentoo/etc/portage
 
 scx() {
     step "sched-ext: scx_lavd via scx_loader (falls back to the normal scheduler on any error)"

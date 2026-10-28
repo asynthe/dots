@@ -12,7 +12,6 @@ _: {
       protontricks
       protonup-ng
       protonup-rs
-      #steamtinkerlaunch
     ];
   };
 }
