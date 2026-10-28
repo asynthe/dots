@@ -23,7 +23,7 @@ matcher never fires on it, whatever the syntax (keysym `F23`, `code:201`,
 The likely cause is a race in modifier-then-key matching when both keys arrive
 in a single report.
 
-- **NixOS:** `nix/nixos/hardware/copilot-key.nix` makes keyd remap F23 to F13.
+- **NixOS:** `nix/modules/hardware/copilot-key.nix` makes keyd remap F23 to F13.
   keyd still holds `LEFTMETA+LEFTSHIFT` down at the same time (raw evdev on
   keyd's virtual device shows codes 125, 42 and 183 all down). So the bind is
   `code:191` with `ignore_mods = true`. Without it, a bind with modmask 0
