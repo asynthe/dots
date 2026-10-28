@@ -52,11 +52,3 @@ eval "$(atuin init zsh --disable-up-arrow)"
 eval "$(direnv hook zsh)"
 
 check_repo
-
-# pnpm
-export PNPM_HOME='/home/meow/.local/share/pnpm'
-case ":$PATH:" in
-  ":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
