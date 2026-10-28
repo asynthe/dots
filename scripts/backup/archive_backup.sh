@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
-# Archives the "live" (actively re-fetched) subfolders of ~/ben/backup into a
-# timestamped tar.gz under ~/ben/backup/archive, with a basic sanity check on
-# file sizes (catches empty/truncated exports before they get archived) and
-# rotation that keeps only the last N archives.
-#
-# Does NOT touch the static one-time dumps (phone, reddit, bookmarks,
-# tandem_json) — those aren't refreshed by any script, so re-archiving them
-# every run would be wasteful. Add a folder name to SOURCES below once a
-# script actively maintains it (e.g. "maps" once the Maps-pins exporter exists).
+# Archive the live subfolders of ~/ben/backup with a size check and rotation.
 set -euo pipefail
 
 BACKUP_ROOT="/home/meow/ben/backup"
@@ -36,9 +28,7 @@ fi
 
 echo "Archiving: ${present[*]}"
 
-# --- Size sanity check -------------------------------------------------
-# Flags empty files, and files that shrank a lot vs the previous run
-# (manifest is a simple "path<TAB>size" file, one entry per archived file).
+# Size sanity check
 new_sizes="$(mktemp)"
 trap 'rm -f "$new_sizes"' EXIT
 
@@ -74,11 +64,11 @@ if [ "$warnings" -gt 0 ]; then
     echo "Proceeding with archive despite ${warnings} size warning(s) above." >&2
 fi
 
-# --- Archive ------------------------------------------------------------
+# Archive
 tar -czf "$ARCHIVE_FILE" -C "$BACKUP_ROOT" "${present[@]}"
 echo "Created ${ARCHIVE_FILE} ($(du -h "$ARCHIVE_FILE" | cut -f1))"
 
-# --- Rotate: keep only the last $KEEP archives --------------------------
+# Rotate: keep only the last $KEEP archives
 mapfile -t old_archives < <(ls -1t "${ARCHIVE_DIR}"/backup_*.tar.gz 2>/dev/null | tail -n +$((KEEP + 1)))
 for old in "${old_archives[@]:-}"; do
     [ -n "$old" ] || continue
