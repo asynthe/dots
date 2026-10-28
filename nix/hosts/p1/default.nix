@@ -29,6 +29,7 @@
       firmware
       fingerprint
       tpm
+      secure-boot
 
       tailscale
       mullvad
