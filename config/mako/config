@@ -17,3 +17,8 @@ on-button-middle=exec makoctl menu -n "$id" wofi --dmenu -p 'Select action: '
 [urgency=high]
 border-color=#f7768e
 ignore-timeout=1
+
+[app-name="blueman"]
+width=500
+ignore-timeout=1
+default-timeout=0

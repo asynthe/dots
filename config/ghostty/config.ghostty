@@ -35,10 +35,10 @@ keybind = super+h=goto_split:left
 keybind = super+j=goto_split:down
 keybind = super+k=goto_split:up
 keybind = super+l=goto_split:right
-keybind = super+shift+h=resize_split:left,40
-keybind = super+shift+j=resize_split:down,40
-keybind = super+shift+k=resize_split:up,40
-keybind = super+shift+l=resize_split:right,40
+keybind = super+ctrl+h=resize_split:left,40
+keybind = super+ctrl+j=resize_split:down,40
+keybind = super+ctrl+k=resize_split:up,40
+keybind = super+ctrl+l=resize_split:right,40
 
 keybind = super+t=new_tab
 keybind = super+[=previous_tab
