@@ -1,7 +1,0 @@
-sys-kernel/installkernel dracut systemd systemd-boot uki ukify
-sys-apps/systemd boot ukify cryptsetup tpm
-sys-fs/cryptsetup argon2
-media-video/pipewire sound-server
-x11-drivers/nvidia-drivers wayland powerd
-sys-apps/fwupd uefi
-sys-devel/gcc graphite lto pgo
