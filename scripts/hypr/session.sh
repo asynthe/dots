@@ -35,7 +35,7 @@ die() {
 ws() { GROUP=$((GROUP + 1)); }
 pane() { PLAN+=("$GROUP|$1|$2"); }
 
-term() { # term <cwd> [command...]
+term() {
     local cwd=$1
     shift
     local out="ghostty --class=$TERMCLASS --working-directory=$cwd"

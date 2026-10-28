@@ -1,26 +1,5 @@
-;; ███████╗███╗   ███╗ █████╗  ██████╗███████╗
-;; ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
-;; █████╗  ██╔████╔██║███████║██║     ███████╗
-;; ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
-;; ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
-;; ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
-
 ;; TODO If i scroll down can i keep cursor where it is, so if i move the arrows then it goes back to that line.
 
-
-; Package Manager
-; Packages (1)
-; Packages (2)
-; Packages (Org Mode)
-; Settings
-; Keybinds
-; Settings - Theme
-; Settings - Font
-; Settings - Org Mode
-; Settings - Org Roam
-
-;; ───────────────────────── Package Manager (straight.el) ─────────────────────────
-;; https://github.com/radian-software/straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -37,23 +16,11 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Configuration
 (straight-use-package 'use-package)
 (use-package el-patch
   :straight t)
 (setq straight-use-pakage-by-default t)
 
-;; ───────────────────────── Packages - 1 ─────────────────────────
-;; Package list:
-;; Vertico
-;; Marginalia
-;; Orderless
-;; Consult
-;; Embark
-;; embark-consult
-;; wgrep
-
-;; Vertico
 (use-package vertico
   :straight t
   :config
@@ -61,19 +28,16 @@
   (setq vertico-resize nil)
   (vertico-mode 1))
 
-;; Marginalia
 (use-package marginalia
   :straight t
   :config
   (marginalia-mode 1))
 
-;; Orderless
 (use-package orderless
   :straight t
   :config
   (setq completion-styles '(orderless basic)))
 
-;; Consult
 (use-package consult
   :straight t
   :config
@@ -85,7 +49,6 @@
          ("M-s M-l" . consult-line)             ; Search the current buffer
          ("M-s M-b" . consult-buffer)))         ; Switch to another buffer, or bookmarked file, or recently opened file.
 
-;; Embark
 (use-package embark
   :straight t
   :bind (("C-." . embark-act)
@@ -93,11 +56,9 @@
          ("C-c C-c" . embark-collect)
          ("C-c C-e" . embark-export)))
 
-;; embark-consult
 (use-package embark-consult
   :straight t)
 
-;; wgrep
 (use-package wgrep
   :straight t
   :bind ( :map grep-mode-map
@@ -105,11 +66,8 @@
           ("C-x C-q" . wgrep-change-to-wgrep-mode)
           ("C-c C-c" . wgrep-finish-edit)))
 
-;; (built-in)
 (savehist-mode 1)
 
-;; ───────────────────────── Packages - 2 ─────────────────────────
-;; Evil Mode
 (use-package evil
       :straight t
 	     :init
@@ -121,7 +79,6 @@
 	     :config
 	     (evil-mode 1))
 
-;; Evil Collection (for Evil Mode)
 (use-package evil-collection
 	     :after evil
          :straight t
@@ -134,18 +91,15 @@
                       (define-key evil-motion-state-map (kbd "RET") nil)
                       (define-key evil-motion-state-map (kbd "TAB") nil))
 
-;; ───────────────────────── Packages - Org Mode ─────────────────────────
 (use-package valign                         ; Vertical align
   :straight t)
 (add-hook 'org-mode-hook #'valign-mode)
 
-;; ───────────────────────── Settings ─────────────────────────
 (global-display-line-numbers-mode t)        ; Line numbers
 (setq-default indent-tabs-mode nil)         ; Use spaces instead of tabs
 (setq-default tab-width 4)                  ; 4 spaces
 (show-paren-mode 1)                         ; Enable parentheses matching
 
-;; Basic UI settings
 (setq inhibit-startup-message t)            ; No startup message
 (menu-bar-mode -1)                          ; Disable menu bar
 (scroll-bar-mode -1)                        ; Disable scroll bar
@@ -160,39 +114,30 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode -1))))
 
-;; Mouse Scrolling
 (setq mouse-wheel-follow-mouse 't)          ; Scroll window under mouse
-;(setq mouse-wheel-progressive-speed t)     ; Accelerate scrolling
 (setq scroll-conservatively 101)            ; Value greater than 100 gets rid of half page jumping
 
 ;; Mouse - Precision pixel scroll
-;(pixel-scroll-precision-mode 1)
 ;(setq pixel-scroll-precision-large-scroll-height 40.0) ; Scroll with mouse as smooth as touchpad
 ;(setq pixel-scroll-use-momentum t)         ; Keep the momentum when scrolling
 
-; TODO
 (setq mac-mouse-whell-mode t)
 
-;; Transparency
 (cond
- ;; Linux
  ((and (eq system-type 'gnu/linux)
 
   ;; This are the two lines that set up transparency, you can use them outside the cond if you want.
   (set-frame-parameter nil 'alpha-background 80)                    ; For current frame
   (add-to-list 'default-frame-alist '(alpha-background . 80))))     ; For new frames
 
- ;; macOS
  ((eq system-type 'darwin)
   (set-frame-parameter nil 'alpha '(70 . 80))
   (add-to-list 'default-frame-alist '(alpha . (80 . 80))))
 
- ;; Windows
  ((eq system-type 'windows-nt)
   (set-frame-parameter nil 'alpha '(80 . 80))
   (add-to-list 'default-frame-alist '(alpha . (80 . 80)))))
 
-;; ───────────────────────── Keybinds ─────────────────────────
 ;; Setting up Evil-style keybindings
 (use-package general
   :straight t
@@ -203,23 +148,6 @@
     :global-prefix "C-SPC")) ; Optional: allows SPC outside evil too
 
 ;; Description on the minibuffer
-;(use-package which-key
-;             :straight t
-;             :init (which-key-mode)
-;             :diminish which-key-mode
-;             :config
-;             (setq which-key-idle-delay 1
-;                   which-key-side-window-location 'bottom
-;                   which-key-sort-order #'which-key-key-order-alpha
-;                   which-key-sort-uppercase-first nil
-;                   which-key-add-column-padding 1
-;                   which-key-max-display-columns nil
-;                   which-key-min-display-lines 6
-;                   which-key-side-window-slot -10
-;                   which-key-side-window-max-height 0.25
-;                   which-key-max-description-length 25
-;                   which-key-allow-imprecise-window-fit t
-;                   which-key-separator " → "))
 
 (use-package which-key
   :straight t
@@ -232,49 +160,35 @@
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-;; Buffers and Files
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 
-;(evil-define-key '(normal visual) global-map
-;                 (kbd "SPC .") #'find-file
-;                 (kbd "SPC ,") #'consult-buffer)
-
-;; Keybinds
 (my/keybinds
 
-  ;; Files
   "."   '(find-file :which-key "Find file")
   ","   '(consult-buffer :which-key "Switch buffer")
   "fs"  '(save-buffer :which-key "Save file")
 
-  ;; Configuration
   "uc"  '(load-file "~/.config/emacs/config.el" :which-key "Reload configuration")
 
-  ;; Buffers
   "b"   '(:ignore t :which-key "Buffers commands")
   "bk"  '(kill-this-buffer :which-key "Kill buffer")
 
-  ;; Org Roam
   "n"  '(:ignore t :which-key "Org roam commands")
   "nf" '(org-roam-node-find :which-key "Find and open note")
   "nu" '(org-roam-db-sync :which-key "Notes database update")
   "ri" '(org-id-get-create :which-key "Insert org-id"))
 
-;; ───────────────────────── Settings - Theme ─────────────────────────
 (use-package doom-themes
   :straight t)
 (load-theme 'doom-meltbus t)                ; Load a theme
 (setq doom-themes-enable-bold t)            ; If nil, bol is disabled
 (setq doom-themes-enable-italics t)         ; If nil, italics is disabled
 
-;; ───────────────────────── Settings - Font (JetBrainsMono) ─────────────────────────
-;; General Font Settings
 (set-face-attribute 'default nil :height 140)                                       ; Font size
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
 (set-face-attribute 'font-lock-keyword-face nil :slant 'italic)                     ; Makes commented text and keywords italics, works in emacsclient
 
-;; System-os specific
 (cond
  ((or (eq system-type 'gnu/linux) (eq system-type 'darwin)) 
   (progn
@@ -295,7 +209,6 @@
  ((eq system-type 'windows-nt) 
   (progn
   
-    ; Windows configuration
     (add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 14"))              ; Required by emacsclient, if not used fonts will appear smaller
     (set-face-attribute 'default nil
                         :font "JetBrainsMono NF 14"
@@ -308,25 +221,21 @@
                         :weight 'regular)
     )))
 
-;; Ligatures
 (use-package ligature
   :straight t
 	     :config
 
-         ;; Prog-mode
 	     (ligature-set-ligatures 'prog-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
                                        "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
                                        "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
                                        ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
 
-         ;; Org-mode
 	     (ligature-set-ligatures 'org-mode '("<---" "<--"  "<<-" "<-" "->" "-->" "--->" "<->" "<-->" "<--->" "<---->" "<!--"
                                        "<==" "<===" "<=" "=>" "=>>" "==>" "===>" ">=" "<=>" "<==>" "<===>" "<====>" "<!---"
                                        "<~~" "<~" "~>" "~~>" "::" ":::" "==" "!=" "===" "!=="
                                        ":=" ":-" ":+" "<*" "<*>" "*>" "<|" "<|>" "|>" "+:" "-:" "=:" "<******>" "++" "+++"))
 	     (global-ligature-mode t))
 
-;; ───────────────────────── Settings - Org Mode ─────────────────────────
 (straight-use-package 'org)
 (require 'org-mouse)                  ; Enable the mouse
 ;; Open file links in the same window
@@ -349,13 +258,11 @@
       org-ellipsis " … "
       org-adapt-identation nil
 
-      ;; Syntax Highlighting
       org-src-fontify-natively t
       org-src-tab-acts-natively t
       org-config-babel-evaluate nil
       org-edit-src-content-identation 0)
 
-;; ───────────────────────── Settings - Org Roam ─────────────────────────
 (use-package org-roam
   :straight t
   :custom

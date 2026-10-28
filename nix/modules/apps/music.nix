@@ -9,7 +9,6 @@ _: {
       ncmpcpp
       rmpc
       spek
-      #projectm_3 # Milkdrop 3
     ];
   };
 }

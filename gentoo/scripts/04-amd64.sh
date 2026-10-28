@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# setup.md §0 + §17: the from-source system on the repo's portage config (~amd64, LTO, lto pgo),
-# then the extras. /etc/portage must match gentoo/portage first (./02-portage.sh apply).
+# The from-source system on the repo's portage config (~amd64, LTO, lto pgo),
+# then the extras. /etc/portage must match gentoo/etc/portage first (./02-portage.sh apply).
 #
 #   ./04-amd64.sh prep     build-in-RAM (tmpfs). Run the rest from a text console (tty2 + tmux),
 #                          not a terminal inside Hyprland: that one dies with the session.
@@ -8,15 +8,14 @@
 #                          and binhost packages rebuilt on ~amd64 with LTO. Many hours. Reboot.
 #   ./04-amd64.sh resume   continue an interrupted emerge (portage's saved queue), same inhibit + log.
 #   ./04-amd64.sh failed   packages that failed -> no-lto (in the repo), apply, rebuild them.
-#   ./04-amd64.sh games    the games block (interactive: Steam autounmask, two dependency loops).
+#   ./04-amd64.sh games    the games set (interactive: Steam autounmask, two dependency loops).
 #   ./04-amd64.sh hyprglass  rebuild the hyprglass plugin (after any Hyprland update).
 #
 # Watch from another tty: `tail -f ~/.local/state/p1-setup/logs/*.log` (newest one).
 set -uo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "run as meow, not root"; exit 1; }
-MD=~/git/dots/gentoo/packages.md
 S=~/git/dots/gentoo/scripts
-P=~/git/dots/gentoo/portage
+P=~/git/dots/gentoo/etc/portage
 applied() { "$S/02-portage.sh" diff >/dev/null || { echo "/etc/portage differs from the repo: $S/02-portage.sh apply"; exit 1; }; }
 step() { printf '\n\033[1;34m== %s\033[0m\n' "$*"; }
 
@@ -24,19 +23,7 @@ step() { printf '\n\033[1;34m== %s\033[0m\n' "$*"; }
 sudo -v || exit 1
 ( while kill -0 $$ 2>/dev/null; do sudo -n true; sleep 50; done ) &
 
-block() {   # $1 section, $2 before|emerge  (same parser as 03-packages.sh)
-    awk -v sec="$1" -v want="$2" '
-        /^## / { insec = (substr($0,4) == sec); next }
-        !insec { next }
-        /^before/ { nextbefore = 1 }
-        /^```bash/ { inb = 1; buf = ""; next }
-        /^```/ && inb { inb = 0
-            if (want == "before" && nextbefore) { printf "%s", buf; exit }
-            if (want == "emerge" && buf ~ /emerge -av --noreplace/) { printf "%s", buf; exit }
-            nextbefore = 0; next }
-        inb { buf = buf $0 "\n" }' "$MD"
-}
-atoms() { block "$1" emerge | awk '/^  [a-z0-9-]+\//{print $1}'; }
+atoms() { grep -v '^#' ~/git/dots/gentoo/etc/portage/sets/"$1"; }
 
 hyprglass() {
     step "rebuild hyprglass against the new Hyprland"
@@ -83,7 +70,6 @@ snapshot() {   # read-only btrfs snapshot of / (subvol @) before a big rebuild
 case "${1:-}" in
 prep)
     step "build in RAM: /var/tmp/portage on tmpfs (24G), big packages build on disk"
-    # 24G cap of 30G RAM: tmpfs only uses what builds actually hold; zram (15G) covers peaks.
     sudo mkdir -p /var/tmp/portage /var/tmp/notmpfs
     sudo chown portage:portage /var/tmp/notmpfs
     grep -q ' /var/tmp/portage ' /etc/fstab || echo 'tmpfs  /var/tmp/portage  tmpfs  size=24G,uid=portage,gid=portage,mode=775,noatime  0 0' | sudo tee -a /etc/fstab
@@ -112,8 +98,6 @@ world)
     long emerge -av1 --keep-going sys-devel/gcc
     sudo gcc-config "$(gcc-config -l | wc -l)" && gcc-config -c
 
-    # USE=-gpm: package.use/zz-autounmask (Steam's 32-bit list) asks for 32-bit gpm and ncurses,
-    # and each needs the other built first. Without gpm there's no loop; the -uDN puts it back.
     step "rebuild everything (-e @world): ~amd64 versions, LTO, the profile's flags"
     echo "After your 'Yes' it runs unattended. Sleep, idle and the lid switch are blocked meanwhile."
     long USE=-gpm emerge -ave --keep-going --backtrack=50 @world
@@ -131,7 +115,7 @@ hyprglass) hyprglass ;;
 
 games)
     # Separate, interactive: Steam's 32-bit deps need autounmask + dispatch-conf, and the
-    # gpm <-> ncurses loop needs the -gpm rebuild first (packages.md, games).
+    # gpm <-> ncurses loop needs the -gpm rebuild first.
     applied
     mapfile -t GAMES < <(atoms games)
     G=(--getbinpkg=n --usepkg=n --noreplace --backtrack=50)
@@ -159,12 +143,12 @@ failed)
     [ ${#F[@]} -gt 0 ] || { echo "no failed builds in /var/tmp/portage"; exit 0; }
     for p in "${F[@]}"; do echo "$p   (log: /var/tmp/portage/$p/temp/build.log)"; done
     echo "Check a log first if unsure: a non-LTO failure (fetch, a real bug) won't be fixed by this."
-    read -rp "Mark these no-lto (gentoo/portage/package.env/no-lto) and rebuild them? [y/N] " a; [ "$a" = y ] || exit 0
+    read -rp "Mark these no-lto (gentoo/etc/portage/package.env/no-lto) and rebuild them? [y/N] " a; [ "$a" = y ] || exit 0
     for p in "${F[@]}"; do echo "$(qatom -F '%{CATEGORY}/%{PN}' "$p") no-lto.conf"; done | tee -a "$P/package.env/no-lto"
     "$S/02-portage.sh" apply || exit 1
     sudo rm -rf $(for p in "${F[@]}"; do echo "/var/tmp/portage/$p"; done)
     long emerge -av1 --keep-going $(for p in "${F[@]}"; do echo "=$p"; done)
-    echo "Commit it: git -C ~/git/dots commit -m 'gentoo: no-lto ...' gentoo/portage/package.env/no-lto"
+    echo "Commit it: git -C ~/git/dots commit -m 'gentoo: no-lto ...' gentoo/etc/portage/package.env/no-lto"
     ;;
 
 *) sed -n '2,15p' "$0" ;;

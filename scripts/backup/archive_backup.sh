@@ -28,7 +28,6 @@ fi
 
 echo "Archiving: ${present[*]}"
 
-# Size sanity check
 new_sizes="$(mktemp)"
 trap 'rm -f "$new_sizes"' EXIT
 
@@ -64,7 +63,6 @@ if [ "$warnings" -gt 0 ]; then
     echo "Proceeding with archive despite ${warnings} size warning(s) above." >&2
 fi
 
-# Archive
 tar -czf "$ARCHIVE_FILE" -C "$BACKUP_ROOT" "${present[@]}"
 echo "Created ${ARCHIVE_FILE} ($(du -h "$ARCHIVE_FILE" | cut -f1))"
 

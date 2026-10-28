@@ -17,7 +17,7 @@ Singleton {
     readonly property color fg    : "#ffffff"
     readonly property color accent: "#0078d7"
 
-    readonly property color menuBg    : "#000000"   // OLED
+    readonly property color menuBg    : "#000000"
     readonly property color menuHover : "#1f1f1f"
     readonly property color menuBorder: "#333333"
     readonly property color menuSep   : "#2a2a2a"

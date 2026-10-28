@@ -1,7 +1,6 @@
 _: {
   flake.modules.nixos.desktop-apps = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [
-      #librewolf #mullvad-browser
       ungoogled-chromium
       libreoffice-qt
       imv

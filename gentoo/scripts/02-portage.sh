@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# /etc/portage comes from the repo: ~/git/dots/gentoo/portage is the source, this copies it.
+# /etc/portage comes from the repo: ~/git/dots/gentoo/etc/portage is the source, this copies it.
 # Copied, not symlinked: portage sources make.conf and env/*.conf as root on every emerge, so a
 # symlink into ~ would let anything running as meow become root without sudo.
 #
@@ -10,11 +10,10 @@
 #
 # Only the names that exist in the repo (make.conf, make.profile, env/, package.*/, repos.conf/,
 # ...) are touched; /etc/portage's backups, gnupg/ and pending ._cfg* files are left alone.
-# Inside those dirs, apply deletes what the repo no longer has, except savedconfig/ (packages
-# write it themselves).
+# Inside those dirs, apply deletes what the repo no longer has, except package-written savedconfig/.
 set -uo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "run as meow, not root"; exit 1; }
-P=~/git/dots/gentoo/portage
+P=~/git/dots/gentoo/etc/portage
 E=/etc/portage
 cd "$P" || exit 1
 mapfile -t ITEMS < <(ls -A)

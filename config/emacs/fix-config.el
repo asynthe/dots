@@ -1,4 +1,3 @@
-;; Which-key
 (use-package which-key
              :straight t
              :init (which-key-mode)
@@ -17,20 +16,11 @@
                    which-key-allow-imprecise-window-fit t
                    which-key-separator " → "))
 
-;; ------------------------- Packages (2) -------------------------
-
-;; All the Icons
 (use-package all-the-icons
              :straight t
              :if (display-graphic-p))
 (use-package all-the-icons-dired
              :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
-
-;; Beacon (cursor blink)
-;; https://github.com/Malabarba/beacon
-;(use-package beacon
-	     ;:config
-	     ;(beacon-mode 1))
 
 (use-package doom-modeline)   ; Doom Modeline
 (doom-modeline-mode 1)
@@ -42,13 +32,11 @@
 (global-hide-mode-line-mode 1)
 (add-hook 'neotree-mode-hook #'hide-mode-line-mode)
 
-;; ------------------------- Packages - Org -------------------------
 (use-package org-tidy         ; Hides :PROPERTY:
              :straight t
              :hook
              (org-mode . org-tidy-mode))
 
-;; ------------------------- Settings -------------------------
 ;; Truncate or word wrapping
 (add-hook 'org-mode-hook (lambda ()
                            (setq truncate-lines nil)  ; Disable truncation
@@ -63,19 +51,12 @@
 (defun set-truncate (&rest _)
   (setq-local truncate-lines nil))
 
-;; Fringes
-;(set-fringe-mode 7)
-;(set-fringe-mode 0)                       ; No fringes
-
-;; Margins / Padding
 (setq-default left-margin-width 3)
 (setq-default right-margin-width 3)
 (set-window-buffer nil (current-buffer))
 
-;; ------------------------- Org Mode -------------------------
 (add-hook 'org-mode-hook 'turn-on-flyspell) ; Flyspell (Spell Checking)
 
-;; Headings size
 (custom-set-faces
  '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
  '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
@@ -94,7 +75,6 @@
 ;; Apply the org faces
 (add-hook 'org-mode-hook 'my-org-faces)
 
-;; Add TODO keywords
 (setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
 ;; Language-specific colors for code blocks
@@ -115,6 +95,4 @@
                             ("shell" (:background "#121212" :extend t))
                             ("yaml" (:background "#121212" :extend t))
                             ("xml" (:background "#6D86FF" :extend t))))
-
-;; ------------------------- Extra -------------------------
 

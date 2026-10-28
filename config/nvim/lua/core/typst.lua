@@ -6,7 +6,7 @@ local host = require("host")
 
 local M = {}
 
-local watches = {} -- book.typ -> job id
+local watches = {}
 
 function M.book(buf)
     local file = vim.api.nvim_buf_get_name(buf or 0)
@@ -32,7 +32,6 @@ local function viewer()
     end
 end
 
--- The first compile of a new book takes a moment; wait for the PDF to exist.
 local function open_when_ready(pdf, tries)
     if vim.uv.fs_stat(pdf) then
         local cmd = viewer()

@@ -42,15 +42,7 @@
 
       boot.loader.efi.efiSysMountPoint = "/efi";
 
-      # Windows lives on the other disk's ESP, which systemd-boot can't see on
-      # its own. Get the handle from the EFI shell (`map -c`, then `ls HD1a1:`
-      # until you find EFI/Microsoft) after Windows is installed. Until then,
-      # F12 at the Lenovo splash picks it.
-      #boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
-      #boot.loader.systemd-boot.windows."11" = {
-      #    title           = "Windows 11";
-      #    efiDeviceHandle = "HD1a1";
-      #};
+      # Windows boots from nvme1's own ESP: F12 at the Lenovo splash (notes: nix.md, dual boot).
 
       disko.devices.disk.nvme0 = {
         type = "disk";
@@ -84,8 +76,7 @@
               "10"
             ];
             content.content.type = "btrfs";
-            # label is load-bearing: the rollback in base/impermanence.nix
-            # mounts /dev/disk/by-label/nixos
+            # The impermanence rollback mounts /dev/disk/by-label/nixos.
             content.content.extraArgs = [
               "-L"
               "nixos"

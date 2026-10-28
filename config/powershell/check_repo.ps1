@@ -6,7 +6,6 @@
 
 $script:CheckRepoFile = $PSCommandPath
 $script:CheckRepoRecord = @(
-    # name   hosts          visibility
     'dots    github,gitlab  public'    # bootstrap.sh curls it raw from gitlab
     'flakes  github,gitlab  public'
     'notes   github,gitlab  private'
@@ -15,7 +14,6 @@ $script:CheckRepoRecord = @(
     'auth    github,gitlab  private'
     'sarten  github,gitlab  public'
 )
-# Windows keeps repos on the Desktop; Linux and macOS in ~/git.
 $script:CheckRepoRoots = @(
     (Join-Path (Join-Path $HOME 'Desktop') 'git')
     (Join-Path $HOME 'git')
@@ -100,7 +98,6 @@ function check_repo {
             if (-not $pushers) {
                 $kind = 'nopush'    # a host nothing pushes to falls behind unnoticed
             } elseif (-not $head) {
-                # no commits yet
             } elseif (-not (Test-Path $answer)) {
                 # Never heard from the host: the tracking ref is all there is.
                 if ($pushedAt -and (git -C $repo rev-list -1 HEAD --not @pushedAt)) { $kind = 'unpushed' }
@@ -189,7 +186,6 @@ function _check_repo_refresh([string]$cache, [string[]]$todo) {
         $heads = _check_repo_wait $a.Ssh
         $anon = _check_repo_wait $a.Https
         if (-not $heads.Ok) {
-            # Only the host itself makes a repo missing; no answer keeps what we knew.
             if ($heads.Err -match 'Permission denied|Could not resolve|timed out|refused|unreachable|closed by') { continue }
             $out = 'missing'
         } else {

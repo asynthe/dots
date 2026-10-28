@@ -1,4 +1,3 @@
--- Inicializa el filtro de audio en el perfil 3 (loudnorm=I=-16:TP=-3:LRA=4)
 local index = 5
 
 local filters = {

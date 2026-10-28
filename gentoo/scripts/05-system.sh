@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup.md §4 (kernel params, lid, firewall), §6 (hardware, nvidia, fwupd), cleanup, §2 ssh.
+# Kernel params, lid, firewall, hardware, nvidia, fwupd, cleanup, ssh.
 # Safe during the stage1 build: nothing here runs emerge. Each step shows itself and asks.
 # Fingerprint (§6) is not here: PAM edits are done by hand, with a root shell open on tty2.
 #   ./05-system.sh            all steps, in order
@@ -116,9 +116,9 @@ fwupd() {
     ask "Append [uefi_capsule] to /etc/fwupd/fwupd.conf?" || return 0
     printf '\n[uefi_capsule]\nEspLocation=/efi\nDisableShimForSecureBoot=true\n' | sudo tee -a /etc/fwupd/fwupd.conf
     sudo systemctl restart fwupd
-    sbverify --list /usr/libexec/fwupd/efi/fwupdx64.efi.signed 2>&1 | grep -i 'issuer' # CN=Database Key
+    sbverify --list /usr/libexec/fwupd/efi/fwupdx64.efi.signed 2>&1 | grep -i 'issuer'
     echo "Firmware updates: sudo fwupdmgr refresh && sudo fwupdmgr get-updates  (update only on AC;"
-    echo "a BIOS/dbx update changes PCR7: passphrase once, then re-enroll, install.md step 18)"
+    echo "a BIOS/dbx update changes PCR7: passphrase once, then re-enroll, see notes/gentoo.md, TPM2)"
 }
 
 cleanup() {

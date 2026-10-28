@@ -15,19 +15,17 @@ PanelWindow {
 
     readonly property string dir: Ui.dir("DESKTOP")
     property var    items   : []
-    property var    sel     : ({})     // name -> true
+    property var    sel     : ({})
     property string renaming: ""
     property string pending : ""       // new item to rename once it shows up
     property var    games   : ({})     // .desktop names that start games (no float, no fade)
 
-    // drag state; dx/dy in px, dropOn = name under the dragged icon
     property bool   dragging: false
     property real   dragDx  : 0
     property real   dragDy  : 0
     property string dropOn  : ""
     property bool   dropped : false    // swallow the click that ends a drag
 
-    // Icons sit on a grid like Windows; dragged ones remember their cell.
     readonly property int pitchX: 78
     readonly property int pitchY: 96
     readonly property int cols  : Math.max(1, Math.floor((width - 8) / pitchX))
@@ -360,8 +358,6 @@ PanelWindow {
                         x: 14; y: 4
                         width: 48; height: 48
 
-                        // pictures show themselves; videos a frame from the shared
-                        // freedesktop thumbnail cache (Nemo reads the same one)
                         readonly property bool isImage: desk.images.includes(cell.modelData.suffix)
                         readonly property bool isVideo: desk.videos.includes(cell.modelData.suffix)
                         readonly property string thumb: isVideo
@@ -395,7 +391,7 @@ PanelWindow {
                             anchors.fill: parent
                             source: Apps.icon(cell.meta?.icon || desk.iconOf(cell.modelData))
                         }
-                        Rectangle {   // shortcut arrow
+                        Rectangle {
                             visible: cell.modelData.suffix === "desktop"
                             anchors { left: parent.left; bottom: parent.bottom }
                             width: 14; height: 14
@@ -466,7 +462,7 @@ PanelWindow {
                         }
                     }
 
-                    Rectangle {   // rename box
+                    Rectangle {
                         visible: cell.editing
                         x: -12; y: 56
                         width: parent.width + 24

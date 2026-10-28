@@ -1,4 +1,3 @@
-# ------------------------- Configuration -------------------------
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
@@ -8,14 +7,13 @@ continuation_prompt = "▶▶"
 right_format = "」にゃ~(white)"
 
 [line_break]
-disabled = true # Two lines.
+disabled = true
 
 [cmd_duration]
 disabled = true
 show_milliseconds = false
 style = "bold italic red"
 
-# Username
 [username]
 disabled = false
 format = "[$user ](#0099ff)"
@@ -23,14 +21,12 @@ show_always = true
 style_root = "bg:#9A348E"
 style_user = "bg:#9A348E"
 
-# Hostname
 [hostname]
 disabled = false
 format = "on [$hostname](#ff3399) "
 ssh_only = false
 trim_at = "."
 
-# Prompt
 [character]
 success_symbol = "[「](white)"
 error_symbol = "[ >_< [「]()](bold red)"
@@ -38,10 +34,7 @@ vimcmd_replace_one_symbol = "[「](white)"
 vimcmd_replace_symbol = "[「](white)"
 vimcmd_symbol = "[「](white)"
 vimcmd_visual_symbol = "[「](white)"
-#error_symbol = "[ ノ_< [「]()](bold red)"
-# Prompt - Vim mode
 
-# Directory
 [directory]
 disabled = false
 format = "in [$path]($style) "
@@ -62,30 +55,13 @@ truncation_symbol = ".../"
 "music" = " "
 "sync" = " "
 
-# ------------------------ Icons ------------------------
-
-# Git
 [git_branch]
 symbol = " "
-#[git_status]
-#style = "167"
-#conflicted = "🏳"
-#ahead = "🏎💨"
-#behind = "😰"
-#diverged = "😵"
-#up_to_date = "✓"
-#untracked = "🤷‍"
-#stashed = "📦"
-#modified = "📝"
-#staged = '[++\($count\)](green)'
-#renamed = "👅"
-#deleted = "🗑"
 
 [package]
 disabled = false
 symbol = " "
 
-# Others
 [aws]
 symbol = "  "
 

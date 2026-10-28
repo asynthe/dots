@@ -1,5 +1,4 @@
 #!/bin/sh
-# Boot menu title per kernel, "Gentoo Linux (7.2.8)": ukify reads this via OSRelease= in uki.conf.
 [ "$1" = add ] || exit 0
 v=${2%%-*}
 mkdir -p /run/kernel

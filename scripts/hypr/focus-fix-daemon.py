@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Cursor nudge on every openwindow event; see spawn-terminal.sh.
 import os
 import socket
 import subprocess

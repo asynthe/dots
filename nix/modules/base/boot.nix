@@ -8,7 +8,7 @@ _: {
     boot.loader.systemd-boot.configurationLimit = 4;
     boot.loader.timeout = 3;
 
-    # Short menu titles, "NixOS Linux (7.3) Gen 12" (docs/nix.md).
+    # Short menu titles, "NixOS Linux (7.3) Gen 12" (notes: nix.md).
     boot.loader.systemd-boot.extraInstallCommands = ''
       for e in /efi/loader/entries/nixos-*.conf; do
           [ -e "$e" ] || continue
